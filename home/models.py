@@ -10,6 +10,13 @@ class HomePage(Page):
     pass
 
 
+class PortfolioPage(Page):
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context['projects'] = ProjectPage.objects.all()
+        return context
+
+
 class ProjectPage(Page):
     logo = models.ForeignKey(
         'wagtailimages.Image',
@@ -44,5 +51,3 @@ class ProjectPage(Page):
         FieldPanel('duration'),
 
     ]
-    # parent_page_types = ['blog.BlogIndex']
-    # subpage_types = []
