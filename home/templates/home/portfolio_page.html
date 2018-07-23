@@ -1,26 +1,27 @@
 {% extends "base.html" %}
-
+{% load wagtailimages_tags %}
 
 {% block body_class %}template-homepage{% endblock %}
 
 {% block content %}
 <div class="container">
 
-    <h1 class="my-4">Page Heading
-        <small>Secondary Text</small>
+    <h1 class="my-4">
+        Portfolio
     </h1>
 
     <div class="row">
         {% for project in projects %}
         <div class="col-lg-6 portfolio-item">
             <div class="card h-100">
-                <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                <a href="#">{% image project.logo fill-700x400-c100 class="card-img-top"%}</a>
+
                 <div class="card-body">
                     <h4 class="card-title">
                         <a href="#">{{ project.logo }}</a>
                     </h4>
                     <p class="card-text">
-                        {{ project.summary | safe }}
+                        {{ project.summary }}
                     </p>
                 </div>
             </div>
