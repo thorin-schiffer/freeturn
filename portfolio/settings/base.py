@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'modelcluster',
     'taggit',
+    'livereload',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -61,6 +62,7 @@ MIDDLEWARE = [
 
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    'livereload.middleware.LiveReloadScript',
 ]
 
 ROOT_URLCONF = 'portfolio.urls'
