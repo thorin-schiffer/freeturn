@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
 
 {% block body_class %}template-homepage{% endblock %}
 
@@ -14,11 +15,11 @@
         {% for project in projects %}
         <div class="col-lg-6 portfolio-item">
             <div class="card h-100">
-                <a href="#">{% image project.logo fill-700x400-c100 class="card-img-top"%}</a>
+                <a href="{% pageurl project %}">{% image project.logo fill-700x400-c100 class="card-img-top"%}</a>
 
                 <div class="card-body">
                     <h4 class="card-title">
-                        <a href="#">{{ project.logo }}</a>
+                        <a href="{% pageurl project %}">{{ project.logo }}</a>
                     </h4>
                     <p class="card-text">
                         {{ project.summary }}
