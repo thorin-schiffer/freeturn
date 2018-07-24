@@ -1,4 +1,7 @@
 from django.db import models
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.fields import ParentalKey
+from taggit.models import TaggedItemBase
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Page
@@ -15,6 +18,10 @@ class PortfolioPage(Page):
         context = super().get_context(request, *args, **kwargs)
         context['projects'] = ProjectPage.objects.all()
         return context
+
+
+class ProjectTechnology(TaggedItemBase):
+    content_object = ParentalKey('ProjectPage', on_delete=models.CASCADE, related_name='technologies_items')
 
 
 class ProjectPage(Page):
@@ -44,6 +51,9 @@ class ProjectPage(Page):
         index.FilterField('start_date'),
     ]
 
+    technologies = ClusterTaggableManager(through=ProjectTechnology,
+                                          blank=True)
+
     content_panels = Page.content_panels + [
         ImageChooserPanel('logo'),
         FieldPanel('name'),
@@ -52,5 +62,6 @@ class ProjectPage(Page):
 
         FieldPanel('start_date'),
         FieldPanel('duration'),
-
+        FieldPanel('responsibility'),
+        FieldPanel('technologies'),
     ]
