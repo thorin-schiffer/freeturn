@@ -47,8 +47,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
+
                 {% for menu_item in menu_items %}
-                    <li class="nav-item active">
+                    <li class="nav-item {% if menu_item == page or page.get_parent.id == menu_item.id %}active{% endif %}">
                         <a class="nav-link" href="{% pageurl menu_item %}">
                             {{ menu_item }}
                         </a>
