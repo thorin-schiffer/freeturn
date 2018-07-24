@@ -16,7 +16,10 @@ class HomePage(Page):
 class PortfolioPage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        context['projects'] = ProjectPage.objects.all()
+        technology = request.GET.get('technology')
+        context['projects'] = ProjectPage.objects.child_of(self).live()
+        if technology:
+            context['projects'] = context['projects'].filter(technologies__name=technology)
         return context
 
 
