@@ -21,7 +21,8 @@ class PortfolioPage(Page):
 
 
 class ProjectTechnology(TaggedItemBase):
-    content_object = ParentalKey('ProjectPage', on_delete=models.CASCADE, related_name='technologies_items')
+    content_object = ParentalKey('ProjectPage', on_delete=models.CASCADE,
+                                 related_name='technologies_items')
 
 
 class ProjectPage(Page):
@@ -48,6 +49,9 @@ class ProjectPage(Page):
     search_fields = Page.search_fields + [
         index.SearchField('name'),
         index.SearchField('summary'),
+        index.RelatedFields('technologies', [
+            index.SearchField('name', partial_match=True, boost=10),
+        ]),
         index.FilterField('start_date'),
     ]
 
