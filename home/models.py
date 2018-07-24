@@ -28,7 +28,8 @@ class ProjectPage(Page):
 
     name = models.CharField(max_length=255)
 
-    summary = RichTextField(help_text="Short description to show on tiles and lists")
+    summary = models.CharField(max_length=511,
+                               help_text="Short description to show on tiles and lists")
     description = RichTextField(help_text="Long description to show on the detail page")
 
     start_date = models.DateField(null=True, blank=True)
