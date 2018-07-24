@@ -36,6 +36,8 @@ class ProjectPage(Page):
     duration = models.IntegerField(help_text="Duration in months, null=till now",
                                    null=True, blank=True)
 
+    responsibility = RichTextField()
+
     search_fields = Page.search_fields + [
         index.SearchField('name'),
         index.SearchField('summary'),
