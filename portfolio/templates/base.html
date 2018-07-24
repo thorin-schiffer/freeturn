@@ -1,4 +1,6 @@
 {% load static wagtailuserbar %}
+{% load wagtailcore_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,20 +47,14 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Portfolio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                </li>
+                {% for menu_item in menu_items %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% pageurl menu_item %}">
+                            {{ menu_item }}
+                        </a>
+                    </li>
+                {% endfor %}
+
                 {% wagtailuserbar %}
             </ul>
         </div>
