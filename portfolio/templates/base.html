@@ -49,13 +49,12 @@
             <ul class="navbar-nav ml-auto">
 
                 {% for menu_item in menu_items %}
-                    <li class="nav-item {% if menu_item == page or page.get_parent.id == menu_item.id %}active{% endif %}">
-                        <a class="nav-link" href="{% pageurl menu_item %}">
-                            {{ menu_item }}
-                        </a>
-                    </li>
+                <li class="nav-item {% if menu_item == page or page.get_parent.id == menu_item.id %}active{% endif %}">
+                    <a class="nav-link" href="{% pageurl menu_item %}">
+                        {{ menu_item }}
+                    </a>
+                </li>
                 {% endfor %}
-                + Technologies
                 + Search
                 {% wagtailuserbar %}
             </ul>
