@@ -85,4 +85,5 @@ class TechnologiesPage(Page):
         context['technologies'] = Tag.objects.annotate(
             projects_count=Count('home_projecttechnology_items')
         ).filter(projects_count__gt=0)
+        context['portfolio'] = PortfolioPage.objects.last()
         return context
