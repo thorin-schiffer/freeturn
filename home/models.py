@@ -1,16 +1,25 @@
+import uuid
+
 from django.db import models
+from django.db.models import Count
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
-from taggit.models import TaggedItemBase
+from taggit.models import TaggedItemBase, Tag
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Page
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
+from wagtail.snippets.models import register_snippet
 
 
 class HomePage(Page):
-    pass
+    subpage_types = [
+        'home.PortfolioPage',
+        'home.TechnologiesPage'
+    ]
 
 
 class PortfolioPage(Page):
@@ -59,7 +68,8 @@ class ProjectPage(Page):
     ]
 
     technologies = ClusterTaggableManager(through=ProjectTechnology,
-                                          blank=True)
+                                          blank=True,
+                                          related_name='projects')
 
     content_panels = Page.content_panels + [
         ImageChooserPanel('logo'),
@@ -72,3 +82,44 @@ class ProjectPage(Page):
         FieldPanel('responsibility'),
         FieldPanel('technologies'),
     ]
+
+
+class TechnologiesPage(Page):
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context['technologies'] = Tag.objects.annotate(
+            projects_count=Count('home_projecttechnology_items')
+        ).filter(projects_count__gt=0)
+        context['portfolio'] = PortfolioPage.objects.last()
+        return context
+
+
+@register_snippet
+class TechnologyInfo(models.Model):
+    logo = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    summary = RichTextField(blank=True)
+    tag = models.OneToOneField('taggit.Tag', on_delete=models.CASCADE, related_name='info')
+    content_panels = Page.content_panels + [
+        ImageChooserPanel('logo'),
+        FieldPanel('summary'),
+        FieldPanel('tag'),
+    ]
+
+    def __str__(self):
+        return self.tag.name
+
+    class Meta:
+        verbose_name = 'technology'
+        verbose_name_plural = 'technologies'
+
+
+@receiver(post_save, sender=Tag)
+def on_tag_save(sender, instance, created, **kwargs):
+    if created:
+        TechnologyInfo.objects.get_or_create(tag=instance)

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
+
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="my-4">
+        Technologies
+    </h1>
+
+    <div class="row">
+        {% for technology in technologies %}
+        <div class="col-lg-6 portfolio-item">
+            <div class="card h-100">
+                <a href="{% pageurl portfolio %}?technology={{technology}}">{% image technology.info.logo fill-700x400-c100 class="card-img-top"%}</a>
+
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="{% pageurl portfolio %}?technology={{technology}}">{{ technology }}</a>
+                    </h4>
+                    <p class="card-text">
+                        {{ technology.info.summary | richtext }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
