@@ -41,6 +41,10 @@ class PortfolioPage(Page):
         related_name='+'
     )
 
+    content_panels = Page.content_panels + [
+        ImageChooserPanel('background'),
+    ]
+
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         technology = request.GET.get('technology')
@@ -110,6 +114,10 @@ class TechnologiesPage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
+
+    content_panels = Page.content_panels + [
+        ImageChooserPanel('background'),
+    ]
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
