@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.db.models import Count
 from django.db.models.signals import post_save
@@ -10,6 +12,7 @@ from wagtail.core.fields import RichTextField
 from wagtail.core.models import Page
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
+from wagtail.snippets.models import register_snippet
 
 
 class HomePage(Page):
@@ -91,6 +94,7 @@ class TechnologiesPage(Page):
         return context
 
 
+@register_snippet
 class TechnologyInfo(models.Model):
     logo = models.ForeignKey(
         'wagtailimages.Image',
@@ -99,11 +103,23 @@ class TechnologyInfo(models.Model):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    summary = RichTextField()
+    summary = RichTextField(blank=True)
     tag = models.OneToOneField('taggit.Tag', on_delete=models.CASCADE, related_name='info')
+    content_panels = Page.content_panels + [
+        ImageChooserPanel('logo'),
+        FieldPanel('summary'),
+        FieldPanel('tag'),
+    ]
+
+    def __str__(self):
+        return self.tag.name
+
+    class Meta:
+        verbose_name = 'technology'
+        verbose_name_plural = 'technologies'
 
 
 @receiver(post_save, sender=Tag)
 def on_tag_save(sender, instance, created, **kwargs):
     if created:
-        TechnologyInfo.objects.create(tag=instance)
+        TechnologyInfo.objects.get_or_create(tag=instance)
