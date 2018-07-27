@@ -1,5 +1,3 @@
-import uuid
-
 from django.db import models
 from django.db.models import Count
 from django.db.models.signals import post_save
@@ -16,13 +14,33 @@ from wagtail.snippets.models import register_snippet
 
 
 class HomePage(Page):
+    background = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
     subpage_types = [
         'home.PortfolioPage',
         'home.TechnologiesPage'
     ]
 
+    content_panels = Page.content_panels + [
+        ImageChooserPanel('background'),
+    ]
+
 
 class PortfolioPage(Page):
+    background = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         technology = request.GET.get('technology')
@@ -85,6 +103,14 @@ class ProjectPage(Page):
 
 
 class TechnologiesPage(Page):
+    background = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context['technologies'] = Tag.objects.annotate(
