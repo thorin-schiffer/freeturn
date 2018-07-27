@@ -1,7 +1,8 @@
 from django.db import models
+from django.db.models import Count
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
-from taggit.models import TaggedItemBase
+from taggit.models import TaggedItemBase, Tag
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Page
@@ -62,7 +63,8 @@ class ProjectPage(Page):
     ]
 
     technologies = ClusterTaggableManager(through=ProjectTechnology,
-                                          blank=True)
+                                          blank=True,
+                                          related_name='projects')
 
     content_panels = Page.content_panels + [
         ImageChooserPanel('logo'),
@@ -79,10 +81,8 @@ class ProjectPage(Page):
 
 class TechnologiesPage(Page):
     def get_context(self, request, *args, **kwargs):
-        raise NotImplementedError()
         context = super().get_context(request, *args, **kwargs)
-        technology = request.GET.get('technology')
-        context['projects'] = ProjectPage.objects.child_of(self).live()
-        if technology:
-            context['projects'] = context['projects'].filter(technologies__name=technology)
+        context['technologies'] = Tag.objects.annotate(
+            projects_count=Count('home_projecttechnology_items')
+        ).filter(projects_count__gt=0)
         return context
