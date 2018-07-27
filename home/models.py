@@ -10,7 +10,10 @@ from wagtail.search import index
 
 
 class HomePage(Page):
-    pass
+    subpage_types = [
+        'home.PortfolioPage',
+        'home.TechnologiesPage'
+    ]
 
 
 class PortfolioPage(Page):
@@ -72,3 +75,14 @@ class ProjectPage(Page):
         FieldPanel('responsibility'),
         FieldPanel('technologies'),
     ]
+
+
+class TechnologiesPage(Page):
+    def get_context(self, request, *args, **kwargs):
+        raise NotImplementedError()
+        context = super().get_context(request, *args, **kwargs)
+        technology = request.GET.get('technology')
+        context['projects'] = ProjectPage.objects.child_of(self).live()
+        if technology:
+            context['projects'] = context['projects'].filter(technologies__name=technology)
+        return context
