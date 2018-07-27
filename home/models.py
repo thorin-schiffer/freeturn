@@ -1,5 +1,7 @@
 from django.db import models
 from django.db.models import Count
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
 from taggit.models import TaggedItemBase, Tag
@@ -87,3 +89,21 @@ class TechnologiesPage(Page):
         ).filter(projects_count__gt=0)
         context['portfolio'] = PortfolioPage.objects.last()
         return context
+
+
+class TechnologyInfo(models.Model):
+    logo = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    summary = RichTextField()
+    tag = models.OneToOneField('taggit.Tag', on_delete=models.CASCADE, related_name='info')
+
+
+@receiver(post_save, sender=Tag)
+def on_tag_save(sender, instance, created, **kwargs):
+    if created:
+        TechnologyInfo.objects.create(tag=instance)
