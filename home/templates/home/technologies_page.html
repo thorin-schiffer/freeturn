@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}
+
+{% for technology in technologies %}
+{{ technology.projects_count }}
+{% endfor %}
+
+{% endblock %}
