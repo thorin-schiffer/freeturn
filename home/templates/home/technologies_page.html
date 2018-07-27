@@ -16,14 +16,14 @@
         {% for technology in technologies %}
         <div class="col-lg-6 portfolio-item">
             <div class="card h-100">
-                <a href="{% pageurl portfolio %}?technology={{technology}}">{% image technology.logo fill-700x400-c100 class="card-img-top"%}</a>
+                <a href="{% pageurl portfolio %}?technology={{technology}}">{% image technology.info.logo fill-700x400-c100 class="card-img-top"%}</a>
 
                 <div class="card-body">
                     <h4 class="card-title">
                         <a href="{% pageurl portfolio %}?technology={{technology}}">{{ technology }}</a>
                     </h4>
                     <p class="card-text">
-                        !!!{{ technology }} >> description
+                        {{ technology.info.summary | richtext }}
                     </p>
                 </div>
             </div>
