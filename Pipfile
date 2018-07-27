@@ -8,6 +8,7 @@ wagtail = "<2.2,>=2.1"
 Django = "<2.1,>=2.0"
 django-livereload-server = "*"
 django-turbolinks = "*"
+django-debug-toolbar = "*"
 
 [dev-packages]
 
