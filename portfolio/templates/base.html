@@ -1,5 +1,6 @@
 {% load static wagtailuserbar %}
 {% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,6 +32,14 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/portfolio.css' %}">
 
     {% block extra_css %}
+    {% image page.background fill-1920x1080 as background %}
+    <style>
+        body {
+            background: url('{{background.url}}') no-repeat center center fixed;
+        }
+
+
+    </style>
     {# Override this in templates to add extra stylesheets #}
     {% endblock %}
 </head>
