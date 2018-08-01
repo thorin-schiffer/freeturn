@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'taggit',
     'livereload',
     'colorful',
+    'storages',
 
     'django.contrib.admin',
     'django.contrib.auth',

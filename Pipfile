@@ -13,6 +13,7 @@ gunicorn = "*"
 django-toolbelt = "*"
 django-colorful = "*"
 whitenoise = "*"
+django-storages = "*"
 
 [dev-packages]
 
