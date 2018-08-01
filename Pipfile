@@ -10,6 +10,7 @@ django-livereload-server = "*"
 django-turbolinks = "*"
 django-debug-toolbar = "*"
 gunicorn = "*"
+django-toolbelt = "*"
 
 [dev-packages]
 
