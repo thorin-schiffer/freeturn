@@ -116,8 +116,10 @@ class TechnologiesPage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
+    title_color = RGBColorField(default="#FFFFFF")
 
     content_panels = Page.content_panels + [
+        FieldPanel('title_color'),
         ImageChooserPanel('background'),
     ]
 
