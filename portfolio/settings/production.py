@@ -10,6 +10,8 @@ DATABASES['default'] = dj_database_url.config()
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
 try:
     from .local import *
 except ImportError:
