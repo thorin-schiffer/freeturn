@@ -1,3 +1,4 @@
+from colorful.fields import RGBColorField
 from django.db import models
 from django.db.models import Count
 from django.db.models.signals import post_save
@@ -21,13 +22,14 @@ class HomePage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-
+    title_color = RGBColorField(default="#FFFFFF")
     subpage_types = [
         'home.PortfolioPage',
         'home.TechnologiesPage'
     ]
 
     content_panels = Page.content_panels + [
+        FieldPanel('title_color'),
         ImageChooserPanel('background'),
     ]
 

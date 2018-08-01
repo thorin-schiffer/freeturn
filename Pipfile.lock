@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6d6ed5bbaa8371ce6dc1664994c68112151486e2533b40658ff97d1df9d28cdc"
+            "sha256": "6f8c7df0593d2a1edc6e8d29b093bcb6954d7d829b8b3131a054dfc6f3b1ca5b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -58,6 +58,14 @@
             ],
             "index": "pypi",
             "version": "==2.0.7"
+        },
+        "django-colorful": {
+            "hashes": [
+                "sha256:5f21aea59b87cf286f742abb0318f91bbfef135b3e3bd4725f3dd4ecf6876478",
+                "sha256:b47abe9cc7a77f5e16aa8b1b0439213372fdb921f199d6cf5c06145be424ec38"
+            ],
+            "index": "pypi",
+            "version": "==1.2"
         },
         "django-debug-toolbar": {
             "hashes": [
@@ -265,7 +273,7 @@
                 "sha256:c58757e37c4a3172949c99099d4d5106e4d7b63aa0617f9bb24bfbff712c7866",
                 "sha256:d8984742ce86c0855cccecd5c6f54a9f7532c983947cff06f3a0e2115b47f85c"
             ],
-            "markers": "python_version != '3.0.*' and python_version >= '2.7' and python_version != '3.2.*' and python_version != '3.1.*' and python_version != '3.3.*'",
+            "markers": "python_version != '3.3.*' and python_version != '3.1.*' and python_version != '3.0.*' and python_version >= '2.7' and python_version != '3.2.*'",
             "version": "==5.1"
         },
         "unidecode": {
@@ -280,7 +288,7 @@
                 "sha256:a68ac5e15e76e7e5dd2b8f94007233e01effe3e50e8daddf69acfd81cb686baf",
                 "sha256:b5725a0bd4ba422ab0e66e89e030c806576753ea3ee08554382c14e685d117b5"
             ],
-            "markers": "python_version != '3.3.*' and python_version != '3.1.*' and python_version != '3.0.*' and python_version >= '2.6' and python_version < '4' and python_version != '3.2.*'",
+            "markers": "python_version != '3.3.*' and python_version != '3.1.*' and python_version >= '2.6' and python_version != '3.0.*' and python_version < '4' and python_version != '3.2.*'",
             "version": "==1.23"
         },
         "wagtail": {
