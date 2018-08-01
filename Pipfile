@@ -9,6 +9,7 @@ Django = "<2.1,>=2.0"
 django-livereload-server = "*"
 django-turbolinks = "*"
 django-debug-toolbar = "*"
+gunicorn = "*"
 
 [dev-packages]
 
