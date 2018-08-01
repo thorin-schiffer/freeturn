@@ -12,6 +12,7 @@ django-debug-toolbar = "*"
 gunicorn = "*"
 django-toolbelt = "*"
 django-colorful = "*"
+whitenoise = "*"
 
 [dev-packages]
 
