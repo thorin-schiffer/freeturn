@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'modelcluster',
     'taggit',
     'livereload',
+    'colorful',
 
     'django.contrib.admin',
     'django.contrib.auth',
