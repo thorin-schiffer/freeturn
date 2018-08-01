@@ -11,6 +11,7 @@ django-turbolinks = "*"
 django-debug-toolbar = "*"
 gunicorn = "*"
 django-toolbelt = "*"
+django-colorful = "*"
 
 [dev-packages]
 
