@@ -125,6 +125,7 @@ class TechnologiesPage(Page):
         FieldPanel('title_color'),
         ImageChooserPanel('background'),
     ]
+    subpage_types = []
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
