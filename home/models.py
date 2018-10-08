@@ -42,6 +42,9 @@ class PortfolioPage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
+    subpage_types = [
+        'home.ProjectPage',
+    ]
 
     content_panels = Page.content_panels + [
         ImageChooserPanel('background'),
