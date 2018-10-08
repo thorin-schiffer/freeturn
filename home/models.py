@@ -73,8 +73,6 @@ class ProjectPage(Page):
         related_name='+'
     )
 
-    name = models.CharField(max_length=255)
-
     summary = models.CharField(max_length=511,
                                help_text="Short description to show on tiles and lists")
     description = RichTextField(help_text="Long description to show on the detail page")
@@ -86,7 +84,6 @@ class ProjectPage(Page):
     responsibility = RichTextField()
 
     search_fields = Page.search_fields + [
-        index.SearchField('name'),
         index.SearchField('summary'),
         index.RelatedFields('technologies', [
             index.SearchField('name', partial_match=True, boost=10),
@@ -100,7 +97,6 @@ class ProjectPage(Page):
 
     content_panels = Page.content_panels + [
         ImageChooserPanel('logo'),
-        FieldPanel('name'),
         FieldPanel('summary'),
         FieldPanel('description'),
 
