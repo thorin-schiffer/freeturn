@@ -57,7 +57,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
 
-                {% for menu_item in menu_items %}
+                {% for menu_item in menu_items.values %}
                 <li class="nav-item {% if menu_item == page or page.get_parent.id == menu_item.id %}active{% endif %}">
                     <a class="nav-link" href="{% pageurl menu_item %}">
                         {{ menu_item }}
