@@ -6,9 +6,7 @@ name = "pypi"
 [packages]
 wagtail = "<2.2,>=2.1"
 Django = "<2.1,>=2.0"
-django-livereload-server = "*"
 django-turbolinks = "*"
-django-debug-toolbar = "*"
 gunicorn = "*"
 django-toolbelt = "*"
 django-colorful = "*"
@@ -17,6 +15,8 @@ django-storages = "*"
 "boto3" = "*"
 
 [dev-packages]
+django-livereload-server = "*"
+django-debug-toolbar = "*"
 
 [requires]
 python_version = "3.7"
