@@ -14,8 +14,9 @@
     <div class="row">
         {% for project in projects %}
         <div class="col-lg-6 portfolio-item">
-            <div class="card h-100">
-                <a href="{% pageurl project %}">{% image project.logo fill-700x400-c100 class="card-img-top"%}</a>
+            <div class="card h-100 text-white bg-dark">
+                <div class="card-header">{{ project.title }}</div>
+                <a href="{% pageurl project %}">{% image project.logo fill-100x100-c100 class="rounded mx-auto d-block" style="background:white"%}</a>
 
                 <div class="card-body">
                     <h4 class="card-title">
