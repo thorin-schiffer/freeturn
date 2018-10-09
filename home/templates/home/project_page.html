@@ -12,26 +12,31 @@
 
     <div class="row">
 
-        <div class="col-md-8">
-            {% image page.logo fill-700x400-c100 class="img-fluid"%}
+        <div class="col-md-4">
+            {% image page.logo fill-400x400-c100 class="img-fluid"%}
         </div>
 
-        <div class="col-md-4">
-            <h3 class="my-3">Project Description</h3>
+        <div class="col-md-8">
+            <h2 class="my-3">{{ page.title }}: {{ page.start_date | date:"M Y" }}, {{ page.duration }} month{{page.duration|pluralize}}</h2>
+            <h3>Responsibility</h3>
             <p>
-                {{ page.summary }}
+                {{ page.responsibility| richtext }}
             </p>
+            <h3>Technologies</h3>
             <p>
-                Start date: {{ page.start_date }}
-            </p>
-            <p>
-                Duration: {{ page.duration }} months
-            </p>
-            <p>
-                Responsibility: {{ page.responsibility }}
-            </p>
-            <p>
-                Technologies: {{ page.technologies.all }}
+            <div class="row">
+                {% for technology in page.technologies.all %}
+                <div class="col-lg-1">
+                    <a href="{% pageurl menu_items.portfolio %}?technology={{technology}}">
+                        {% image technology.info.logo fill-50x50-c100 class="mx-auto d-block"%}
+
+                    </a>
+                    <div class="d-flex justify-content-center">
+                        {{ technology }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
             </p>
         </div>
 
