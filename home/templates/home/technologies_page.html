@@ -12,11 +12,11 @@
         Technologies
     </h1>
 
-    <div class="row">
-        {% for technology in technologies %}
-        <div class="col-lg-3 technology-item">
+    {% for technology in technologies %}
+        {% if forloop.counter0|divisibleby:3 %}<div class="row">{% endif %}
+        <div class="col-lg-3">
 
-            <div class="card h-100 bg-secondary text-white">
+            <div class="card h-100 bg-secondary text-white technology-item">
                 <a href="{% pageurl portfolio %}?technology={{technology}}">
                     {% image technology.info.logo fill-100x100-c100 class="mx-auto d-block technology-logo" style="background:white;"%}
                 </a>
@@ -28,8 +28,8 @@
             </div>
 
         </div>
-        {% endfor %}
-    </div>
+        {% if forloop.counter|divisibleby:3 %}</div>{% endif %}
+    {% endfor %}
 </div>
 
 {% endblock %}
