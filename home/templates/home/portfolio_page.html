@@ -8,8 +8,13 @@
 <div class="container">
 
     <h1 class="my-4">
-        Portfolio{% if request.GET.technology %}:{{request.GET.technology}}{% endif %}
+        Portfolio{% if technology %}:{{technology}}{% endif %}
     </h1>
+    {% if technology %}
+    <p>
+        {{ technology.summary | richtext }}
+    </p>
+    {% endif %}
     {% for project in projects %}
         {% if forloop.counter0|divisibleby:3 %}<div class="row">{% endif %}
         <div class="col-lg-4">
