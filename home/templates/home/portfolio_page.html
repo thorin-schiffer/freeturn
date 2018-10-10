@@ -10,24 +10,23 @@
     <h1 class="my-4">
         Portfolio{% if request.GET.technology %}:{{request.GET.technology}}{% endif %}
     </h1>
+    {% for project in projects %}
+        {% if forloop.counter0|divisibleby:3 %}<div class="row">{% endif %}
+            <div class="col-lg-4">
+                <div class="card h-100 text-white bg-dark portfolio-item">
+                    <a href="{% pageurl project %}">{% image project.logo fill-100x100-c100 class="mx-auto d-block portfolio-logo" style="background:white;"%}</a>
 
-    <div class="row">
-        {% for project in projects %}
-        <div class="col-lg-4">
-            <div class="card h-100 text-white bg-dark portfolio-item">
-                <a href="{% pageurl project %}">{% image project.logo fill-100x100-c100 class="mx-auto d-block portfolio-logo" style="background:white;"%}</a>
-
-                <div class="card-body">
-                    <h4 class="card-title">
-                        {{ project.title }}
-                    </h4>
-                    <p class="card-text">
-                        {{ project.summary }}
-                    </p>
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            {{ project.title }}
+                        </h4>
+                        <p class="card-text">
+                            {{ project.summary }}
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-        {% endfor %}
-    </div>
+        {% if forloop.counter|divisibleby:3 %}</div>{% endif %}
+    {% endfor %}
 </div>
 {% endblock %}

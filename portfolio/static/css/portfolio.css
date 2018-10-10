@@ -3,7 +3,7 @@
     margin: 20px;
 }
 .portfolio-item {
-    border-radius: 4px;
+    border-radius: 20px;
 }
 .technology-logo {
     border-radius: 100px;
@@ -11,4 +11,8 @@
 }
 .technology-item {
     border-radius: 4px;
+}
+
+.row {
+    margin-top: 20px;
 }
