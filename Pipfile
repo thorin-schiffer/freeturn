@@ -5,17 +5,18 @@ name = "pypi"
 
 [packages]
 wagtail = "<2.2,>=2.1"
-Django = "<2.1,>=2.0"
+Django = "==2.0.9"
 gunicorn = "*"
 django-toolbelt = "*"
 django-colorful = "*"
 whitenoise = "*"
 django-storages = "*"
 "boto3" = "*"
+invoke = "*"
 
 [dev-packages]
 django-livereload-server = "*"
 django-debug-toolbar = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.6.6"

@@ -1,11 +1,11 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d9657cc70dd24fceb46eac1f918a94a61a8b6a193068b95cf9b4251445c5f4fc"
+            "sha256": "bd4900c0ec78284d08a50297d1729522073688768fa4dcb03a1b9c2a59e263f0"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_version": "3.7"
+            "python_version": "3.6.6"
         },
         "sources": [
             {
@@ -26,18 +26,18 @@
         },
         "boto3": {
             "hashes": [
-                "sha256:b9664b5e11dc5d3e2b546609f2c86e457ac1b4b596fee18322fa3667ce730f88",
-                "sha256:b9e5a9c4c70d06a7aca9270ea4b4f69577c9107a891ab6de279565284c335eb1"
+                "sha256:0409ee2b927a8767ca629c5d2f09799e937636ec0f0123842b63f526ec170c0c",
+                "sha256:3e31a82b3739e44dc47ab99f514ff9ef9b230f38ecf4dbe04a90edc53b284468"
             ],
             "index": "pypi",
-            "version": "==1.9.19"
+            "version": "==1.9.20"
         },
         "botocore": {
             "hashes": [
-                "sha256:0f0a2a74a9dc1d53531f559477f329ad087f3b378fc9cf02e67017e475854f8d",
-                "sha256:bc2fa51e05afb944f4f684c7d52a0db165898985d46b2fcb55fb842028fcc7a6"
+                "sha256:4152cd92e7f979707e35be7d4fa18f0435050b460e0a54cd88db27c2586d8886",
+                "sha256:dde120395f3775fa2273c1e0e5b909532f74461601d85c6c5f5f719991cffd22"
             ],
-            "version": "==1.12.19"
+            "version": "==1.12.20"
         },
         "certifi": {
             "hashes": [
@@ -159,6 +159,15 @@
                 "sha256:684a38a6f903c1d71d6d5fac066b58d7768af4de2b832e426ec79c30daa94a16"
             ],
             "version": "==2.7"
+        },
+        "invoke": {
+            "hashes": [
+                "sha256:4f4de934b15c2276caa4fbc5a3b8a61c0eb0b234f2be1780d2b793321995c2d6",
+                "sha256:dc492f8f17a0746e92081aec3f86ae0b4750bf41607ea2ad87e5a7b5705121b7",
+                "sha256:eb6f9262d4d25b40330fb21d1e99bf0f85011ccc3526980f8a3eaedd4b43892e"
+            ],
+            "index": "pypi",
+            "version": "==1.2.0"
         },
         "jmespath": {
             "hashes": [
