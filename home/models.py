@@ -107,6 +107,9 @@ class ProjectPage(Page):
     ]
     subpage_types = []
 
+    class Meta:
+        ordering = ('-start_date',)
+
 
 class TechnologiesPage(Page):
     background = models.ForeignKey(
