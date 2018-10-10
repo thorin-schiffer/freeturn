@@ -4,6 +4,15 @@
 
 {% block body_class %}template-homepage{% endblock %}
 
+{% block extra_css %}
+{% image menu_items.portfolio.background fill-1920x1080 as background %}
+<style>
+    body {
+        background: url('{{background.url}}') no-repeat center center fixed;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <h1 class="my-4">
