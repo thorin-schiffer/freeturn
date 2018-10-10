@@ -156,9 +156,3 @@ class TechnologyInfo(models.Model):
     class Meta:
         verbose_name = 'technology'
         verbose_name_plural = 'technologies'
-
-
-@receiver(post_save, sender=Tag)
-def on_tag_save(sender, instance, created, **kwargs):
-    if created:
-        TechnologyInfo.objects.get_or_create(tag=instance)
