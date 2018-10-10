@@ -8,7 +8,7 @@
 <div class="container">
 
     <h1 class="my-4">
-        Portfolio
+        Portfolio{% if request.GET.technology %}:{{request.GET.technology}}{% endif %}
     </h1>
 
     <div class="row">
