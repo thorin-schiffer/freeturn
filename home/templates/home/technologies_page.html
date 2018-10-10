@@ -14,19 +14,19 @@
 
     <div class="row">
         {% for technology in technologies %}
-        <div class="col-lg-6 portfolio-item">
-            <div class="card h-100">
-                <a href="{% pageurl portfolio %}?technology={{technology}}">{% image technology.info.logo fill-700x400-c100 class="card-img-top"%}</a>
+        <div class="col-lg-3 technology-item">
 
+            <div class="card h-100 bg-secondary text-white">
+                <a href="{% pageurl portfolio %}?technology={{technology}}">
+                    {% image technology.info.logo fill-100x100-c100 class="mx-auto d-block techology-logo" style="background:white;"%}
+                </a>
                 <div class="card-body">
                     <h4 class="card-title">
-                        <a href="{% pageurl portfolio %}?technology={{technology}}">{{ technology }}</a>
+                        {{ technology }}
                     </h4>
-                    <p class="card-text">
-                        {{ technology.info.summary | richtext }}
-                    </p>
                 </div>
             </div>
+
         </div>
         {% endfor %}
     </div>
