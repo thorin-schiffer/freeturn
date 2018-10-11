@@ -1,8 +1,6 @@
 from colorful.fields import RGBColorField
 from django.db import models
 from django.db.models import Count
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
 from taggit.models import TaggedItemBase, Tag
@@ -97,11 +95,13 @@ class ProjectPage(Page):
                                           blank=True,
                                           related_name='projects')
 
+    project_url = models.URLField(null=True, blank=True) # url is a part of the parent model
+
     content_panels = Page.content_panels + [
         ImageChooserPanel('logo'),
         FieldPanel('summary'),
         FieldPanel('description'),
-
+        FieldPanel('project_url'),
         FieldPanel('start_date'),
         FieldPanel('duration'),
         FieldPanel('responsibility'),

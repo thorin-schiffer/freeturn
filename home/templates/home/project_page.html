@@ -25,12 +25,16 @@
             {% image page.logo fill-400x400-c100 class="img-fluid"%}
         </div>
 
-        <div class="col-md-8">
+        <div class="col-md-6">
             <h2 class="my-3">{{ page.title }}: {{ page.start_date | date:"M Y" }}, {{ page.duration }} month{{page.duration|pluralize}}</h2>
             <h3>Responsibility</h3>
             <p>
                 {{ page.responsibility| richtext }}
             </p>
+            {% if page.project_url %}
+            <h3>Link</h3>
+            <p><a href="{{ page.project_url }}">{{ page.project_url }}</a></p>
+            {% endif %}
             <h3>Technologies</h3>
             <p>
             <div class="row">
