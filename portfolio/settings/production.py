@@ -1,6 +1,6 @@
 from .base import *
 
-DEBUG = True
+DEBUG = False
 
 # Parse database configuration from $DATABASE_URL
 import dj_database_url
