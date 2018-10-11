@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load wagtailimages_tags %}
 {% load wagtailcore_tags %}
+{% load static %}
 
 {% block body_class %}template-homepage{% endblock %}
 
@@ -19,7 +20,13 @@
         {% if forloop.counter0|divisibleby:3 %}<div class="row">{% endif %}
         <div class="col-lg-4">
             <div class="card h-100 text-white bg-dark portfolio-item">
-                <a href="{% pageurl project %}">{% image project.logo fill-100x100-c100 class="mx-auto d-block portfolio-logo" style="background:white;"%}</a>
+                <a href="{% pageurl project %}">
+                    {% if project.logo %}
+                        {% image project.logo fill-100x100-c50 class="mx-auto d-block portfolio-logo" style="background:white;"%}
+                    {% else %}
+                        <img height="100" width="100" src="{% static 'img/default_project.png' %}" class="mx-auto d-block technology-logo">
+                    {% endif %}
+                </a>
 
                 <div class="card-body">
                     <h4 class="card-title">
