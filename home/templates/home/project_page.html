@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load wagtailimages_tags %}
 {% load wagtailcore_tags %}
-
+{% load static %}
 {% block body_class %}template-homepage{% endblock %}
 
 {% block extra_css %}
@@ -22,10 +22,10 @@
     <div class="row">
 
         <div class="col-md-4">
-            {% image page.logo fill-400x400-c100 class="img-fluid"%}
+            {% image page.logo fill-400x400-c100 class="img-fluid portfolio-logo"%}
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-8">
             <h2 class="my-3">{{ page.title }}: {{ page.start_date | date:"M Y" }}, {{ page.duration }} month{{page.duration|pluralize}}</h2>
             <h3>Responsibility</h3>
             <p>
@@ -39,12 +39,15 @@
             <p>
             <div class="row">
                 {% for technology in page.technologies.all %}
-                <div class="col-lg-1">
+                <div class="col-lg-2">
                     <a href="{% pageurl menu_items.portfolio %}?technology={{technology}}">
-                        {% image technology.info.logo fill-50x50-c100 class="mx-auto d-block"%}
-
+                        {% if technology.info.logo %}
+                            {% image technology.info.logo fill-50x50-c100 class="mx-auto d-block technology-logo"%}
+                        {% else %}
+                            <img height="50" width="50" src="{% static 'img/default_technology.png' %}" class="mx-auto d-block technology-logo">
+                        {% endif %}
                     </a>
-                    <div class="d-flex justify-content-center">
+                    <div class="text-center">
                         {{ technology }}
                     </div>
                 </div>
@@ -52,11 +55,12 @@
             </div>
             </p>
         </div>
-
+    </div>
+    <div class="row">
         <div class="col-md-12">
+            <h2>Project description</h2>
             {{ page.description | richtext}}
         </div>
-
     </div>
 </div>
 {% endblock %}
