@@ -72,6 +72,14 @@ class ProjectPage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
+    card_background = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Card background on the portfolio view"
+    )
 
     summary = models.CharField(max_length=511,
                                help_text="Short description to show on tiles and lists")
@@ -99,6 +107,7 @@ class ProjectPage(Page):
 
     content_panels = Page.content_panels + [
         ImageChooserPanel('logo'),
+        ImageChooserPanel('card_background'),
         FieldPanel('summary'),
         FieldPanel('description'),
         FieldPanel('project_url'),
