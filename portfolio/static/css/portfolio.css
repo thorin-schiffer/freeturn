@@ -1,7 +1,7 @@
 .portfolio-logo {
     border-radius: 200px;
     margin: 20px 0px;
-    box-shadow: 0 1px 1px 0 #C7C7C7 inset;
+    box-shadow: 0 5px 5px 0 #C7C7C7 inset;
     background: white;
 }
 .portfolio-item {
@@ -17,4 +17,11 @@
 
 .row {
     margin-top: 20px;
+}
+.card {
+    border: none;
+}
+.card-footer {
+    border-radius: 200px;
+    box-shadow: 0 5px 5px -5px black inset;
 }
