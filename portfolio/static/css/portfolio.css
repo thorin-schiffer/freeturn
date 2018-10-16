@@ -11,9 +11,10 @@
     .card-footer {
         border-radius: 200px;
         box-shadow: 0 3px 3px -5px black inset;
+        background: none;
     }
     .technology-item {
-    border-radius: 20px;
+        border-radius: 20px;
     }
 }
 .technology-logo {
