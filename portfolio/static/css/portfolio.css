@@ -10,7 +10,7 @@
     }
     .card-footer {
         border-radius: 200px;
-        box-shadow: 0 5px 5px -5px black inset;
+        box-shadow: 0 3px 3px -5px black inset;
     }
     .technology-item {
     border-radius: 20px;
