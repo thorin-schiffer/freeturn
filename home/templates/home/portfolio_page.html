@@ -21,7 +21,9 @@
         <div class="col-lg-4">
             {% image project.card_background fill-512x512 as card_background %}
             <div class="card h-100 text-white bg-dark portfolio-item"
-                 style="background: url('{{card_background.url}}') no-repeat center center;background-size: cover;">
+                 {% if card_background %}
+                 style="background: url('{{card_background.url}}') no-repeat center center;background-size: cover;"
+                 {% endif %}>
                 <a href="{% pageurl project %}">
                     {% if project.logo %}
                         {% image project.logo fill-100x100-c50 class="mx-auto d-block portfolio-logo" style="background:white;"%}
