@@ -13,7 +13,7 @@
     </h1>
 
     {% for technology in technologies %}
-        {% if forloop.counter0|divisibleby:3 %}<div class="row">{% endif %}
+        {% if forloop.counter0|divisibleby:4 %}<div class="row">{% endif %}
         <div class="col-lg-3">
 
             <div class="card h-100 bg-secondary text-white technology-item">
@@ -32,7 +32,7 @@
             </div>
 
         </div>
-        {% if forloop.counter|divisibleby:3 %}</div>{% endif %}
+        {% if forloop.counter|divisibleby:4 %}</div>{% endif %}
     {% endfor %}
 </div>
 
