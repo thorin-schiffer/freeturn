@@ -7,7 +7,6 @@
 
 {% block content %}
 <div class="container">
-    <a href="{% pageurl menu_items.portfolio %}" class="btn btn-outline-dark">to portfolio</a>
     <h1 class="my-4">
         Sergey Cheparev
     </h1>
@@ -47,6 +46,7 @@
         <div class="col-md-4">
             {% image page.picture fill-400x400-c80 class="img-fluid portfolio-logo"%}
         </div>
+            <a href="{% pageurl menu_items.portfolio %}" class="btn btn-outline-dark">to portfolio</a>
     </div>
 </div>
 
