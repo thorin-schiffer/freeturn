@@ -38,7 +38,8 @@ class HomePage(Page):
 
     subpage_types = [
         'home.PortfolioPage',
-        'home.TechnologiesPage'
+        'home.TechnologiesPage',
+        'home.ContactPage'
     ]
 
     content_panels = Page.content_panels + [
