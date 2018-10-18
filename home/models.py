@@ -20,6 +20,9 @@ class HomePage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
+    claim = models.CharField(max_length=300,
+                             help_text="Claim text placed under the name",
+                             default="Freelance python developer")
     title_color = RGBColorField(default="#FFFFFF")
     subpage_types = [
         'home.PortfolioPage',
