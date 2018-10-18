@@ -30,10 +30,10 @@ def deploy(context, repo=True):
 @invoke.task
 @with_django
 def create_pages(context):
-    from home.models import PortfolioPage, TechnologiesPage, ContactPage, HomePage
+    from home.models import PortfolioPage, TechnologiesPage, HomePage
     from treebeard.exceptions import NodeAlreadySaved
 
-    types = [PortfolioPage, TechnologiesPage, ContactPage]
+    types = [PortfolioPage, TechnologiesPage]
     home = HomePage.objects.first()
 
     for t in types:

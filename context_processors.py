@@ -6,6 +6,5 @@ def menu_items(request):
         'menu_items': {
             "portfolio": PortfolioPage.objects.last(),
             "technology": TechnologiesPage.objects.last(),
-            "contact": ContactPage.objects.last()
         }
     }
