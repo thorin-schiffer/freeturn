@@ -2,6 +2,7 @@
 {% load wagtailimages_tags %}
 {% load wagtailcore_tags %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block body_class %}template-homepage{% endblock %}
 
@@ -13,8 +14,8 @@
     {{ page.intro|richtext }}
     <form action="{% pageurl page %}" method="POST">
         {% csrf_token %}
-        {{ form.as_table }}
-        <input type="submit">
+        {{ form|crispy }}
+        <input type="submit" class="btn btn-outline-dark">
     </form>
 </div>
 
