@@ -7,14 +7,12 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="my-4">
-        Sergey Cheparev
-    </h1>
-    <h2 class="mt-5" style="color:{{ page.title_color }}">{{ page.claim }}</h2>
-
     <div class="row">
-
         <div class="col-md-8">
+            <h1 class="my-4">
+                Sergey Cheparev
+            </h1>
+            <h2 style="color:{{ page.title_color }}">{{ page.claim }}</h2>
             <div class="row">
                 <div class="col-lg-2">
                     <a href="https://stackoverflow.com/users/1205242/eviltnan">
@@ -43,18 +41,19 @@
             </div>
         </div>
         <div class="col-md-4">
-            {% image page.picture fill-400x400-c80 class="img-fluid"%}
-        </div>
-    </div>
-    <div class="row">
-        <div class="btn-group col-md-4" role="group">
-            <a href="{% pageurl menu_items.portfolio %}" class="btn btn-outline-dark">to portfolio</a>
+            {% image page.picture fill-512x512-c80 class="img-fluid"%}
+            <div class="row">
+                <div class="btn-group col-md-4" role="group">
+                    <a href="{% pageurl menu_items.portfolio %}" class="btn btn-outline-dark">to portfolio</a>
 
-            {% for form in forms %}
-                <a href="{% pageurl form %}" class="btn btn-outline-dark">{{ form.title }}</a>
-            {% endfor %}
+                    {% for form in forms %}
+                        <a href="{% pageurl form %}" class="btn btn-outline-dark">{{ form.title }}</a>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
+
 </div>
 
 <div class="col-lg-6">
