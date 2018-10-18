@@ -163,7 +163,7 @@ class TechnologiesPage(Page):
         context = super().get_context(request, *args, **kwargs)
         context['technologies'] = Tag.objects.annotate(
             projects_count=Count('home_projecttechnology_items')
-        ).filter(projects_count__gt=0)
+        ).filter(projects_count__gt=0).order_by('-projects_count')
         context['portfolio'] = PortfolioPage.objects.last()
         return context
 
