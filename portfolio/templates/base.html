@@ -57,6 +57,7 @@
         }
 
 
+
     </style>
     {# Override this in templates to add extra stylesheets #}
     {% endblock %}
@@ -64,32 +65,31 @@
 
 <body class="{% block body_class %}{% endblock %}">
 
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
-    <div class="container">
-        <a class="navbar-brand" href="/">sergey cheparev</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-
-                {% for menu_item in menu_items.values %}
-                <li class="nav-item {% if menu_item == page or page.get_parent.id == menu_item.id %}active{% endif %}">
-                    <a class="nav-link" href="{% pageurl menu_item %}">
-                        {{ menu_item }}
-                    </a>
-                </li>
-                {% endfor %}
-                {% wagtailuserbar %}
-            </ul>
-        </div>
-    </div>
-</nav>
 
 <!-- Page Content -->
 <section>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
+        <div class="container">
+            <a class="navbar-brand" href="/">sergey cheparev</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+
+                    {% for menu_item in menu_items.values %}
+                    <li class="nav-item {% if menu_item == page or page.get_parent.id == menu_item.id %}active{% endif %}">
+                        <a class="nav-link" href="{% pageurl menu_item %}">
+                            {{ menu_item }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                    {% wagtailuserbar %}
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class="container">
         <div class="row">
             {% block content %}{% endblock %}
