@@ -1,4 +1,4 @@
-from home.models import PortfolioPage, TechnologiesPage
+from home.models import PortfolioPage, TechnologiesPage, ContactPage
 
 
 def menu_items(request):
@@ -6,5 +6,6 @@ def menu_items(request):
         'menu_items': {
             "portfolio": PortfolioPage.objects.last(),
             "technology": TechnologiesPage.objects.last(),
+            "contact": ContactPage.objects.last()
         }
     }
