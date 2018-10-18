@@ -47,6 +47,11 @@ class HomePage(Page):
         ImageChooserPanel('background'),
     ]
 
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context['forms'] = ContactPage.objects.live()
+        return context
+
 
 class PortfolioPage(Page):
     background = models.ForeignKey(
