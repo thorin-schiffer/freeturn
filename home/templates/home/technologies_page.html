@@ -25,8 +25,11 @@
                     {% endif %}
                 </a>
                 <div class="card-body">
-                    <h4 class="card-title">
+                    <h3 class="card-title">
                         {{ technology }}
+                    </h3>
+                    <h4>
+                        {{technology.projects_count}} project{{ technology.projects_count | pluralize }}
                     </h4>
                 </div>
             </div>
