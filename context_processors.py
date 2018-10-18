@@ -1,4 +1,4 @@
-from home.models import PortfolioPage, TechnologiesPage
+from home.models import PortfolioPage, TechnologiesPage, ContactPage
 
 
 def menu_items(request):

@@ -49,10 +49,10 @@
     <div class="row">
         <div class="btn-group col-md-4" role="group">
             <a href="{% pageurl menu_items.portfolio %}" class="btn btn-outline-dark">to portfolio</a>
-            <a href="#" class="btn btn-outline-dark">request cv</a>
-            <a href="#" class="btn btn-outline-dark">check availability</a>
-            <a href="#" class="btn btn-outline-dark">offer project</a>
-            <a href="#" class="btn btn-outline-dark">arrange call</a>
+
+            {% for form in forms %}
+                <a href="{% pageurl form %}" class="btn btn-outline-dark">{{ form.title }}</a>
+            {% endfor %}
         </div>
     </div>
 </div>
