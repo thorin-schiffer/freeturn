@@ -13,6 +13,7 @@ whitenoise = "*"
 django-storages = "*"
 "boto3" = "*"
 invoke = "*"
+django-crispy-forms = "*"
 
 [dev-packages]
 django-livereload-server = "*"
