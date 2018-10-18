@@ -1,10 +1,63 @@
 {% extends "base.html" %}
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
+{% load static %}
 
 {% block body_class %}template-homepage{% endblock %}
 
 {% block content %}
+<div class="container">
+    <h1 class="my-4">
+        Sergey Cheparev
+    </h1>
+    <h2 class="mt-5" style="color:{{ page.title_color }}">{{ page.claim }}</h2>
+
+    <div class="row">
+
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-lg-2">
+                    <a href="https://stackoverflow.com/users/1205242/eviltnan">
+                        <img height="50" width="50" src="{% static 'img/stack_overflow.png' %}" class="mx-auto d-block technology-logo">
+                    </a>
+                    <div class="text-center">
+                        Stackoverflow
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <a href="https://github.com/eviltnan">
+                        <img height="50" width="50" src="{% static 'img/github.png' %}" class="mx-auto d-block technology-logo">
+                    </a>
+                    <div class="text-center">
+                        GitHub
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <a href="https://www.linkedin.com/in/sergey-cheparev/">
+                        <img height="50" width="50" src="{% static 'img/linkedin.png' %}" class="mx-auto d-block technology-logo">
+                    </a>
+                    <div class="text-center">
+                        LinkedIn
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            {% image page.picture fill-400x400-c80 class="img-fluid"%}
+        </div>
+    </div>
+    <div class="row">
+        <div class="btn-group col-md-4" role="group">
+            <a href="{% pageurl menu_items.portfolio %}" class="btn btn-outline-dark">to portfolio</a>
+            <a href="#" class="btn btn-outline-dark">request cv</a>
+            <a href="#" class="btn btn-outline-dark">check availability</a>
+            <a href="#" class="btn btn-outline-dark">offer project</a>
+            <a href="#" class="btn btn-outline-dark">arrange call</a>
+        </div>
+    </div>
+</div>
+
 <div class="col-lg-6">
-    <h1 class="mt-5" style="color:{{ page.title_color }}">Sergey Cheparev</h1>
-    <h2 class="mt-5" style="color:{{ page.title_color }}">Freelance senior python developer and data scientist</h2>
+
 </div>
 {% endblock %}
