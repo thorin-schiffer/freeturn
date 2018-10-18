@@ -24,6 +24,16 @@ class HomePage(Page):
                              help_text="Claim text placed under the name",
                              default="Freelance python developer")
     title_color = RGBColorField(default="#FFFFFF")
+
+    picture = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="My picture"
+    )
+
     subpage_types = [
         'home.PortfolioPage',
         'home.TechnologiesPage'
@@ -31,6 +41,7 @@ class HomePage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel('title_color'),
+        ImageChooserPanel('picture'),
         ImageChooserPanel('background'),
     ]
 
