@@ -117,7 +117,7 @@ class ProjectPage(Page):
                                           blank=True,
                                           related_name='projects')
 
-    project_url = models.URLField(null=True, blank=True) # url is a part of the parent model
+    project_url = models.URLField(null=True, blank=True)  # url is a part of the parent model
 
     content_panels = Page.content_panels + [
         ImageChooserPanel('logo'),
@@ -184,3 +184,13 @@ class TechnologyInfo(models.Model):
     class Meta:
         verbose_name = 'technology'
         verbose_name_plural = 'technologies'
+
+
+class ContactPage(Page):
+    background = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
