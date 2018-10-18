@@ -7,6 +7,7 @@
 
 {% block content %}
 <div class="container">
+    <a href="{% pageurl menu_items.portfolio %}" class="btn btn-outline-dark">to portfolio</a>
     <h1 class="my-4">
         Sergey Cheparev
     </h1>
@@ -14,45 +15,21 @@
 
     <div class="row">
 
-        <div class="col-md-4">
-            {% image page.picture fill-400x400-c80 class="img-fluid portfolio-logo"%}
-        </div>
-
         <div class="col-md-8">
-            <h2 class="my-3">{{ page.start_date | date:"M Y" }}, {{ page.duration }} month{{page.duration|pluralize}}</h2>
-            <h3>Responsibility</h3>
-            <p>
-                {{ page.responsibility| richtext }}
-            </p>
-            {% if page.project_url %}
-            <h3>Link</h3>
-            <p><a href="{{ page.project_url }}">{{ page.project_url }}</a></p>
-            {% endif %}
-            <h3>Technologies</h3>
-            <p>
+            <h3>Digital identity</h3>
             <div class="row">
-                {% for technology in page.technologies.all %}
                 <div class="col-lg-2">
-                    <a href="{% pageurl menu_items.portfolio %}?technology={{technology}}">
-                        {% if technology.info.logo %}
-                            {% image technology.info.logo fill-50x50-c100 class="mx-auto d-block technology-logo"%}
-                        {% else %}
-                            <img height="50" width="50" src="{% static 'img/default_technology.png' %}" class="mx-auto d-block technology-logo">
-                        {% endif %}
+                    <a href="https://stackoverflow.com/users/1205242/eviltnan">
+                        <img height="50" width="50" src="{% static 'img/stack_overflow.png' %}" class="mx-auto d-block technology-logo">
                     </a>
                     <div class="text-center">
-                        {{ technology }}
+                        Stackoverflow
                     </div>
                 </div>
-                {% endfor %}
             </div>
-            </p>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <h2>Project description</h2>
-            {{ page.description | richtext}}
+        <div class="col-md-4">
+            {% image page.picture fill-400x400-c80 class="img-fluid portfolio-logo"%}
         </div>
     </div>
 </div>
