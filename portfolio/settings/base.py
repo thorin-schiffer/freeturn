@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'wagtail.admin',
     'wagtail.core',
 
+    'snowpenguin.django.recaptcha2',
     'modelcluster',
     'taggit',
     'livereload',
@@ -158,3 +159,5 @@ WAGTAIL_SITE_NAME = "portfolio"
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'https://cheparev.com'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
