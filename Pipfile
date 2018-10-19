@@ -16,6 +16,7 @@ invoke = "*"
 django-crispy-forms = "*"
 django-dotenv = "*"
 "django-recaptcha2" = "*"
+sentry-sdk = "*"
 
 [dev-packages]
 django-livereload-server = "*"
