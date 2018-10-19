@@ -9,6 +9,8 @@ from wagtail.contrib.forms.edit_handlers import FormSubmissionsPanel
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Page
+from wagtail.documents.edit_handlers import DocumentChooserPanel
+from wagtail.documents.models import get_document_model
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
@@ -127,6 +129,15 @@ class ProjectPage(Page):
 
     project_url = models.URLField(null=True, blank=True)  # url is a part of the parent model
 
+    reference_letter = models.ForeignKey(
+        get_document_model(),
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Reference letter for this project"
+    )
+
     content_panels = Page.content_panels + [
         ImageChooserPanel('logo'),
         ImageChooserPanel('card_background'),
@@ -137,6 +148,7 @@ class ProjectPage(Page):
         FieldPanel('duration'),
         FieldPanel('responsibility'),
         FieldPanel('technologies'),
+        DocumentChooserPanel('reference_letter'),
     ]
     subpage_types = []
 
