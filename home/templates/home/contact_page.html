@@ -6,6 +6,11 @@
 
 {% block body_class %}template-homepage{% endblock %}
 
+{% block extra_js %}
+{{ block.super }}
+<script src='https://www.google.com/recaptcha/api.js'></script>
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <h1 class="my-4">
