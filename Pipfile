@@ -21,6 +21,7 @@ sentry-sdk = "*"
 [dev-packages]
 django-livereload-server = "*"
 django-debug-toolbar = "*"
+django-extensions = "*"
 
 [requires]
 python_version = "3.6.6"
