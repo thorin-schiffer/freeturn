@@ -2,6 +2,9 @@ import invoke
 import functools
 import os
 import sys
+import dotenv
+
+dotenv.read_dotenv()
 
 
 def with_django(func):
