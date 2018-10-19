@@ -15,6 +15,8 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
+from home.forms import RecaptchaForm
+
 
 class HomePage(Page):
     background = models.ForeignKey(
@@ -210,7 +212,7 @@ class FormField(AbstractFormField):
     page = ParentalKey('ContactPage', on_delete=models.CASCADE, related_name='form_fields')
 
 
-class ContactPage(AbstractEmailForm):
+class ContactPage(RecaptchaForm):
     background = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
