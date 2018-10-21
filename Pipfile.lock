@@ -140,6 +140,14 @@
             ],
             "version": "==4.3"
         },
+        "django-turbolinks": {
+            "hashes": [
+                "sha256:8916f063f76b35b42e01255f53c4964b9c5dbfcef0b69cec3955e259a0735ec6",
+                "sha256:f52a84098d52560d3861c5b04d12a0da56f66c3df130b94953bc4cf7b4ee46f0"
+            ],
+            "index": "pypi",
+            "version": "==0.5.1"
+        },
         "djangorestframework": {
             "hashes": [
                 "sha256:607865b0bb1598b153793892101d881466bd5a991de12bd6229abb18b1c86136",
