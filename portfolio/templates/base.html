@@ -49,25 +49,18 @@
     <meta name="msapplication-TileImage" content="{% static 'img/favicon/ms-icon-144x144.png' %}">
     <meta name="theme-color" content="#373a3c">
 
+
     {% block extra_css %}
-    {% image page.background fill-1920x1080 as background %}
-    <style>
-        body {
-            background: url('{{background.url}}') no-repeat center center fixed;
-        }
-
-
-
-    </style>
     {# Override this in templates to add extra stylesheets #}
     {% endblock %}
 </head>
 
-<body class="{% block body_class %}{% endblock %}" style="padding-bottom: 100px;">
+{% image page.background fill-1920x1080 as background %}
+<body class="{% block body_class %}{% endblock %}" style="padding-bottom: 100px; background: url('{{background.url}}') no-repeat center center fixed;">
 
 
 <!-- Page Content -->
-<section>
+<section class="background">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
         <div class="container">
             <a class="navbar-brand" href="/">sergey cheparev</a>
