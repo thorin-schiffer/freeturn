@@ -23,7 +23,9 @@ def with_django(func):
 
 
 @invoke.task
-def deploy(context, repo=True):
+def deploy(context, repo=True, db_backup=True):
+    if db_backup:
+        context.run("heroku pg:backups:capture ")
     if repo:
         context.run("git push origin && git push heroku develop:master")
     else:
