@@ -61,11 +61,13 @@
             </p>
         </div>
     </div>
+    {% if page.description %}
     <div class="row">
         <div class="col-md-12">
             <h2>Project description</h2>
             {{ page.description | richtext}}
         </div>
     </div>
+    {% endif %}
 </div>
 {% endblock %}
