@@ -49,8 +49,12 @@ class HomePage(Page):
         'home.ContactPage'
     ]
 
+    earliest_available = models.DateField(null=True, blank=True, default=timezone.now)
+
     content_panels = Page.content_panels + [
         FieldPanel('title_color'),
+        FieldPanel('claim'),
+        FieldPanel('earliest_available'),
         ImageChooserPanel('picture'),
         ImageChooserPanel('background'),
     ]
@@ -64,7 +68,7 @@ class HomePage(Page):
         context['current_project'] = current_project
 
         last_project = ProjectPage.objects.live().order_by('-start_date').first()
-        context['earliest_available'] = last_project.start_date + timedelta(days=31 * last_project.duration)
+        context['earliest_available'] = self.earliest_available or last_project.start_date + timedelta(days=31 * last_project.duration)
 
         return context
 
