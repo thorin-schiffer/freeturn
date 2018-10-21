@@ -6,8 +6,11 @@
 {% block body_class %}template-homepage{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
+<div class="container home" >
+    <div class="row vertical-align">
+        <div class="col-md-4">
+            {% image page.picture fill-512x512-c80 class="img-fluid"%}
+        </div>
         <div class="col-md-8">
             <h1 class="my-4">
                 Sergey Cheparev
@@ -39,11 +42,17 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            {% image page.picture fill-512x512-c80 class="img-fluid"%}
+            <div class="row">
+                <div class="col-lg-12">
+                    Earliest available for new projects: {{ earliest_available | date:"F Y" }}
+                </div>
+            </div>
             <div class="row">
                 <div class="btn-group col-md-4" role="group">
+                    {% if current_project %}
+                        <a href="{% pageurl current_project %}" class="btn btn-outline-dark">current project</a>
+                    {% endif %}
+
                     <a href="{% pageurl menu_items.portfolio %}" class="btn btn-outline-dark">to portfolio</a>
 
                     {% for form in forms %}

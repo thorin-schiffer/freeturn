@@ -16,6 +16,9 @@
     .technology-item {
         border-radius: 20px;
     }
+    .home.container {
+        margin-top: 200px;
+    }
 }
 .technology-logo {
     border-radius: 100px;
@@ -27,4 +30,8 @@
 }
 .card {
     border: none;
+}
+.vertical-align {
+    display: flex;
+    align-items: center;
 }

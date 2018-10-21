@@ -1,6 +1,9 @@
+from datetime import timedelta
+
 from colorful.fields import RGBColorField
 from django.db import models
 from django.db.models import Count
+from django.utils import timezone
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
 from taggit.models import TaggedItemBase, Tag
@@ -55,6 +58,14 @@ class HomePage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context['forms'] = ContactPage.objects.live()
+        current_project = ProjectPage.objects.live().filter(
+            start_date__lt = timezone.now()
+        ).order_by('-start_date').first()
+        context['current_project'] = current_project
+
+        last_project = ProjectPage.objects.live().first()
+        context['earliest_available'] = last_project.start_date + timedelta(days=31 * last_project.duration)
+
         return context
 
 
