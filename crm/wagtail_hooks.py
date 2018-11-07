@@ -1,7 +1,7 @@
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
 
-from crm.models import Company, City
+from crm.models import Company, City, Channel
 
 
 class CityAdmin(ModelAdmin):
@@ -9,6 +9,12 @@ class CityAdmin(ModelAdmin):
     menu_icon = 'fa-location-arrow'
     menu_label = 'Cities'
     list_display = ('name', 'project_count')
+
+
+class ChannelAdmin(ModelAdmin):
+    model = Channel
+    menu_icon = 'fa-arrow-circle-up'
+    menu_label = 'Channels'
 
 
 class CompanyAdmin(ModelAdmin):
@@ -28,7 +34,7 @@ class CRMGroup(ModelAdminGroup):
     menu_icon = "fa-briefcase"
     menu_order = 200
     items = (
-        CompanyAdmin, CityAdmin
+        CompanyAdmin, CityAdmin, ChannelAdmin
     )
 
 
