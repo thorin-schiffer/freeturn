@@ -22,6 +22,7 @@ django-extensions = "*"
 django-phonenumber-field = "*"
 phonenumbers = "*"
 wagtailfontawesome = "*"
+smart-getenv = "*"
 
 [dev-packages]
 django-livereload-server = "*"
