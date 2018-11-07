@@ -22,6 +22,7 @@ class ProjectAdmin(ModelAdmin):
     menu_icon = 'fa-product-hunt'
     menu_label = 'Projects'
     list_display = ('company', 'location', 'daily_rate')
+    search_fields = ('project_page__title',)
 
 
 class CompanyAdmin(ModelAdmin):
