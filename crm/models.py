@@ -29,6 +29,16 @@ class Employee(TimeStampedModel):
     company = models.ForeignKey('Company',
                                 on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+    @property
+    def project_count(self):
+        return self.projects.count()
+
+    class Meta:
+        verbose_name_plural = 'people'
+
 
 class Channel(models.Model):
     name = models.CharField(max_length=200)
@@ -53,7 +63,8 @@ class Project(models.Model):
     manager = models.ForeignKey('Employee',
                                 on_delete=models.SET_NULL,
                                 null=True,
-                                blank=True)
+                                blank=True,
+                                related_name='projects')
     location = models.ForeignKey('crm.City',
                                  related_name='projects',
                                  on_delete=models.CASCADE)

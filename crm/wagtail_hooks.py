@@ -1,7 +1,7 @@
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
 
-from crm.models import Company, City, Channel, Project
+from crm.models import Company, City, Channel, Project, Employee
 
 
 class CityAdmin(ModelAdmin):
@@ -25,6 +25,14 @@ class ProjectAdmin(ModelAdmin):
     search_fields = ('project_page__title',)
 
 
+class EmployeeAdmin(ModelAdmin):
+    model = Employee
+    menu_icon = 'fa-users'
+    menu_label = 'People'
+    search_fields = ('first_name', 'last_name', 'company__name', 'email')
+    list_display = ('first_name', 'last_name', 'company', 'project_count')
+
+
 class CompanyAdmin(ModelAdmin):
     model = Company
     menu_label = 'Companies'  # ditch this to use verbose_name_plural from model
@@ -44,7 +52,7 @@ class CRMGroup(ModelAdminGroup):
     menu_icon = "fa-briefcase"
     menu_order = 200
     items = (
-        ProjectAdmin, CompanyAdmin, CityAdmin, ChannelAdmin
+        ProjectAdmin, EmployeeAdmin, CompanyAdmin, CityAdmin, ChannelAdmin
     )
 
 
