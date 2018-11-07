@@ -167,3 +167,5 @@ TAGGIT_TAGS_FROM_STRING = 'home.utils.tags_splitter'
 from smart_getenv import getenv
 
 DEFAULT_DAILY_RATE = getenv('DEFAULT_DAILY_RATE', default=100, type=Decimal)
+PHONENUMBER_DEFAULT_REGION = "DE"
+PHONENUMBER_DB_FORMAT = "NATIONAL"
