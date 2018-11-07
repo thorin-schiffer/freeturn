@@ -66,12 +66,12 @@ class Project(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        if not self.pk and not self.daily_rate and self.company:
+        if not self.daily_rate and self.company:
             self.daily_rate = self.company.default_daily_rate
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.project_page.name if self.project_page else str(self.company)
+        return self.project_page.title if self.project_page else str(self.company)
 
     class Meta:
         verbose_name_plural = "projects"
