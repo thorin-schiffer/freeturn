@@ -27,6 +27,8 @@ class CompanyAdmin(ModelAdmin):
     list_display = ('name', 'location', 'channel')
     list_filter = ('location', 'channel',)
     search_fields = ('name',)
+    inspect_view_enabled = True
+    inspect_view_fields = ['name']
 
 
 class CRMGroup(ModelAdminGroup):
