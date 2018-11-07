@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 from django_extensions.db.models import TimeStampedModel
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -19,6 +18,12 @@ class Employee(TimeStampedModel):
 
     company = models.ForeignKey('Company',
                                 on_delete=models.CASCADE)
+
+
+class Channel(models.Model):
+    name = models.CharField(max_length=200)
+    url = models.URLField(blank=True,
+                          null=True)
 
 
 class Project(models.Model):
@@ -43,3 +48,8 @@ class Company(TimeStampedModel):
     location = models.ForeignKey('crm.City',
                                  on_delete=models.CASCADE)
     is_hr = models.BooleanField(default=True)
+    channel = models.ForeignKey('Channel',
+                                on_delete=models.SET_NULL,
+                                help_text="Lead channel this company came from",
+                                null=True,
+                                blank=True)
