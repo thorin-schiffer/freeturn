@@ -19,6 +19,8 @@ django-dotenv = "*"
 "django-recaptcha2" = "*"
 sentry-sdk = "*"
 django-extensions = "*"
+django-phonenumber-field = "*"
+phonenumbers = "*"
 
 [dev-packages]
 django-livereload-server = "*"

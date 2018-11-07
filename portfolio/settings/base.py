@@ -24,6 +24,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 INSTALLED_APPS = [
     'home',
+    'crm',
     'turbolinks',
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'crispy_forms',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
