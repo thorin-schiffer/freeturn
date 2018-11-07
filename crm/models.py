@@ -58,6 +58,24 @@ class Project(models.Model):
                                  related_name='projects',
                                  on_delete=models.CASCADE)
 
+    daily_rate = models.DecimalField(
+        decimal_places=2,
+        max_digits=6,
+        null=True,
+        blank=True
+    )
+
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.daily_rate and self.company:
+            self.daily_rate = self.company.default_daily_rate
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.project_page.name if self.project_page else str(self.company)
+
+    class Meta:
+        verbose_name_plural = "projects"
+
 
 class Company(TimeStampedModel):
     name = models.CharField(max_length=200,
