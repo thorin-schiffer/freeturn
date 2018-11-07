@@ -1,7 +1,14 @@
 from wagtail.contrib.modeladmin.options import (
-    ModelAdmin, modeladmin_register)
+    ModelAdmin, modeladmin_register, ModelAdminGroup)
 
-from crm.models import Company
+from crm.models import Company, City
+
+
+class CityAdmin(ModelAdmin):
+    model = City
+    menu_icon = 'fa-location-arrow'
+    menu_label = 'Cities'
+    list_display = ('name', 'project_count')
 
 
 class CompanyAdmin(ModelAdmin):
@@ -16,5 +23,14 @@ class CompanyAdmin(ModelAdmin):
     search_fields = ('name',)
 
 
+class CRMGroup(ModelAdminGroup):
+    menu_label = "CRM"
+    menu_icon = "fa-briefcase"
+    menu_order = 200
+    items = (
+        CompanyAdmin, CityAdmin
+    )
+
+
 # Now you just need to register your customised ModelAdmin class with Wagtail
-modeladmin_register(CompanyAdmin)
+modeladmin_register(CRMGroup)

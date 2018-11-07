@@ -8,6 +8,13 @@ class City(models.Model):
     name = models.CharField(max_length=200,
                             unique=True)
 
+    @property
+    def project_count(self):
+        return self.projects.count()
+
+    class Meta:
+        verbose_name_plural = "city"
+
 
 class Employee(TimeStampedModel):
     first_name = models.CharField(max_length=200)
@@ -39,6 +46,7 @@ class Project(models.Model):
                                 null=True,
                                 blank=True)
     location = models.ForeignKey('crm.City',
+                                 related_name='projects',
                                  on_delete=models.CASCADE)
 
 
