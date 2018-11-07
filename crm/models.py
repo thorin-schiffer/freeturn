@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.conf import settings
 from django_extensions.db.models import TimeStampedModel
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -70,6 +70,13 @@ class Company(TimeStampedModel):
                                 help_text="Lead channel this company came from",
                                 null=True,
                                 blank=True)
+    default_daily_rate = models.DecimalField(
+        decimal_places=2,
+        max_digits=6,
+        null=True,
+        blank=True,
+        default=settings.DEFAULT_DAILY_RATE
+    )
 
     def __str__(self):
         return self.name
