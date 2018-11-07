@@ -53,3 +53,6 @@ class Company(TimeStampedModel):
                                 help_text="Lead channel this company came from",
                                 null=True,
                                 blank=True)
+
+    class Meta:
+        verbose_name_plural = 'companies'
