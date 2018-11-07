@@ -18,6 +18,7 @@ django-crispy-forms = "*"
 django-dotenv = "*"
 "django-recaptcha2" = "*"
 sentry-sdk = "*"
+django-extensions = "*"
 
 [dev-packages]
 django-livereload-server = "*"
