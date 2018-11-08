@@ -78,7 +78,10 @@ class Project(ProjectStateMixin, models.Model):
     location = models.ForeignKey('crm.City',
                                  related_name='projects',
                                  on_delete=models.CASCADE)
+
     original_description = RichTextField()
+    original_url = models.URLField(null=True, blank=True)
+
     notes = MarkdownField()
     daily_rate = models.DecimalField(
         decimal_places=2,
