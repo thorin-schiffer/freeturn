@@ -3,6 +3,8 @@ from django.conf import settings
 from django_extensions.db.models import TimeStampedModel
 from phonenumber_field.modelfields import PhoneNumberField
 
+from crm.project_states import ProjectStateMixin
+
 
 class City(models.Model):
     name = models.CharField(max_length=200,
@@ -52,7 +54,7 @@ class Channel(models.Model):
         verbose_name_plural = 'channels'
 
 
-class Project(models.Model):
+class Project(ProjectStateMixin, models.Model):
     project_page = models.ForeignKey('home.ProjectPage',
                                      on_delete=models.SET_NULL,
                                      null=True,
