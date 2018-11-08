@@ -79,7 +79,7 @@ class ProjectAdmin(ModelAdmin):
     url_helper_class = ProjectURLHelper
 
     def get_form_fields_exclude(self, request):
-        fields = super().get_form_fields_exclude(request)
+        global_fields = super().get_form_fields_exclude(request)
         state_action = request.resolver_match.kwargs.get('action')
         if state_action:
             transitions = [transition for transition in Project().get_all_state_transitions() if
@@ -87,8 +87,13 @@ class ProjectAdmin(ModelAdmin):
             if not transitions:
                 raise Http404
             transition = transitions[0]
-            exclude_fields = transition.custom.get('exclude_fields', [])
-            fields = list(set(fields + exclude_fields))
+            all_fields = [field.name for field in Project._meta.get_fields()]
+            focus_fields = transition.custom.get('fields', [])
+
+            fields = list(set(all_fields) - set(focus_fields))
+            fields = list(set(fields + global_fields))
+        else:
+            fields = global_fields
         return fields
 
     def state_view(self, request, instance_pk, action):

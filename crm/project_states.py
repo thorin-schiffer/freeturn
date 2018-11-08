@@ -7,7 +7,7 @@ class ProjectStateMixin(models.Model):
 
     @transition(field=state, source='requested', target='scoped', custom={
         "help": "This project was scoped, on email or call",
-        "exclude_fields": ["recruiter"]
+        "fields": ["recruiter"]
     })
     def scope(self):
         pass
