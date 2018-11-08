@@ -7,19 +7,21 @@ class ProjectStateMixin(models.Model):
 
     @transition(field=state, source='requested', target='scoped', custom={
         "help": "This project was scoped, on email or call",
-        "fields": ["recruiter"]
+        "fields": ["location", "daily_rate"]
     })
     def scope(self):
         pass
 
     @transition(field=state, source='scoped', target='introduced', custom={
-        "help": "Introduced to the end client"
+        "help": "Introduced to the end client",
+        "fields": ["recruiter"]
     })
     def introduce(self):
         pass
 
-    @transition(field=state, source='inroduced', target='signed', custom={
-        "help": "Contract signed"
+    @transition(field=state, source='introduced', target='signed', custom={
+        "help": "Contract signed",
+        "fields": ["company"]
     })
     def sign(self):
         pass
