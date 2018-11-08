@@ -1,8 +1,9 @@
+from django.conf.urls import url
+from django.contrib.admin.utils import quote
+from django.http import Http404
 from wagtail.contrib.modeladmin.helpers import ButtonHelper, AdminURLHelper
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
-from django.contrib.admin.utils import quote
-from django.conf.urls import url
 from wagtail.contrib.modeladmin.views import EditView
 
 from crm.models import Recruiter, City, Channel, Project, Employee
@@ -37,10 +38,6 @@ class StateTransitionView(EditView):
     def __init__(self, **kwargs):
         self.action = kwargs.pop('action')
         super().__init__(**kwargs)
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        return data
 
 
 class ProjectButtonHelper(ButtonHelper):
@@ -79,6 +76,18 @@ class ProjectAdmin(ModelAdmin):
     search_fields = ('project_page__title',)
     button_helper_class = ProjectButtonHelper
     url_helper_class = ProjectURLHelper
+
+    def get_form_fields_exclude(self, request):
+        fields = super().get_form_fields_exclude(request)
+        state_action = request.resolver_match.kwargs.get('action')
+        transitions = [transition for transition in Project().get_all_state_transitions() if
+                       transition.method.__name__ == state_action]
+        if not transitions:
+            raise Http404
+        transition = transitions[0]
+        exclude_fields = transition.custom.get('exclude_fields', [])
+        fields = list(set(fields + exclude_fields))
+        return fields
 
     def state_view(self, request, instance_pk, action):
         kwargs = {'model_admin': self, 'instance_pk': instance_pk, 'action': action}
