@@ -23,6 +23,8 @@ django-phonenumber-field = "*"
 phonenumbers = "*"
 wagtailfontawesome = "*"
 smart-getenv = "*"
+django-fsm = "*"
+django-fsm-log = "*"
 
 [dev-packages]
 django-livereload-server = "*"
