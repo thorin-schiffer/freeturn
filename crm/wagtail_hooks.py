@@ -7,7 +7,7 @@ from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
 from wagtail.contrib.modeladmin.views import EditView
 
-from crm.models import Recruiter, City, Channel, Project, Employee
+from crm.models import Recruiter, City, Channel, Project, Employee, ClientCompany
 
 
 class CityAdmin(ModelAdmin):
@@ -149,12 +149,21 @@ class RecruiterAdmin(ModelAdmin):
     inspect_view_fields = ['name']
 
 
+class ClientCompanyAdmin(ModelAdmin):
+    model = ClientCompany
+    menu_label = 'Clients'
+    menu_icon = 'fa-user-circle'
+    list_display = ('name', 'location', 'channel')
+    list_filter = ('location', 'channel',)
+    search_fields = ('name',)
+
+
 class CRMGroup(ModelAdminGroup):
     menu_label = "CRM"
     menu_icon = "fa-briefcase"
     menu_order = 200
     items = (
-        ProjectAdmin, EmployeeAdmin, RecruiterAdmin, CityAdmin, ChannelAdmin
+        ProjectAdmin, EmployeeAdmin, RecruiterAdmin, CityAdmin, ChannelAdmin, ClientCompanyAdmin
     )
 
 
