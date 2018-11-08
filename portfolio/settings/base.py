@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'wagtail.admin',
     'wagtail.core',
     'wagtailfontawesome',
+    'wagtailmarkdown',
 
     'snowpenguin.django.recaptcha2',
     'modelcluster',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'phonenumber_field',
+    'django_fsm_log',
 ]
 
 MIDDLEWARE = [

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6e03b62db4b80d18e35be492f348cb5324d76dd64df9ade424f45dfd8b44810f"
+            "sha256": "9f092f1bcb744e52ea43b6450101c6484a4bb43aa99afe5541ef31e459401777"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -30,6 +30,13 @@
                 "sha256:808b6ac932dccb0a4126558f7dfdcf41710dd44a4ef497a0bb59a77f9f078e89"
             ],
             "version": "==4.6.0"
+        },
+        "bleach": {
+            "hashes": [
+                "sha256:0ee95f6167129859c5dce9b1ca291ebdb5d8cd7e382ca0e237dfd0dad63f63d8",
+                "sha256:24754b9a7d530bf30ce7cbc805bc6cce785660b4a10ff3a43633728438c105ab"
+            ],
+            "version": "==2.1.4"
         },
         "boto3": {
             "hashes": [
@@ -81,6 +88,13 @@
             "index": "pypi",
             "version": "==2.0.9"
         },
+        "django-appconf": {
+            "hashes": [
+                "sha256:6a4d9aea683b4c224d97ab8ee11ad2d29a37072c0c6c509896dd9857466fb261",
+                "sha256:ddab987d14b26731352c01ee69c090a4ebfc9141ed223bef039d79587f22acd9"
+            ],
+            "version": "==1.0.2"
+        },
         "django-colorful": {
             "hashes": [
                 "sha256:49d3feefdabdf6a22931c12ce1ed0cbb4596e7754e66bd55c0f362c0a369e5cb",
@@ -112,6 +126,22 @@
             ],
             "index": "pypi",
             "version": "==2.1.3"
+        },
+        "django-fsm": {
+            "hashes": [
+                "sha256:13da2fbec4284dcf2235157c299306f67b788bd39126bed3cdbcc6a8f17575e9",
+                "sha256:c4790469e4f54b6cc95a3ac2c1bd1cdadeb04b0f3578e2472cdd857543a56e67"
+            ],
+            "index": "pypi",
+            "version": "==2.6.0"
+        },
+        "django-fsm-log": {
+            "hashes": [
+                "sha256:9ff71a89dcd9664629df0cc9551b1e600a0996acbf9a0cf46e1c3a29205dc6b5",
+                "sha256:b9ef3636714ec1692bdd79c4fac6152c5d180888d73ba85055e7b6315c47a1d4"
+            ],
+            "index": "pypi",
+            "version": "==1.5.0"
         },
         "django-modelcluster": {
             "hashes": [
@@ -230,6 +260,13 @@
             ],
             "version": "==0.9.3"
         },
+        "markdown": {
+            "hashes": [
+                "sha256:9ba587db9daee7ec761cfc656272be6aabe2ed300fece21208e4aab2e457bc8f",
+                "sha256:a856869c7ff079ad84a3e19cd87a64998350c2b94e9e08e44270faef33400f81"
+            ],
+            "version": "==2.6.11"
+        },
         "phonenumbers": {
             "hashes": [
                 "sha256:e460a71c12b9e7c57ed9d27e2953d0318fe758d5089256bba41dd0b5177355b1",
@@ -309,6 +346,14 @@
             ],
             "version": "==2.7.5"
         },
+        "pygments": {
+            "hashes": [
+                "sha256:78f3f434bcc5d6ee09020f92ba487f95ba50f1e3ef83ae96b9d5ffa1bab25c5d",
+                "sha256:dbae1046def0efb574852fab9e90209b23f556367b5a320c0bcb871c77c3e8cc"
+            ],
+            "index": "pypi",
+            "version": "==2.2.0"
+        },
         "python-dateutil": {
             "hashes": [
                 "sha256:063df5763652e21de43de7d9e00ccf239f953a832941e37be541614732cdfc93",
@@ -379,7 +424,7 @@
                 "sha256:61bf29cada3fc2fbefad4fdf059ea4bd1b4a86d2b6d15e1c7c0b582b9752fe39",
                 "sha256:de9529817c93f27c8ccbfead6985011db27bd0ddfcdb2d86f3f663385c6a9c22"
             ],
-            "markers": "python_version >= '3.4'",
+            "markers": "python_version < '4' and python_version != '3.2.*' and python_version != '3.3.*' and python_version != '3.1.*' and python_version >= '2.7' and python_version != '3.0.*'",
             "version": "==1.24.1"
         },
         "wagtail": {
@@ -389,6 +434,14 @@
             ],
             "index": "pypi",
             "version": "==2.1.3"
+        },
+        "wagtail-markdown": {
+            "hashes": [
+                "sha256:a101ccb78382b853e5a3aeeeef248ec13e77a115441731466ed49a30429c4e90",
+                "sha256:cb081ca56b6cdab9d73d6800001f85ab72ff3cecbdcbc15ebc687b77994420d7"
+            ],
+            "index": "pypi",
+            "version": "==0.5"
         },
         "wagtailfontawesome": {
             "hashes": [
