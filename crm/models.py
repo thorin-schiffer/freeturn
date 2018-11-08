@@ -109,13 +109,18 @@ class BaseCompany(TimeStampedModel):
                                 blank=True)
     url = models.URLField(blank=True,
                           null=True)
+    notes = MarkdownField(default="", blank=True)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         abstract = True
+        verbose_name_plural = 'clients'
+        verbose_name = 'client'
 
 
 class Recruiter(BaseCompany):
-    is_hr = models.BooleanField(default=True)
     default_daily_rate = models.DecimalField(
         decimal_places=2,
         max_digits=6,
@@ -124,11 +129,8 @@ class Recruiter(BaseCompany):
         default=settings.DEFAULT_DAILY_RATE
     )
 
-    def __str__(self):
-        return self.name
-
     class Meta:
-        verbose_name_plural = 'companies'
+        verbose_name_plural = 'recruiters'
 
 
 class ClientCompany(BaseCompany):

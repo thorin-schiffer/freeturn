@@ -156,6 +156,7 @@ class ClientCompanyAdmin(ModelAdmin):
     list_display = ('name', 'location', 'channel')
     list_filter = ('location', 'channel',)
     search_fields = ('name',)
+    inspect_view_enabled = True
 
 
 class CRMGroup(ModelAdminGroup):
