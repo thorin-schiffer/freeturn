@@ -106,6 +106,8 @@ class BaseCompany(TimeStampedModel):
                                 help_text="Lead channel this company came from",
                                 null=True,
                                 blank=True)
+    url = models.URLField(blank=True,
+                          null=True)
 
     class Meta:
         abstract = True
