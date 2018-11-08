@@ -72,7 +72,8 @@ class ProjectAdmin(ModelAdmin):
     model = Project
     menu_icon = 'fa-product-hunt'
     menu_label = 'Projects'
-    list_display = ('recruiter', 'location', 'daily_rate', 'company')
+    list_display = ('recruiter', 'location', 'daily_rate', 'company', 'state')
+    list_filter = ('location', 'state')
     search_fields = ('project_page__title',)
     button_helper_class = ProjectButtonHelper
     url_helper_class = ProjectURLHelper
@@ -80,13 +81,14 @@ class ProjectAdmin(ModelAdmin):
     def get_form_fields_exclude(self, request):
         fields = super().get_form_fields_exclude(request)
         state_action = request.resolver_match.kwargs.get('action')
-        transitions = [transition for transition in Project().get_all_state_transitions() if
-                       transition.method.__name__ == state_action]
-        if not transitions:
-            raise Http404
-        transition = transitions[0]
-        exclude_fields = transition.custom.get('exclude_fields', [])
-        fields = list(set(fields + exclude_fields))
+        if state_action:
+            transitions = [transition for transition in Project().get_all_state_transitions() if
+                           transition.method.__name__ == state_action]
+            if not transitions:
+                raise Http404
+            transition = transitions[0]
+            exclude_fields = transition.custom.get('exclude_fields', [])
+            fields = list(set(fields + exclude_fields))
         return fields
 
     def state_view(self, request, instance_pk, action):
