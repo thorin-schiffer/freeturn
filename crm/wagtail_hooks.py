@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.contrib.admin.utils import quote
 from django.http import Http404
+from django_fsm import TransitionNotAllowed
 from wagtail.contrib.modeladmin.helpers import ButtonHelper, AdminURLHelper
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
@@ -47,6 +48,14 @@ class StateTransitionView(EditView):
         return "{model_name} '{instance}' now in state {instance.state}".format(
             model_name=self.verbose_name.capitalize(), instance=instance
         )
+
+    def form_valid(self, form):
+        method = getattr(form.instance, self.action)
+        try:
+            method()
+        except TransitionNotAllowed:
+            return self.form_invalid(form)
+        return super().form_valid(form)
 
 
 class ProjectButtonHelper(ButtonHelper):

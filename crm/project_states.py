@@ -14,7 +14,7 @@ class ProjectStateMixin(models.Model):
 
     @transition(field=state, source='scoped', target='introduced', custom={
         "help": "Introduced to the end client",
-        "fields": ["recruiter"]
+        "fields": ["company"]
     })
     def introduce(self):
         pass
