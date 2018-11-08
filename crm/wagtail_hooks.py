@@ -40,6 +40,14 @@ class StateTransitionView(EditView):
         self.page_title = f"{self.action.capitalize()} {Project._meta.verbose_name}"
         super().__init__(**kwargs)
 
+    def edit_url(self):
+        return self.url_helper.get_action_url('state', self.pk_quoted, self.action)
+
+    def get_success_message(self, instance):
+        return "{model_name} '{instance}' now in state {instance.state}".format(
+            model_name=self.verbose_name.capitalize(), instance=instance
+        )
+
 
 class ProjectButtonHelper(ButtonHelper):
     def state_buttons(self, obj, pk):
