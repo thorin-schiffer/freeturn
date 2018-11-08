@@ -88,17 +88,23 @@ class Project(models.Model):
         verbose_name_plural = "projects"
 
 
-class Company(TimeStampedModel):
+class BaseCompany(TimeStampedModel):
     name = models.CharField(max_length=200,
                             unique=True)
     location = models.ForeignKey('crm.City',
                                  on_delete=models.CASCADE)
-    is_hr = models.BooleanField(default=True)
     channel = models.ForeignKey('Channel',
                                 on_delete=models.SET_NULL,
                                 help_text="Lead channel this company came from",
                                 null=True,
                                 blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class Company(BaseCompany):
+    is_hr = models.BooleanField(default=True)
     default_daily_rate = models.DecimalField(
         decimal_places=2,
         max_digits=6,
