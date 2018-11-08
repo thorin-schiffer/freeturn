@@ -21,7 +21,7 @@ class ProjectAdmin(ModelAdmin):
     model = Project
     menu_icon = 'fa-product-hunt'
     menu_label = 'Projects'
-    list_display = ('company', 'location', 'daily_rate')
+    list_display = ('recruiter', 'location', 'daily_rate', 'company')
     search_fields = ('project_page__title',)
 
 
