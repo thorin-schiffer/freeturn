@@ -25,6 +25,8 @@ wagtailfontawesome = "*"
 smart-getenv = "*"
 django-fsm = "*"
 django-fsm-log = "*"
+wagtail-markdown = "*"
+pygments = "*"
 
 [dev-packages]
 django-livereload-server = "*"
