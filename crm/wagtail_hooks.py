@@ -37,6 +37,7 @@ class StateTransitionView(EditView):
 
     def __init__(self, **kwargs):
         self.action = kwargs.pop('action')
+        self.page_title = f"{self.action.capitalize()} {Project._meta.verbose_name}"
         super().__init__(**kwargs)
 
 
