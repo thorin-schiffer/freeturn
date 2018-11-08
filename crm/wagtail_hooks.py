@@ -1,5 +1,7 @@
+from wagtail.contrib.modeladmin.helpers import ButtonHelper
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
+from django.contrib.admin.utils import quote
 
 from crm.models import Recruiter, City, Channel, Project, Employee
 
@@ -17,12 +19,40 @@ class ChannelAdmin(ModelAdmin):
     menu_label = 'Channels'
 
 
+class ProjectButtonHelper(ButtonHelper):
+    def state_buttons(self, obj, pk):
+        available_transitions = obj.get_available_state_transitions()
+        buttons = []
+        for transition in available_transitions:
+            buttons.append(
+                {
+                    'url': self.url_helper.get_action_url('edit', quote(pk)),
+                    'label': transition.method.__name__.capitalize(),
+                    'classname': self.finalise_classname(['fa-building', 'button-small'] +
+                                                         transition.custom.get('classes', [])),
+                    'title': transition.custom['help'].capitalize(),
+                }
+            )
+        return buttons
+
+    def get_buttons_for_obj(self, obj, *args, **kwargs):
+        btns = super().get_buttons_for_obj(obj, *args, **kwargs)
+        usr = self.request.user
+        ph = self.permission_helper
+        pk = getattr(obj, self.opts.pk.attname)
+
+        if ph.user_can_edit_obj(usr, obj):
+            btns += self.state_buttons(obj, pk)
+        return btns
+
+
 class ProjectAdmin(ModelAdmin):
     model = Project
     menu_icon = 'fa-product-hunt'
     menu_label = 'Projects'
     list_display = ('recruiter', 'location', 'daily_rate', 'company')
     search_fields = ('project_page__title',)
+    button_helper_class = ProjectButtonHelper
 
 
 class EmployeeAdmin(ModelAdmin):
