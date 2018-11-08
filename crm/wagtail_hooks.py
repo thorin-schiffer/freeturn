@@ -1,7 +1,7 @@
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
 
-from crm.models import Company, City, Channel, Project, Employee
+from crm.models import Recruiter, City, Channel, Project, Employee
 
 
 class CityAdmin(ModelAdmin):
@@ -21,7 +21,7 @@ class ProjectAdmin(ModelAdmin):
     model = Project
     menu_icon = 'fa-product-hunt'
     menu_label = 'Projects'
-    list_display = ('company', 'location', 'daily_rate')
+    list_display = ('recruiter', 'location', 'daily_rate', 'company')
     search_fields = ('project_page__title',)
 
 
@@ -33,9 +33,9 @@ class EmployeeAdmin(ModelAdmin):
     list_display = ('first_name', 'last_name', 'company', 'project_count')
 
 
-class CompanyAdmin(ModelAdmin):
-    model = Company
-    menu_label = 'Companies'  # ditch this to use verbose_name_plural from model
+class RecruiterAdmin(ModelAdmin):
+    model = Recruiter
+    menu_label = 'Recruiters'  # ditch this to use verbose_name_plural from model
     menu_icon = 'fa-building'  # change as required
     menu_order = 200  # will put in 3rd place (000 being 1st, 100 2nd)
     add_to_settings_menu = False  # or True to add your model to the Settings sub-menu
@@ -52,7 +52,7 @@ class CRMGroup(ModelAdminGroup):
     menu_icon = "fa-briefcase"
     menu_order = 200
     items = (
-        ProjectAdmin, EmployeeAdmin, CompanyAdmin, CityAdmin, ChannelAdmin
+        ProjectAdmin, EmployeeAdmin, RecruiterAdmin, CityAdmin, ChannelAdmin
     )
 
 
