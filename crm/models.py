@@ -26,7 +26,7 @@ class Employee(TimeStampedModel):
                                  blank=True)
     email = models.EmailField()
 
-    company = models.ForeignKey('Company',
+    company = models.ForeignKey('Recruiter',
                                 on_delete=models.CASCADE)
 
     def __str__(self):
@@ -57,9 +57,9 @@ class Project(models.Model):
                                      on_delete=models.SET_NULL,
                                      null=True,
                                      blank=True)
-    company = models.ForeignKey('Company',
-                                on_delete=models.CASCADE,
-                                related_name='projects')
+    recruiter = models.ForeignKey('Recruiter',
+                                  on_delete=models.CASCADE,
+                                  related_name='projects')
     manager = models.ForeignKey('Employee',
                                 on_delete=models.SET_NULL,
                                 null=True,
@@ -77,12 +77,12 @@ class Project(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        if not self.daily_rate and self.company:
-            self.daily_rate = self.company.default_daily_rate
+        if not self.daily_rate and self.recruiter:
+            self.daily_rate = self.recruiter.default_daily_rate
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.project_page.title if self.project_page else str(self.company)
+        return self.project_page.title if self.project_page else str(self.recruiter)
 
     class Meta:
         verbose_name_plural = "projects"
@@ -103,7 +103,7 @@ class BaseCompany(TimeStampedModel):
         abstract = True
 
 
-class Company(BaseCompany):
+class Recruiter(BaseCompany):
     is_hr = models.BooleanField(default=True)
     default_daily_rate = models.DecimalField(
         decimal_places=2,
