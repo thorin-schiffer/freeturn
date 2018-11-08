@@ -57,10 +57,6 @@ class Channel(models.Model):
 
 
 class Project(ProjectStateMixin, models.Model):
-    project_page = models.ForeignKey('home.ProjectPage',
-                                     on_delete=models.SET_NULL,
-                                     null=True,
-                                     blank=True)
     recruiter = models.ForeignKey('Recruiter',
                                   on_delete=models.CASCADE,
                                   related_name='projects')
@@ -89,6 +85,10 @@ class Project(ProjectStateMixin, models.Model):
         null=True,
         blank=True
     )
+    project_page = models.ForeignKey('home.ProjectPage',
+                                     on_delete=models.SET_NULL,
+                                     null=True,
+                                     blank=True)
 
     def save(self, *args, **kwargs):
         if not self.daily_rate and self.recruiter:
@@ -96,7 +96,7 @@ class Project(ProjectStateMixin, models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.project_page.title if self.project_page else str(self.recruiter)
+        return str(self.company) or str(self.recruiter)
 
     class Meta:
         verbose_name_plural = "projects"
