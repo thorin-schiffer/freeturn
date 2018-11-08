@@ -60,6 +60,12 @@ class Project(models.Model):
     recruiter = models.ForeignKey('Recruiter',
                                   on_delete=models.CASCADE,
                                   related_name='projects')
+    company = models.ForeignKey('ClientCompany',
+                                on_delete=models.SET_NULL,
+                                null=True,
+                                blank=True,
+                                related_name='projects')
+
     manager = models.ForeignKey('Employee',
                                 on_delete=models.SET_NULL,
                                 null=True,
@@ -118,3 +124,7 @@ class Recruiter(BaseCompany):
 
     class Meta:
         verbose_name_plural = 'companies'
+
+
+class ClientCompany(BaseCompany):
+    pass
