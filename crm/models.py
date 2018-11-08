@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django_extensions.db.models import TimeStampedModel
 from phonenumber_field.modelfields import PhoneNumberField
+from wagtail.core.fields import RichTextField
 from wagtailmarkdown.fields import MarkdownField
 
 from crm.project_states import ProjectStateMixin
@@ -77,6 +78,7 @@ class Project(ProjectStateMixin, models.Model):
     location = models.ForeignKey('crm.City',
                                  related_name='projects',
                                  on_delete=models.CASCADE)
+    original_description = RichTextField()
     notes = MarkdownField()
     daily_rate = models.DecimalField(
         decimal_places=2,
