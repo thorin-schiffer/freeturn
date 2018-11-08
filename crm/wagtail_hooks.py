@@ -1,7 +1,9 @@
-from wagtail.contrib.modeladmin.helpers import ButtonHelper
+from wagtail.contrib.modeladmin.helpers import ButtonHelper, AdminURLHelper
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
 from django.contrib.admin.utils import quote
+from django.conf.urls import url
+from wagtail.contrib.modeladmin.views import EditView
 
 from crm.models import Recruiter, City, Channel, Project, Employee
 
@@ -19,16 +21,39 @@ class ChannelAdmin(ModelAdmin):
     menu_label = 'Channels'
 
 
+class ProjectURLHelper(AdminURLHelper):
+    def get_action_url_pattern(self, action):
+        if action == 'state':
+            return r'^%s/%s/%s/(?P<instance_pk>[-\w]+)/(?P<action>[-\w]+)/$' % (
+                self.opts.app_label, self.opts.model_name, action
+            )
+        pattern = super().get_action_url_pattern(action)
+        return pattern
+
+
+class StateTransitionView(EditView):
+    action = None
+
+    def __init__(self, **kwargs):
+        self.action = kwargs.pop('action')
+        super().__init__(**kwargs)
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        return data
+
+
 class ProjectButtonHelper(ButtonHelper):
     def state_buttons(self, obj, pk):
         available_transitions = obj.get_available_state_transitions()
         buttons = []
         for transition in available_transitions:
+            action = transition.method.__name__
             buttons.append(
                 {
-                    'url': self.url_helper.get_action_url('edit', quote(pk)),
-                    'label': transition.method.__name__.capitalize(),
-                    'classname': self.finalise_classname(['fa-building', 'button-small'] +
+                    'url': self.url_helper.get_action_url('state', quote(pk), action),
+                    'label': action.capitalize(),
+                    'classname': self.finalise_classname(['button-small'] +
                                                          transition.custom.get('classes', [])),
                     'title': transition.custom['help'].capitalize(),
                 }
@@ -53,6 +78,19 @@ class ProjectAdmin(ModelAdmin):
     list_display = ('recruiter', 'location', 'daily_rate', 'company')
     search_fields = ('project_page__title',)
     button_helper_class = ProjectButtonHelper
+    url_helper_class = ProjectURLHelper
+
+    def state_view(self, request, instance_pk, action):
+        kwargs = {'model_admin': self, 'instance_pk': instance_pk, 'action': action}
+        return StateTransitionView.as_view(**kwargs)(request)
+
+    def get_admin_urls_for_registration(self):
+        urls = super().get_admin_urls_for_registration()
+        route = url(self.url_helper.get_action_url_pattern('state'),
+                    self.state_view,
+                    name=self.url_helper.get_action_url_name('state'))
+        urls = urls + (route,)
+        return urls
 
 
 class EmployeeAdmin(ModelAdmin):
