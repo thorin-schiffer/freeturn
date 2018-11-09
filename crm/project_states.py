@@ -21,7 +21,7 @@ class ProjectStateMixin(models.Model):
 
     @transition(field=state, source='introduced', target='signed', custom={
         "help": "Contract signed",
-        "fields": ["company", "notes"]
+        "fields": ["project_page", "company", "notes"]
     })
     def sign(self):
         pass
