@@ -131,8 +131,8 @@ class EmployeeAdmin(ModelAdmin):
     model = Employee
     menu_icon = 'fa-users'
     menu_label = 'People'
-    search_fields = ('first_name', 'last_name', 'company__name', 'email')
-    list_display = ('first_name', 'last_name', 'company', 'project_count')
+    search_fields = ('telephone', 'first_name', 'last_name', 'company__name', 'email', 'mobile')
+    list_display = ('first_name', 'last_name', 'company', 'project_count', 'telephone')
 
 
 class RecruiterAdmin(ModelAdmin):

@@ -28,6 +28,9 @@ class Employee(TimeStampedModel):
     last_name = models.CharField(max_length=200)
     telephone = PhoneNumberField(null=True,
                                  blank=True)
+    mobile = PhoneNumberField(null=True,
+                              blank=True)
+
     email = models.EmailField()
 
     company = models.ForeignKey('Recruiter',
