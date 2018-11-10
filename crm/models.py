@@ -12,6 +12,7 @@ from wagtailmarkdown.fields import MarkdownField
 from wagtailmarkdown.utils import render_markdown
 
 from crm.project_states import ProjectStateMixin
+from crm.utils import get_working_days
 
 
 class City(models.Model):
@@ -124,6 +125,14 @@ class Project(ProjectStateMixin, models.Model):
         return SafeText(
             f"<a href='{url}'>{self.project_page}</a>"
         )
+
+    @property
+    def budget(self):
+        working_days = get_working_days(self.start_date, self.end_date)
+        return self.daily_rate * working_days
+
+    def get_budget_display(self):
+        return f"{self.budget} €"
 
     def clean(self):
         if self.start_date >= self.end_date:
