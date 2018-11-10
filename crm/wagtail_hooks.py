@@ -104,7 +104,8 @@ class ProjectAdmin(ModelAdmin):
         'state', 'recruiter', 'company', 'location',
         'original_description', 'original_url', 'notes',
         'start_date', 'end_date', 'duration', 'daily_rate',
-        'budget', 'vat', 'invoice_amount', 'project_page',
+        'budget', 'vat', 'invoice_amount', 'income_tax', 'nett_income',
+        'project_page',
     ]
 
     def get_form_fields_exclude(self, request):

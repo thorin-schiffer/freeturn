@@ -139,6 +139,14 @@ class Project(ProjectStateMixin, models.Model):
     def invoice_amount(self):
         return self.budget + self.vat
 
+    @property
+    def income_tax(self):
+        return self.budget * settings.INCOME_TAX_RATE
+
+    @property
+    def nett_income(self):
+        return self.budget - self.income_tax
+
     def get_budget_display(self):
         return f"{self.budget} €"
 
@@ -147,6 +155,12 @@ class Project(ProjectStateMixin, models.Model):
 
     def get_invoice_amount_display(self):
         return f"{self.invoice_amount:.2f} €"
+
+    def get_income_tax_display(self):
+        return f"{self.income_tax:.2f} €"
+
+    def get_nett_income_display(self):
+        return f"{self.nett_income:.2f} €"
 
     def clean(self):
         if self.start_date >= self.end_date:
