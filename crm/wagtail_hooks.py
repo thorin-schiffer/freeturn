@@ -201,3 +201,17 @@ class ProjectSearchArea(SearchArea):
 @hooks.register('register_admin_search_area')
 def register_pages_search_area():
     return ProjectSearchArea()
+
+
+class RecruiterSearchArea(SearchArea):
+    def __init__(self):
+        super().__init__(
+            "Recruiters", reverse('crm_recruiter_modeladmin_index'),
+            name='recruiters',
+            classnames='icon icon-fa-building',
+            order=102)
+
+
+@hooks.register('register_admin_search_area')
+def register_pages_search_area():
+    return RecruiterSearchArea()
