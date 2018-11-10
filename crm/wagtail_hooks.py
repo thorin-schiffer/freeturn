@@ -187,3 +187,17 @@ class PeopleSearchArea(SearchArea):
 @hooks.register('register_admin_search_area')
 def register_pages_search_area():
     return PeopleSearchArea()
+
+
+class ProjectSearchArea(SearchArea):
+    def __init__(self):
+        super().__init__(
+            "Projects", reverse('crm_project_modeladmin_index'),
+            name='projects',
+            classnames='icon icon-fa-product-hunt',
+            order=101)
+
+
+@hooks.register('register_admin_search_area')
+def register_pages_search_area():
+    return ProjectSearchArea()
