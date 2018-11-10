@@ -99,6 +99,13 @@ class ProjectAdmin(ModelAdmin):
     button_helper_class = ProjectButtonHelper
     url_helper_class = ProjectURLHelper
 
+    inspect_view_enabled = True
+    inspect_view_fields = [
+        'state', 'recruiter', 'company', 'location',
+        'original_description', 'original_url', 'notes',
+        'start_date', 'end_date', 'duration', 'project_page'
+    ]
+
     def get_form_fields_exclude(self, request):
         global_fields = super().get_form_fields_exclude(request)
         state_action = request.resolver_match.kwargs.get('action')
