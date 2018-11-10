@@ -1,5 +1,6 @@
 import math
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.conf import settings
 from django.utils.safestring import SafeText
@@ -116,6 +117,15 @@ class Project(ProjectStateMixin, models.Model):
 
     def get_notes_display(self):
         return SafeText(render_markdown(self.notes))
+
+    def clean(self):
+        if self.start_date >= self.end_date:
+            raise ValidationError(
+                {
+                    "start_date": "End date can't be earlier than start date",
+                    "end_date": "End date can't be earlier than start date",
+                }
+            )
 
     def save(self, *args, **kwargs):
         if not self.daily_rate and self.recruiter:
