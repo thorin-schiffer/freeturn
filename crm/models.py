@@ -3,6 +3,7 @@ import math
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
 from phonenumber_field.modelfields import PhoneNumberField
@@ -117,6 +118,12 @@ class Project(ProjectStateMixin, models.Model):
 
     def get_notes_display(self):
         return SafeText(render_markdown(self.notes))
+
+    def get_project_page_display(self):
+        url = reverse("wagtailadmin_pages:edit", args=(self.project_page.pk,))
+        return SafeText(
+            f"<a href='{url}'>{self.project_page}</a>"
+        )
 
     def clean(self):
         if self.start_date >= self.end_date:
