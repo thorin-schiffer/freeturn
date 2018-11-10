@@ -93,11 +93,20 @@ class ProjectAdmin(ModelAdmin):
     model = Project
     menu_icon = 'fa-product-hunt'
     menu_label = 'Projects'
-    list_display = ('company', 'recruiter', 'location', 'daily_rate', 'state')
+    list_display = ('company', 'recruiter', 'location', 'daily_rate', 'budget', 'state')
     list_filter = ('location', 'state')
     search_fields = ('project_page__title',)
     button_helper_class = ProjectButtonHelper
     url_helper_class = ProjectURLHelper
+
+    inspect_view_enabled = True
+    inspect_view_fields = [
+        'state', 'recruiter', 'company', 'location',
+        'original_description', 'original_url', 'notes',
+        'start_date', 'end_date', 'duration', 'daily_rate',
+        'budget', 'vat', 'invoice_amount', 'income_tax', 'nett_income',
+        'project_page',
+    ]
 
     def get_form_fields_exclude(self, request):
         global_fields = super().get_form_fields_exclude(request)
