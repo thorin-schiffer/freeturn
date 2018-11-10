@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'phonenumber_field',
     'django_fsm_log',
+    'django_mailbox'
 ]
 
 MIDDLEWARE = [
