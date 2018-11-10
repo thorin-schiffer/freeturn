@@ -135,11 +135,18 @@ class Project(ProjectStateMixin, models.Model):
     def vat(self):
         return self.budget * settings.VAT_RATE
 
+    @property
+    def invoice_amount(self):
+        return self.budget + self.vat
+
     def get_budget_display(self):
         return f"{self.budget} €"
 
     def get_vat_display(self):
         return f"{self.vat:.2f} €"
+
+    def get_invoice_amount_display(self):
+        return f"{self.invoice_amount:.2f} €"
 
     def clean(self):
         if self.start_date >= self.end_date:
