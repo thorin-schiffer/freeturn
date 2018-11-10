@@ -27,6 +27,7 @@ django-fsm = "*"
 django-fsm-log = "*"
 wagtail-markdown = "*"
 pygments = "*"
+holidays = "*"
 
 [dev-packages]
 django-livereload-server = "*"

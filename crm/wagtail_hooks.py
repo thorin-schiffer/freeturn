@@ -103,7 +103,7 @@ class ProjectAdmin(ModelAdmin):
     inspect_view_fields = [
         'state', 'recruiter', 'company', 'location',
         'original_description', 'original_url', 'notes',
-        'start_date', 'end_date', 'duration', 'daily_rate',
+        'start_date', 'end_date', 'duration', 'daily_rate', 'working_days',
         'budget', 'vat', 'invoice_amount', 'income_tax', 'nett_income',
         'project_page',
     ]

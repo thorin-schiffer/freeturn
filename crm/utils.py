@@ -1,9 +1,16 @@
+from datetime import timedelta
+
+import holidays
+
+
 def get_working_days(start_date, end_date):
-    number_of_days = (end_date - start_date).days + 1
-    number_of_weeks = number_of_days // 7
-    reminder_days = number_of_days % 7
-    number_of_days -= number_of_weeks * 2
-    if reminder_days:
-        weekdays = set(range(end_date.isoweekday(), end_date.isoweekday() - reminder_days, -1))
-        number_of_days -= len(weekdays.intersection([7, 6, 0, -1]))
-    return number_of_days
+    days = [start_date + timedelta(days=1) * i for i in range(
+        (end_date - start_date).days + 1
+    )]
+
+    working_days = []
+    for day in days:
+        if day in holidays.DE(prov='BE') or day.weekday() in [5, 6]:
+            continue
+        working_days.append(day)
+    return working_days

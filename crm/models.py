@@ -132,7 +132,7 @@ class Project(ProjectStateMixin, models.Model):
     def budget(self):
         if not self.start_date or not self.end_date:
             return
-        working_days = get_working_days(self.start_date, self.end_date)
+        working_days = len(get_working_days(self.start_date, self.end_date))
         if not self.daily_rate:
             return
         return self.daily_rate * working_days
@@ -160,6 +160,12 @@ class Project(ProjectStateMixin, models.Model):
         if not self.budget or not self.income_tax:
             return
         return self.budget - self.income_tax
+
+    @property
+    def working_days(self):
+        if not self.start_date or not self.end_date:
+            return
+        return len(get_working_days(self.start_date, self.end_date))
 
     def get_budget_display(self):
         return f"{self.budget} €" if self.budget else None
