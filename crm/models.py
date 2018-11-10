@@ -1,9 +1,13 @@
+import math
+
 from django.db import models
 from django.conf import settings
+from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
 from phonenumber_field.modelfields import PhoneNumberField
 from wagtail.core.fields import RichTextField
 from wagtailmarkdown.fields import MarkdownField
+from wagtailmarkdown.utils import render_markdown
 
 from crm.project_states import ProjectStateMixin
 
@@ -88,10 +92,30 @@ class Project(ProjectStateMixin, models.Model):
         null=True,
         blank=True
     )
+
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+
     project_page = models.ForeignKey('home.ProjectPage',
                                      on_delete=models.SET_NULL,
                                      null=True,
                                      blank=True)
+
+    @property
+    def duration(self):
+        try:
+            return math.ceil((self.end_date - self.start_date).days / 30)
+        except TypeError:
+            pass
+
+    def get_duration_display(self):
+        return f"{self.duration} months"
+
+    def get_original_description_display(self):
+        return SafeText(self.original_description)
+
+    def get_notes_display(self):
+        return SafeText(render_markdown(self.notes))
 
     def save(self, *args, **kwargs):
         if not self.daily_rate and self.recruiter:
