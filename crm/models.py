@@ -88,7 +88,7 @@ class Project(ProjectStateMixin, models.Model):
     original_description = RichTextField()
     original_url = models.URLField(null=True, blank=True)
 
-    notes = MarkdownField()
+    notes = MarkdownField(null=True, blank=True)
     daily_rate = models.DecimalField(
         decimal_places=2,
         max_digits=6,
@@ -121,6 +121,8 @@ class Project(ProjectStateMixin, models.Model):
         return SafeText(render_markdown(self.notes))
 
     def get_project_page_display(self):
+        if not self.project_page:
+            return
         url = reverse("wagtailadmin_pages:edit", args=(self.project_page.pk,))
         return SafeText(
             f"<a href='{url}'>{self.project_page}</a>"
@@ -160,22 +162,22 @@ class Project(ProjectStateMixin, models.Model):
         return self.budget - self.income_tax
 
     def get_budget_display(self):
-        return f"{self.budget} €"
+        return f"{self.budget} €" if self.budget else None
 
     def get_vat_display(self):
-        return f"{self.vat:.2f} €"
+        return f"{self.vat:.2f} €" if self.vat else None
 
     def get_invoice_amount_display(self):
-        return f"{self.invoice_amount:.2f} €"
+        return f"{self.invoice_amount:.2f} €" if self.invoice_amount else None
 
     def get_income_tax_display(self):
-        return f"{self.income_tax:.2f} €"
+        return f"{self.income_tax:.2f} €" if self.income_tax else None
 
     def get_nett_income_display(self):
-        return f"{self.nett_income:.2f} €"
+        return f"{self.nett_income:.2f} €" if self.nett_income else None
 
     def clean(self):
-        if self.start_date >= self.end_date:
+        if self.start_date and self.end_date and self.start_date >= self.end_date:
             raise ValidationError(
                 {
                     "start_date": "End date can't be earlier than start date",
