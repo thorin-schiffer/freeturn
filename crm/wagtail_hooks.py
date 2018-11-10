@@ -93,7 +93,7 @@ class ProjectAdmin(ModelAdmin):
     model = Project
     menu_icon = 'fa-product-hunt'
     menu_label = 'Projects'
-    list_display = ('company', 'recruiter', 'location', 'daily_rate', 'state')
+    list_display = ('company', 'recruiter', 'location', 'daily_rate', 'budget', 'state')
     list_filter = ('location', 'state')
     search_fields = ('project_page__title',)
     button_helper_class = ProjectButtonHelper

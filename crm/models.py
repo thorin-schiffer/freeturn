@@ -128,23 +128,35 @@ class Project(ProjectStateMixin, models.Model):
 
     @property
     def budget(self):
+        if not self.start_date or not self.end_date:
+            return
         working_days = get_working_days(self.start_date, self.end_date)
+        if not self.daily_rate:
+            return
         return self.daily_rate * working_days
 
     @property
     def vat(self):
+        if not self.budget:
+            return
         return self.budget * settings.VAT_RATE
 
     @property
     def invoice_amount(self):
+        if not self.vat:
+            return
         return self.budget + self.vat
 
     @property
     def income_tax(self):
+        if not self.budget:
+            return
         return self.budget * settings.INCOME_TAX_RATE
 
     @property
     def nett_income(self):
+        if not self.budget or not self.income_tax:
+            return
         return self.budget - self.income_tax
 
     def get_budget_display(self):
