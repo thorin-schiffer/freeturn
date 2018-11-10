@@ -1,11 +1,14 @@
 from django.conf.urls import url
 from django.contrib.admin.utils import quote
 from django.http import Http404
+from django.urls import reverse
 from django_fsm import TransitionNotAllowed
+from wagtail.admin.search import SearchArea
 from wagtail.contrib.modeladmin.helpers import ButtonHelper, AdminURLHelper
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
 from wagtail.contrib.modeladmin.views import EditView
+from wagtail.core import hooks
 
 from crm.models import Recruiter, City, Channel, Project, Employee, ClientCompany
 
@@ -170,3 +173,17 @@ class CRMGroup(ModelAdminGroup):
 
 # Now you just need to register your customised ModelAdmin class with Wagtail
 modeladmin_register(CRMGroup)
+
+
+class PeopleSearchArea(SearchArea):
+    def __init__(self):
+        super().__init__(
+            "People", reverse('crm_employee_modeladmin_index'),
+            name='people',
+            classnames='icon icon-fa-users',
+            order=100)
+
+
+@hooks.register('register_admin_search_area')
+def register_pages_search_area():
+    return PeopleSearchArea()
