@@ -131,8 +131,15 @@ class Project(ProjectStateMixin, models.Model):
         working_days = get_working_days(self.start_date, self.end_date)
         return self.daily_rate * working_days
 
+    @property
+    def vat(self):
+        return self.budget * settings.VAT_RATE
+
     def get_budget_display(self):
         return f"{self.budget} €"
+
+    def get_vat_display(self):
+        return f"{self.vat:.2f} €"
 
     def clean(self):
         if self.start_date >= self.end_date:
