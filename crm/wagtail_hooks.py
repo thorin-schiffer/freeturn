@@ -3,6 +3,7 @@ from django.contrib.admin.utils import quote
 from django.http import Http404
 from django.urls import reverse
 from django_fsm import TransitionNotAllowed
+from social_django.models import UserSocialAuth
 from wagtail.admin.search import SearchArea
 from wagtail.contrib.modeladmin.helpers import ButtonHelper, AdminURLHelper
 from wagtail.contrib.modeladmin.options import (
@@ -228,8 +229,11 @@ def register_pages_search_area():
 
 @hooks.register('register_account_menu_item')
 def google_login(request):
+    existing_google_account = UserSocialAuth.objects.filter(user=request.user).first()
+    hint = "Associate google account" if not existing_google_account \
+        else f"Logged in with: {existing_google_account.uid}"
     return {
         'url': reverse('social:begin', args=("google-oauth2",)),
         'label': "Google login",
-        'help_text': "Associate google account"
+        'help_text': hint
     }
