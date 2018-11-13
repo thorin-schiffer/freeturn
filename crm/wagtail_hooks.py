@@ -11,7 +11,7 @@ from wagtail.contrib.modeladmin.options import (
 from wagtail.contrib.modeladmin.views import EditView
 from wagtail.core import hooks
 
-from crm.models import Recruiter, City, Channel, Project, Employee, ClientCompany
+from crm.models import Recruiter, City, Channel, Project, Employee, ClientCompany, Message
 
 
 class CityAdmin(ModelAdmin):
@@ -183,6 +183,22 @@ class CRMGroup(ModelAdminGroup):
 
 # Now you just need to register your customised ModelAdmin class with Wagtail
 modeladmin_register(CRMGroup)
+
+
+class MailAdmin(ModelAdmin):
+    model = Message
+    menu_icon = 'fa-envelope'
+    menu_label = 'Mail'
+    menu_order = 201
+    list_display = ['subject', 'from_address']
+    inspect_view_enabled = True
+    inspect_view_fields = ['subject', 'from_address', 'xx']
+
+    def get_xx(self):
+        raise Exception("HERE")
+
+
+modeladmin_register(MailAdmin)
 
 
 class PeopleSearchArea(SearchArea):
