@@ -194,4 +194,4 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 ]
 from social_core.pipeline import DEFAULT_AUTH_PIPELINE
 
-SOCIAL_AUTH_PIPELINE = ("utils.social_for_authed_only",) + DEFAULT_AUTH_PIPELINE
+SOCIAL_AUTH_PIPELINE = ("utils.social_for_authed_only",) + DEFAULT_AUTH_PIPELINE + ("crm.utils.ensure_mailbox",)
