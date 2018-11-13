@@ -224,3 +224,12 @@ class RecruiterSearchArea(SearchArea):
 @hooks.register('register_admin_search_area')
 def register_pages_search_area():
     return RecruiterSearchArea()
+
+
+@hooks.register('register_account_menu_item')
+def google_login(request):
+    return {
+        'url': reverse('social:begin', args=("google-oauth2",)),
+        'label': "Google login",
+        'help_text': "Associate google account"
+    }
