@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'phonenumber_field',
     'django_fsm_log',
+    'social_django',
     'django_mailbox'
 ]
 
@@ -174,3 +175,15 @@ PHONENUMBER_DEFAULT_REGION = "DE"
 PHONENUMBER_DB_FORMAT = "NATIONAL"
 VAT_RATE = Decimal('0.19')
 INCOME_TAX_RATE = Decimal('0.41')
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = getenv("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = getenv("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET")
+
+SOCIAL_AUTH_LOGIN_URL = "/admin/account/"
+LOGIN_REDIRECT_URL = SOCIAL_AUTH_LOGIN_URL
