@@ -187,3 +187,11 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = getenv("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET")
 
 SOCIAL_AUTH_LOGIN_URL = "/admin/account/"
 LOGIN_REDIRECT_URL = SOCIAL_AUTH_LOGIN_URL
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/gmail.readonly',
+    'https://www.googleapis.com/auth/gmail.send',
+    'https://mail.google.com/'
+]
+from social_core.pipeline import DEFAULT_AUTH_PIPELINE
+
+SOCIAL_AUTH_PIPELINE = ("utils.social_for_authed_only",) + DEFAULT_AUTH_PIPELINE
