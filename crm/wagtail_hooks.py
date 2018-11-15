@@ -3,6 +3,7 @@ from django.contrib.admin.utils import quote
 from django.http import Http404
 from django.urls import reverse
 from django_fsm import TransitionNotAllowed
+from django_mailbox.models import Mailbox
 from social_django.models import UserSocialAuth
 from wagtail.admin.search import SearchArea
 from wagtail.contrib.modeladmin.helpers import ButtonHelper, AdminURLHelper
@@ -185,20 +186,51 @@ class CRMGroup(ModelAdminGroup):
 modeladmin_register(CRMGroup)
 
 
-class MailAdmin(ModelAdmin):
+class MessageAdmin(ModelAdmin):
     model = Message
-    menu_icon = 'fa-envelope'
-    menu_label = 'Mail'
-    menu_order = 201
+    menu_icon = 'fa-envelope-open'
+    menu_label = 'Messages'
     list_display = ['subject', 'from_address']
     inspect_view_enabled = True
-    inspect_view_fields = ['subject', 'from_address', 'xx']
-
-    def get_xx(self):
-        raise Exception("HERE")
+    inspect_view_fields = ['subject', 'from_address']
 
 
-modeladmin_register(MailAdmin)
+class MailboxButtonHelper(ButtonHelper):
+    def get_mail(self, obj, pk):
+        return {
+            'url': "TBD",
+            'label': "Get mail",
+            'classname': self.finalise_classname(['button-small']),
+            'title': "Get last mails from server",
+        }
+
+    def get_buttons_for_obj(self, obj, *args, **kwargs):
+        btns = super().get_buttons_for_obj(obj, *args, **kwargs)
+        usr = self.request.user
+        ph = self.permission_helper
+        pk = getattr(obj, self.opts.pk.attname)
+
+        if ph.user_can_edit_obj(usr, obj):
+            btns.append(self.get_mail(obj, pk))
+        return btns
+
+
+class MailboxAdmin(ModelAdmin):
+    model = Mailbox
+    menu_icon = 'fa-address-card'
+    button_helper_class = MailboxButtonHelper
+
+
+class MailGroup(ModelAdminGroup):
+    menu_label = "Mail"
+    menu_icon = "fa-envelope"
+    menu_order = 200
+    items = (
+        MessageAdmin, MailboxAdmin
+    )
+
+
+modeladmin_register(MailGroup)
 
 
 class PeopleSearchArea(SearchArea):
