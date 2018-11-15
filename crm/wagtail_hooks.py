@@ -12,7 +12,7 @@ from wagtail.contrib.modeladmin.options import (
 from wagtail.contrib.modeladmin.views import EditView
 from wagtail.core import hooks
 
-from crm.models import Recruiter, City, Channel, Project, Employee, ClientCompany
+from crm.models import Recruiter, City, Channel, Project, Employee, ClientCompany, ProjectMessage
 
 
 class CityAdmin(ModelAdmin):
@@ -182,17 +182,17 @@ class CRMGroup(ModelAdminGroup):
     )
 
 
-# Now you just need to register your customised ModelAdmin class with Wagtail
 modeladmin_register(CRMGroup)
 
 
 class MessageAdmin(ModelAdmin):
-    model = Message
+    model = ProjectMessage
     menu_icon = 'fa-envelope-open'
     menu_label = 'Messages'
-    list_display = ['subject', 'from_address']
+    list_display = ['subject', 'author', 'project']
+    list_filter = ['project', 'author']
     inspect_view_enabled = True
-    inspect_view_fields = ['subject', 'from_address', 'html']
+    inspect_view_fields = ['project', 'subject', 'from_address', 'html']
 
 
 class MailboxButtonHelper(ButtonHelper):
