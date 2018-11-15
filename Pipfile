@@ -28,6 +28,8 @@ django-fsm-log = "*"
 wagtail-markdown = "*"
 pygments = "*"
 holidays = "*"
+django-mailbox = "*"
+python-social-auth = {version = "*", extras = ["django"]}
 
 [dev-packages]
 django-livereload-server = "*"

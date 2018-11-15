@@ -1,5 +1,5 @@
 import math
-
+import django_mailbox.models
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.conf import settings
@@ -10,6 +10,8 @@ from phonenumber_field.modelfields import PhoneNumberField
 from wagtail.core.fields import RichTextField
 from wagtailmarkdown.fields import MarkdownField
 from wagtailmarkdown.utils import render_markdown
+from django_mailbox.signals import message_received
+from django.dispatch import receiver
 
 from crm.project_states import ProjectStateMixin
 from crm.utils import get_working_days
@@ -42,6 +44,11 @@ class Employee(TimeStampedModel):
 
     company = models.ForeignKey('Recruiter',
                                 on_delete=models.CASCADE)
+
+    messages = models.ManyToManyField('django_mailbox.Message',
+                                      through='ProjectMessage',
+                                      related_name="authors",
+                                      editable=False)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -103,6 +110,11 @@ class Project(ProjectStateMixin, models.Model):
                                      on_delete=models.SET_NULL,
                                      null=True,
                                      blank=True)
+
+    messages = models.ManyToManyField('django_mailbox.Message',
+                                      through='ProjectMessage',
+                                      related_name="projects",
+                                      editable=False)
 
     @property
     def duration(self):
@@ -197,10 +209,55 @@ class Project(ProjectStateMixin, models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return str(self.company) or str(self.recruiter)
+        return str(self.company or self.recruiter)
 
     class Meta:
         verbose_name_plural = "projects"
+
+
+class ProjectMessage(TimeStampedModel):
+    message = models.ForeignKey('django_mailbox.Message',
+                                on_delete=models.CASCADE,
+                                related_name='project_messages')
+    project = models.ForeignKey('Project',
+                                null=True,
+                                blank=True,
+                                on_delete=models.SET_NULL)
+    author = models.ForeignKey('Employee',
+                               on_delete=models.CASCADE)
+
+    @staticmethod
+    def associate(message):
+        """
+        Associates message with projects and people
+        """
+        from_address = message.from_address
+        people = Employee.objects.filter(email__in=from_address)
+        for employee in people:
+            project = employee.projects.order_by('modified').last()
+            ProjectMessage.objects.update_or_create(
+                message=message,
+                defaults={
+                    "author": employee,
+                    "project": project
+                },
+
+            )
+
+    @property
+    def subject(self):
+        return self.message.subject
+
+    @property
+    def from_address(self):
+        return self.message.from_address
+
+    @property
+    def html(self):
+        return SafeText(self.message.html)
+
+    def __str__(self):
+        return self.subject
 
 
 class BaseCompany(TimeStampedModel):
@@ -241,3 +298,9 @@ class Recruiter(BaseCompany):
 
 class ClientCompany(BaseCompany):
     pass
+
+
+@receiver(message_received)
+def on_mailbox_message(sender, message, **args):
+    if not message.project_messages.count():
+        ProjectMessage.associate(message)
