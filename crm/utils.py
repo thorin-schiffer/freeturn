@@ -19,7 +19,9 @@ def get_working_days(start_date, end_date):
 
 
 def ensure_mailbox(backend, details, response, *args, **kwargs):
-    uri = f"gmail+ssl://{urllib.parse.quote_plus(details['email'])}:oauth2@imap.gmail.com?archive=Archived"
+    # archive to inbox in order to keep emails on server
+    # see https://github.com/coddingtonbear/django-mailbox/issues/72
+    uri = f"gmail+ssl://{urllib.parse.quote_plus(details['email'])}:oauth2@imap.gmail.com?archive=Inbox"
     name = details['username']
     from_email = details['email']
     Mailbox.objects.update_or_create(
