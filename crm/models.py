@@ -43,6 +43,10 @@ class Employee(TimeStampedModel):
     company = models.ForeignKey('Recruiter',
                                 on_delete=models.CASCADE)
 
+    messages = models.ManyToManyField('django_mailbox.Message',
+                                      through='ProjectMessage',
+                                      related_name="authors")
+
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
@@ -103,6 +107,10 @@ class Project(ProjectStateMixin, models.Model):
                                      on_delete=models.SET_NULL,
                                      null=True,
                                      blank=True)
+
+    messages = models.ManyToManyField('django_mailbox.Message',
+                                      through='ProjectMessage',
+                                      related_name="projects")
 
     @property
     def duration(self):
@@ -201,6 +209,17 @@ class Project(ProjectStateMixin, models.Model):
 
     class Meta:
         verbose_name_plural = "projects"
+
+
+class ProjectMessage(models.Model):
+    message = models.ForeignKey('django_mailbox.Message',
+                                on_delete=models.CASCADE)
+    project = models.ForeignKey('Project',
+                                null=True,
+                                blank=True,
+                                on_delete=models.SET_NULL)
+    author = models.ForeignKey('Employee',
+                               on_delete=models.CASCADE)
 
 
 class BaseCompany(TimeStampedModel):
