@@ -73,7 +73,7 @@ class Channel(models.Model):
         verbose_name_plural = 'channels'
 
 
-class Project(ProjectStateMixin, models.Model):
+class Project(ProjectStateMixin, TimeStampedModel):
     recruiter = models.ForeignKey('Recruiter',
                                   on_delete=models.CASCADE,
                                   related_name='projects')
