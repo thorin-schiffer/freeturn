@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'django_fsm_log',
     'social_django',
-    'django_mailbox'
+    'django_mailbox',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
