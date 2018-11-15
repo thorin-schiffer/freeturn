@@ -3,7 +3,7 @@ from django.contrib.admin.utils import quote
 from django.http import Http404
 from django.urls import reverse
 from django_fsm import TransitionNotAllowed
-from django_mailbox.models import Mailbox
+from django_mailbox.models import Mailbox, Message
 from social_django.models import UserSocialAuth
 from wagtail.admin.search import SearchArea
 from wagtail.contrib.modeladmin.helpers import ButtonHelper, AdminURLHelper
@@ -12,7 +12,7 @@ from wagtail.contrib.modeladmin.options import (
 from wagtail.contrib.modeladmin.views import EditView
 from wagtail.core import hooks
 
-from crm.models import Recruiter, City, Channel, Project, Employee, ClientCompany, Message
+from crm.models import Recruiter, City, Channel, Project, Employee, ClientCompany
 
 
 class CityAdmin(ModelAdmin):
@@ -192,7 +192,7 @@ class MessageAdmin(ModelAdmin):
     menu_label = 'Messages'
     list_display = ['subject', 'from_address']
     inspect_view_enabled = True
-    inspect_view_fields = ['subject', 'from_address']
+    inspect_view_fields = ['subject', 'from_address', 'html']
 
 
 class MailboxButtonHelper(ButtonHelper):

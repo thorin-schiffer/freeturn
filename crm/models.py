@@ -241,18 +241,3 @@ class Recruiter(BaseCompany):
 
 class ClientCompany(BaseCompany):
     pass
-
-
-class Message(django_mailbox.models.Message):
-    project = models.ForeignKey('crm.Project',
-                                on_delete=models.SET_NULL,
-                                null=True,
-                                blank=True)
-    employee = models.ForeignKey('crm.Employee',
-                                 on_delete=models.SET_NULL,
-                                 null=True,
-                                 blank=True)
-
-    @property
-    def html(self):
-        return SafeText(super().html)
