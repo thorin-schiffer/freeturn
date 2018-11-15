@@ -1,16 +1,18 @@
 from django.conf.urls import url
 from django.contrib.admin.utils import quote
 from django.http import Http404
+from django.shortcuts import redirect
 from django.urls import reverse
 from django_fsm import TransitionNotAllowed
-from django_mailbox.models import Mailbox, Message
+from django_mailbox.models import Mailbox
 from social_django.models import UserSocialAuth
 from wagtail.admin.search import SearchArea
 from wagtail.contrib.modeladmin.helpers import ButtonHelper, AdminURLHelper
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
-from wagtail.contrib.modeladmin.views import EditView
+from wagtail.contrib.modeladmin.views import EditView, InstanceSpecificView
 from wagtail.core import hooks
+from wagtail.admin import messages
 
 from crm.models import Recruiter, City, Channel, Project, Employee, ClientCompany, ProjectMessage
 
@@ -195,10 +197,27 @@ class MessageAdmin(ModelAdmin):
     inspect_view_fields = ['project', 'subject', 'from_address', 'html']
 
 
+class GetMailView(InstanceSpecificView):
+    action = 'get_mail'
+    page_title = 'Get mail'
+
+    def get(self, *args, **kwargs):
+        new_mails = self.instance.get_new_mail()
+        if new_mails:
+            messages.success(
+                self.request, f"Mail updated for {self.instance}: {len(new_mails)} new mails"
+            )
+        else:
+            messages.warning(
+                self.request, f"Mail updated for {self.instance}: no new mails"
+            )
+        return redirect(self.index_url)
+
+
 class MailboxButtonHelper(ButtonHelper):
     def get_mail(self, obj, pk):
         return {
-            'url': "TBD",
+            'url': self.url_helper.get_action_url('get_mail', quote(pk)),
             'label': "Get mail",
             'classname': self.finalise_classname(['button-small']),
             'title': "Get last mails from server",
@@ -219,6 +238,18 @@ class MailboxAdmin(ModelAdmin):
     model = Mailbox
     menu_icon = 'fa-address-card'
     button_helper_class = MailboxButtonHelper
+
+    def get_mail_view(self, request, instance_pk):
+        kwargs = {'model_admin': self, 'instance_pk': instance_pk}
+        return GetMailView.as_view(**kwargs)(request)
+
+    def get_admin_urls_for_registration(self):
+        urls = super().get_admin_urls_for_registration()
+        route = url(self.url_helper.get_action_url_pattern('get_mail'),
+                    self.get_mail_view,
+                    name=self.url_helper.get_action_url_name('get_mail'))
+        urls = urls + (route,)
+        return urls
 
 
 class MailGroup(ModelAdminGroup):
