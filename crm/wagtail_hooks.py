@@ -3,16 +3,18 @@ from django.contrib.admin.utils import quote
 from django.contrib.auth.models import Permission
 from django.http import Http404
 from django.shortcuts import redirect
+from django.template.defaultfilters import pluralize
 from django.urls import reverse
+from django.utils import timezone
 from django_fsm import TransitionNotAllowed
 from social_django.models import UserSocialAuth
+from wagtail.admin import messages
 from wagtail.admin.search import SearchArea
 from wagtail.contrib.modeladmin.helpers import ButtonHelper, AdminURLHelper, PermissionHelper
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
 from wagtail.contrib.modeladmin.views import EditView, InstanceSpecificView
 from wagtail.core import hooks
-from wagtail.admin import messages
 
 from crm.models import Recruiter, City, Channel, Project, Employee, ClientCompany, ProjectMessage, Mailbox
 
@@ -97,12 +99,13 @@ class ProjectAdmin(ModelAdmin):
     model = Project
     menu_icon = 'fa-product-hunt'
     menu_label = 'Projects'
-    list_display = ('recruiter', 'manager', 'location', 'daily_rate', 'state')
+
+    list_display = ('recruiter', 'manager', 'location', 'daily_rate', 'state', 'last_activity')
     list_filter = ('location', 'state')
     search_fields = ('project_page__title',)
     button_helper_class = ProjectButtonHelper
     url_helper_class = ProjectURLHelper
-
+    ordering = ('-modified',)
     inspect_view_enabled = True
     inspect_view_fields = [
         'state', 'recruiter', 'company', 'location',
@@ -111,6 +114,10 @@ class ProjectAdmin(ModelAdmin):
         'budget', 'vat', 'invoice_amount', 'income_tax', 'nett_income',
         'project_page',
     ]
+
+    def last_activity(self, instance):
+        days = (timezone.now() - instance.modified).days
+        return f"{days} day{pluralize(days)} ago"
 
     def get_form_fields_exclude(self, request):
         global_fields = super().get_form_fields_exclude(request)
@@ -141,6 +148,9 @@ class ProjectAdmin(ModelAdmin):
                     name=self.url_helper.get_action_url_name('state'))
         urls = urls + (route,)
         return urls
+
+    def get_extra_class_names_for_field_col(self, obj, field_name):
+        return []
 
 
 class EmployeeAdmin(ModelAdmin):
