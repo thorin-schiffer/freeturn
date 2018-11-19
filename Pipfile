@@ -35,6 +35,7 @@ python-social-auth = {version = "*", extras = ["django"]}
 django-livereload-server = "*"
 django-debug-toolbar = "*"
 django-extensions = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.7.1"
