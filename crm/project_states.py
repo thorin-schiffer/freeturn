@@ -4,6 +4,19 @@ from django_fsm import FSMField, transition
 
 class ProjectStateMixin(models.Model):
     state = FSMField(default='requested', editable=False)
+    state_colors = {
+        "requested": "#71b2d4",
+        "scoped": "#43b1b0",
+        "introduced": "#71b2d4",
+        "signed": "#189370",
+        "progress": "#43b1b0",
+        "finished": "#246060",
+        "stopped": "#cd3238"
+    }
+
+    @property
+    def state_color(self):
+        return self.state_colors.get(self.state, '#000')
 
     @transition(field=state, source='requested', target='scoped', custom={
         "help": "This project was scoped, on email or call",

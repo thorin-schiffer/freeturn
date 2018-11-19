@@ -149,8 +149,12 @@ class ProjectAdmin(ModelAdmin):
         urls = urls + (route,)
         return urls
 
-    def get_extra_class_names_for_field_col(self, obj, field_name):
-        return []
+    def get_extra_attrs_for_field_col(self, obj, field_name):
+        if field_name == 'state':
+            return {
+                "style": f"color: {obj.state_color};text-transform: uppercase;"
+            }
+        return {}
 
 
 class EmployeeAdmin(ModelAdmin):
