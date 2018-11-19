@@ -1,20 +1,20 @@
 from django.conf.urls import url
 from django.contrib.admin.utils import quote
+from django.contrib.auth.models import Permission
 from django.http import Http404
 from django.shortcuts import redirect
 from django.urls import reverse
 from django_fsm import TransitionNotAllowed
-from django_mailbox.models import Mailbox
 from social_django.models import UserSocialAuth
 from wagtail.admin.search import SearchArea
-from wagtail.contrib.modeladmin.helpers import ButtonHelper, AdminURLHelper
+from wagtail.contrib.modeladmin.helpers import ButtonHelper, AdminURLHelper, PermissionHelper
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
 from wagtail.contrib.modeladmin.views import EditView, InstanceSpecificView
 from wagtail.core import hooks
 from wagtail.admin import messages
 
-from crm.models import Recruiter, City, Channel, Project, Employee, ClientCompany, ProjectMessage
+from crm.models import Recruiter, City, Channel, Project, Employee, ClientCompany, ProjectMessage, Mailbox
 
 
 class CityAdmin(ModelAdmin):
@@ -235,10 +235,19 @@ class MailboxButtonHelper(ButtonHelper):
         return btns
 
 
+class MailboxPermissionHelper(PermissionHelper):
+    def get_all_model_permissions(self):
+        return Permission.objects.filter(
+            content_type__app_label='django_mailbox',
+            content_type__model='mailbox',
+        )
+
+
 class MailboxAdmin(ModelAdmin):
     model = Mailbox
     menu_icon = 'fa-address-card'
     button_helper_class = MailboxButtonHelper
+    permission_helper_class = MailboxPermissionHelper
 
     def get_mail_view(self, request, instance_pk):
         kwargs = {'model_admin': self, 'instance_pk': instance_pk}
