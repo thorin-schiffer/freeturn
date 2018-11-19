@@ -37,4 +37,4 @@ django-debug-toolbar = "*"
 django-extensions = "*"
 
 [requires]
-python_version = "3.6.6"
+python_version = "3.7.1"
