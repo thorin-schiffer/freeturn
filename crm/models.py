@@ -304,3 +304,22 @@ class ClientCompany(BaseCompany):
 def on_mailbox_message(sender, message, **args):
     if not message.project_messages.count():
         ProjectMessage.associate(message)
+
+
+class Mailbox(django_mailbox.models.Mailbox):
+    class Meta:
+        proxy = True
+        verbose_name_plural = 'mailboxes'
+
+    def get_new_mail(self, condition=None):
+        """Connect to this transport and fetch new messages."""
+        new_mail = []
+        connection = self.get_connection()
+        if not connection:
+            return new_mail
+        for message in connection.get_message(condition):
+            message_id = message['message-id'][0:255]
+            if not django_mailbox.models.Message.objects.filter(message_id=message_id).exists():
+                msg = self.process_incoming_message(message)
+                new_mail.append(msg)
+        return new_mail
