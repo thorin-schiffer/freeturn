@@ -30,6 +30,7 @@ pygments = "*"
 holidays = "*"
 django-mailbox = "*"
 python-social-auth = {version = "*", extras = ["django"]}
+social-auth-app-django = "*"
 
 [dev-packages]
 django-livereload-server = "*"
@@ -37,6 +38,8 @@ django-debug-toolbar = "*"
 django-extensions = "*"
 pytest = "*"
 pytest-django = "*"
+pytest-cov = "*"
+pytest-xdist = "*"
 
 [requires]
 python_version = "3.7.1"
