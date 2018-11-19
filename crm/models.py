@@ -1,17 +1,18 @@
 import math
+
 import django_mailbox.models
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.conf import settings
+from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
+from django_mailbox.signals import message_received
 from phonenumber_field.modelfields import PhoneNumberField
 from wagtail.core.fields import RichTextField
 from wagtailmarkdown.fields import MarkdownField
 from wagtailmarkdown.utils import render_markdown
-from django_mailbox.signals import message_received
-from django.dispatch import receiver
 
 from crm.project_states import ProjectStateMixin
 from crm.utils import get_working_days
@@ -253,8 +254,10 @@ class ProjectMessage(TimeStampedModel):
         return self.message.from_address
 
     @property
-    def html(self):
-        return SafeText(self.message.html)
+    def text(self):
+        return SafeText(
+            f"<pre>{self.message.text}</pre>"
+        )
 
     def __str__(self):
         return self.subject
