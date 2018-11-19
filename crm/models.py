@@ -251,7 +251,7 @@ class ProjectMessage(TimeStampedModel):
 
     @property
     def from_address(self):
-        return self.message.from_address
+        return ",".join(self.message.from_address)
 
     @property
     def text(self):
