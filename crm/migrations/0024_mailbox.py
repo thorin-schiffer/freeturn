@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('django_mailbox', '0007_auto_20181115_1822'),
+        ('django_mailbox', '0006_mailbox_last_polling'),
         ('crm', '0023_auto_20181115_1822'),
     ]
 
