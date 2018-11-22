@@ -102,7 +102,7 @@ class ProjectAdmin(ModelAdmin):
 
     list_display = ('recruiter', 'manager', 'location', 'daily_rate', 'state', 'last_activity')
     list_filter = ('location', 'state')
-    search_fields = ('project_page__title',)
+    search_fields = ('project_page__title', 'manager__company__name')
     button_helper_class = ProjectButtonHelper
     url_helper_class = ProjectURLHelper
     ordering = ('-modified',)
