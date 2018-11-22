@@ -40,6 +40,8 @@ pytest = "*"
 pytest-django = "*"
 pytest-cov = "*"
 pytest-xdist = "*"
+webtest = "*"
+django-webtest = "*"
 
 [requires]
 python_version = "3.7.1"
