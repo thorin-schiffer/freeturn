@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 import factory
 
 from crm import models
@@ -33,6 +35,11 @@ class RecruiterFactory(BaseCompanyFactory):
         model = models.Recruiter
 
 
+class ClientCompanyFactory(BaseCompanyFactory):
+    class Meta:
+        model = models.ClientCompany
+
+
 class EmployeeFactory(factory.DjangoModelFactory):
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')
@@ -42,3 +49,21 @@ class EmployeeFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = models.Employee
+
+
+class ProjectFactory(factory.DjangoModelFactory):
+    company = factory.SubFactory(ClientCompanyFactory)
+    manager = factory.SubFactory(EmployeeFactory)
+    location = factory.SubFactory(CityFactory)
+    original_description = factory.Faker('paragraphs')
+    original_url = factory.Faker('uri')
+    notes = factory.Faker('text')
+    daily_rate = factory.Faker('pydecimal', left_digits=3, right_digits=2, positive=True)
+    start_date = factory.Faker('future_datetime', end_date="+30d")
+
+    class Meta:
+        model = models.Project
+
+    @factory.post_generation
+    def end_date(self, *args, **kwargs):
+        self.end_date = self.start_date + timedelta(days=90)
