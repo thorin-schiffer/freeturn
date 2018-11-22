@@ -42,6 +42,8 @@ pytest-cov = "*"
 pytest-xdist = "*"
 webtest = "*"
 django-webtest = "*"
+factory-boy = "*"
+pytest-factoryboy = "*"
 
 [requires]
 python_version = "3.7.1"
