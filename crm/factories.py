@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django_mailbox.models import Mailbox
 import factory
 
 from crm import models
@@ -67,3 +68,17 @@ class ProjectFactory(factory.DjangoModelFactory):
     @factory.post_generation
     def end_date(self, *args, **kwargs):
         self.end_date = self.start_date + timedelta(days=90)
+
+
+class MailboxFactory(factory.DjangoModelFactory):
+
+    class Meta:
+        model = Mailbox
+
+
+class ProjectMessageFactory(factory.DjangoModelFactory):
+    project = factory.SubFactory(ProjectFactory)
+    author = factory.SubFactory(EmployeeFactory)
+
+    class Meta:
+        model = models.Project
