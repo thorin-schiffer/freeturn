@@ -5,14 +5,13 @@ from utils import result_pks
 
 
 @pytest.mark.django_db
-def test_index(django_app,
-               admin_user,
+def test_index(admin_app,
                client_company,
                client_company_factory):
     other_client = client_company_factory()
     assert other_client.location != client_company.location
     url = reverse('crm_clientcompany_modeladmin_index')
-    r = django_app.get(url, user=admin_user)
+    r = admin_app.get(url)
     r = r.click(client_company.location.name)
     assert r.status_code == 200
     result = result_pks(r)
