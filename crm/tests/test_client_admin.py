@@ -56,6 +56,7 @@ def test_delete(admin_app,
                 client_company):
     url = reverse('crm_clientcompany_modeladmin_delete', kwargs={'instance_pk': client_company.pk})
     r = admin_app.get(url)
+    assert r.status_code == 200
     form = r.forms[1]
     assert form.action == url
 
@@ -63,9 +64,9 @@ def test_delete(admin_app,
     assert not ClientCompany.objects.filter(pk=client_company.pk).exists()
 
 
-def test_edit():
-    pytest.fail()
-
-
-def test_inspect():
-    pytest.fail()
+@pytest.mark.django_db
+def test_inspect(admin_app,
+                 client_company):
+    url = reverse('crm_clientcompany_modeladmin_inspect', kwargs={'instance_pk': client_company.pk})
+    r = admin_app.get(url)
+    assert r.status_code == 200
