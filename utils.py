@@ -19,3 +19,10 @@ def result_pks(response, cast=None):
     return [
         cast(r) for r in result_rows
     ]
+
+
+def required_inputs(response):
+    inputs = response.lxml.xpath(".//*[@required]/@id")
+    return [
+        i.replace("id_", "") for i in inputs
+    ]

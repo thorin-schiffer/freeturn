@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 
-from utils import result_pks
+from utils import result_pks, required_inputs
 
 
 @pytest.mark.django_db
@@ -18,8 +18,14 @@ def test_index(admin_app,
     assert client_company.pk in result
 
 
-def test_add():
-    pytest.fail()
+@pytest.mark.django_db
+def test_add(admin_app):
+    url = reverse('crm_clientcompany_modeladmin_create')
+    r = admin_app.get(url)
+    assert r.status_code == 200
+    required = required_inputs(r)
+    assert 'name' in required
+    assert 'location' in required
 
 
 def test_delete():
