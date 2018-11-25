@@ -90,6 +90,7 @@ class MessageFactory(factory.DjangoModelFactory):
 class ProjectMessageFactory(factory.DjangoModelFactory):
     project = factory.SubFactory(ProjectFactory)
     author = factory.SubFactory(EmployeeFactory)
+    message = factory.SubFactory(MessageFactory)
 
     class Meta:
-        model = models.Project
+        model = models.ProjectMessage
