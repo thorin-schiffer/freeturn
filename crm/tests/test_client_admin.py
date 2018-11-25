@@ -1,7 +1,11 @@
 import pytest
 from django.urls import reverse
 
+from crm.models import ClientCompany
 from utils import result_pks, required_inputs
+from faker import Faker
+
+fake = Faker()
 
 
 @pytest.mark.django_db
@@ -19,7 +23,7 @@ def test_index(admin_app,
 
 
 @pytest.mark.django_db
-def test_add(admin_app):
+def test_add_required(admin_app):
     url = reverse('crm_clientcompany_modeladmin_create')
     r = admin_app.get(url)
     assert r.status_code == 200
@@ -28,6 +32,26 @@ def test_add(admin_app):
     assert 'location' in required
 
 
+@pytest.mark.django_db
+def test_add(admin_app,
+             city, channel):
+    url = reverse('crm_clientcompany_modeladmin_create')
+    r = admin_app.get(url)
+    form = r.forms[1]
+    assert form.action == url
+    name = fake.sentence()
+    form['name'] = name
+    form['location'] = city.id
+    form['channel'] = channel.id
+    form['url'] = fake.uri()
+    form['notes'] = fake.text()
+
+    r = form.submit().follow()
+    assert r.status_code == 200
+    assert ClientCompany.objects.filter(name=name).exists()
+
+
+@pytest.mark.django_db
 def test_delete():
     pytest.fail()
 
