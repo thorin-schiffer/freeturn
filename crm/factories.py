@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.contrib.auth import get_user_model
 from django_mailbox.models import Mailbox, Message
 import factory
 
@@ -94,3 +95,15 @@ class ProjectMessageFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = models.ProjectMessage
+
+
+class UserFactory(factory.DjangoModelFactory):
+    username = factory.Sequence(lambda n: f"user{n}")
+
+    class Meta:
+        model = get_user_model()
+
+
+class AdminFactory(UserFactory):
+    is_staff = True
+    is_superuser = True
