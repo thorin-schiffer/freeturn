@@ -52,8 +52,15 @@ def test_add(admin_app,
 
 
 @pytest.mark.django_db
-def test_delete():
-    pytest.fail()
+def test_delete(admin_app,
+                client_company):
+    url = reverse('crm_clientcompany_modeladmin_delete', kwargs={'instance_pk': client_company.pk})
+    r = admin_app.get(url)
+    form = r.forms[1]
+    assert form.action == url
+
+    form.submit()
+    assert not ClientCompany.objects.filter(pk=client_company.pk).exists()
 
 
 def test_edit():
