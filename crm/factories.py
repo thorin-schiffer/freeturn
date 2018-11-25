@@ -71,6 +71,9 @@ class ProjectFactory(factory.DjangoModelFactory):
 
 
 class MailboxFactory(factory.DjangoModelFactory):
+    name = factory.Sequence(lambda n: f"mailbox {n}")
+    uri = factory.LazyAttribute(lambda x: f"imap+ssl://testusername:password@testserver")
+    from_email = factory.Faker('email')
 
     class Meta:
         model = Mailbox
