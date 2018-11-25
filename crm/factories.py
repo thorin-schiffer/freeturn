@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from django_mailbox.models import Mailbox
+from django_mailbox.models import Mailbox, Message
 import factory
 
 from crm import models
@@ -77,6 +77,14 @@ class MailboxFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = Mailbox
+
+
+class MessageFactory(factory.DjangoModelFactory):
+    mailbox = factory.SubFactory(MailboxFactory)
+    subject = factory.Faker('sentence', nb_words=6, variable_nb_words=True)
+
+    class Meta:
+        model = Message
 
 
 class ProjectMessageFactory(factory.DjangoModelFactory):
