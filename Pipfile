@@ -29,8 +29,9 @@ wagtail-markdown = "*"
 pygments = "*"
 holidays = "*"
 django-mailbox = "*"
-python-social-auth = {version = "*", extras = ["django"]}
+python-social-auth = {version = "*",extras = ["django"]}
 social-auth-app-django = "*"
+lxml = "*"
 
 [dev-packages]
 django-livereload-server = "*"
