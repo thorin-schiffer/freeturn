@@ -10,6 +10,7 @@ def social_for_authed_only(backend, details, response, *args, **kwargs):
 def result_pks(response, cast=None):
     """
     returns ids from wagtail admin search result
+    :param cast: cast pks to a type, default int
     :param response: webtest response
     :return: ids list
     """
