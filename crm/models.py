@@ -75,9 +75,6 @@ class Channel(models.Model):
 
 
 class Project(ProjectStateMixin, TimeStampedModel):
-    recruiter = models.ForeignKey('Recruiter',
-                                  on_delete=models.CASCADE,
-                                  related_name='projects')
     company = models.ForeignKey('ClientCompany',
                                 on_delete=models.SET_NULL,
                                 null=True,
@@ -116,6 +113,10 @@ class Project(ProjectStateMixin, TimeStampedModel):
                                       through='ProjectMessage',
                                       related_name="projects",
                                       editable=False)
+
+    @property
+    def recruiter(self):
+        return self.manager.company if self.manager else None
 
     @property
     def duration(self):
@@ -251,7 +252,7 @@ class ProjectMessage(TimeStampedModel):
 
     @property
     def from_address(self):
-        return self.message.from_address
+        return ",".join(self.message.from_address)
 
     @property
     def text(self):

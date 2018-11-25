@@ -29,12 +29,22 @@ wagtail-markdown = "*"
 pygments = "*"
 holidays = "*"
 django-mailbox = "*"
-python-social-auth = {version = "*", extras = ["django"]}
+python-social-auth = {version = "*",extras = ["django"]}
+social-auth-app-django = "*"
+lxml = "*"
 
 [dev-packages]
 django-livereload-server = "*"
 django-debug-toolbar = "*"
 django-extensions = "*"
+pytest = "*"
+pytest-django = "*"
+pytest-cov = "*"
+pytest-xdist = "*"
+webtest = "*"
+django-webtest = "*"
+factory-boy = "*"
+pytest-factoryboy = "*"
 
 [requires]
 python_version = "3.7.1"
