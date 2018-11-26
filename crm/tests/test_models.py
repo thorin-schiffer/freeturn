@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, date
 
 import pytest
 from django.core.exceptions import ValidationError
@@ -14,3 +14,20 @@ def test_clean(project):
 
     project.end_date = project.start_date + timedelta(days=1)
     project.clean()
+
+
+@pytest.mark.django_db
+def test_projects_count(city, employee, project_factory):
+    project_factory.create(location=city, manager=employee)
+    assert city.project_count == 1
+    assert employee.project_count == 1
+
+
+@pytest.mark.django_db
+def test_project_duration(project):
+    project.start_date = date(2018, 11, 26)
+    project.end_date = date(2018, 12, 30)
+    assert project.duration == 2
+
+    project.start_date = None
+    assert project.duration is None
