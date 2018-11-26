@@ -18,3 +18,7 @@ def test_index_action(admin_app,
     project.refresh_from_db()
     assert project.state == 'stopped'
     assert len(r.context['messages']) == 1
+
+
+def test_correct_actions():
+    pytest.fail()
