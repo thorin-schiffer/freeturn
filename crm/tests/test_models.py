@@ -4,6 +4,8 @@ import pytest
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
+from crm.models import ProjectMessage
+
 
 @pytest.mark.django_db
 def test_clean(project):
@@ -31,3 +33,13 @@ def test_project_duration(project):
 
     project.start_date = None
     assert project.duration is None
+
+
+@pytest.mark.django_db
+def test_associate(project,
+                   message,
+                   monkeypatch):
+    monkeypatch.setattr(message, 'from_header', f"Max Mustermann <{project.manager.email}>")
+    assert message not in project.messages.all()
+    ProjectMessage.associate(message)
+    assert message in project.messages.all()
