@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from django.contrib.auth import get_user_model
-from django_mailbox.models import Mailbox, Message
+from django_mailbox.models import Message
 import factory
 
 from crm import models
@@ -48,6 +48,7 @@ class EmployeeFactory(factory.DjangoModelFactory):
     telephone = factory.Faker('phone_number')
 
     company = factory.SubFactory(RecruiterFactory)
+    email = factory.Faker('email')
 
     class Meta:
         model = models.Employee
@@ -68,7 +69,8 @@ class ProjectFactory(factory.DjangoModelFactory):
 
     @factory.post_generation
     def end_date(self, *args, **kwargs):
-        self.end_date = self.start_date + timedelta(days=90)
+        if self.start_date:
+            self.end_date = self.start_date + timedelta(days=90)
 
 
 class MailboxFactory(factory.DjangoModelFactory):
@@ -77,7 +79,7 @@ class MailboxFactory(factory.DjangoModelFactory):
     from_email = factory.Faker('email')
 
     class Meta:
-        model = Mailbox
+        model = models.Mailbox
 
 
 class MessageFactory(factory.DjangoModelFactory):
