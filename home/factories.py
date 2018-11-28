@@ -1,8 +1,10 @@
 import factory
 import wagtail_factories
+from taggit.models import Tag
 from wagtail.core.models import Page
 
 from home import models
+from home.models import TechnologyInfo
 
 
 class HomePageFactory(wagtail_factories.PageFactory):
@@ -35,3 +37,17 @@ class ProjectPageFactory(wagtail_factories.PageFactory):
 class PortfolioPageFactory(wagtail_factories.PageFactory):
     class Meta:
         model = models.PortfolioPage
+
+
+class TagFactory(factory.DjangoModelFactory):
+    name = factory.Faker("word")
+
+    class Meta:
+        model = Tag
+
+
+class TechnologyInfoFactory(factory.DjangoModelFactory):
+    tag = factory.SubFactory(TagFactory)
+
+    class Meta:
+        model = TechnologyInfo
