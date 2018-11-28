@@ -72,3 +72,14 @@ def test_non_repeat_get_mail(mailbox,
     # call again, no new messages should be created
     mailbox.get_new_mail()
     assert django_mailbox.models.Message.objects.filter(message_id=raw_email['message-id']).count() == 1
+
+
+@pytest.mark.django_db
+def test_project_states(project):
+    assert project.state == 'requested'
+    project.scope()
+    project.introduce()
+    project.sign()
+    project.start()
+    project.finish()
+    project.drop()
