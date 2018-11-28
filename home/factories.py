@@ -30,3 +30,8 @@ class ProjectPageFactory(wagtail_factories.PageFactory):
 
     class Meta:
         model = models.ProjectPage
+
+
+class PortfolioPageFactory(wagtail_factories.PageFactory):
+    class Meta:
+        model = models.PortfolioPage
