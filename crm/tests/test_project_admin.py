@@ -39,7 +39,3 @@ def test_inspect_blank(admin_app, project_factory):
     url = reverse('crm_project_modeladmin_inspect', kwargs={'instance_pk': project.pk})
     r = admin_app.get(url)
     assert r.status_code == 200
-
-
-def test_correct_actions():
-    pytest.fail()
