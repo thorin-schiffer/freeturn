@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from django.contrib.auth import get_user_model
-from django_mailbox.models import Mailbox, Message
+from django_mailbox.models import Message
 import factory
 
 from crm import models
@@ -78,7 +78,7 @@ class MailboxFactory(factory.DjangoModelFactory):
     from_email = factory.Faker('email')
 
     class Meta:
-        model = Mailbox
+        model = models.Mailbox
 
 
 class MessageFactory(factory.DjangoModelFactory):
