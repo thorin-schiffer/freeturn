@@ -55,7 +55,7 @@ def test_technologies(rf,
 
 
 @pytest.mark.django_db
-def test_technologies(rf,
+def test_contact_form(rf,
                       portfolio_page,
                       technologies_page,
                       contact_page):
