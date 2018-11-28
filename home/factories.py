@@ -51,3 +51,8 @@ class TechnologyInfoFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = TechnologyInfo
+
+
+class TechnologiesPageFactory(wagtail_factories.PageFactory):
+    class Meta:
+        model = models.TechnologiesPage
