@@ -32,6 +32,7 @@ django-mailbox = "*"
 python-social-auth = {version = "*",extras = ["django"]}
 social-auth-app-django = "*"
 lxml = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 django-livereload-server = "*"
