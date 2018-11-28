@@ -19,3 +19,18 @@ def test_home(home_page,
 
     context = home_page.get_context(request)
     assert context['earliest_available'] == project_page.start_date + timedelta(days=31)
+
+
+@pytest.mark.django_db
+def test_portfolio(portfolio_page,
+                   project_page_factory,
+                   technology_info,
+                   rf):
+    project_page = project_page_factory.create(parent=portfolio_page)
+    project_page.technologies.add(technology_info.tag)
+    project_page.save()
+    request = rf.get(f"/?technology={technology_info.tag.name}")
+    context = portfolio_page.get_context(request)
+
+    assert context['technology'] == technology_info
+    assert project_page in context['projects']

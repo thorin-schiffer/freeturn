@@ -95,7 +95,7 @@ class PortfolioPage(Page):
         technology = request.GET.get('technology')
         context['projects'] = ProjectPage.objects.child_of(self).live()
         if technology:
-            context['projects'] = context['projects'].filter(technologies__name=technology)
+            context['projects'] = context['projects'].filter(technologies__name__in=[technology.lower()])
             context['technology'] = TechnologyInfo.objects.filter(tag__name=technology).first()
         context['projects'] = context['projects'].order_by('-start_date')
         return context
