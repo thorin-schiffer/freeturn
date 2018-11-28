@@ -69,7 +69,8 @@ class ProjectFactory(factory.DjangoModelFactory):
 
     @factory.post_generation
     def end_date(self, *args, **kwargs):
-        self.end_date = self.start_date + timedelta(days=90)
+        if self.start_date:
+            self.end_date = self.start_date + timedelta(days=90)
 
 
 class MailboxFactory(factory.DjangoModelFactory):
