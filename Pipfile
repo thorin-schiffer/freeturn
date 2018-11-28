@@ -46,6 +46,7 @@ django-webtest = "*"
 factory-boy = "*"
 pytest-factoryboy = "*"
 ipython = "*"
+pytest-mock = "*"
 
 [requires]
 python_version = "3.7.1"
