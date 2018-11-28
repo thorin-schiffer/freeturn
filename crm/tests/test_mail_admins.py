@@ -74,3 +74,11 @@ def test_get_mail_view_new_mail(admin_app,
     messages = r.context['messages']
     message = messages._loaded_messages[0]
     assert message.level == SUCCESS
+
+
+@pytest.mark.django_db
+def test_project_message_inspect(admin_app,
+                                 project_message):
+    url = reverse('crm_projectmessage_modeladmin_inspect', kwargs={'instance_pk': project_message.pk})
+    r = admin_app.get(url)
+    assert r.status_code == 200
