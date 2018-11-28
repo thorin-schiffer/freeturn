@@ -34,3 +34,21 @@ def test_portfolio(portfolio_page,
 
     assert context['technology'] == technology_info
     assert project_page in context['projects']
+
+
+@pytest.mark.django_db
+def test_technologies(rf,
+                      technology_info,
+                      project_page_factory,
+                      technologies_page,
+                      portfolio_page):
+    request = rf.get("/")
+    project_page = project_page_factory.create(parent=portfolio_page)
+    context = technologies_page.get_context(request)
+    project_page.technologies.add(technology_info.tag)
+    project_page.save()
+
+    assert technology_info.tag in context['technologies']
+    tag = context['technologies'][0]
+    assert tag.projects_count == 1
+    assert context['portfolio'] == portfolio_page
