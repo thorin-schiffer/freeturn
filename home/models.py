@@ -68,8 +68,9 @@ class HomePage(Page):
         context['current_project'] = current_project
 
         last_project = ProjectPage.objects.live().order_by('-start_date').first()
-        context['earliest_available'] = self.earliest_available or last_project.start_date + timedelta(days=31 * last_project.duration)
-
+        context['earliest_available'] = self.earliest_available or last_project.start_date + timedelta(
+            days=31 * (last_project.duration or 1)
+        )
         return context
 
 
