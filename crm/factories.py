@@ -48,6 +48,7 @@ class EmployeeFactory(factory.DjangoModelFactory):
     telephone = factory.Faker('phone_number')
 
     company = factory.SubFactory(RecruiterFactory)
+    email = factory.Faker('email')
 
     class Meta:
         model = models.Employee
