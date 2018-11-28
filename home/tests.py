@@ -52,3 +52,13 @@ def test_technologies(rf,
     tag = context['technologies'][0]
     assert tag.projects_count == 1
     assert context['portfolio'] == portfolio_page
+
+
+@pytest.mark.django_db
+def test_technologies(rf,
+                      portfolio_page,
+                      technologies_page,
+                      contact_page):
+    request = rf.get("/")
+    r = contact_page.render_landing_page(request)
+    assert r.status_code == 200
