@@ -20,5 +20,13 @@ def test_index_action(admin_app,
     assert len(r.context['messages']) == 1
 
 
+@pytest.mark.django_db
+def test_inspect(admin_app,
+                 project):
+    url = reverse('crm_project_modeladmin_inspect', kwargs={'instance_pk': project.pk})
+    r = admin_app.get(url)
+    assert r.status_code == 200
+
+
 def test_correct_actions():
     pytest.fail()
