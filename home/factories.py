@@ -1,7 +1,7 @@
 import factory
 import wagtail_factories
 from taggit.models import Tag
-from wagtail.core.models import Page
+from wagtail.core.models import Page, Site
 
 from home import models
 from home.models import TechnologyInfo
@@ -20,6 +20,8 @@ class HomePageFactory(wagtail_factories.PageFactory):
 
 
 class ContactPageFactory(wagtail_factories.PageFactory):
+    title = "Contact"
+
     class Meta:
         model = models.ContactPage
 
@@ -35,6 +37,8 @@ class ProjectPageFactory(wagtail_factories.PageFactory):
 
 
 class PortfolioPageFactory(wagtail_factories.PageFactory):
+    title = "Portfolio"
+
     class Meta:
         model = models.PortfolioPage
 
@@ -54,5 +58,17 @@ class TechnologyInfoFactory(factory.DjangoModelFactory):
 
 
 class TechnologiesPageFactory(wagtail_factories.PageFactory):
+    title = "Technologies"
+
     class Meta:
         model = models.TechnologiesPage
+
+
+class SiteFactory(factory.DjangoModelFactory):
+    hostname = 'testsite'
+    port = 8000
+    site_name = factory.Faker('sentence')
+    root_page = factory.SubFactory(wagtail_factories.PageFactory)
+
+    class Meta:
+        model = Site
