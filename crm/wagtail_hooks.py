@@ -79,12 +79,12 @@ class PeopleSearchArea(SearchArea):
 
 
 @hooks.register('register_admin_search_area')
-def register_pages_search_area():
+def register_people_search_area():
     return PeopleSearchArea()
 
 
 @hooks.register('register_admin_search_area')
-def register_pages_search_area():
+def register_project_search_area():
     return ProjectSearchArea()
 
 
