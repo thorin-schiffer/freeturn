@@ -49,6 +49,7 @@ pytest-factoryboy = "*"
 ipython = "*"
 pytest-mock = "*"
 wagtail-factories = "*"
+flake8 = "*"
 
 [requires]
 python_version = "3.7.1"
