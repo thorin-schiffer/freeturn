@@ -1,0 +1,37 @@
+.portfolio-logo {
+    border-radius: 200px;
+    margin: 20px 0px;
+    box-shadow: 0 5px 5px 0 #C7C7C7 inset;
+    background: white;
+}
+@media (min-width: 576px){
+    .portfolio-item {
+        border-radius: 20px;
+    }
+    .card-footer {
+        border-radius: 200px;
+        box-shadow: 0 3px 3px -5px black inset;
+        background: none;
+    }
+    .technology-item {
+        border-radius: 20px;
+    }
+    .home.container {
+        margin-top: 200px;
+    }
+}
+.technology-logo {
+    border-radius: 100px;
+    margin: 20px;
+}
+
+.row {
+    margin-top: 20px;
+}
+.card {
+    border: none;
+}
+.vertical-align {
+    display: flex;
+    align-items: center;
+}

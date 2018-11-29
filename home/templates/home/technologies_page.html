@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
+{% load static %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="my-4" style="color:{{ page.title_color }}">
+        Technologies
+    </h1>
+
+    {% for technology in technologies %}
+        {% if forloop.counter0|divisibleby:4 %}<div class="row">{% endif %}
+        <div class="col-lg-3">
+
+            <div class="card h-100 bg-secondary text-white technology-item">
+                <a href="{% pageurl portfolio %}?technology={{technology}}">
+                    {% if technology.info.logo %}
+                        {% image technology.info.logo fill-100x100-c100 class="mx-auto d-block technology-logo" style="background:white;"%}
+                    {% else %}
+                        <img height="100" width="100" src="{% static 'img/default_technology.png' %}" class="mx-auto d-block technology-logo">
+                    {% endif %}
+                </a>
+                <div class="card-body">
+                    <h3 class="card-title">
+                        {{ technology }}
+                    </h3>
+                    <h4>
+                        {{technology.projects_count}} project{{ technology.projects_count | pluralize }}
+                    </h4>
+                </div>
+            </div>
+
+        </div>
+        {% if forloop.counter|divisibleby:4 %}</div>{% endif %}
+    {% endfor %}
+</div>
+
+{% endblock %}

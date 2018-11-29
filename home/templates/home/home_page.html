@@ -1,11 +1,71 @@
 {% extends "base.html" %}
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
+{% load static %}
 
 {% block body_class %}template-homepage{% endblock %}
 
 {% block content %}
-    <h1>Welcome to your new Wagtail site!</h1>
+<div class="container home" >
+    <div class="row vertical-align">
+        <div class="col-md-4">
+            {% image page.picture fill-512x512-c80 class="img-fluid"%}
+        </div>
+        <div class="col-md-8">
+            <h1 class="my-4">
+                Sergey Cheparev
+            </h1>
+            <h2 style="color:{{ page.title_color }}">{{ page.claim }}</h2>
+            <div class="row">
+                <div class="col-lg-2">
+                    <a href="https://stackoverflow.com/users/1205242/eviltnan">
+                        <img height="50" width="50" src="{% static 'img/stack_overflow.png' %}" class="mx-auto d-block">
+                    </a>
+                    <div class="text-center">
+                        Stackoverflow
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <a href="https://github.com/eviltnan">
+                        <img height="50" width="50" src="{% static 'img/github.png' %}" class="mx-auto d-block">
+                    </a>
+                    <div class="text-center">
+                        GitHub
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <a href="https://www.linkedin.com/in/sergey-cheparev/">
+                        <img height="50" width="50" src="{% static 'img/linkedin.png' %}" class="mx-auto d-block">
+                    </a>
+                    <div class="text-center">
+                        LinkedIn
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    Earliest available for new projects: {{ earliest_available | date:"F Y" }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="btn-group col-md-4" role="group">
+                    {% if current_project %}
+                        <a href="{% pageurl current_project %}" class="btn btn-outline-dark">current project</a>
+                    {% endif %}
 
-    <p>You can access the admin interface <a href="{% url 'wagtailadmin_home' %}">here</a> (make sure you have run "./manage.py createsuperuser" in the console first).</p>
+                    <a href="{% pageurl menu_items.portfolio %}" class="btn btn-outline-dark">to portfolio</a>
 
-    <p>If you haven't already given the documentation a read, head over to <a href="http://docs.wagtail.io/">http://docs.wagtail.io</a> to start building on Wagtail</p>
+                    {% for form in forms %}
+                        <a href="{% pageurl form %}" class="btn btn-outline-dark">{{ form.title }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="col-lg-6">
+
+</div>
 {% endblock %}

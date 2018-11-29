@@ -1,0 +1,10 @@
+[run]
+branch = true
+omit = */tests/*, */migrations/*, */urls.py, */settings/*, */wsgi.py, manage.py, fabfile.py, tasks.py
+source = .
+
+[report]
+skip_covered = True
+fail_under=94
+sort = Miss
+ignore_errors = True

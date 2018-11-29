@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
+{% load static %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <h1 class="my-4">
+        {{page.title}}{% if technology %}:{{technology}}{% endif %}
+    </h1>
+    {% if technology %}
+    <p>
+        {{ technology.summary | richtext }}
+    </p>
+    {% endif %}
+    {% for project in projects %}
+        {% if forloop.counter0|divisibleby:3 %}<div class="row">{% endif %}
+        <div class="col-lg-4">
+            {% image project.card_background fill-512x512 as card_background %}
+            <div class="card h-100 text-white bg-dark portfolio-item"
+                 {% if project.card_background %}
+                 style="background: url('{{card_background.url}}') no-repeat center center;background-size: cover;"
+                 {% endif %}>
+                <a href="{% pageurl project %}">
+                    {% if project.logo %}
+                        {% image project.logo fill-100x100-c50 class="mx-auto d-block portfolio-logo" style="background:white;"%}
+                    {% else %}
+                        <img height="100" width="100" src="{% static 'img/default_project.png' %}" class="mx-auto d-block technology-logo">
+                    {% endif %}
+                </a>
+
+                <div class="card-body">
+                    <h4 class="card-title">
+                        {{ project.title }}
+                    </h4>
+                    <p class="card-text">
+                        {{ project.summary }}
+                    </p>
+                </div>
+                <div class="card-footer text-right">
+                    {{ project.start_date | date:"M Y" }}
+                </div>
+            </div>
+        </div>
+        {% if forloop.counter|divisibleby:3 %}</div>{% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

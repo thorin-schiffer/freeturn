@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script src='https://www.google.com/recaptcha/api.js'></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">
+        {{ page.title }}
+    </h1>
+    {{ page.intro|richtext }}
+    <form action="{% pageurl page %}" method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" class="btn btn-outline-dark">
+    </form>
+</div>
+
+{% endblock %}
