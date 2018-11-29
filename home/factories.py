@@ -30,7 +30,7 @@ class ProjectPageFactory(wagtail_factories.PageFactory):
     summary = factory.Faker('sentence')
     description = factory.Faker('text')
     responsibility = factory.Faker('word')
-    start_date = factory.Faker('past_datetime')
+    start_date = factory.Faker('past_datetime', start_date="-15d")
 
     class Meta:
         model = models.ProjectPage
