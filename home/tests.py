@@ -55,10 +55,11 @@ def test_technologies(rf,
 
 
 @pytest.mark.django_db
-def test_contact_form(rf,
-                      portfolio_page,
-                      technologies_page,
-                      contact_page):
-    request = rf.get("/")
-    r = contact_page.render_landing_page(request)
-    assert r.status_code == 200
+def test_contact_form_recaptcha(django_app,
+                                default_site,
+                                portfolio_page,
+                                technologies_page,
+                                contact_page_factory):
+    contact_page = contact_page_factory.create(parent=default_site.root_page)
+    r = django_app.get(f"/{contact_page.slug}/", status="*")
+    r.form.submit()
