@@ -52,3 +52,14 @@ def test_technologies(rf,
     tag = context['technologies'][0]
     assert tag.projects_count == 1
     assert context['portfolio'] == portfolio_page
+
+
+@pytest.mark.django_db
+def test_contact_form_recaptcha(django_app,
+                                default_site,
+                                portfolio_page,
+                                technologies_page,
+                                contact_page_factory):
+    contact_page = contact_page_factory.create(parent=default_site.root_page)
+    r = django_app.get(f"/{contact_page.slug}/", status="*")
+    r.form.submit()

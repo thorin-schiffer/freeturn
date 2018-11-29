@@ -12,7 +12,6 @@ def test_project_message_index(admin_app,
     project_message_factory.create()
     url = reverse('crm_projectmessage_modeladmin_index')
     r = admin_app.get(url)
-    assert r.status_code == 200
 
 
 @pytest.fixture
@@ -50,7 +49,6 @@ def test_get_mail_view_no_mail(admin_app,
         }
     )
     r = admin_app.get(url).follow()
-    assert r.status_code == 200
     messages = r.context['messages']
     assert len(messages) == 1
     message = messages._loaded_messages[0]
@@ -68,7 +66,6 @@ def test_get_mail_view_new_mail(admin_app,
         }
     )
     r = admin_app.get(url).follow()
-    assert r.status_code == 200
 
     assert len(r.context['messages']) == 1
     messages = r.context['messages']
@@ -81,4 +78,3 @@ def test_project_message_inspect(admin_app,
                                  project_message):
     url = reverse('crm_projectmessage_modeladmin_inspect', kwargs={'instance_pk': project_message.pk})
     r = admin_app.get(url)
-    assert r.status_code == 200
