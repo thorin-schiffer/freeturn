@@ -64,4 +64,4 @@ def test_delete(admin_app,
 def test_inspect(admin_app,
                  client_company):
     url = reverse('crm_clientcompany_modeladmin_inspect', kwargs={'instance_pk': client_company.pk})
-    r = admin_app.get(url)
+    admin_app.get(url)

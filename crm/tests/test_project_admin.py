@@ -23,7 +23,7 @@ def test_index_action(admin_app,
 def test_inspect(admin_app,
                  project):
     url = reverse('crm_project_modeladmin_inspect', kwargs={'instance_pk': project.pk})
-    r = admin_app.get(url)
+    admin_app.get(url)
 
 
 @pytest.mark.django_db
