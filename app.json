@@ -1,4 +1,13 @@
 {
+  "name": "Portfolio",
+  "description": "Sergey Cheparev portfolio website",
+  "website": "https://portfolio.cheparev.com/",
+  "repository": "https://github.com/eviltnan/portfolio",
+  "logo": "https://portfolio.cheparev.com/static/img/favicon/favicon-96x96.png",
+  "success_url": "/",
+  "scripts": {
+    "predeploy": "heroku pg:backups:capture"
+  },
   "environments": {
     "test": {
       "scripts": {
