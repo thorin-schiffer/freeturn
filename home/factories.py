@@ -1,5 +1,6 @@
 import factory
 import wagtail_factories
+from django.utils.timezone import get_current_timezone
 from taggit.models import Tag
 from wagtail.core.models import Page, Site
 
@@ -30,7 +31,7 @@ class ProjectPageFactory(wagtail_factories.PageFactory):
     summary = factory.Faker('sentence')
     description = factory.Faker('text')
     responsibility = factory.Faker('word')
-    start_date = factory.Faker('past_datetime', start_date="-15d")
+    start_date = factory.Faker('past_date', start_date="-15d", tzinfo=get_current_timezone())
 
     class Meta:
         model = models.ProjectPage
