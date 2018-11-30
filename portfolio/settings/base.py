@@ -63,7 +63,6 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
-    'livereload.middleware.LiveReloadScript',
 ]
 
 ROOT_URLCONF = 'portfolio.urls'
