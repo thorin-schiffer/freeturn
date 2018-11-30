@@ -15,7 +15,8 @@ INTERNAL_IPS = ['127.0.0.1']
 
 if DEBUG_TOOLBAR:
     INSTALLED_APPS += ['debug_toolbar', 'livereload']
-    MIDDLEWARE = MIDDLEWARE + ['debug_toolbar.middleware.DebugToolbarMiddleware', ]
+    MIDDLEWARE = MIDDLEWARE + ['debug_toolbar.middleware.DebugToolbarMiddleware',
+                               'livereload.middleware.LiveReloadScript', ]
 
 try:
     from .local import *
