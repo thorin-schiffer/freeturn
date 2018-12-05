@@ -4,12 +4,16 @@ import django_mailbox.models
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import CASCADE
 from django.dispatch import receiver
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
 from django_mailbox.signals import message_received
 from phonenumber_field.modelfields import PhoneNumberField
+from wagtail.contrib.settings.models import BaseSetting
+from wagtail.contrib.settings.registry import register_setting
 from wagtail.core.fields import RichTextField
 from wagtailmarkdown.fields import MarkdownField
 from wagtailmarkdown.utils import render_markdown
@@ -327,3 +331,65 @@ class Mailbox(django_mailbox.models.Mailbox):
                 msg = self.process_incoming_message(message)
                 new_mail.append(msg)
         return new_mail
+
+
+class Application(TimeStampedModel):
+    project = models.ForeignKey("Project",
+                                on_delete=CASCADE)
+    project_pages = models.ManyToManyField("home.ProjectPage",
+                                           help_text="Project pages to include in the application",
+                                           related_name="applications_included")
+    earliest_available = models.DateField(null=True, blank=True, default=timezone.now)
+    picture = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Picture to use, default is current user pic"
+    )
+    full_name = models.CharField(max_length=200,
+                                 help_text="Name to use in the title of the file, default is current user")
+    title = models.CharField(max_length=200, help_text="Title to be placed under the name")
+    experience_overview = MarkdownField(
+        help_text="Notice on your experience",
+    )
+
+    relevant_project_pages = models.ManyToManyField(
+        "home.ProjectPage",
+        help_text="Project pages to be placed on the first page, eye catcher for this project",
+        related_name="applications_highlighted"
+    )
+    education_overview = MarkdownField(
+        help_text="Notice on your education",
+    )
+    contact_details = MarkdownField()
+    languages_overview = MarkdownField()
+
+    skills = models.ManyToManyField(
+        'taggit.Tag',
+        help_text="Technology tags to be included, "
+                  "will be automatically formed to look relevant"
+    )
+
+
+@register_setting(icon='placeholder')
+class ApplicationSettings(BaseSetting):
+    default_title = models.CharField(
+        max_length=255, help_text='Default title to use')
+    default_experience_overview = MarkdownField(
+        help_text="Notice on your experience",
+        default="Python developer experience: 7 years"
+    )
+
+    default_relevant_project_pages = models.ManyToManyField(
+        "home.ProjectPage",
+        help_text="Project pages to be placed on the first page, eye catcher for this project",
+        related_name="applications_highlighted"
+    )
+    default_education_overview = MarkdownField(
+        help_text="Notice on your education",
+        default="Novosibirsk State Technical University"
+    )
+    default_contact_details = MarkdownField(default="sergey@cheparev.com")
+    default_languages_overview = MarkdownField(default="English: fluent")
