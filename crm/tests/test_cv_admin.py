@@ -24,3 +24,4 @@ def test_add_form_prefill(admin_app, admin_user, default_site,
     assert form['rate_overview'].value == cv_settings.default_rate_overview
     assert form['full_name'].value == admin_user.first_name + " " + admin_user.last_name
     assert form['earliest_available'].value == str(home_page.earliest_available)
+    assert form['picture'].value == str(home_page.picture.id)
