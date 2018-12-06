@@ -18,6 +18,7 @@ class CreateCVView(CreateView):
             "contact_details": settings.default_contact_details,
             "languages_overview": settings.default_languages_overview,
             "rate_overview": settings.default_rate_overview,
+            "working_permit": settings.default_working_permit,
             "full_name": f"{user.first_name} {user.last_name}",
             "earliest_available": home.earliest_available,
             "picture": home.picture

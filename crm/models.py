@@ -368,6 +368,7 @@ class CV(TimeStampedModel):
     contact_details = MarkdownField()
     languages_overview = MarkdownField()
     rate_overview = MarkdownField()
+    working_permit = MarkdownField()
 
     skills = models.ManyToManyField(
         'taggit.Tag',
@@ -395,6 +396,7 @@ class CV(TimeStampedModel):
                         FieldPanel('contact_details'),
                         FieldPanel('languages_overview'),
                         FieldPanel('rate_overview'),
+                        FieldPanel('working_permit'),
                     ]
                 )
 
@@ -419,3 +421,4 @@ class CVGenerationSettings(BaseSetting):
     default_contact_details = MarkdownField(default="sergey@cheparev.com")
     default_languages_overview = MarkdownField(default="English: fluent")
     default_rate_overview = MarkdownField(default="<<change default in settings>>")
+    default_working_permit = MarkdownField(default="PERMANENT RESIDENCE")
