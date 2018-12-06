@@ -404,6 +404,9 @@ class CV(TimeStampedModel):
         ),
     ]
 
+    class Meta:
+        verbose_name = "CV"
+
 
 @register_setting(icon='icon icon-fa-id-card')
 class CVGenerationSettings(BaseSetting):
