@@ -2,7 +2,7 @@ from pytest_factoryboy import register
 from crm import factories
 import pytest
 
-from home.factories import SiteFactory
+from home.factories import SiteFactory, HomePageFactory
 
 register(factories.CityFactory)
 register(factories.EmployeeFactory)
@@ -16,6 +16,7 @@ register(factories.ProjectMessageFactory)
 register(factories.UserFactory)
 register(factories.AdminFactory, "admin_user")
 register(SiteFactory)
+register(HomePageFactory)
 
 
 @pytest.fixture
