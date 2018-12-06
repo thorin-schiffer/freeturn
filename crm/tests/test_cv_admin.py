@@ -14,9 +14,9 @@ def test_add_form_prefill(admin_app, default_site):
     form = r.forms[1]
     assert form.action == url
 
-    assert form['title'] == cv_settings.default_title
-    assert form['experience_overview'] == cv_settings.default_experience_overview
-    assert form['education_overview'] == cv_settings.default_education_overview
-    assert form['contact_details'] == cv_settings.default_contact_details
-    assert form['languages_overview'] == cv_settings.default_languages_overview
-    assert form['rate_overview'] == cv_settings.default_rate_overview
+    assert form['title'].value == cv_settings.default_title
+    assert form['experience_overview'].value == cv_settings.default_experience_overview
+    assert form['education_overview'].value == cv_settings.default_education_overview
+    assert form['contact_details'].value == cv_settings.default_contact_details
+    assert form['languages_overview'].value == cv_settings.default_languages_overview
+    assert form['rate_overview'].value == cv_settings.default_rate_overview
