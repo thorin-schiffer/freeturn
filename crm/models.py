@@ -377,7 +377,7 @@ class CV(TimeStampedModel):
 @register_setting(icon='placeholder')
 class CVGenerationSettings(BaseSetting):
     default_title = models.CharField(
-        max_length=255, help_text='Default title to use')
+        max_length=255, help_text='Default title to use', default="Freelance python developer")
     default_experience_overview = MarkdownField(
         help_text="Notice on your experience",
         default="Python developer experience: 7 years"
