@@ -2,7 +2,7 @@ import factory
 import wagtail_factories
 from django.utils.timezone import get_current_timezone
 from taggit.models import Tag
-from wagtail.core.models import Page, Site
+from wagtail.core.models import Site
 
 from home import models
 from home.models import TechnologyInfo
@@ -13,11 +13,6 @@ class HomePageFactory(wagtail_factories.PageFactory):
 
     class Meta:
         model = models.HomePage
-
-    @factory.post_generation
-    def add_to_tree(self, *args, **kwargs):
-        root = Page.objects.filter(title='root').first()
-        self.parent = root
 
 
 class ContactPageFactory(wagtail_factories.PageFactory):
