@@ -333,7 +333,7 @@ class Mailbox(django_mailbox.models.Mailbox):
         return new_mail
 
 
-class Application(TimeStampedModel):
+class CV(TimeStampedModel):
     project = models.ForeignKey("Project",
                                 on_delete=CASCADE)
     project_pages = models.ManyToManyField("home.ProjectPage",
@@ -365,6 +365,7 @@ class Application(TimeStampedModel):
     )
     contact_details = MarkdownField()
     languages_overview = MarkdownField()
+    rate_overview = MarkdownField()
 
     skills = models.ManyToManyField(
         'taggit.Tag',
@@ -374,7 +375,7 @@ class Application(TimeStampedModel):
 
 
 @register_setting(icon='placeholder')
-class ApplicationSettings(BaseSetting):
+class CVGenerationSettings(BaseSetting):
     default_title = models.CharField(
         max_length=255, help_text='Default title to use')
     default_experience_overview = MarkdownField(
@@ -382,14 +383,10 @@ class ApplicationSettings(BaseSetting):
         default="Python developer experience: 7 years"
     )
 
-    default_relevant_project_pages = models.ManyToManyField(
-        "home.ProjectPage",
-        help_text="Project pages to be placed on the first page, eye catcher for this project",
-        related_name="applications_highlighted"
-    )
     default_education_overview = MarkdownField(
         help_text="Notice on your education",
         default="Novosibirsk State Technical University"
     )
     default_contact_details = MarkdownField(default="sergey@cheparev.com")
     default_languages_overview = MarkdownField(default="English: fluent")
+    default_rate_overview = MarkdownField(default="<<change default in settings>>")
