@@ -10,6 +10,7 @@ from home.models import TechnologyInfo
 
 class HomePageFactory(wagtail_factories.PageFactory):
     title = factory.Faker('sentence')
+    picture = factory.SubFactory(wagtail_factories.ImageFactory)
 
     class Meta:
         model = models.HomePage
