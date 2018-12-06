@@ -6,6 +6,7 @@ from wagtail.contrib.modeladmin.options import (
 from wagtail.core import hooks
 
 from crm.models import Recruiter, City, Channel, Employee, ClientCompany
+from crm.wagtail_admin.cv import CVAdmin
 from crm.wagtail_admin.mail import MailGroup
 from crm.wagtail_admin.project import ProjectAdmin, ProjectSearchArea
 
@@ -60,7 +61,7 @@ class CRMGroup(ModelAdminGroup):
     menu_icon = "fa-briefcase"
     menu_order = 200
     items = (
-        ProjectAdmin, EmployeeAdmin, RecruiterAdmin, CityAdmin, ChannelAdmin, ClientCompanyAdmin
+        ProjectAdmin, CVAdmin, EmployeeAdmin, RecruiterAdmin, CityAdmin, ChannelAdmin, ClientCompanyAdmin
     )
 
 
