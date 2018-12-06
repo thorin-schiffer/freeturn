@@ -12,9 +12,11 @@ from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
 from django_mailbox.signals import message_received
 from phonenumber_field.modelfields import PhoneNumberField
+from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPanel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail.core.fields import RichTextField
+from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtailmarkdown.fields import MarkdownField
 from wagtailmarkdown.utils import render_markdown
 
@@ -372,6 +374,33 @@ class CV(TimeStampedModel):
         help_text="Technology tags to be included, "
                   "will be automatically formed to look relevant"
     )
+
+    panels = [
+        FieldPanel('project'),
+        FieldRowPanel(
+            [
+                MultiFieldPanel(
+                    [
+                        FieldPanel('full_name'),
+                        FieldPanel('title'),
+                        FieldPanel('earliest_available'),
+                        FieldPanel('experience_overview'),
+                        FieldPanel('education_overview'),
+                    ],
+                    heading="Header data"
+                ),
+                MultiFieldPanel(
+                    [
+                        ImageChooserPanel('picture'),
+                        FieldPanel('contact_details'),
+                        FieldPanel('languages_overview'),
+                        FieldPanel('rate_overview'),
+                    ]
+                )
+
+            ]
+        ),
+    ]
 
 
 @register_setting(icon='icon icon-fa-id-card')
