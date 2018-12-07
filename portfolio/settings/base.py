@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'colorful',
     'storages',
     'ajax_select',
+    'wkhtmltopdf',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -197,5 +198,9 @@ from social_core.pipeline import DEFAULT_AUTH_PIPELINE
 
 SOCIAL_AUTH_PIPELINE = ("utils.social_for_authed_only",) + DEFAULT_AUTH_PIPELINE + ("crm.utils.ensure_mailbox",)
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
-      'access_type': 'offline'
+    'access_type': 'offline'
+}
+WKHTMLTOPDF_CMD = '/usr/bin/wkhtmltopdf'
+WKHTMLTOPDF_CMD_OPTIONS = {
+    'quiet': True,
 }
