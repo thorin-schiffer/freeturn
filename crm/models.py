@@ -12,6 +12,7 @@ from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
 from django_mailbox.signals import message_received
 from phonenumber_field.modelfields import PhoneNumberField
+from taggit.models import Tag
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPanel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
@@ -406,7 +407,7 @@ class CV(TimeStampedModel):
         ),
     ]
 
-    def set_relevant_project_pages(self, limit=5):
+    def set_relevant_skills_and_projects(self, limit=5):
         technologies = TechnologyInfo.match_text(self.project.original_description)
         if self.relevant_project_pages.count():
             logger.error(f"Won't set relevant project pages for {self}, it's not empty")
@@ -414,6 +415,9 @@ class CV(TimeStampedModel):
         self.relevant_project_pages.set(ProjectPage.objects.live().filter(
             technologies__in=technologies.values_list('tag__id')
         )[:limit])
+        self.relevant_skills.set(
+            Tag.objects.filter(id__in=technologies.values_list('tag__id'))
+        )
 
     class Meta:
         verbose_name = "CV"
