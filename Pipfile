@@ -33,6 +33,7 @@ python-social-auth = {version = "*",extras = ["django"]}
 social-auth-app-django = "*"
 lxml = "*"
 psycopg2-binary = "*"
+fuzzywuzzy = {extras = ["speedup"],version = "*"}
 
 [dev-packages]
 django-livereload-server = "*"

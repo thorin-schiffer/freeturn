@@ -1,5 +1,5 @@
 from datetime import timedelta
-
+from fuzzywuzzy import process
 from colorful.fields import RGBColorField
 from django.db import models
 from django.db.models import Count
@@ -215,6 +215,17 @@ class TechnologyInfo(models.Model):
         FieldPanel('summary'),
         FieldPanel('tag'),
     ]
+
+    @staticmethod
+    def match_text(text, limit=5, cutoff=40):
+        choices = TechnologyInfo.objects.values_list(
+            'tag__name', flat=True
+        )
+        results = process.extract(text, choices, limit=limit)
+        print(results)
+        return TechnologyInfo.objects.filter(
+            tag__name__in=[r[0] for r in results if r[1] > cutoff]
+        )
 
     def __str__(self):
         return self.tag.name

@@ -2,7 +2,7 @@ import factory
 import wagtail_factories
 from django.utils.timezone import get_current_timezone
 from taggit.models import Tag
-from wagtail.core.models import Page, Site
+from wagtail.core.models import Site
 
 from home import models
 from home.models import TechnologyInfo
@@ -10,14 +10,10 @@ from home.models import TechnologyInfo
 
 class HomePageFactory(wagtail_factories.PageFactory):
     title = factory.Faker('sentence')
+    picture = factory.SubFactory(wagtail_factories.ImageFactory)
 
     class Meta:
         model = models.HomePage
-
-    @factory.post_generation
-    def add_to_tree(self, *args, **kwargs):
-        root = Page.objects.filter(title='root').first()
-        self.parent = root
 
 
 class ContactPageFactory(wagtail_factories.PageFactory):
@@ -32,6 +28,16 @@ class ProjectPageFactory(wagtail_factories.PageFactory):
     description = factory.Faker('text')
     responsibility = factory.Faker('word')
     start_date = factory.Faker('past_date', start_date="-15d", tzinfo=get_current_timezone())
+
+    @factory.post_generation
+    def technologies(self, created, extracted, *args, **kwargs):
+        if extracted is not None:
+            infos = [TechnologyInfoFactory(tag__name=name) for name in extracted]
+        else:
+            infos = [TechnologyInfoFactory()]
+        for info in infos:
+            self.technologies.add(info.tag)
+        self.save()
 
     class Meta:
         model = models.ProjectPage

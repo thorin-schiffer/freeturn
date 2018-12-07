@@ -4,18 +4,29 @@ import django_mailbox.models
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import CASCADE
 from django.dispatch import receiver
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
 from django_mailbox.signals import message_received
 from phonenumber_field.modelfields import PhoneNumberField
+from taggit.models import Tag
+from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPanel
+from wagtail.contrib.settings.models import BaseSetting
+from wagtail.contrib.settings.registry import register_setting
 from wagtail.core.fields import RichTextField
+from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtailmarkdown.fields import MarkdownField
 from wagtailmarkdown.utils import render_markdown
 
 from crm.project_states import ProjectStateMixin
 from crm.utils import get_working_days
+from home.models import TechnologyInfo, ProjectPage
+import logging
+
+logger = logging.getLogger("crm.models")
 
 
 class City(models.Model):
@@ -327,3 +338,116 @@ class Mailbox(django_mailbox.models.Mailbox):
                 msg = self.process_incoming_message(message)
                 new_mail.append(msg)
         return new_mail
+
+
+class CV(TimeStampedModel):
+    project = models.ForeignKey("Project",
+                                on_delete=CASCADE)
+    earliest_available = models.DateField(null=True, blank=True, default=timezone.now)
+    picture = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Picture to use, default is the one used on home page"
+    )
+
+    full_name = models.CharField(max_length=200,
+                                 help_text="Name to use in the title of the file, default is current user")
+    title = models.CharField(max_length=200, help_text="Title to be placed under the name")
+    experience_overview = MarkdownField(
+        help_text="Notice on your experience",
+    )
+
+    relevant_project_pages = models.ManyToManyField(
+        "home.ProjectPage",
+        help_text="Project pages to be placed on the first page, eye catcher for this project",
+        related_name="applications_highlighted"
+    )
+    relevant_skills = models.ManyToManyField(
+        'taggit.Tag',
+        help_text="Technology tags to be included, "
+                  "will be automatically formed to look relevant"
+    )
+
+    education_overview = MarkdownField(
+        help_text="Notice on your education",
+    )
+    contact_details = MarkdownField()
+    languages_overview = MarkdownField()
+    rate_overview = MarkdownField()
+    working_permit = MarkdownField()
+
+    panels = [
+        FieldPanel('project'),
+        FieldRowPanel(
+            [
+                MultiFieldPanel(
+                    [
+                        FieldPanel('full_name'),
+                        FieldPanel('title'),
+                        FieldPanel('earliest_available'),
+                        FieldPanel('experience_overview'),
+                        FieldPanel('education_overview'),
+                    ],
+                    heading="Header data"
+                ),
+                MultiFieldPanel(
+                    [
+                        ImageChooserPanel('picture'),
+                        FieldPanel('contact_details'),
+                        FieldPanel('languages_overview'),
+                        FieldPanel('rate_overview'),
+                        FieldPanel('working_permit'),
+                    ]
+                )
+
+            ]
+        ),
+        FieldPanel('relevant_project_pages'),
+        FieldPanel('relevant_skills'),
+    ]
+
+    def set_relevant_skills_and_projects(self, limit=5):
+        technologies = TechnologyInfo.match_text(self.project.original_description)
+        if self.relevant_project_pages.count():
+            logger.error(f"Won't set relevant project pages for {self}, it's not empty")
+            return
+        self.relevant_project_pages.set(ProjectPage.objects.live().filter(
+            technologies__in=technologies.values_list('tag__id')
+        )[:limit])
+        self.relevant_skills.set(
+            Tag.objects.filter(id__in=technologies.values_list('tag__id'))
+        )
+
+    def save(self, **kwargs):
+        creating = self.pk is None
+        super().save(**kwargs)
+        if creating:
+            self.set_relevant_skills_and_projects()
+
+    def __str__(self):
+        return str(self.project)
+
+    class Meta:
+        verbose_name = "CV"
+
+
+@register_setting(icon='icon icon-fa-id-card')
+class CVGenerationSettings(BaseSetting):
+    default_title = models.CharField(
+        max_length=255, help_text='Default title to use', default="Freelance python developer")
+    default_experience_overview = MarkdownField(
+        help_text="Notice on your experience",
+        default="Python developer experience: 7 years"
+    )
+
+    default_education_overview = MarkdownField(
+        help_text="Notice on your education",
+        default="Novosibirsk State Technical University"
+    )
+    default_contact_details = MarkdownField(default="sergey@cheparev.com")
+    default_languages_overview = MarkdownField(default="English: fluent")
+    default_rate_overview = MarkdownField(default="<<change default in settings>>")
+    default_working_permit = MarkdownField(default="PERMANENT RESIDENCE")

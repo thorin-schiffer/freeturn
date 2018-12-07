@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from django.contrib.auth import get_user_model
+from django.utils.timezone import get_current_timezone
 from django_mailbox.models import Message
 import factory
 
@@ -109,3 +110,18 @@ class UserFactory(factory.DjangoModelFactory):
 class AdminFactory(UserFactory):
     is_staff = True
     is_superuser = True
+
+
+class CVFactory(factory.DjangoModelFactory):
+    project = factory.SubFactory(ProjectFactory)
+    earliest_available = factory.Faker('past_date', start_date="-15d", tzinfo=get_current_timezone())
+    full_name = factory.Faker('name')
+    title = factory.Faker('sentence')
+    experience_overview = factory.Faker('text')
+    education_overview = factory.Faker('text')
+    contact_details = factory.Faker('phone_number')
+    rate_overview = "100 schmeckles"
+    working_permit = "permanent"
+
+    class Meta:
+        model = models.CV
