@@ -216,6 +216,10 @@ class TechnologyInfo(models.Model):
         FieldPanel('tag'),
     ]
 
+    @staticmethod
+    def match_text(text):
+        raise NotImplementedError()
+
     def __str__(self):
         return self.tag.name
 

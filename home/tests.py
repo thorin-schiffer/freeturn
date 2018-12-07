@@ -1,6 +1,11 @@
 from datetime import timedelta
 
 import pytest
+from faker import Faker
+
+from home.models import TechnologyInfo
+
+fake = Faker()
 
 
 @pytest.mark.django_db
@@ -63,3 +68,20 @@ def test_contact_form_recaptcha(django_app,
     contact_page = contact_page_factory.create(parent=default_site.root_page)
     r = django_app.get(f"/{contact_page.slug}/", status="*")
     r.form.submit()
+
+
+@pytest.mark.django_db
+def test_match_text(technology_info):
+    # avoid vocabulary collision
+    technology_info.tag.name = "xxx"
+    technology_info.tag.save()
+
+    text_no_match = fake.text()
+    assert technology_info.tag.name not in text_no_match
+    text_match = f"{text_no_match} {technology_info.tag.name}"
+
+    result = TechnologyInfo.match_text(text_no_match)
+    assert technology_info not in result
+
+    result = TechnologyInfo.match_text(text_match)
+    assert technology_info in result
