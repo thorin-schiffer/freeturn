@@ -1,0 +1,54 @@
+{% load wagtailmarkdown %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+</head>
+<body>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <h2>{{ instance.full_name }}</h2>
+            {{ instance.title }}
+            {{ instance.experience_overview | markdown }}
+        </td>
+        <td>
+            {{ instance.picture }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {{ instance.relevant_project_pages.all }}
+        </td>
+        <td>
+            <h2> Contact </h2>
+            {{ instance.contact_details | markdown }}
+
+            <h2>Skills</h2>
+            {{ instance.relevant_skills.all }}
+
+            <h2> Languages </h2>
+            {{ instance.languages_overview | markdown }}
+
+            <h2> Working permit</h2>
+            {{ instance.working_permit | markdown }}
+
+
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <h2> Education</h2>
+            {{ instance.education_overview | markdown }}
+        </td>
+        <td>
+            <h2> Daily rate</h2>
+            {{ instance.rate_overview | markdown }}
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
