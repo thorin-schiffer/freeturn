@@ -35,6 +35,7 @@ lxml = "*"
 psycopg2-binary = "*"
 fuzzywuzzy = {extras = ["speedup"],version = "*"}
 django-ajax-selects = "*"
+django-wkhtmltopdf = "*"
 
 [dev-packages]
 django-livereload-server = "*"
