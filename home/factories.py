@@ -29,6 +29,16 @@ class ProjectPageFactory(wagtail_factories.PageFactory):
     responsibility = factory.Faker('word')
     start_date = factory.Faker('past_date', start_date="-15d", tzinfo=get_current_timezone())
 
+    @factory.post_generation
+    def technologies(self, created, extracted, *args, **kwargs):
+        if extracted is not None:
+            infos = [TechnologyInfoFactory(tag__name=name) for name in extracted]
+        else:
+            infos = [TechnologyInfoFactory()]
+        for info in infos:
+            self.technologies.add(info.tag)
+        self.save()
+
     class Meta:
         model = models.ProjectPage
 
