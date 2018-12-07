@@ -9,6 +9,8 @@ from crm.models import ProjectMessage
 import django_mailbox.models
 from email.message import Message as EmailMessage
 
+from home.models import TechnologyInfo
+
 
 @pytest.mark.django_db
 def test_clean(project):
@@ -83,3 +85,20 @@ def test_project_states(project):
     project.start()
     project.finish()
     project.drop()
+
+
+@pytest.fixture
+def project_pages(project_page_factory):
+    matching_page = project_page_factory.create(technologies=['xxx'])
+    not_matching_page = project_page_factory.create()
+    return [matching_page, not_matching_page]
+
+
+@pytest.mark.django_db
+def test_cv_set_relevant_projects(cv, project_pages, mocker):
+    technology_info = TechnologyInfo.objects.filter(tag__name='xxx')
+    mocker.patch('home.models.TechnologyInfo.match_text',
+                 side_effect=lambda *args: technology_info)
+
+    cv.set_relevant_project_pages()
+    assert list(cv.relevant_project_pages.all()) == [project_pages[0]]
