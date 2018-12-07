@@ -22,6 +22,10 @@ from wagtailmarkdown.utils import render_markdown
 
 from crm.project_states import ProjectStateMixin
 from crm.utils import get_working_days
+from home.models import TechnologyInfo, ProjectPage
+import logging
+
+logger = logging.getLogger("crm.models")
 
 
 class City(models.Model):
@@ -348,7 +352,7 @@ class CV(TimeStampedModel):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text="Picture to use, default is current user pic"
+        help_text="Picture to use, default is the one used on home page"
     )
     full_name = models.CharField(max_length=200,
                                  help_text="Name to use in the title of the file, default is current user")
@@ -403,6 +407,15 @@ class CV(TimeStampedModel):
             ]
         ),
     ]
+
+    def set_relevant_project_pages(self, limit=5):
+        technologies = TechnologyInfo.match_text(self.project.original_description)
+        if self.relevant_project_pages.count():
+            logger.error(f"Won't set relevant project pages for {self}, it's not empty")
+            return
+        self.relevant_project_pages.set(ProjectPage.objects.live().filter(
+            technologies__in=technologies.values_list('tag__id')
+        )[:limit])
 
     class Meta:
         verbose_name = "CV"
