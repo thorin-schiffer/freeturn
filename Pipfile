@@ -34,6 +34,7 @@ social-auth-app-django = "*"
 lxml = "*"
 psycopg2-binary = "*"
 fuzzywuzzy = {extras = ["speedup"],version = "*"}
+django-ajax-selects = "*"
 
 [dev-packages]
 django-livereload-server = "*"
