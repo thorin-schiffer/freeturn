@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'taggit',
     'colorful',
     'storages',
+    'ajax_select',
 
     'django.contrib.admin',
     'django.contrib.auth',
