@@ -342,9 +342,6 @@ class Mailbox(django_mailbox.models.Mailbox):
 class CV(TimeStampedModel):
     project = models.ForeignKey("Project",
                                 on_delete=CASCADE)
-    project_pages = models.ManyToManyField("home.ProjectPage",
-                                           help_text="Project pages to include in the application",
-                                           related_name="applications_included")
     earliest_available = models.DateField(null=True, blank=True, default=timezone.now)
     picture = models.ForeignKey(
         'wagtailimages.Image',
@@ -354,6 +351,7 @@ class CV(TimeStampedModel):
         related_name='+',
         help_text="Picture to use, default is the one used on home page"
     )
+
     full_name = models.CharField(max_length=200,
                                  help_text="Name to use in the title of the file, default is current user")
     title = models.CharField(max_length=200, help_text="Title to be placed under the name")
@@ -366,6 +364,12 @@ class CV(TimeStampedModel):
         help_text="Project pages to be placed on the first page, eye catcher for this project",
         related_name="applications_highlighted"
     )
+    relevant_skills = models.ManyToManyField(
+        'taggit.Tag',
+        help_text="Technology tags to be included, "
+                  "will be automatically formed to look relevant"
+    )
+
     education_overview = MarkdownField(
         help_text="Notice on your education",
     )
@@ -373,12 +377,6 @@ class CV(TimeStampedModel):
     languages_overview = MarkdownField()
     rate_overview = MarkdownField()
     working_permit = MarkdownField()
-
-    skills = models.ManyToManyField(
-        'taggit.Tag',
-        help_text="Technology tags to be included, "
-                  "will be automatically formed to look relevant"
-    )
 
     panels = [
         FieldPanel('project'),
