@@ -1,5 +1,6 @@
 from wagtail.contrib.modeladmin.options import ModelAdmin
-from wagtail.contrib.modeladmin.views import CreateView
+from wagtail.contrib.modeladmin.views import CreateView, InspectView
+from wkhtmltopdf.views import PDFTemplateView
 
 from crm.models import CV, CVGenerationSettings
 from home.models import HomePage
@@ -25,6 +26,14 @@ class CreateCVView(CreateView):
         }
 
 
+class CVInspectView(PDFTemplateView,
+                    InspectView):
+    show_content_in_browser = True
+    template_name = "cv/body.html"
+    header_template = "cv/header.html"
+    footer_template = "cv/footer.html"
+
+
 class CVAdmin(ModelAdmin):
     model = CV
     menu_icon = 'fa-id-card'
@@ -32,3 +41,6 @@ class CVAdmin(ModelAdmin):
     create_view_class = CreateCVView
     list_display = ['project', 'created']
     ordering = ['-created']
+    inspect_view_enabled = True
+    inspect_view_class = CVInspectView
+    inspect_template_name = CVInspectView.template_name
