@@ -1,6 +1,7 @@
 import math
 
 import django_mailbox.models
+from ajax_select.fields import AutoCompleteSelectMultipleWidget
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -406,7 +407,7 @@ class CV(TimeStampedModel):
             ]
         ),
         FieldPanel('relevant_project_pages'),
-        FieldPanel('relevant_skills'),
+        FieldPanel('relevant_skills', widget=AutoCompleteSelectMultipleWidget('technologies')),
     ]
 
     def set_relevant_skills_and_projects(self, limit=5):
