@@ -30,3 +30,5 @@ class CVAdmin(ModelAdmin):
     menu_icon = 'fa-id-card'
     menu_label = 'CVs'
     create_view_class = CreateCVView
+    list_display = ['project', 'created']
+    ordering = ['-created']
