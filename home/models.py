@@ -221,6 +221,8 @@ class TechnologyInfo(models.Model):
         choices = TechnologyInfo.objects.values_list(
             'tag__name', flat=True
         )
+        if not choices.exists():
+            return TechnologyInfo.objects.none()
         results = process.extract(text, choices, limit=limit)
         print(results)
         return TechnologyInfo.objects.filter(
