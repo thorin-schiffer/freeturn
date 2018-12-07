@@ -405,6 +405,8 @@ class CV(TimeStampedModel):
 
             ]
         ),
+        FieldPanel('relevant_project_pages'),
+        FieldPanel('relevant_skills'),
     ]
 
     def set_relevant_skills_and_projects(self, limit=5):
@@ -418,6 +420,15 @@ class CV(TimeStampedModel):
         self.relevant_skills.set(
             Tag.objects.filter(id__in=technologies.values_list('tag__id'))
         )
+
+    def save(self, **kwargs):
+        creating = self.pk is None
+        super().save(**kwargs)
+        if creating:
+            self.set_relevant_skills_and_projects()
+
+    def __str__(self):
+        return str(self.project)
 
     class Meta:
         verbose_name = "CV"
