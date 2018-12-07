@@ -406,7 +406,7 @@ class CV(TimeStampedModel):
 
             ]
         ),
-        FieldPanel('relevant_project_pages'),
+        FieldPanel('relevant_project_pages', widget=AutoCompleteSelectMultipleWidget('project_pages')),
         FieldPanel('relevant_skills', widget=AutoCompleteSelectMultipleWidget('technologies')),
     ]
 
