@@ -6,11 +6,13 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from ajax_select import urls as ajax_select_urls
+from wagtailautocomplete.urls.admin import urlpatterns as autocomplete_admin_urls
 
 urlpatterns = [
     url(r'^django-admin/', admin.site.urls),
 
     url(r'^ajax_select/', include(ajax_select_urls)),
+    url(r'^admin/autocomplete/', include(autocomplete_admin_urls)),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
     url(r'^social/', include('social_django.urls', namespace='social')),
