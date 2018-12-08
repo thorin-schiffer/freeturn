@@ -24,21 +24,29 @@
         <td valign="top">
             <h1>{{ instance.full_name }}</h1>
             <h2>{{ instance.title }}</h2>
+            <h4>Application for: {{ instance.project}}</h4>
             {{ instance.experience_overview | markdown }}
         </td>
         <td width="30%">
             {% image instance.picture fill-256x256-c80 class="img-fluid"%}
         </td>
     </tr>
+    {% with relevant_skills=instance.relevant_skills.all %}
     <tr>
         <td valign="top">
             <h2>Relevant projects</h2>
 
             {% for project in instance.relevant_project_pages.all %}
             <h3>{{project.title }}</h3>
-            <h4>{{ project.start_date|date:"F Y" }} - {{ project.end_date|date:"F Y" }}</h4>
+            <h4>
+                {{ project.start_date|date:"F Y" }} - {{ project.end_date|date:"F Y" }}
+                {% for skill in relevant_skills %}
+                <span class="label">{{ skill }}</span>
+                {% endfor %}
+            </h4>
             {{project.responsibility | safe}}
             {{project.summary | safe}}
+
             <br>
             {% endfor %}
 
@@ -48,15 +56,14 @@
             {{ instance.contact_details | markdown }}
 
             <h2>Skills</h2>
-            {% with relevant_skills=instance.relevant_skills.all %}
+
             {% for skill in skills %}
             {% if skill.tag in relevant_skills %}
-                <span class="label">{{ skill }}</span>
-                {% else %}
-                {{ skill }}
+            <span class="label">{{ skill }}</span>
+            {% else %}
+            {{ skill }}
             {% endif %}
             {% endfor %}
-            {% endwith %}
 
             <h2> Languages </h2>
             {{ instance.languages_overview | markdown }}
@@ -67,6 +74,7 @@
 
         </td>
     </tr>
+    {% endwith %}
 
     <tr>
         <td>
