@@ -34,7 +34,7 @@ class CVInspectView(PDFTemplateView,
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['skills'] = TechnologyInfo.objects.all()
-        context['project_pages'] = ProjectPage.objects.live()
+        context['project_pages'] = ProjectPage.objects.live().order_by('-start_date')
         return context
 
 

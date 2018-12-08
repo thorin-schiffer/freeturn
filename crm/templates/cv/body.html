@@ -1,6 +1,3 @@
-{% load wagtailmarkdown %}
-{% load wagtailimages_tags %}
-{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,31 +11,16 @@
         margin: 50px;
         font-size: 16px;
     };
-
-
-
-
     </style>
 </head>
 <body>
 {% include "cv/front_page.html" %}
 
 <!--Starting project descriptions-->
+{% with relevant_skills=instance.relevant_skills.all %}
 {% for page in project_pages %}
-<table style="page-break-before: always;">
-    <tbody>
-    <tr>
-        <td>
-            <h2>Portfolio: {{project_page.title}}</h2>
-        </td>
-        {% if page.logo %}
-        <td width="30%">
-            {% image page.logo fill-256x256-c80 class="img-fluid"%}
-        </td>
-        {% endif %}
-    </tr>
-    </tbody>
-</table>
+{% include "cv/project_page.html" %}
 {% endfor %}
+{% endwith %}
 </body>
 </html>
