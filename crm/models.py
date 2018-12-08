@@ -19,6 +19,7 @@ from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail.core.fields import RichTextField
 from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtailautocomplete.edit_handlers import AutocompletePanel
 from wagtailmarkdown.fields import MarkdownField
 from wagtailmarkdown.utils import render_markdown
 
@@ -406,7 +407,7 @@ class CV(TimeStampedModel):
 
             ]
         ),
-        FieldPanel('relevant_project_pages', widget=AutoCompleteSelectMultipleWidget('project_pages')),
+        AutocompletePanel('relevant_project_pages', is_single=False, page_type='home.ProjectPage'),
         FieldPanel('relevant_skills', widget=AutoCompleteSelectMultipleWidget('technologies')),
     ]
 

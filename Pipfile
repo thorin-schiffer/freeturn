@@ -37,6 +37,7 @@ fuzzywuzzy = {extras = ["speedup"],version = "*"}
 django-ajax-selects = "*"
 django-wkhtmltopdf = "*"
 bleach = "*"
+wagtail-autocomplete = "*"
 
 [dev-packages]
 django-livereload-server = "*"
