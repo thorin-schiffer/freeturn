@@ -11,6 +11,14 @@
             <p>
                 {{ page.position }}
             </p>
+
+            <h3>Responsibilities</h3>
+            <ul>
+                {% for responsibility in page.responsibilities.all %}
+                <li>{{responsibility}}</li>
+                {% endfor %}
+            </ul>
+
             {% if page.project_url %}
             <h3>Link</h3>
             <p><a href="{{ page.project_url }}">{{ page.project_url }}</a></p>
