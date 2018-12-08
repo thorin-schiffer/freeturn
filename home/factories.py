@@ -28,6 +28,7 @@ class ProjectPageFactory(wagtail_factories.PageFactory):
     description = factory.Faker('text')
     responsibility = factory.Faker('word')
     start_date = factory.Faker('past_date', start_date="-15d", tzinfo=get_current_timezone())
+    duration = 6
 
     @factory.post_generation
     def technologies(self, created, extracted, *args, **kwargs):
