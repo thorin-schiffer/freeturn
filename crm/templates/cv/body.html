@@ -6,11 +6,15 @@
 <head>
     <meta charset="utf-8"/>
     <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <style type="text/css">
     body {
         font-family: 'Lato';
         margin: 50px;
+        font-size: 16px;
     };
+
     </style>
 </head>
 <body>
@@ -31,20 +35,28 @@
             <h2>Relevant projects</h2>
 
             {% for project in instance.relevant_project_pages.all %}
-                <h3>{{project.title }}</h3>
-                <h4>{{ project.start_date|date:"F Y" }} - {{ project.end_date|date:"F Y" }}</h4>
-                {{project.responsibility | safe}}
-                {{project.summary | safe}}
-                <br>
+            <h3>{{project.title }}</h3>
+            <h4>{{ project.start_date|date:"F Y" }} - {{ project.end_date|date:"F Y" }}</h4>
+            {{project.responsibility | safe}}
+            {{project.summary | safe}}
+            <br>
             {% endfor %}
 
         </td>
-        <td>
+        <td valign="top">
             <h2> Contact </h2>
             {{ instance.contact_details | markdown }}
 
             <h2>Skills</h2>
-            {{ instance.relevant_skills.all }}
+            {% with relevant_skills=instance.relevant_skills.all %}
+            {% for skill in skills %}
+            {% if skill.tag in relevant_skills %}
+                <span class="label">{{ skill }}</span>
+                {% else %}
+                {{ skill }}
+            {% endif %}
+            {% endfor %}
+            {% endwith %}
 
             <h2> Languages </h2>
             {{ instance.languages_overview | markdown }}
