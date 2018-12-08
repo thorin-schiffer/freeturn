@@ -1,9 +1,10 @@
 from datetime import timedelta
-from fuzzywuzzy import process
+
 from colorful.fields import RGBColorField
 from django.db import models
 from django.db.models import Count
 from django.utils import timezone
+from fuzzywuzzy import process
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
 from taggit.models import TaggedItemBase, Tag
@@ -156,7 +157,10 @@ class ProjectPage(Page):
         related_name='+',
         help_text="Reference letter for this project"
     )
-
+    responsibilities = models.ManyToManyField(
+        'Responsibility',
+        related_name="projects"
+    )
     content_panels = Page.content_panels + [
         ImageChooserPanel('logo'),
         ImageChooserPanel('card_background'),
@@ -167,6 +171,7 @@ class ProjectPage(Page):
         FieldPanel('duration'),
         FieldPanel('position'),
         FieldPanel('technologies'),
+        FieldPanel('responsibilities'),
         DocumentChooserPanel('reference_letter'),
     ]
     subpage_types = []
