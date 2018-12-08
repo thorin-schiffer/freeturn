@@ -47,6 +47,7 @@ class CVAdmin(ModelAdmin):
     menu_label = 'CVs'
     create_view_class = CreateCVView
     list_display = ['project', 'created']
+    list_filter = ['project', 'created']
     ordering = ['-created']
     inspect_view_enabled = True
     inspect_view_class = CVInspectView
