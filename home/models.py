@@ -228,7 +228,6 @@ class TechnologyInfo(models.Model):
         if not choices.exists():
             return TechnologyInfo.objects.none()
         results = process.extract(text, choices, limit=limit)
-        print(results)
         return TechnologyInfo.objects.filter(
             tag__name__in=[r[0] for r in results if r[1] > cutoff]
         )
