@@ -26,7 +26,7 @@ class ContactPageFactory(wagtail_factories.PageFactory):
 class ProjectPageFactory(wagtail_factories.PageFactory):
     summary = factory.Faker('sentence')
     description = factory.Faker('text')
-    responsibility = factory.Faker('word')
+    position = factory.Faker('job')
     start_date = factory.Faker('past_date', start_date="-15d", tzinfo=get_current_timezone())
     duration = 6
 

@@ -131,8 +131,8 @@ class ProjectPage(Page):
     duration = models.IntegerField(help_text="Duration in months, null=till now",
                                    null=True, blank=True)
 
-    responsibility = models.CharField(max_length=100,
-                                      default="Backend developer")
+    position = models.CharField(max_length=100,
+                                default="Backend developer")
 
     search_fields = Page.search_fields + [
         index.SearchField('summary'),
@@ -165,7 +165,7 @@ class ProjectPage(Page):
         FieldPanel('project_url'),
         FieldPanel('start_date'),
         FieldPanel('duration'),
-        FieldPanel('responsibility'),
+        FieldPanel('position'),
         FieldPanel('technologies'),
         DocumentChooserPanel('reference_letter'),
     ]
