@@ -3,7 +3,7 @@ from wagtail.contrib.modeladmin.views import CreateView, InspectView
 from wkhtmltopdf.views import PDFTemplateView
 
 from crm.models import CV, CVGenerationSettings
-from home.models import HomePage
+from home.models import HomePage, TechnologyInfo
 
 
 class CreateCVView(CreateView):
@@ -32,6 +32,11 @@ class CVInspectView(PDFTemplateView,
     template_name = "cv/body.html"
     header_template = "cv/header.html"
     footer_template = "cv/footer.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['skills'] = TechnologyInfo.objects.all()
+        return context
 
 
 class CVAdmin(ModelAdmin):
