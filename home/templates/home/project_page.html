@@ -10,6 +10,8 @@
     body {
         background: url('{{background.url}}') no-repeat center center fixed;
     }
+
+
 </style>
 {% endblock %}
 
@@ -24,18 +26,27 @@
 
         <div class="col-md-4">
             {% if page.logo %}
-                {% image page.logo fill-400x400-c100 class="img-fluid portfolio-logo"%}
+            {% image page.logo fill-400x400-c100 class="img-fluid portfolio-logo"%}
             {% else %}
-                <img height="400" width="400" src="{% static 'img/default_project.png' %}" class="img-fluid portfolio-logo">
+            <img height="400" width="400" src="{% static 'img/default_project.png' %}" class="img-fluid portfolio-logo">
             {% endif %}
         </div>
 
         <div class="col-md-8">
-            <h2 class="my-3">{{ page.start_date | date:"M Y" }}, {{ page.duration }} month{{page.duration|pluralize}}</h2>
+            <h2 class="my-3">{{ page.start_date | date:"M Y" }}, {{ page.duration }}
+                month{{page.duration|pluralize}}</h2>
             <h3>Position</h3>
             <p>
                 {{ page.position }}
             </p>
+
+            <h3>Responsibilities</h3>
+            <ul class="list-group list-group-flush">
+                {% for responsibility in page.responsibilities.all %}
+                <li class="list-group-item">{{responsibility}}</li>
+                {% endfor %}
+            </ul>
+
             {% if page.project_url %}
             <h3>Link</h3>
             <p><a href="{{ page.project_url }}">{{ page.project_url }}</a></p>
@@ -47,9 +58,10 @@
                 <div class="col-lg-2">
                     <a href="{% pageurl menu_items.portfolio %}?technology={{technology}}">
                         {% if technology.info.logo %}
-                            {% image technology.info.logo fill-50x50-c100 class="mx-auto d-block technology-logo"%}
+                        {% image technology.info.logo fill-50x50-c100 class="mx-auto d-block technology-logo"%}
                         {% else %}
-                            <img height="50" width="50" src="{% static 'img/default_technology.png' %}" class="mx-auto d-block technology-logo">
+                        <img height="50" width="50" src="{% static 'img/default_technology.png' %}"
+                             class="mx-auto d-block technology-logo">
                         {% endif %}
                     </a>
                     <div class="text-center">
