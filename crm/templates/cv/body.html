@@ -33,7 +33,7 @@
     </tr>
     {% with relevant_skills=instance.relevant_skills.all %}
     <tr>
-        <td valign="top">
+        <td valign="top" style="padding-right: 20px">
             <h2>Relevant projects</h2>
 
             {% for project in instance.relevant_project_pages.all %}
@@ -48,6 +48,7 @@
             {{project.summary | safe}}
 
             <br>
+            <hr>
             {% endfor %}
 
         </td>
