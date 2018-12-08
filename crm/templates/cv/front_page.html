@@ -7,7 +7,9 @@
         <td valign="top">
             <h1>{{ instance.full_name }}</h1>
             <h2>{{ instance.title }}</h2>
-            <h4>Application for: {{ instance.project}}</h4>
+
+            Application for: {{ instance.project}}, strictly confidential
+
             {{ instance.experience_overview | markdown }}
         </td>
         <td width="30%">
