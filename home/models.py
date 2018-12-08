@@ -269,3 +269,14 @@ class ContactPage(RecaptchaForm):
             FieldPanel('subject'),
         ], "Email"),
     ]
+
+
+@register_snippet
+class Responsibility(models.Model):
+    text = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.text
+
+    class Meta:
+        verbose_name_plural = "responsibilities"
