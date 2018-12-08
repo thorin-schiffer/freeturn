@@ -37,6 +37,9 @@ class CVInspectView(PDFTemplateView,
         context['project_pages'] = ProjectPage.objects.live().order_by('-start_date')
         return context
 
+    def get_filename(self):
+        return f"{self.instance.full_name} CV, application for {self.instance.project}.pdf"
+
 
 class CVAdmin(ModelAdmin):
     model = CV
