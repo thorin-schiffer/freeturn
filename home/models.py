@@ -131,7 +131,8 @@ class ProjectPage(Page):
     duration = models.IntegerField(help_text="Duration in months, null=till now",
                                    null=True, blank=True)
 
-    responsibility = RichTextField()
+    responsibility = models.CharField(max_length=100,
+                                      default="Backend developer")
 
     search_fields = Page.search_fields + [
         index.SearchField('summary'),
