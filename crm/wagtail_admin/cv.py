@@ -30,8 +30,6 @@ class CVInspectView(PDFTemplateView,
                     InspectView):
     show_content_in_browser = True
     template_name = "cv/body.html"
-    header_template = "cv/header.html"
-    footer_template = "cv/footer.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
