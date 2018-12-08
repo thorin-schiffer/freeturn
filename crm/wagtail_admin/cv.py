@@ -1,8 +1,9 @@
 from wagtail.contrib.modeladmin.options import ModelAdmin
-from wagtail.contrib.modeladmin.views import CreateView
+from wagtail.contrib.modeladmin.views import CreateView, InspectView
+from wkhtmltopdf.views import PDFTemplateView
 
 from crm.models import CV, CVGenerationSettings
-from home.models import HomePage
+from home.models import HomePage, TechnologyInfo, ProjectPage
 
 
 class CreateCVView(CreateView):
@@ -25,10 +26,29 @@ class CreateCVView(CreateView):
         }
 
 
+class CVInspectView(PDFTemplateView,
+                    InspectView):
+    show_content_in_browser = True
+    template_name = "cv/body.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['skills'] = TechnologyInfo.objects.all()
+        context['project_pages'] = ProjectPage.objects.live().order_by('-start_date')
+        return context
+
+    def get_filename(self):
+        return f"{self.instance.full_name} CV, application for {self.instance.project}.pdf"
+
+
 class CVAdmin(ModelAdmin):
     model = CV
     menu_icon = 'fa-id-card'
     menu_label = 'CVs'
     create_view_class = CreateCVView
     list_display = ['project', 'created']
+    list_filter = ['project', 'created']
     ordering = ['-created']
+    inspect_view_enabled = True
+    inspect_view_class = CVInspectView
+    inspect_template_name = CVInspectView.template_name

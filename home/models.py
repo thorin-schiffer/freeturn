@@ -170,6 +170,10 @@ class ProjectPage(Page):
     ]
     subpage_types = []
 
+    @property
+    def end_date(self):
+        return self.start_date + timedelta(days=30 * self.duration)
+
     class Meta:
         ordering = ('-start_date',)
 

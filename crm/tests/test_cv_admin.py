@@ -26,3 +26,9 @@ def test_add_form_prefill(admin_app, admin_user, default_site,
     assert form['full_name'].value == admin_user.first_name + " " + admin_user.last_name
     assert form['earliest_available'].value == str(home_page.earliest_available)
     assert form['picture'].value == str(home_page.picture.id)
+
+
+@pytest.mark.django_db
+def test_inspect(admin_app, cv_with_relevant):
+    url = reverse('crm_cv_modeladmin_inspect', kwargs={'instance_pk': cv_with_relevant.pk})
+    admin_app.get(url)

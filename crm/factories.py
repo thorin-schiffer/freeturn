@@ -6,6 +6,7 @@ from django_mailbox.models import Message
 import factory
 
 from crm import models
+from home.factories import TagFactory, ProjectPageFactory
 
 
 class CityFactory(factory.DjangoModelFactory):
@@ -125,3 +126,18 @@ class CVFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = models.CV
+
+
+class CVWithRelevantFactory(CVFactory):
+
+    @factory.post_generation
+    def relevant_skills(self, created, extracted, **kwargs):
+        if extracted:
+            raise NotImplementedError()
+        self.relevant_skills.set([TagFactory()])
+
+    @factory.post_generation
+    def relevant_projects(self, created, extracted, **kwargs):
+        if extracted:
+            raise NotImplementedError()
+        self.relevant_project_pages.set([ProjectPageFactory()])

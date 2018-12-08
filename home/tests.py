@@ -23,7 +23,7 @@ def test_home(home_page,
     home_page.earliest_available = None
 
     context = home_page.get_context(request)
-    assert context['earliest_available'] == project_page.start_date + timedelta(days=31)
+    assert context['earliest_available'] == project_page.start_date + timedelta(days=31 * project_page.duration)
 
 
 @pytest.mark.django_db
