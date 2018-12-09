@@ -25,8 +25,10 @@
             <h3>{{project.title }}</h3>
             <h4>
                 {{ project.start_date|date:"F Y" }} - {{ project.end_date|date:"F Y" }}
-                {% for skill in relevant_skills %}
-                <span class="label">{{ skill }}</span>
+                {% for technology in project.technologies.all %}
+                {% if technology in relevant_skills %}
+                    <span class="label label-default">{{ technology }}</span>
+                {% endif %}
                 {% endfor %}
             </h4>
             {{project.position }}
@@ -45,7 +47,7 @@
 
             {% for skill in skills %}
             {% if skill.tag in relevant_skills %}
-            <span class="label">{{ skill }}</span>
+            <span class="label label-default">{{ skill }}</span>
             {% else %}
             {{ skill }}
             {% endif %}
