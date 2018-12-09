@@ -1,3 +1,4 @@
+from django.db.models import Count
 from wagtail.admin.edit_handlers import ObjectList
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import CreateView, InspectView
@@ -41,7 +42,10 @@ class CVInspectView(PDFTemplateView,
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['skills'] = TechnologyInfo.objects.all()
+
+        context['skills'] = TechnologyInfo.objects.annotate(
+            projects_count=Count('tag__home_projecttechnology_items')
+        ).filter(projects_count__gt=0).order_by('-projects_count')
         context['project_pages'] = ProjectPage.objects.live().order_by('-start_date')
         return context
 
