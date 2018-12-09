@@ -23,7 +23,7 @@ sentry_sdk.init(
     dsn=os.getenv("SENTRY_DSN"),
     integrations=[DjangoIntegration()]
 )
-
+WKHTMLTOPDF_CMD = '/app/bin/wkhtmltopdf'
 try:
     from .local import *
 except ImportError:
