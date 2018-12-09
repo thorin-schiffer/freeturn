@@ -410,10 +410,10 @@ class CV(TimeStampedModel):
             ]
         ),
     ]
-    panels = create_panels + [
+    panels = [
         AutocompletePanel('relevant_project_pages', is_single=False, page_type='home.ProjectPage'),
         FieldPanel('relevant_skills', widget=AutoCompleteSelectMultipleWidget('technologies')),
-    ]
+    ] + create_panels
 
     def set_relevant_skills_and_projects(self, limit=5):
         technologies = TechnologyInfo.match_text(self.project.original_description)
