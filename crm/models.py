@@ -383,7 +383,7 @@ class CV(TimeStampedModel):
     rate_overview = MarkdownField()
     working_permit = MarkdownField()
 
-    panels = [
+    create_panels = [
         FieldPanel('project'),
         FieldRowPanel(
             [
@@ -409,6 +409,8 @@ class CV(TimeStampedModel):
 
             ]
         ),
+    ]
+    panels = create_panels + [
         AutocompletePanel('relevant_project_pages', is_single=False, page_type='home.ProjectPage'),
         FieldPanel('relevant_skills', widget=AutoCompleteSelectMultipleWidget('technologies')),
     ]

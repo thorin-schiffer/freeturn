@@ -5,8 +5,8 @@ from crm.models import CVGenerationSettings
 
 
 @pytest.mark.django_db
-def test_add_form_prefill(admin_app, admin_user, default_site,
-                          home_page_factory):
+def test_create(admin_app, admin_user, default_site,
+                home_page_factory, project):
     # cv creation form prefilled with settings from cv generator settings
     home_page = home_page_factory.create(parent=default_site.root_page)
     cv_settings = CVGenerationSettings.for_site(default_site)
@@ -26,6 +26,8 @@ def test_add_form_prefill(admin_app, admin_user, default_site,
     assert form['full_name'].value == admin_user.first_name + " " + admin_user.last_name
     assert form['earliest_available'].value == str(home_page.earliest_available)
     assert form['picture'].value == str(home_page.picture.id)
+    form['project'] = str(project.id)
+    form.submit()
 
 
 @pytest.mark.django_db
