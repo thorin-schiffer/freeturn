@@ -220,6 +220,8 @@ class TechnologyInfo(models.Model):
     )
     summary = RichTextField(blank=True)
     tag = models.OneToOneField('taggit.Tag', on_delete=models.CASCADE, related_name='info')
+    match_in_cv = models.BooleanField(default=True,
+                                      help_text="Match for technology in CV relevant projects?")
     content_panels = Page.content_panels + [
         ImageChooserPanel('logo'),
         FieldPanel('summary'),
@@ -228,7 +230,7 @@ class TechnologyInfo(models.Model):
 
     @staticmethod
     def match_text(text, limit=5, cutoff=40):
-        choices = TechnologyInfo.objects.values_list(
+        choices = TechnologyInfo.objects.filter(match_in_cv=True).values_list(
             'tag__name', flat=True
         )
         if not choices.exists():

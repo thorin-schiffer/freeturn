@@ -422,7 +422,7 @@ class CV(TimeStampedModel):
             return
         self.relevant_project_pages.set(ProjectPage.objects.live().filter(
             technologies__in=technologies.values_list('tag__id')
-        )[:limit])
+        ).order_by('-start_date')[:limit])
         self.relevant_skills.set(
             Tag.objects.filter(id__in=technologies.values_list('tag__id'))
         )
