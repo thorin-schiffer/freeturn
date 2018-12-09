@@ -37,6 +37,7 @@ django-ajax-selects = "*"
 django-wkhtmltopdf = "*"
 bleach = "*"
 wagtail-autocomplete = "*"
+python-dotenv = "*"
 
 [dev-packages]
 django-livereload-server = "*"
