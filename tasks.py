@@ -4,7 +4,7 @@ import os
 import sys
 import dotenv
 
-dotenv.read_dotenv()
+dotenv.load_dotenv()
 
 
 def with_django(func):
@@ -50,3 +50,14 @@ def create_pages(context):
             except NodeAlreadySaved:
                 print(f"Error adding {title}, page is somehow there")
                 continue
+
+
+@invoke.task
+def sync_production(ctx, backup=False):
+    if backup:
+        ctx.run("heroku pg:backups:capture")
+    ctx.run("heroku pg:backups:download")
+    database_url = os.environ['DATABASE_URL']
+    ctx.run(f"pg_restore --verbose --clean --no-acl --no-owner --dbname={database_url} latest.dump")
+    ctx.run("./manage.py migrate")
+    os.remove("./latest.dump")

@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.contrib.modeladmin',
+    'wagtail.contrib.settings',
     'wagtail.embeds',
     'wagtail.sites',
     'wagtail.users',
@@ -29,12 +30,15 @@ INSTALLED_APPS = [
     'wagtail.core',
     'wagtailfontawesome',
     'wagtailmarkdown',
+    'wagtailautocomplete',
 
     'snowpenguin.django.recaptcha2',
     'modelcluster',
     'taggit',
     'colorful',
     'storages',
+    'ajax_select',
+    'wkhtmltopdf',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -90,14 +94,9 @@ WSGI_APPLICATION = 'portfolio.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
+import dj_database_url
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
+DATABASES = {'default': dj_database_url.config()}
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
@@ -195,5 +194,9 @@ from social_core.pipeline import DEFAULT_AUTH_PIPELINE
 
 SOCIAL_AUTH_PIPELINE = ("utils.social_for_authed_only",) + DEFAULT_AUTH_PIPELINE + ("crm.utils.ensure_mailbox",)
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
-      'access_type': 'offline'
+    'access_type': 'offline'
+}
+WKHTMLTOPDF_CMD = '/usr/bin/wkhtmltopdf'
+WKHTMLTOPDF_CMD_OPTIONS = {
+    'quiet': True,
 }

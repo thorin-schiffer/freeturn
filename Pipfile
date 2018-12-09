@@ -15,7 +15,6 @@ django-storages = "*"
 "boto3" = "*"
 invoke = "*"
 django-crispy-forms = "*"
-django-dotenv = "*"
 "django-recaptcha2" = "*"
 sentry-sdk = "*"
 django-extensions = "*"
@@ -33,6 +32,11 @@ python-social-auth = {version = "*",extras = ["django"]}
 social-auth-app-django = "*"
 lxml = "*"
 psycopg2-binary = "*"
+fuzzywuzzy = {extras = ["speedup"],version = "*"}
+django-ajax-selects = "*"
+django-wkhtmltopdf = "*"
+bleach = "*"
+wagtail-autocomplete = "*"
 
 [dev-packages]
 django-livereload-server = "*"
@@ -53,6 +57,8 @@ flake8 = "*"
 flake8-mutable = "*"
 flake8-tidy-imports = "*"
 pre-commit = "*"
+pytest-dotenv = "*"
+awscli = "*"
 
 [requires]
 python_version = "3.7.1"

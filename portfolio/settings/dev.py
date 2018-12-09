@@ -13,10 +13,12 @@ ALLOWED_HOSTS = ['*']
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 INTERNAL_IPS = ['127.0.0.1']
 
+INSTALLED_APPS = ['livereload'] + INSTALLED_APPS
+MIDDLEWARE = MIDDLEWARE + ['livereload.middleware.LiveReloadScript', ]
+
 if DEBUG_TOOLBAR:
-    INSTALLED_APPS += ['debug_toolbar', 'livereload']
-    MIDDLEWARE = MIDDLEWARE + ['debug_toolbar.middleware.DebugToolbarMiddleware',
-                               'livereload.middleware.LiveReloadScript', ]
+    INSTALLED_APPS += ['debug_toolbar']
+    MIDDLEWARE = MIDDLEWARE + ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
 try:
     from .local import *

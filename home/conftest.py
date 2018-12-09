@@ -1,9 +1,12 @@
 import pytest
+import wagtail_factories
 from pytest_factoryboy import register
 
 from home import factories
 
 register(factories.HomePageFactory)
+register(wagtail_factories.ImageFactory)
+register(wagtail_factories.CollectionFactory)
 register(factories.ContactPageFactory)
 register(factories.ProjectPageFactory)
 register(factories.PortfolioPageFactory)

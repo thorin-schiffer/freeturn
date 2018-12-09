@@ -4,6 +4,7 @@ from colorful.fields import RGBColorField
 from django.db import models
 from django.db.models import Count
 from django.utils import timezone
+from fuzzywuzzy import process
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
 from taggit.models import TaggedItemBase, Tag
@@ -131,7 +132,8 @@ class ProjectPage(Page):
     duration = models.IntegerField(help_text="Duration in months, null=till now",
                                    null=True, blank=True)
 
-    responsibility = RichTextField()
+    position = models.CharField(max_length=100,
+                                default="Backend developer")
 
     search_fields = Page.search_fields + [
         index.SearchField('summary'),
@@ -155,7 +157,10 @@ class ProjectPage(Page):
         related_name='+',
         help_text="Reference letter for this project"
     )
-
+    responsibilities = models.ManyToManyField(
+        'Responsibility',
+        related_name="projects"
+    )
     content_panels = Page.content_panels + [
         ImageChooserPanel('logo'),
         ImageChooserPanel('card_background'),
@@ -164,11 +169,16 @@ class ProjectPage(Page):
         FieldPanel('project_url'),
         FieldPanel('start_date'),
         FieldPanel('duration'),
-        FieldPanel('responsibility'),
+        FieldPanel('position'),
         FieldPanel('technologies'),
+        FieldPanel('responsibilities'),
         DocumentChooserPanel('reference_letter'),
     ]
     subpage_types = []
+
+    @property
+    def end_date(self):
+        return self.start_date + timedelta(days=30 * self.duration)
 
     class Meta:
         ordering = ('-start_date',)
@@ -210,11 +220,25 @@ class TechnologyInfo(models.Model):
     )
     summary = RichTextField(blank=True)
     tag = models.OneToOneField('taggit.Tag', on_delete=models.CASCADE, related_name='info')
+    match_in_cv = models.BooleanField(default=True,
+                                      help_text="Match for technology in CV relevant projects?")
     content_panels = Page.content_panels + [
         ImageChooserPanel('logo'),
         FieldPanel('summary'),
         FieldPanel('tag'),
     ]
+
+    @staticmethod
+    def match_text(text, limit=5, cutoff=40):
+        choices = TechnologyInfo.objects.filter(match_in_cv=True).values_list(
+            'tag__name', flat=True
+        )
+        if not choices.exists():
+            return TechnologyInfo.objects.none()
+        results = process.extract(text, choices, limit=limit)
+        return TechnologyInfo.objects.filter(
+            tag__name__in=[r[0] for r in results if r[1] > cutoff]
+        )
 
     def __str__(self):
         return self.tag.name
@@ -252,3 +276,14 @@ class ContactPage(RecaptchaForm):
             FieldPanel('subject'),
         ], "Email"),
     ]
+
+
+@register_snippet
+class Responsibility(models.Model):
+    text = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.text
+
+    class Meta:
+        verbose_name_plural = "responsibilities"
