@@ -40,6 +40,8 @@
 
         </td>
         <td valign="top">
+            <h2>Availability</h2>
+            {{ instance.earliest_available | date:"F Y" }}
             <h2> Contact </h2>
             {{ instance.contact_details | markdown }}
 
