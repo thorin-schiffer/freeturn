@@ -1,3 +1,4 @@
+from wagtail.admin.edit_handlers import ObjectList
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import CreateView, InspectView
 from wkhtmltopdf.views import PDFTemplateView
@@ -7,6 +8,13 @@ from home.models import HomePage, TechnologyInfo, ProjectPage
 
 
 class CreateCVView(CreateView):
+    def get_edit_handler(self):
+        if hasattr(self.model, 'edit_handler'):
+            edit_handler = self.model.edit_handler
+        else:
+            edit_handler = ObjectList(CV.create_panels)
+        return edit_handler.bind_to_model(self.model)
+
     def get_initial(self):
         site = self.request.site
         user = self.request.user
