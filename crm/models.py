@@ -365,12 +365,14 @@ class CV(TimeStampedModel):
     relevant_project_pages = models.ManyToManyField(
         "home.ProjectPage",
         help_text="Project pages to be placed on the first page, eye catcher for this project",
-        related_name="applications_highlighted"
+        related_name="applications_highlighted",
+        blank=True
     )
     relevant_skills = models.ManyToManyField(
         'taggit.Tag',
         help_text="Technology tags to be included, "
-                  "will be automatically formed to look relevant"
+                  "will be automatically formed to look relevant",
+        blank=True
     )
 
     education_overview = MarkdownField(
