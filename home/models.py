@@ -131,7 +131,7 @@ class ProjectPage(Page):
                                help_text="Short description to show on tiles and lists")
     description = RichTextField(help_text="Long description to show on the detail page")
 
-    start_date = models.DateField(null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True, db_index=True)
     duration = models.IntegerField(help_text="Duration in months, null=till now",
                                    null=True, blank=True)
 
