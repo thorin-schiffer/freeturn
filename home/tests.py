@@ -85,3 +85,14 @@ def test_match_text(technology_info):
 
     result = TechnologyInfo.match_text(text_match)
     assert technology_info in result
+
+
+@pytest.mark.django_db
+def test_tag_technology_creation(project_page,
+                                 tag_factory):
+    project_page.technologies.all()
+    tag = tag_factory.create()
+    assert not TechnologyInfo.objects.filter(tag=tag).exists()
+    project_page.technologies.add(tag)
+    project_page.save()
+    assert TechnologyInfo.objects.filter(tag=tag).exists()

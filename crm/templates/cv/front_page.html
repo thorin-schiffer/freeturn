@@ -21,7 +21,7 @@
         <td valign="top" style="padding-right: 20px">
             <h2>Relevant projects</h2>
 
-            {% for project in instance.relevant_project_pages.all %}
+            {% for project in relevant_project_pages %}
             <h3>{{project.title }}</h3>
             <h4>
                 {{ project.start_date|date:"F Y" }} - {{ project.end_date|date:"F Y" }}

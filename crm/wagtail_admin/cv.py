@@ -47,6 +47,7 @@ class CVInspectView(PDFTemplateView,
             projects_count=Count('tag__home_projecttechnology_items')
         ).filter(projects_count__gt=0).order_by('-projects_count')
         context['project_pages'] = ProjectPage.objects.live().order_by('-start_date')
+        context['relevant_project_pages'] = self.instance.relevant_project_pages.order_by('-start_date')
         return context
 
     def get_filename(self):

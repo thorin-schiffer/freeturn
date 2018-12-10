@@ -1,8 +1,11 @@
 from datetime import timedelta
 
+from ajax_select.fields import AutoCompleteSelectWidget
 from colorful.fields import RGBColorField
 from django.db import models
 from django.db.models import Count
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
 from fuzzywuzzy import process
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -128,7 +131,7 @@ class ProjectPage(Page):
                                help_text="Short description to show on tiles and lists")
     description = RichTextField(help_text="Long description to show on the detail page")
 
-    start_date = models.DateField(null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True, db_index=True)
     duration = models.IntegerField(help_text="Duration in months, null=till now",
                                    null=True, blank=True)
 
@@ -222,10 +225,10 @@ class TechnologyInfo(models.Model):
     tag = models.OneToOneField('taggit.Tag', on_delete=models.CASCADE, related_name='info')
     match_in_cv = models.BooleanField(default=True,
                                       help_text="Match for technology in CV relevant projects?")
-    content_panels = Page.content_panels + [
+    panels = [
         ImageChooserPanel('logo'),
         FieldPanel('summary'),
-        FieldPanel('tag'),
+        FieldPanel('tag', widget=AutoCompleteSelectWidget('technologies')),
     ]
 
     @staticmethod
@@ -287,3 +290,11 @@ class Responsibility(models.Model):
 
     class Meta:
         verbose_name_plural = "responsibilities"
+
+
+@receiver(post_save, sender=ProjectTechnology, dispatch_uid="check_technology_created")
+def check_technology_created(sender, instance, created, **kwargs):
+    if created:
+        TechnologyInfo.objects.get_or_create(
+            tag=instance.tag
+        )
