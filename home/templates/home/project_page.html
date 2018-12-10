@@ -57,18 +57,19 @@
             <p>
             <div class="row">
                 {% for technology in page.technologies.all %}
-                <div class="col-lg-1" style="margin-left: 10px;">
+                <div class="col-lg-2">
                     <a href="{% pageurl menu_items.portfolio %}?technology={{technology}}">
                         {% if technology.info.logo %}
-                        {% image technology.info.logo fill-32x32-c100 class="mx-auto d-block technology-logo"%}
+                        {% image technology.info.logo fill-32x32-c100 class="mx-auto d-block"%}
                         {% else %}
                         <img height="32" width="32" src="{% static 'img/default_technology.png' %}"
-                             class="mx-auto d-block technology-logo">
+                             class="mx-auto d-block">
                         {% endif %}
-                    </a>
-                    <div class="text-center">
+                        <div class="text-center">
                         {{ technology }}
                     </div>
+                    </a>
+
                 </div>
                 {% endfor %}
             </div>

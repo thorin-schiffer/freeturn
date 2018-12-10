@@ -38,15 +38,7 @@
             <hr>
             {% endfor %}
 
-        </td>
-        <td valign="top">
-            <h2>Availability</h2>
-            {{ instance.earliest_available | date:"F Y" }}
-            <h2> Contact </h2>
-            {{ instance.contact_details | markdown }}
-
             <h2>Skills</h2>
-
             {% for skill in skills %}
             {% if skill.tag in relevant_skills %}
             <span class="label label-default">{{ skill }}</span>
@@ -54,6 +46,13 @@
             {{ skill }}
             {% endif %}
             {% endfor %}
+
+        </td>
+        <td valign="top">
+            <h2>Availability</h2>
+            {{ instance.earliest_available | date:"F Y" }}
+            <h2> Contact </h2>
+            {{ instance.contact_details | markdown }}
 
             <h2> Languages </h2>
             {{ instance.languages_overview | markdown }}
