@@ -38,6 +38,7 @@ django-wkhtmltopdf = "*"
 bleach = "*"
 wagtail-autocomplete = "*"
 python-dotenv = "*"
+django-redis = "*"
 
 [dev-packages]
 django-livereload-server = "*"
