@@ -4,6 +4,8 @@ from ajax_select.fields import AutoCompleteSelectWidget
 from colorful.fields import RGBColorField
 from django.db import models
 from django.db.models import Count
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
 from fuzzywuzzy import process
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -288,3 +290,11 @@ class Responsibility(models.Model):
 
     class Meta:
         verbose_name_plural = "responsibilities"
+
+
+@receiver(post_save, sender=ProjectTechnology, dispatch_uid="check_technology_created")
+def check_technology_created(sender, instance, created, **kwargs):
+    if created:
+        TechnologyInfo.objects.get_or_create(
+            tag=instance.tag
+        )
