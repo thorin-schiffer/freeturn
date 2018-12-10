@@ -9,7 +9,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from fuzzywuzzy import process
 from modelcluster.contrib.taggit import ClusterTaggableManager
-from modelcluster.fields import ParentalKey
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from taggit.models import TaggedItemBase, Tag
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, FieldRowPanel
 from wagtail.contrib.forms.edit_handlers import FormSubmissionsPanel
@@ -160,10 +160,9 @@ class ProjectPage(Page):
         related_name='+',
         help_text="Reference letter for this project"
     )
-    responsibilities = models.ManyToManyField(
+    responsibilities = ParentalManyToManyField(
         'Responsibility',
-        related_name="projects",
-        blank=True
+        related_name="projects"
     )
     content_panels = Page.content_panels + [
         ImageChooserPanel('logo'),
