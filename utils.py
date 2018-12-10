@@ -34,8 +34,8 @@ def disabled_in_admin(func):
     """
 
     def _inner(request):
-        resolver_match = request.resolver_match
-        if 'wagtail.contrib.modeladmin' in resolver_match._func_path:
+
+        if request.path.startswith("/admin/"):
             return {}
         return func(request)
 
