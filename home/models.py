@@ -162,7 +162,8 @@ class ProjectPage(Page):
     )
     responsibilities = models.ManyToManyField(
         'Responsibility',
-        related_name="projects"
+        related_name="projects",
+        blank=True
     )
     content_panels = Page.content_panels + [
         ImageChooserPanel('logo'),
