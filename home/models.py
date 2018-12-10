@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from ajax_select.fields import AutoCompleteSelectWidget
 from colorful.fields import RGBColorField
 from django.db import models
 from django.db.models import Count
@@ -222,10 +223,10 @@ class TechnologyInfo(models.Model):
     tag = models.OneToOneField('taggit.Tag', on_delete=models.CASCADE, related_name='info')
     match_in_cv = models.BooleanField(default=True,
                                       help_text="Match for technology in CV relevant projects?")
-    content_panels = Page.content_panels + [
+    panels = [
         ImageChooserPanel('logo'),
         FieldPanel('summary'),
-        FieldPanel('tag'),
+        FieldPanel('tag', widget=AutoCompleteSelectWidget('technologies')),
     ]
 
     @staticmethod
