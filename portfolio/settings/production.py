@@ -28,7 +28,7 @@ WKHTMLTOPDF_CMD = '/app/bin/wkhtmltopdf'
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': '127.0.0.1:6379',
+        'LOCATION': os.environ.get("REDIS_URL"),
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
