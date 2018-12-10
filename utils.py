@@ -26,3 +26,17 @@ def required_inputs(response):
     return [
         i.replace("id_", "") for i in inputs
     ]
+
+
+def disabled_in_admin(func):
+    """
+    returns empty dict instead of actual context processor in admin
+    """
+
+    def _inner(request):
+
+        if request.path.startswith("/admin/"):
+            return {}
+        return func(request)
+
+    return _inner
