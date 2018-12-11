@@ -4,9 +4,11 @@
     <tbody>
     <tr>
         <td valign="top">
-            <h2>Portfolio: {{page.title}}</h2>
+            <h2>Portfolio project: {{page.title}}</h2>
             <h3 class="my-3">{{ page.start_date | date:"F Y" }}, {{ page.duration }}
                 month{{page.duration|pluralize}}</h3>
+            <h3>Summary</h3>
+                {{ page.summary }}
             <h3>Position</h3>
             <p>
                 {{ page.position }}
@@ -40,7 +42,7 @@
         {% endif %}
     </tr>
     <tr>
-        <td valign="top">
+        <td valign="top" style="font-size: 18px;">
             <h2>Project description</h2>
             {{ page.description | richtext}}
         </td>
