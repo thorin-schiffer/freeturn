@@ -51,7 +51,7 @@ class CVInspectView(PDFTemplateView,
         return context
 
     def get_filename(self):
-        return f"{self.instance.full_name} CV, application for {self.instance.project}.pdf"
+        return f"{self.instance.full_name} CV and project portfolio for {self.instance.project}.pdf"
 
 
 class CVAdmin(ModelAdmin):
