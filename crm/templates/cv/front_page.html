@@ -27,7 +27,7 @@
                 {{ project.start_date|date:"F Y" }} - {{ project.end_date|date:"F Y" }}
                 {% for technology in project.technologies.all %}
                 {% if technology in relevant_skills %}
-                    <span class="label label-default">{{ technology }}</span>
+                <span class="label label-default">{{ technology }}</span>
                 {% endif %}
                 {% endfor %}
             </h4>
@@ -60,6 +60,8 @@
             <h2> Working permit</h2>
             {{ instance.working_permit | markdown }}
 
+            <h2> Daily rate</h2>
+            {{ instance.rate_overview | markdown }}
 
         </td>
     </tr>
@@ -69,10 +71,6 @@
         <td>
             <h2> Education</h2>
             {{ instance.education_overview | markdown }}
-        </td>
-        <td>
-            <h2> Daily rate</h2>
-            {{ instance.rate_overview | markdown }}
         </td>
     </tr>
     </tbody>
