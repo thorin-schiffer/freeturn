@@ -8,7 +8,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from fuzzywuzzy import process
-from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from taggit.models import TaggedItemBase, Tag
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, FieldRowPanel
@@ -146,10 +145,7 @@ class ProjectPage(Page):
         index.FilterField('start_date'),
     ]
 
-    technologies = ClusterTaggableManager(through=ProjectTechnology,
-                                          blank=True,
-                                          related_name='projects')
-    technologies_temp = ParentalManyToManyField(
+    technologies = ParentalManyToManyField(
         'TechnologyInfo',
         related_name="projects"
     )
@@ -176,8 +172,7 @@ class ProjectPage(Page):
         FieldPanel('start_date'),
         FieldPanel('duration'),
         FieldPanel('position'),
-        FieldPanel('technologies'),
-        FieldPanel('technologies_temp', widget=AutoCompleteSelectMultipleWidget('technologies')),
+        FieldPanel('technologies', widget=AutoCompleteSelectMultipleWidget('technologies')),
         FieldPanel('responsibilities'),
         DocumentChooserPanel('reference_letter'),
     ]
