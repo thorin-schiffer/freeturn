@@ -418,7 +418,7 @@ class CV(TimeStampedModel):
     ]
     panels = [
         AutocompletePanel('relevant_project_pages', is_single=False, page_type='home.ProjectPage'),
-        FieldPanel('relevant_skills', widget=AutoCompleteSelectMultipleWidget('technologies')),
+        FieldPanel('relevant_skills_temp', widget=AutoCompleteSelectMultipleWidget('technologies')),
     ] + create_panels
 
     def set_relevant_skills_and_projects(self, limit=5):
