@@ -96,10 +96,10 @@ def project_pages(project_page_factory):
 
 @pytest.mark.django_db
 def test_cv_set_relevant_projects(cv, project_pages, mocker):
-    technology_info = TechnologyInfo.objects.filter(tag__name='xxx')
+    technology_info = TechnologyInfo.objects.filter(name='xxx')
     mocker.patch('home.models.TechnologyInfo.match_text',
                  side_effect=lambda *args: technology_info)
 
     cv.set_relevant_skills_and_projects()
     assert list(cv.relevant_project_pages.all()) == [project_pages[0]]
-    assert list(cv.relevant_skills.all()) == [technology_info[0].tag]
+    assert list(cv.relevant_skills.all()) == [technology_info[0]]

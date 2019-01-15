@@ -1,3 +1,4 @@
+import logging
 import math
 
 import django_mailbox.models
@@ -13,7 +14,6 @@ from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
 from django_mailbox.signals import message_received
 from phonenumber_field.modelfields import PhoneNumberField
-from taggit.models import Tag
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPanel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
@@ -26,7 +26,6 @@ from wagtailmarkdown.utils import render_markdown
 from crm.project_states import ProjectStateMixin
 from crm.utils import get_working_days
 from home.models import TechnologyInfo, ProjectPage
-import logging
 
 logger = logging.getLogger("crm.models")
 
@@ -411,9 +410,9 @@ class CV(TimeStampedModel):
         ),
     ]
     panels = [
-        AutocompletePanel('relevant_project_pages', is_single=False, page_type='home.ProjectPage'),
-        FieldPanel('relevant_skills', widget=AutoCompleteSelectMultipleWidget('technologies')),
-    ] + create_panels
+                 AutocompletePanel('relevant_project_pages', is_single=False, page_type='home.ProjectPage'),
+                 FieldPanel('relevant_skills', widget=AutoCompleteSelectMultipleWidget('technologies')),
+             ] + create_panels
 
     def set_relevant_skills_and_projects(self, limit=5):
         technologies = TechnologyInfo.match_text(self.project.original_description)
@@ -421,11 +420,9 @@ class CV(TimeStampedModel):
             logger.error(f"Won't set relevant project pages for {self}, it's not empty")
             return
         self.relevant_project_pages.set(ProjectPage.objects.live().filter(
-            technologies__in=technologies.values_list('tag__id')
+            technologies__in=technologies
         ).order_by('-start_date')[:limit])
-        self.relevant_skills.set(
-            Tag.objects.filter(id__in=technologies.values_list('tag__id'))
-        )
+        self.relevant_skills.set(technologies)
 
     def save(self, **kwargs):
         creating = self.pk is None

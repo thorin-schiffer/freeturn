@@ -44,7 +44,7 @@ class CVInspectView(PDFTemplateView,
         context = super().get_context_data(**kwargs)
 
         context['skills'] = TechnologyInfo.objects.annotate(
-            projects_count=Count('tag__home_projecttechnology_items')
+            projects_count=Count('projects')
         ).filter(projects_count__gt=0).order_by('-projects_count')
         context['project_pages'] = ProjectPage.objects.live().order_by('-start_date')
         context['relevant_project_pages'] = self.instance.relevant_project_pages.order_by('-start_date')

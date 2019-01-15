@@ -32,9 +32,9 @@ def test_portfolio(portfolio_page,
                    technology_info,
                    rf):
     project_page = project_page_factory.create(parent=portfolio_page)
-    project_page.technologies.add(technology_info.tag)
+    project_page.technologies.add(technology_info)
     project_page.save()
-    request = rf.get(f"/?technology={technology_info.tag.name}")
+    request = rf.get(f"/?technology={technology_info.name}")
     context = portfolio_page.get_context(request)
 
     assert context['technology'] == technology_info
@@ -50,12 +50,12 @@ def test_technologies(rf,
     request = rf.get("/")
     project_page = project_page_factory.create(parent=portfolio_page)
     context = technologies_page.get_context(request)
-    project_page.technologies.add(technology_info.tag)
+    project_page.technologies.add(technology_info)
     project_page.save()
 
-    assert technology_info.tag in context['technologies']
-    tag = context['technologies'][0]
-    assert tag.projects_count == 1
+    assert technology_info in context['technologies']
+    technology = context['technologies'][0]
+    assert technology.projects_count == 1
     assert context['portfolio'] == portfolio_page
 
 
@@ -73,26 +73,15 @@ def test_contact_form_recaptcha(django_app,
 @pytest.mark.django_db
 def test_match_text(technology_info):
     # avoid vocabulary collision
-    technology_info.tag.name = "xxx"
-    technology_info.tag.save()
+    technology_info.name = "xxx"
+    technology_info.save()
 
     text_no_match = fake.text()
-    assert technology_info.tag.name not in text_no_match
-    text_match = f"{text_no_match} {technology_info.tag.name}"
+    assert technology_info.name not in text_no_match
+    text_match = f"{text_no_match} {technology_info.name}"
 
     result = TechnologyInfo.match_text(text_no_match)
     assert technology_info not in result
 
     result = TechnologyInfo.match_text(text_match)
     assert technology_info in result
-
-
-@pytest.mark.django_db
-def test_tag_technology_creation(project_page,
-                                 tag_factory):
-    project_page.technologies.all()
-    tag = tag_factory.create()
-    assert not TechnologyInfo.objects.filter(tag=tag).exists()
-    project_page.technologies.add(tag)
-    project_page.save()
-    assert TechnologyInfo.objects.filter(tag=tag).exists()

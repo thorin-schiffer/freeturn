@@ -4,12 +4,9 @@ from ajax_select.fields import AutoCompleteSelectMultipleWidget
 from colorful.fields import RGBColorField
 from django.db import models
 from django.db.models import Count
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.utils import timezone
 from fuzzywuzzy import process
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
-from taggit.models import TaggedItemBase
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, FieldRowPanel
 from wagtail.contrib.forms.edit_handlers import FormSubmissionsPanel
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
@@ -102,11 +99,6 @@ class PortfolioPage(Page):
             context['technology'] = TechnologyInfo.objects.filter(name=technology).first()
         context['projects'] = context['projects'].order_by('-start_date')
         return context
-
-
-class ProjectTechnology(TaggedItemBase):
-    content_object = ParentalKey('ProjectPage', on_delete=models.CASCADE,
-                                 related_name='technologies_items')
 
 
 class ProjectPage(Page):
@@ -288,11 +280,3 @@ class Responsibility(models.Model):
 
     class Meta:
         verbose_name_plural = "responsibilities"
-
-
-@receiver(post_save, sender=ProjectTechnology, dispatch_uid="check_technology_created")
-def check_technology_created(sender, instance, created, **kwargs):
-    if created:
-        TechnologyInfo.objects.get_or_create(
-            tag=instance.tag
-        )

@@ -33,11 +33,11 @@ class ProjectPageFactory(wagtail_factories.PageFactory):
     @factory.post_generation
     def technologies(self, created, extracted, *args, **kwargs):
         if extracted is not None:
-            infos = [TechnologyInfoFactory(tag__name=name) for name in extracted]
+            infos = [TechnologyInfoFactory(name=name) for name in extracted]
         else:
             infos = [TechnologyInfoFactory()]
         for info in infos:
-            self.technologies.add(info.tag)
+            self.technologies.add(info)
         self.save()
 
     class Meta:
@@ -59,7 +59,7 @@ class TagFactory(factory.DjangoModelFactory):
 
 
 class TechnologyInfoFactory(factory.DjangoModelFactory):
-    tag = factory.SubFactory(TagFactory)
+    name = factory.Faker("word")
 
     class Meta:
         model = TechnologyInfo
