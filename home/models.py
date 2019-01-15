@@ -217,6 +217,7 @@ class TechnologyInfo(models.Model):
     match_in_cv = models.BooleanField(default=True,
                                       help_text="Match for technology in CV relevant projects?")
     panels = [
+        FieldPanel('name'),
         ImageChooserPanel('logo'),
         FieldPanel('summary'),
     ]
