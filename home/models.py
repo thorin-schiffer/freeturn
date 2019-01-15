@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from ajax_select.fields import AutoCompleteSelectWidget, AutoCompleteSelectMultipleWidget
+from ajax_select.fields import AutoCompleteSelectMultipleWidget
 from colorful.fields import RGBColorField
 from django.db import models
 from django.db.models import Count
@@ -9,7 +9,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from fuzzywuzzy import process
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
-from taggit.models import TaggedItemBase, Tag
+from taggit.models import TaggedItemBase
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, FieldRowPanel
 from wagtail.contrib.forms.edit_handlers import FormSubmissionsPanel
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
@@ -99,7 +99,7 @@ class PortfolioPage(Page):
         context['projects'] = ProjectPage.objects.child_of(self).live()
         if technology:
             context['projects'] = context['projects'].filter(technologies__name__in=[technology.lower()])
-            context['technology'] = TechnologyInfo.objects.filter(tag__name=technology).first()
+            context['technology'] = TechnologyInfo.objects.filter(name=technology).first()
         context['projects'] = context['projects'].order_by('-start_date')
         return context
 
@@ -204,8 +204,8 @@ class TechnologiesPage(Page):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        context['technologies'] = Tag.objects.annotate(
-            projects_count=Count('home_projecttechnology_items')
+        context['technologies'] = TechnologyInfo.objects.annotate(
+            projects_count=Count('projects')
         ).filter(projects_count__gt=0).order_by('-projects_count')
         context['portfolio'] = PortfolioPage.objects.last()
         return context
@@ -227,23 +227,22 @@ class TechnologyInfo(models.Model):
     panels = [
         ImageChooserPanel('logo'),
         FieldPanel('summary'),
-        FieldPanel('tag', widget=AutoCompleteSelectWidget('technologies')),
     ]
 
     @staticmethod
     def match_text(text, limit=5, cutoff=40):
         choices = TechnologyInfo.objects.filter(match_in_cv=True).values_list(
-            'tag__name', flat=True
+            'name', flat=True
         )
         if not choices.exists():
             return TechnologyInfo.objects.none()
         results = process.extract(text, choices, limit=limit)
         return TechnologyInfo.objects.filter(
-            tag__name__in=[r[0] for r in results if r[1] > cutoff]
+            name__in=[r[0] for r in results if r[1] > cutoff]
         )
 
     def __str__(self):
-        return self.tag.name
+        return self.name
 
     class Meta:
         verbose_name = 'technology'
