@@ -5,7 +5,7 @@ from taggit.models import Tag
 from wagtail.core.models import Site
 
 from home import models
-from home.models import TechnologyInfo
+from home.models import Technology
 
 
 class HomePageFactory(wagtail_factories.PageFactory):
@@ -33,9 +33,9 @@ class ProjectPageFactory(wagtail_factories.PageFactory):
     @factory.post_generation
     def technologies(self, created, extracted, *args, **kwargs):
         if extracted is not None:
-            infos = [TechnologyInfoFactory(name=name) for name in extracted]
+            infos = [TechnologyFactory(name=name) for name in extracted]
         else:
-            infos = [TechnologyInfoFactory()]
+            infos = [TechnologyFactory()]
         for info in infos:
             self.technologies.add(info)
         self.save()
@@ -58,11 +58,11 @@ class TagFactory(factory.DjangoModelFactory):
         model = Tag
 
 
-class TechnologyInfoFactory(factory.DjangoModelFactory):
+class TechnologyFactory(factory.DjangoModelFactory):
     name = factory.Faker("word")
 
     class Meta:
-        model = TechnologyInfo
+        model = Technology
 
 
 class TechnologiesPageFactory(wagtail_factories.PageFactory):

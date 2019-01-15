@@ -9,7 +9,7 @@ from crm.models import ProjectMessage
 import django_mailbox.models
 from email.message import Message as EmailMessage
 
-from home.models import TechnologyInfo
+from home.models import Technology
 
 
 @pytest.mark.django_db
@@ -96,10 +96,10 @@ def project_pages(project_page_factory):
 
 @pytest.mark.django_db
 def test_cv_set_relevant_projects(cv, project_pages, mocker):
-    technology_info = TechnologyInfo.objects.filter(name='xxx')
-    mocker.patch('home.models.TechnologyInfo.match_text',
-                 side_effect=lambda *args: technology_info)
+    technology = Technology.objects.filter(name='xxx')
+    mocker.patch('home.models.Technology.match_text',
+                 side_effect=lambda *args: technology)
 
     cv.set_relevant_skills_and_projects()
     assert list(cv.relevant_project_pages.all()) == [project_pages[0]]
-    assert list(cv.relevant_skills.all()) == [technology_info[0]]
+    assert list(cv.relevant_skills.all()) == [technology[0]]

@@ -96,7 +96,7 @@ class PortfolioPage(Page):
         context['projects'] = ProjectPage.objects.child_of(self).live()
         if technology:
             context['projects'] = context['projects'].filter(technologies__name__in=[technology.lower()])
-            context['technology'] = TechnologyInfo.objects.filter(name=technology).first()
+            context['technology'] = Technology.objects.filter(name=technology).first()
         context['projects'] = context['projects'].order_by('-start_date')
         return context
 
@@ -138,7 +138,7 @@ class ProjectPage(Page):
     ]
 
     technologies = ParentalManyToManyField(
-        'TechnologyInfo',
+        'Technology',
         related_name="projects"
     )
     project_url = models.URLField(null=True, blank=True)  # url is a part of the parent model
@@ -196,7 +196,7 @@ class TechnologiesPage(Page):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        context['technologies'] = TechnologyInfo.objects.annotate(
+        context['technologies'] = Technology.objects.annotate(
             projects_count=Count('projects')
         ).filter(projects_count__gt=0).order_by('-projects_count')
         context['portfolio'] = PortfolioPage.objects.last()
@@ -204,7 +204,7 @@ class TechnologiesPage(Page):
 
 
 @register_snippet
-class TechnologyInfo(index.Indexed, models.Model):
+class Technology(index.Indexed, models.Model):
     logo = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
@@ -227,13 +227,13 @@ class TechnologyInfo(index.Indexed, models.Model):
 
     @staticmethod
     def match_text(text, limit=5, cutoff=40):
-        choices = TechnologyInfo.objects.filter(match_in_cv=True).values_list(
+        choices = Technology.objects.filter(match_in_cv=True).values_list(
             'name', flat=True
         )
         if not choices.exists():
-            return TechnologyInfo.objects.none()
+            return Technology.objects.none()
         results = process.extract(text, choices, limit=limit)
-        return TechnologyInfo.objects.filter(
+        return Technology.objects.filter(
             name__in=[r[0] for r in results if r[1] > cutoff]
         )
 

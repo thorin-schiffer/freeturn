@@ -1,10 +1,10 @@
 from ajax_select import register, LookupChannel
-from home.models import ProjectPage, TechnologyInfo
+from home.models import ProjectPage, Technology
 
 
 @register('technologies')
 class TechnologiesLookup(LookupChannel):
-    model = TechnologyInfo
+    model = Technology
 
     def get_query(self, q, request):
         return self.model.objects.filter(name__icontains=q)

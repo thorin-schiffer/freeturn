@@ -5,7 +5,7 @@ from wagtail.contrib.modeladmin.views import CreateView, InspectView
 from wkhtmltopdf.views import PDFTemplateView
 
 from crm.models import CV, CVGenerationSettings
-from home.models import HomePage, TechnologyInfo, ProjectPage
+from home.models import HomePage, Technology, ProjectPage
 
 
 class CreateCVView(CreateView):
@@ -43,7 +43,7 @@ class CVInspectView(PDFTemplateView,
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['skills'] = TechnologyInfo.objects.annotate(
+        context['skills'] = Technology.objects.annotate(
             projects_count=Count('projects')
         ).filter(projects_count__gt=0).order_by('-projects_count')
         context['project_pages'] = ProjectPage.objects.live().order_by('-start_date')

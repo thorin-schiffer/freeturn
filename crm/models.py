@@ -25,7 +25,7 @@ from wagtailmarkdown.utils import render_markdown
 
 from crm.project_states import ProjectStateMixin
 from crm.utils import get_working_days
-from home.models import TechnologyInfo, ProjectPage
+from home.models import Technology, ProjectPage
 
 logger = logging.getLogger("crm.models")
 
@@ -368,7 +368,7 @@ class CV(TimeStampedModel):
         blank=True
     )
     relevant_skills = models.ManyToManyField(
-        'home.TechnologyInfo',
+        'home.Technology',
         help_text="Technologies to be included, "
                   "will be automatically formed to look relevant",
         blank=True
@@ -415,7 +415,7 @@ class CV(TimeStampedModel):
              ] + create_panels
 
     def set_relevant_skills_and_projects(self, limit=5):
-        technologies = TechnologyInfo.match_text(self.project.original_description)
+        technologies = Technology.match_text(self.project.original_description)
         if self.relevant_project_pages.count():
             logger.error(f"Won't set relevant project pages for {self}, it's not empty")
             return
