@@ -1,18 +1,16 @@
 from ajax_select import register, LookupChannel
-from taggit.models import Tag
-
-from home.models import ProjectPage
+from home.models import ProjectPage, Technology
 
 
 @register('technologies')
-class TagsLookup(LookupChannel):
-    model = Tag
+class TechnologiesLookup(LookupChannel):
+    model = Technology
 
     def get_query(self, q, request):
-        return self.model.objects.filter(name__icontains=q).exclude(info=None)
+        return self.model.objects.filter(name__icontains=q)
 
     def format_item_display(self, item):
-        return u"<span class='tagit-label tag'>%s</span>" % item.name
+        return u"<span class='icon icon-fa-cog'>%s</span>" % item.name
 
 
 @register('project_pages')

@@ -1,12 +1,12 @@
 from datetime import timedelta
 
+import factory
 from django.contrib.auth import get_user_model
 from django.utils.timezone import get_current_timezone
 from django_mailbox.models import Message
-import factory
 
 from crm import models
-from home.factories import TagFactory, ProjectPageFactory
+from home.factories import ProjectPageFactory, TechnologyFactory
 
 
 class CityFactory(factory.DjangoModelFactory):
@@ -134,7 +134,7 @@ class CVWithRelevantFactory(CVFactory):
     def relevant_skills(self, created, extracted, **kwargs):
         if extracted:
             raise NotImplementedError()
-        self.relevant_skills.set([TagFactory()])
+        self.relevant_skills.set([TechnologyFactory()])
 
     @factory.post_generation
     def relevant_projects(self, created, extracted, **kwargs):

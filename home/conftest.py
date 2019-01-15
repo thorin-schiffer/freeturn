@@ -11,7 +11,7 @@ register(factories.ContactPageFactory)
 register(factories.ProjectPageFactory)
 register(factories.PortfolioPageFactory)
 register(factories.TagFactory)
-register(factories.TechnologyInfoFactory)
+register(factories.TechnologyFactory)
 register(factories.TechnologiesPageFactory)
 register(factories.SiteFactory)
 
