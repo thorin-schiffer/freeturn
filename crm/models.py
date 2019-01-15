@@ -369,12 +369,6 @@ class CV(TimeStampedModel):
         blank=True
     )
     relevant_skills = models.ManyToManyField(
-        'taggit.Tag',
-        help_text="Technology tags to be included, "
-                  "will be automatically formed to look relevant",
-        blank=True
-    )
-    relevant_skills_temp = models.ManyToManyField(
         'home.TechnologyInfo',
         help_text="Technologies to be included, "
                   "will be automatically formed to look relevant",
@@ -418,7 +412,7 @@ class CV(TimeStampedModel):
     ]
     panels = [
         AutocompletePanel('relevant_project_pages', is_single=False, page_type='home.ProjectPage'),
-        FieldPanel('relevant_skills_temp', widget=AutoCompleteSelectMultipleWidget('technologies')),
+        FieldPanel('relevant_skills', widget=AutoCompleteSelectMultipleWidget('technologies')),
     ] + create_panels
 
     def set_relevant_skills_and_projects(self, limit=5):
