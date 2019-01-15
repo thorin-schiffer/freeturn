@@ -374,6 +374,12 @@ class CV(TimeStampedModel):
                   "will be automatically formed to look relevant",
         blank=True
     )
+    relevant_skills_temp = models.ManyToManyField(
+        'home.TechnologyInfo',
+        help_text="Technologies to be included, "
+                  "will be automatically formed to look relevant",
+        blank=True
+    )
 
     education_overview = MarkdownField(
         help_text="Notice on your education",
