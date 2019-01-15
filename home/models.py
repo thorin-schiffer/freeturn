@@ -3,7 +3,7 @@ from datetime import timedelta
 from ajax_select.fields import AutoCompleteSelectWidget
 from colorful.fields import RGBColorField
 from django.db import models
-from django.db.models import Count, ManyToManyField
+from django.db.models import Count
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -149,7 +149,7 @@ class ProjectPage(Page):
     technologies = ClusterTaggableManager(through=ProjectTechnology,
                                           blank=True,
                                           related_name='projects')
-    technologies_temp = ManyToManyField(
+    technologies_temp = ParentalManyToManyField(
         'TechnologyInfo',
         related_name="projects"
     )
@@ -177,6 +177,7 @@ class ProjectPage(Page):
         FieldPanel('duration'),
         FieldPanel('position'),
         FieldPanel('technologies'),
+        FieldPanel('technologies_temp'),
         FieldPanel('responsibilities'),
         DocumentChooserPanel('reference_letter'),
     ]
