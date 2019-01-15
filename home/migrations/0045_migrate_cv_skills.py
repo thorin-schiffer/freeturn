@@ -3,7 +3,7 @@
 from django.db import migrations
 
 
-def remove_tags(apps, schema_editor):
+def copy_connections(apps, schema_editor):
     CV = apps.get_model('crm', 'CV')
     TechnologyInfo = apps.get_model('home', 'TechnologyInfo')
 
@@ -19,5 +19,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(remove_tags),
+        migrations.RunPython(copy_connections),
     ]
