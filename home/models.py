@@ -139,7 +139,8 @@ class ProjectPage(Page):
 
     technologies = ParentalManyToManyField(
         'Technology',
-        related_name="projects"
+        related_name="projects",
+        blank=True
     )
     project_url = models.URLField(null=True, blank=True)  # url is a part of the parent model
 
@@ -153,7 +154,8 @@ class ProjectPage(Page):
     )
     responsibilities = ParentalManyToManyField(
         'Responsibility',
-        related_name="projects"
+        related_name="projects",
+        blank=True
     )
     content_panels = Page.content_panels + [
         ImageChooserPanel('logo'),
