@@ -204,7 +204,7 @@ class TechnologiesPage(Page):
 
 
 @register_snippet
-class TechnologyInfo(models.Model):
+class TechnologyInfo(index.Indexed, models.Model):
     logo = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
@@ -220,6 +220,9 @@ class TechnologyInfo(models.Model):
         FieldPanel('name'),
         ImageChooserPanel('logo'),
         FieldPanel('summary'),
+    ]
+    search_fields = [
+        index.SearchField('name', partial_match=True),
     ]
 
     @staticmethod
