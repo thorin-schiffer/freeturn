@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('wagtailimages', '0020_add-verbose-name'),
-        ('crm', '0034_auto_20190115_1803'),
+        ('crm', '0034_remove_cv_relevant_skills'),
         ('home', '0050_auto_20190115_1841'),
     ]
 
