@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from ajax_select.fields import AutoCompleteSelectWidget
+from ajax_select.fields import AutoCompleteSelectWidget, AutoCompleteSelectMultipleWidget
 from colorful.fields import RGBColorField
 from django.db import models
 from django.db.models import Count
@@ -177,7 +177,7 @@ class ProjectPage(Page):
         FieldPanel('duration'),
         FieldPanel('position'),
         FieldPanel('technologies'),
-        FieldPanel('technologies_temp'),
+        FieldPanel('technologies_temp', widget=AutoCompleteSelectMultipleWidget('technologies')),
         FieldPanel('responsibilities'),
         DocumentChooserPanel('reference_letter'),
     ]
