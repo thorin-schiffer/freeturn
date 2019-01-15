@@ -226,7 +226,7 @@ class TechnologyInfo(models.Model):
     )
     summary = RichTextField(blank=True)
     tag = models.OneToOneField('taggit.Tag', on_delete=models.CASCADE, related_name='info')
-    name = models.CharField(max_length=100, null=True)
+    name = models.CharField(max_length=100, unique=True)
     match_in_cv = models.BooleanField(default=True,
                                       help_text="Match for technology in CV relevant projects?")
     panels = [
