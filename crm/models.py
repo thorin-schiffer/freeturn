@@ -344,6 +344,9 @@ class Recruiter(BaseCompany):
         blank=True,
         default=settings.DEFAULT_DAILY_RATE
     )
+    panels = BaseCompany.panels + [
+        FieldPanel('default_daily_rate')
+    ]
 
     class Meta:
         verbose_name_plural = 'recruiters'
