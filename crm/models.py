@@ -62,6 +62,25 @@ class Employee(TimeStampedModel):
                                       through='ProjectMessage',
                                       related_name="authors",
                                       editable=False)
+    picture = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL, null=True)
+
+    panels = [
+        FieldRowPanel(
+            [
+                MultiFieldPanel([
+                    FieldPanel('first_name'),
+                    FieldPanel('last_name'),
+                    FieldPanel('telephone'),
+                    FieldPanel('mobile'),
+                    FieldPanel('email'),
+                ]),
+                MultiFieldPanel([
+                    FieldPanel('company'),
+                    ImageChooserPanel('picture'),
+                ]),
+            ]
+        ),
+    ]
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

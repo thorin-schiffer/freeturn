@@ -1,6 +1,7 @@
 from django.urls import reverse
 from social_django.models import UserSocialAuth
 from wagtail.admin.search import SearchArea
+from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
 from wagtail.core import hooks
@@ -24,12 +25,14 @@ class ChannelAdmin(ModelAdmin):
     menu_label = 'Channels'
 
 
-class EmployeeAdmin(ModelAdmin):
+class EmployeeAdmin(ThumbnailMixin, ModelAdmin):
     model = Employee
     menu_icon = 'fa-users'
     menu_label = 'People'
     search_fields = ('telephone', 'first_name', 'last_name', 'company__name', 'email', 'mobile')
-    list_display = ('first_name', 'last_name', 'company', 'project_count', 'telephone')
+    list_display = ('admin_thumb', 'first_name', 'last_name', 'company', 'project_count')
+    thumb_image_field_name = 'picture'
+    thumb_default = "/static/img/default_avatar.png"
 
 
 class RecruiterAdmin(ModelAdmin):
