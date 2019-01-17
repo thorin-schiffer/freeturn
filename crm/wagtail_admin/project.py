@@ -81,7 +81,7 @@ class ProjectAdmin(ModelAdmin):
     menu_icon = 'fa-product-hunt'
     menu_label = 'Projects'
 
-    list_display = ('recruiter', 'manager', 'location', 'daily_rate', 'state', 'last_activity')
+    list_display = ('recruiter', 'manager', 'location', 'state', 'last_activity')
     list_filter = ('location', 'state')
     search_fields = ('project_page__title', 'manager__company__name')
     button_helper_class = ProjectButtonHelper
