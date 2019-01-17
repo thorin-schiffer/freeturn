@@ -328,7 +328,9 @@ class BaseCompany(TimeStampedModel):
     name = models.CharField(max_length=200,
                             unique=True)
     location = models.ForeignKey('crm.City',
-                                 on_delete=models.CASCADE)
+                                 on_delete=models.CASCADE,
+                                 blank=True,
+                                 null=True)
     channel = models.ForeignKey('Channel',
                                 on_delete=models.SET_NULL,
                                 help_text="Lead channel this company came from",
