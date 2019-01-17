@@ -62,6 +62,7 @@ class Employee(TimeStampedModel):
                                       through='ProjectMessage',
                                       related_name="authors",
                                       editable=False)
+    picture = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
