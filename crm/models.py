@@ -310,6 +310,23 @@ class BaseCompany(TimeStampedModel):
     notes = MarkdownField(default="", blank=True)
     logo = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL, null=True)
 
+    panels = [
+        FieldRowPanel([
+            MultiFieldPanel([
+                FieldPanel('name'),
+                FieldPanel('location'),
+                FieldPanel('url'),
+            ]),
+            MultiFieldPanel(
+                [
+                    ImageChooserPanel('logo'),
+                    FieldPanel('channel'),
+                ]
+            )
+        ]),
+        FieldRowPanel([FieldPanel('notes')])
+    ]
+
     def __str__(self):
         return self.name
 
