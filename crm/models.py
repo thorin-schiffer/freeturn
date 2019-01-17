@@ -227,6 +227,12 @@ class Project(ProjectStateMixin, TimeStampedModel):
     def get_nett_income_display(self):
         return f"{self.nett_income:.2f} €" if self.nett_income else None
 
+    @property
+    def logo(self):
+        company_logo = self.company.logo if self.company else None
+        recruiter_logo = self.recruiter.logo if self.recruiter else None
+        return company_logo or recruiter_logo
+
     def clean(self):
         if self.start_date and self.end_date and self.start_date >= self.end_date:
             raise ValidationError(

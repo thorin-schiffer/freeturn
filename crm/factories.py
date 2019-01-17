@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 import factory
+import wagtail_factories
 from django.contrib.auth import get_user_model
 from django.utils.timezone import get_current_timezone
 from django_mailbox.models import Message
@@ -29,6 +30,7 @@ class BaseCompanyFactory(factory.DjangoModelFactory):
     location = factory.SubFactory(CityFactory)
     channel = factory.SubFactory(ChannelFactory)
     url = factory.Faker('uri')
+    logo = factory.SubFactory(wagtail_factories.ImageFactory)
 
     class Meta:
         abstract = True

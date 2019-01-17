@@ -103,3 +103,19 @@ def test_cv_set_relevant_projects(cv, project_pages, mocker):
     cv.set_relevant_skills_and_projects()
     assert list(cv.relevant_project_pages.all()) == [project_pages[0]]
     assert list(cv.relevant_skills.all()) == [technology[0]]
+
+
+@pytest.mark.django_db
+def test_project_logo(project):
+    assert project.company.logo is not None
+    assert project.recruiter.logo is not None
+
+    assert project.company is not None
+    assert project.logo is project.company.logo
+
+    project.company.logo = None
+    assert project.logo is project.recruiter.logo
+
+    project.company = None
+    assert project.recruiter is not None
+    assert project.logo is project.recruiter.logo
