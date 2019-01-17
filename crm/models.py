@@ -14,7 +14,7 @@ from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
 from django_mailbox.signals import message_received
 from phonenumber_field.modelfields import PhoneNumberField
-from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPanel
+from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPanel, PageChooserPanel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail.core.fields import RichTextField
@@ -83,7 +83,7 @@ class Employee(TimeStampedModel):
     ]
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.first_name} {self.last_name} [{self.company}]"
 
     @property
     def project_count(self):
@@ -144,6 +144,28 @@ class Project(ProjectStateMixin, TimeStampedModel):
                                       through='ProjectMessage',
                                       related_name="projects",
                                       editable=False)
+
+    panels = [
+        FieldRowPanel([
+            MultiFieldPanel([
+                FieldPanel('company'),
+                FieldPanel('manager'),
+                FieldPanel('location')
+            ]),
+            MultiFieldPanel([
+                FieldPanel('daily_rate'),
+                FieldPanel('start_date'),
+                FieldPanel('end_date')
+            ])
+        ]),
+        MultiFieldPanel([
+            FieldPanel('original_url'),
+            FieldPanel('original_description'),
+
+        ]),
+        FieldPanel('notes'),
+        PageChooserPanel('project_page')
+    ]
 
     @property
     def recruiter(self):
