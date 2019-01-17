@@ -47,7 +47,7 @@ class RecruiterAdmin(ThumbnailMixin, ModelAdmin):
     search_fields = ('name',)
     inspect_view_enabled = True
     inspect_view_fields = ['name']
-    thumb_image_field_name = 'picture'
+    thumb_image_field_name = 'logo'
     thumb_default = "/static/img/default_recruiter.png"
 
 
