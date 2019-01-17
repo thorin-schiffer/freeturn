@@ -7,6 +7,7 @@ from django.utils import timezone
 from django_fsm import TransitionNotAllowed
 from wagtail.admin.search import SearchArea
 from wagtail.contrib.modeladmin.helpers import AdminURLHelper, ButtonHelper
+from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import EditView
 
@@ -76,12 +77,12 @@ class ProjectButtonHelper(ButtonHelper):
         return btns
 
 
-class ProjectAdmin(ModelAdmin):
+class ProjectAdmin(ThumbnailMixin, ModelAdmin):
     model = Project
     menu_icon = 'fa-product-hunt'
     menu_label = 'Projects'
 
-    list_display = ('recruiter', 'manager', 'location', 'daily_rate', 'state', 'last_activity')
+    list_display = ('admin_thumb', 'recruiter', 'manager', 'location', 'state', 'last_activity')
     list_filter = ('location', 'state')
     search_fields = ('project_page__title', 'manager__company__name')
     button_helper_class = ProjectButtonHelper
@@ -95,6 +96,8 @@ class ProjectAdmin(ModelAdmin):
         'budget', 'vat', 'invoice_amount', 'income_tax', 'nett_income',
         'project_page',
     ]
+    thumb_image_field_name = 'logo'
+    thumb_default = "/static/img/default_project.png"
 
     def last_activity(self, instance):
         days = (timezone.now() - instance.modified).days

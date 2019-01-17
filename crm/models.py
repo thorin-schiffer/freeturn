@@ -14,7 +14,7 @@ from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
 from django_mailbox.signals import message_received
 from phonenumber_field.modelfields import PhoneNumberField
-from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPanel
+from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPanel, PageChooserPanel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail.core.fields import RichTextField
@@ -62,7 +62,8 @@ class Employee(TimeStampedModel):
                                       through='ProjectMessage',
                                       related_name="authors",
                                       editable=False)
-    picture = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL, null=True)
+    picture = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL,
+                                null=True, blank=True)
 
     panels = [
         FieldRowPanel(
@@ -83,7 +84,7 @@ class Employee(TimeStampedModel):
     ]
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.first_name} {self.last_name} [{self.company}]"
 
     @property
     def project_count(self):
@@ -144,6 +145,28 @@ class Project(ProjectStateMixin, TimeStampedModel):
                                       through='ProjectMessage',
                                       related_name="projects",
                                       editable=False)
+
+    panels = [
+        FieldRowPanel([
+            MultiFieldPanel([
+                FieldPanel('company'),
+                FieldPanel('manager'),
+                FieldPanel('location')
+            ]),
+            MultiFieldPanel([
+                FieldPanel('daily_rate'),
+                FieldPanel('start_date'),
+                FieldPanel('end_date')
+            ])
+        ]),
+        MultiFieldPanel([
+            FieldPanel('original_url'),
+            FieldPanel('original_description'),
+
+        ]),
+        FieldPanel('notes'),
+        PageChooserPanel('project_page')
+    ]
 
     @property
     def recruiter(self):
@@ -227,6 +250,12 @@ class Project(ProjectStateMixin, TimeStampedModel):
     def get_nett_income_display(self):
         return f"{self.nett_income:.2f} €" if self.nett_income else None
 
+    @property
+    def logo(self):
+        company_logo = self.company.logo if self.company else None
+        recruiter_logo = self.recruiter.logo if self.recruiter else None
+        return company_logo or recruiter_logo
+
     def clean(self):
         if self.start_date and self.end_date and self.start_date >= self.end_date:
             raise ValidationError(
@@ -299,7 +328,9 @@ class BaseCompany(TimeStampedModel):
     name = models.CharField(max_length=200,
                             unique=True)
     location = models.ForeignKey('crm.City',
-                                 on_delete=models.CASCADE)
+                                 on_delete=models.CASCADE,
+                                 blank=True,
+                                 null=True)
     channel = models.ForeignKey('Channel',
                                 on_delete=models.SET_NULL,
                                 help_text="Lead channel this company came from",
@@ -308,6 +339,25 @@ class BaseCompany(TimeStampedModel):
     url = models.URLField(blank=True,
                           null=True)
     notes = MarkdownField(default="", blank=True)
+    logo = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL,
+                             null=True, blank=True)
+
+    panels = [
+        FieldRowPanel([
+            MultiFieldPanel([
+                FieldPanel('name'),
+                FieldPanel('location'),
+                FieldPanel('url'),
+            ]),
+            MultiFieldPanel(
+                [
+                    ImageChooserPanel('logo'),
+                    FieldPanel('channel'),
+                ]
+            )
+        ]),
+        FieldRowPanel([FieldPanel('notes')])
+    ]
 
     def __str__(self):
         return self.name
@@ -326,6 +376,9 @@ class Recruiter(BaseCompany):
         blank=True,
         default=settings.DEFAULT_DAILY_RATE
     )
+    panels = BaseCompany.panels + [
+        FieldPanel('default_daily_rate')
+    ]
 
     class Meta:
         verbose_name_plural = 'recruiters'

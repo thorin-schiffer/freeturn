@@ -1,3 +1,4 @@
+import wagtail_factories
 from pytest_factoryboy import register
 from crm import factories
 import pytest
@@ -20,6 +21,8 @@ register(factories.CVWithRelevantFactory, "cv_with_relevant")
 register(SiteFactory)
 register(HomePageFactory)
 register(ProjectPageFactory)
+register(wagtail_factories.ImageFactory)
+register(wagtail_factories.CollectionFactory)
 
 
 @pytest.fixture

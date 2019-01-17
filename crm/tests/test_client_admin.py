@@ -27,7 +27,6 @@ def test_add_required(admin_app):
     r = admin_app.get(url)
     required = required_inputs(r)
     assert 'name' in required
-    assert 'location' in required
 
 
 @pytest.mark.django_db
