@@ -62,7 +62,8 @@ class Employee(TimeStampedModel):
                                       through='ProjectMessage',
                                       related_name="authors",
                                       editable=False)
-    picture = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL, null=True)
+    picture = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL,
+                                null=True, blank=True)
 
     panels = [
         FieldRowPanel(
@@ -336,7 +337,8 @@ class BaseCompany(TimeStampedModel):
     url = models.URLField(blank=True,
                           null=True)
     notes = MarkdownField(default="", blank=True)
-    logo = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL, null=True)
+    logo = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL,
+                             null=True, blank=True)
 
     panels = [
         FieldRowPanel([
