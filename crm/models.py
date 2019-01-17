@@ -326,6 +326,7 @@ class Recruiter(BaseCompany):
         blank=True,
         default=settings.DEFAULT_DAILY_RATE
     )
+    logo = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL, null=True)
 
     class Meta:
         verbose_name_plural = 'recruiters'
