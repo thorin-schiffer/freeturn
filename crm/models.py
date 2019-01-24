@@ -2,7 +2,7 @@ import logging
 import math
 
 import django_mailbox.models
-from ajax_select.fields import AutoCompleteSelectMultipleWidget
+from ajax_select.fields import AutoCompleteSelectMultipleWidget, AutoCompleteSelectWidget
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -43,6 +43,7 @@ class City(models.Model):
 
     class Meta:
         verbose_name_plural = "city"
+        ordering = ['name']
 
 
 class Employee(TimeStampedModel):
@@ -76,7 +77,7 @@ class Employee(TimeStampedModel):
                     FieldPanel('email'),
                 ]),
                 MultiFieldPanel([
-                    FieldPanel('company'),
+                    FieldPanel('company', widget=AutoCompleteSelectWidget('companies')),
                     ImageChooserPanel('picture'),
                 ]),
             ]
@@ -157,7 +158,7 @@ class Project(ProjectStateMixin, TimeStampedModel):
         ]),
         FieldRowPanel([
             MultiFieldPanel([
-                FieldPanel('company'),
+                FieldPanel('company', widget=AutoCompleteSelectWidget('companies')),
                 FieldPanel('manager'),
                 FieldPanel('location')
             ]),
