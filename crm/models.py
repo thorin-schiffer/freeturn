@@ -107,6 +107,8 @@ class Channel(models.Model):
 
 
 class Project(ProjectStateMixin, TimeStampedModel):
+    name = models.CharField(max_length=120,
+                            blank=True, null=True)
     company = models.ForeignKey('ClientCompany',
                                 on_delete=models.SET_NULL,
                                 null=True,
@@ -147,6 +149,12 @@ class Project(ProjectStateMixin, TimeStampedModel):
                                       editable=False)
 
     panels = [
+        MultiFieldPanel([
+            FieldPanel('name'),
+            FieldPanel('original_url'),
+            FieldPanel('original_description'),
+
+        ]),
         FieldRowPanel([
             MultiFieldPanel([
                 FieldPanel('company'),
@@ -158,11 +166,6 @@ class Project(ProjectStateMixin, TimeStampedModel):
                 FieldPanel('start_date'),
                 FieldPanel('end_date')
             ])
-        ]),
-        MultiFieldPanel([
-            FieldPanel('original_url'),
-            FieldPanel('original_description'),
-
         ]),
         FieldPanel('notes'),
         PageChooserPanel('project_page')
@@ -268,6 +271,8 @@ class Project(ProjectStateMixin, TimeStampedModel):
     def save(self, *args, **kwargs):
         if not self.daily_rate and self.recruiter:
             self.daily_rate = self.recruiter.default_daily_rate
+        if not self.name:
+            self.name = str(self.company or self.recruiter)
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -496,6 +501,10 @@ class CV(TimeStampedModel):
             technologies__in=technologies
         ).order_by('-start_date')[:limit])
         self.relevant_skills.set(technologies)
+
+    @property
+    def logo(self):
+        return self.project.logo if self.project else None
 
     def save(self, **kwargs):
         creating = self.pk is None

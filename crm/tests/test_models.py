@@ -119,3 +119,11 @@ def test_project_logo(project):
     project.company = None
     assert project.recruiter is not None
     assert project.logo is project.recruiter.logo
+
+
+@pytest.mark.django_db
+def test_auto_project_name(project_factory):
+    project_without_company = project_factory.create()
+    assert project_without_company.name == str(project_without_company.company)
+    project_without_company = project_factory.create(company=None)
+    assert project_without_company.name == str(project_without_company.recruiter)
