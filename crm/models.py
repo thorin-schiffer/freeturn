@@ -93,6 +93,7 @@ class Employee(TimeStampedModel):
 
     class Meta:
         verbose_name_plural = 'people'
+        ordering = ['-created']
 
 
 class Channel(models.Model):
