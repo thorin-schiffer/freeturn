@@ -101,7 +101,7 @@ class ProjectAdmin(ThumbnailMixin, ModelAdmin):
     menu_icon = 'fa-product-hunt'
     menu_label = 'Projects'
 
-    list_display = ('admin_thumb', 'manager', 'location', 'state', 'last_activity')
+    list_display = ('admin_thumb', 'name', 'manager', 'location', 'state', 'last_activity')
     list_filter = ('location', 'state')
     search_fields = ('project_page__title', 'manager__company__name')
     button_helper_class = ProjectButtonHelper
@@ -117,6 +117,7 @@ class ProjectAdmin(ThumbnailMixin, ModelAdmin):
     ]
     thumb_image_field_name = 'logo'
     thumb_default = "/static/img/default_project.png"
+    list_display_add_buttons = 'name'
     create_view_class = CreateProjectView
 
     def last_activity(self, instance):
