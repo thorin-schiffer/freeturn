@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.conf.urls import url
 from django.contrib.admin.utils import quote
 from django.http import Http404
@@ -6,6 +8,7 @@ from django.template.defaultfilters import pluralize
 from django.urls import reverse
 from django.utils import timezone
 from django_fsm import TransitionNotAllowed
+from wagtail.admin import messages
 from wagtail.admin.search import SearchArea
 from wagtail.contrib.modeladmin.helpers import AdminURLHelper, ButtonHelper
 from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
@@ -13,7 +16,6 @@ from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import EditView, CreateView
 
 from crm.models import Project
-from wagtail.admin import messages
 
 
 class ProjectURLHelper(AdminURLHelper):
@@ -95,13 +97,21 @@ class CreateProjectView(CreateView):
         cv_create_url = f"{reverse('crm_cv_modeladmin_create')}?for_project={instance.pk}"
         return redirect(cv_create_url)
 
+    def get_initial(self):
+        next_month_first_day = (timezone.now() + timedelta(days=30)).replace(day=1)
+
+        return {
+            'start_date': next_month_first_day,
+            'end_date': next_month_first_day.replace(month=next_month_first_day.month + 3)
+        }
+
 
 class ProjectAdmin(ThumbnailMixin, ModelAdmin):
     model = Project
     menu_icon = 'fa-product-hunt'
     menu_label = 'Projects'
 
-    list_display = ('admin_thumb', 'manager', 'location', 'state', 'last_activity')
+    list_display = ('admin_thumb', 'name', 'manager', 'location', 'state', 'last_activity')
     list_filter = ('location', 'state')
     search_fields = ('project_page__title', 'manager__company__name')
     button_helper_class = ProjectButtonHelper
@@ -117,6 +127,7 @@ class ProjectAdmin(ThumbnailMixin, ModelAdmin):
     ]
     thumb_image_field_name = 'logo'
     thumb_default = "/static/img/default_project.png"
+    list_display_add_buttons = 'name'
     create_view_class = CreateProjectView
 
     def last_activity(self, instance):

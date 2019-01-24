@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 from django.urls import reverse
 
@@ -51,3 +53,17 @@ def test_create_redirect_to_cv_creation(admin_app,
     assert cv_create_url in r.location
     r = r.follow()
     assert len(r.context['messages']) == 2
+
+
+@pytest.mark.django_db
+def test_create_dates_prefill(admin_app,
+                              mocker):
+    date = datetime(2019, 1, 24)
+    mocker.patch('django.utils.timezone.now',
+                 side_effect=lambda *args: date)
+    project_create_url = reverse('crm_project_modeladmin_create')
+    r = admin_app.get(project_create_url)
+    form = r.forms[1]
+
+    assert form['start_date'].value == '2019-02-01'
+    assert form['end_date'].value == '2019-05-01'
