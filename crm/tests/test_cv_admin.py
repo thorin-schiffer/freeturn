@@ -5,11 +5,11 @@ from crm.models import CVGenerationSettings
 
 
 @pytest.mark.django_db
-def test_create(admin_app, admin_user, default_site,
-                home_page_factory, project):
+def test_create(admin_app, admin_user, default_site, project, image):
     # cv creation form prefilled with settings from cv generator settings
-    home_page = home_page_factory.create(parent=default_site.root_page)
     cv_settings = CVGenerationSettings.for_site(default_site)
+    cv_settings.default_picture = image
+    cv_settings.save()
     url = reverse('crm_cv_modeladmin_create')
 
     r = admin_app.get(url)
@@ -24,8 +24,7 @@ def test_create(admin_app, admin_user, default_site,
     assert form['rate_overview'].value == cv_settings.default_rate_overview
     assert form['working_permit'].value == cv_settings.default_working_permit
     assert form['full_name'].value == admin_user.first_name + " " + admin_user.last_name
-    assert form['earliest_available'].value == str(home_page.earliest_available)
-    assert form['picture'].value == str(home_page.picture.id)
+    assert form['picture'].value == str(cv_settings.default_picture.id)
     form['project'] = str(project.id)
     form.submit()
 
