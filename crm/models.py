@@ -415,7 +415,8 @@ class Mailbox(django_mailbox.models.Mailbox):
 
 class CV(TimeStampedModel):
     project = models.ForeignKey("Project",
-                                on_delete=CASCADE)
+                                on_delete=CASCADE,
+                                related_name="cvs")
     earliest_available = models.DateField(null=True, blank=True, default=timezone.now)
     picture = models.ForeignKey(
         'wagtailimages.Image',
