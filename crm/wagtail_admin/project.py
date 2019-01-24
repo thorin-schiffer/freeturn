@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.contrib.admin.utils import quote
 from django.http import Http404
+from django.shortcuts import redirect
 from django.template.defaultfilters import pluralize
 from django.urls import reverse
 from django.utils import timezone
@@ -9,9 +10,10 @@ from wagtail.admin.search import SearchArea
 from wagtail.contrib.modeladmin.helpers import AdminURLHelper, ButtonHelper
 from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
-from wagtail.contrib.modeladmin.views import EditView
+from wagtail.contrib.modeladmin.views import EditView, CreateView
 
 from crm.models import Project
+from wagtail.admin import messages
 
 
 class ProjectURLHelper(AdminURLHelper):
@@ -77,6 +79,23 @@ class ProjectButtonHelper(ButtonHelper):
         return btns
 
 
+class CreateProjectView(CreateView):
+    def form_valid(self, form):
+        instance = form.save()
+        messages.success(
+            self.request, self.get_success_message(instance),
+            buttons=self.get_success_message_buttons(instance)
+        )
+
+        messages.info(
+            self.request,
+            "Now you can create CV for this project"
+        )
+
+        cv_create_url = f"{reverse('crm_cv_modeladmin_create')}?for_project={instance.pk}"
+        return redirect(cv_create_url)
+
+
 class ProjectAdmin(ThumbnailMixin, ModelAdmin):
     model = Project
     menu_icon = 'fa-product-hunt'
@@ -98,6 +117,7 @@ class ProjectAdmin(ThumbnailMixin, ModelAdmin):
     ]
     thumb_image_field_name = 'logo'
     thumb_default = "/static/img/default_project.png"
+    create_view_class = CreateProjectView
 
     def last_activity(self, instance):
         days = (timezone.now() - instance.modified).days

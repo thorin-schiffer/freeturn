@@ -415,7 +415,8 @@ class Mailbox(django_mailbox.models.Mailbox):
 
 class CV(TimeStampedModel):
     project = models.ForeignKey("Project",
-                                on_delete=CASCADE)
+                                on_delete=CASCADE,
+                                related_name="cvs")
     earliest_available = models.DateField(null=True, blank=True, default=timezone.now)
     picture = models.ForeignKey(
         'wagtailimages.Image',
@@ -526,3 +527,22 @@ class CVGenerationSettings(BaseSetting):
     default_languages_overview = MarkdownField(default="English: fluent")
     default_rate_overview = MarkdownField(default="<<change default in settings>>")
     default_working_permit = MarkdownField(default="PERMANENT RESIDENCE")
+    default_picture = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    panels = [
+        FieldPanel('default_title'),
+        FieldPanel('default_experience_overview'),
+        FieldPanel('default_education_overview'),
+        FieldPanel('default_contact_details'),
+        FieldPanel('default_languages_overview'),
+        FieldPanel('default_rate_overview'),
+        FieldPanel('default_working_permit'),
+        FieldPanel('default_rate_overview'),
+        ImageChooserPanel('default_picture')
+    ]

@@ -36,3 +36,18 @@ def test_inspect_blank(admin_app, project_factory):
     )
     url = reverse('crm_project_modeladmin_inspect', kwargs={'instance_pk': project.pk})
     admin_app.get(url)
+
+
+@pytest.mark.django_db
+def test_create_redirect_to_cv_creation(admin_app,
+                                        city,
+                                        default_site):
+    project_create_url = reverse('crm_project_modeladmin_create')
+    r = admin_app.get(project_create_url)
+    form = r.forms[1]
+    form['location'] = str(city.pk)
+    r = r.forms[1].submit()
+    cv_create_url = reverse('crm_cv_modeladmin_create')
+    assert cv_create_url in r.location
+    r = r.follow()
+    assert len(r.context['messages']) == 2
