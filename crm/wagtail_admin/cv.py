@@ -1,5 +1,6 @@
 from django.db.models import Count
 from wagtail.admin.edit_handlers import ObjectList
+from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import CreateView, InspectView
 from wkhtmltopdf.views import PDFTemplateView
@@ -57,14 +58,17 @@ class CVInspectView(PDFTemplateView,
         return f"{self.instance.full_name} CV and project portfolio for {self.instance.project}.pdf"
 
 
-class CVAdmin(ModelAdmin):
+class CVAdmin(ThumbnailMixin, ModelAdmin):
     model = CV
     menu_icon = 'fa-id-card'
     menu_label = 'CVs'
     create_view_class = CreateCVView
-    list_display = ['project', 'created']
+    list_display = ['admin_thumb', 'project', 'created']
     list_filter = ['project', 'created']
     ordering = ['-created']
     inspect_view_enabled = True
     inspect_view_class = CVInspectView
     inspect_template_name = CVInspectView.template_name
+    thumb_image_field_name = 'logo'
+    thumb_default = "/static/img/default_project.png"
+    list_display_add_buttons = 'project'
