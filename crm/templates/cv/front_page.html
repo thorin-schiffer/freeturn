@@ -40,7 +40,7 @@
 
             <h2>Skills</h2>
             {% for skill in skills %}
-            {% if skill.tag in relevant_skills %}
+            {% if skill in relevant_skills %}
             <span class="label label-default">{{ skill }}</span>
             {% else %}
             {{ skill }}

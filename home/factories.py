@@ -33,11 +33,11 @@ class ProjectPageFactory(wagtail_factories.PageFactory):
     @factory.post_generation
     def technologies(self, created, extracted, *args, **kwargs):
         if extracted is not None:
-            infos = [TechnologyFactory(name=name) for name in extracted]
+            technologies = [TechnologyFactory(name=name) for name in extracted]
         else:
-            infos = [TechnologyFactory()]
-        for info in infos:
-            self.technologies.add(info)
+            technologies = [TechnologyFactory()]
+        for technology in technologies:
+            self.technologies.add(technology)
         self.save()
 
     class Meta:
