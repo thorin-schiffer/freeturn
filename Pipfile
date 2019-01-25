@@ -40,6 +40,9 @@ python-dotenv = "*"
 django-redis = "*"
 wagtail-markdown = {editable = true,git = "https://github.com/eviltnan/wagtail-markdown.git",ref = "unblock-wagtail-version"}
 django-analytical = "*"
+google-api-python-client = "*"
+google-auth-httplib2 = "*"
+google-auth-oauthlib = "*"
 
 [dev-packages]
 django-livereload-server = "*"
