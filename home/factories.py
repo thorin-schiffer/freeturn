@@ -18,6 +18,7 @@ class HomePageFactory(wagtail_factories.PageFactory):
 
 class ContactPageFactory(wagtail_factories.PageFactory):
     title = "Contact"
+    show_on_home = True
 
     class Meta:
         model = models.ContactPage

@@ -61,7 +61,7 @@ class HomePage(Page):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        context['forms'] = ContactPage.objects.live()
+        context['forms'] = ContactPage.objects.filter(show_on_home=True).live()
         current_project = ProjectPage.objects.live().filter(
             start_date__lt=timezone.now()
         ).order_by('-start_date').first()
@@ -263,7 +263,8 @@ class ContactPage(RecaptchaForm):
     )
     intro = RichTextField(blank=True)
     thank_you_text = RichTextField(blank=True)
-
+    show_on_home = models.BooleanField(default=False,
+                                       help_text="Show link to this form on home page?")
     content_panels = AbstractEmailForm.content_panels + [
         FormSubmissionsPanel(),
         FieldPanel('intro', classname="full"),
@@ -276,6 +277,9 @@ class ContactPage(RecaptchaForm):
             ]),
             FieldPanel('subject'),
         ], "Email"),
+    ]
+    settings_panels = AbstractEmailForm.settings_panels + [
+        FieldPanel('show_on_home')
     ]
 
 

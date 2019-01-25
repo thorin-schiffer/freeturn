@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'storages',
     'ajax_select',
     'wkhtmltopdf',
+    'google_analytics',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -199,4 +200,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
 WKHTMLTOPDF_CMD = '/usr/bin/wkhtmltopdf'
 WKHTMLTOPDF_CMD_OPTIONS = {
     'quiet': True,
+}
+GOOGLE_ANALYTICS = {
+    'google_analytics_id': getenv("GOOGLE_ANALYTICS_ID"),
 }
