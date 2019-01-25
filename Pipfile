@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-wagtail = "<2.2,>=2.1"
-Django = "==2.0.9"
+wagtail = "<2.5,>=2.4"
+Django = "<2.2,>=2.1"
 django-turbolinks = "*"
 gunicorn = "*"
 django-toolbelt = "*"
@@ -24,7 +24,6 @@ wagtailfontawesome = "*"
 smart-getenv = "*"
 django-fsm = "*"
 django-fsm-log = "*"
-wagtail-markdown = "*"
 pygments = "*"
 holidays = "*"
 django-mailbox = "*"
@@ -39,6 +38,7 @@ bleach = "*"
 wagtail-autocomplete = "*"
 python-dotenv = "*"
 django-redis = "*"
+wagtail-markdown = {editable = true,git = "https://github.com/eviltnan/wagtail-markdown.git",ref = "unblock-wagtail-version"}
 
 [dev-packages]
 django-livereload-server = "*"
