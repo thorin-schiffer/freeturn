@@ -42,7 +42,7 @@ class HomePage(Page):
         related_name='+',
         help_text="My picture"
     )
-
+    max_count = 1
     subpage_types = [
         'home.PortfolioPage',
         'home.TechnologiesPage',
@@ -82,6 +82,7 @@ class PortfolioPage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
+    max_count = 1
     subpage_types = [
         'home.ProjectPage',
     ]
@@ -195,6 +196,7 @@ class TechnologiesPage(Page):
         ImageChooserPanel('background'),
     ]
     subpage_types = []
+    max_count = 1
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
