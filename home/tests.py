@@ -11,12 +11,16 @@ fake = Faker()
 @pytest.mark.django_db
 def test_home(home_page,
               contact_page,
+              contact_page_factory,
               project_page,
               rf):
     request = rf.get("/")
     context = home_page.get_context(request)
 
+    form_no_button = contact_page_factory.create(show_on_home=False)
+
     assert context['forms'][0] == contact_page
+    assert form_no_button not in context['forms']
     assert context['current_project'] == project_page
     assert context['earliest_available'] == home_page.earliest_available
 
