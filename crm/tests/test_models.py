@@ -1,13 +1,15 @@
+import json
 import uuid
-from datetime import timedelta, date
+from datetime import date
+from datetime import timedelta
+from email.message import Message as EmailMessage
 
 import pytest
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
+from crm.gmail_utils import parse_message
 from crm.models import ProjectMessage
-from email.message import Message as EmailMessage
-
 from home.models import Technology
 
 
@@ -39,14 +41,44 @@ def test_project_duration(project):
     assert project.duration is None
 
 
+@pytest.fixture
+def gmail_api_message():
+    with open("data/gmail_api_message.json", "r") as f:
+        return json.load(f)
+
+
+def test_parse_message(gmail_api_message):
+    result = parse_message(gmail_api_message)
+    assert result['sent_at'].date() == date(2019, 1, 26)
+    assert result['text'].strip() == "this is *test *email"
+    assert result['subject'] == "Test email"
+    assert result['from_address'] == "sergey@cheparev.com"
+    assert result['gmail_message_id'] == "1688b0102744bab7"
+    assert result['gmail_thread_id'] == "1688b00c9ec9d5e7"
+
+
+@pytest.fixture
+def parsed_message():
+    return parse_message(gmail_api_message)
+
+
 @pytest.mark.django_db
-def test_associate(project,
-                   message,
-                   monkeypatch):
-    monkeypatch.setattr(message, 'from_header', f"Max Mustermann <{project.manager.email}>")
-    assert message not in project.messages.all()
-    ProjectMessage.associate(message)
-    assert message in project.messages.all()
+def test_associate_new(project, parsed_message):
+    assert parsed_message not in project.messages.all()
+    ProjectMessage.associate(parsed_message)
+    assert parsed_message in project.messages.all()
+
+
+def test_associate_manager_exists():
+    raise NotImplementedError()
+
+
+def test_associate_company_exists():
+    raise NotImplementedError()
+
+
+def test_associate_project_exists():
+    raise NotImplementedError()
 
 
 @pytest.fixture

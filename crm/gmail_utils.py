@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from googleapiclient import discovery
 
+from crm.models import ProjectMessage
 from crm.utils import Credentials
 
 logger = logging.getLogger('gmail_utils')
@@ -61,10 +62,6 @@ def get_raw_messages(user):
     ]
 
 
-def save_message(message):
-    raise NotImplementedError(message)
-
-
 def sync():
     for user in get_user_model().objects.exclude(social_auth=None):
         raw_messages = get_raw_messages(user)
@@ -72,4 +69,4 @@ def sync():
             parse_message(raw_message) for raw_message in raw_messages
         ]
         for message in parsed_messages:
-            save_message(message)
+            ProjectMessage.associate(message)
