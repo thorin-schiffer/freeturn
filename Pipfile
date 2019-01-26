@@ -26,7 +26,6 @@ django-fsm = "*"
 django-fsm-log = "*"
 pygments = "*"
 holidays = "*"
-django-mailbox = "*"
 python-social-auth = {version = "*",extras = ["django"]}
 social-auth-app-django = "*"
 lxml = "*"

@@ -1,18 +1,15 @@
 import logging
 import math
 
-import django_mailbox.models
 from ajax_select.fields import AutoCompleteSelectMultipleWidget, AutoCompleteSelectWidget
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import CASCADE
-from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
-from django_mailbox.signals import message_received
 from phonenumber_field.modelfields import PhoneNumberField
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPanel, PageChooserPanel
 from wagtail.contrib.settings.models import BaseSetting
@@ -59,10 +56,6 @@ class Employee(TimeStampedModel):
     company = models.ForeignKey('Recruiter',
                                 on_delete=models.CASCADE)
 
-    messages = models.ManyToManyField('django_mailbox.Message',
-                                      through='ProjectMessage',
-                                      related_name="authors",
-                                      editable=False)
     picture = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL,
                                 null=True, blank=True)
 
@@ -144,11 +137,6 @@ class Project(ProjectStateMixin, TimeStampedModel):
                                      on_delete=models.SET_NULL,
                                      null=True,
                                      blank=True)
-
-    messages = models.ManyToManyField('django_mailbox.Message',
-                                      through='ProjectMessage',
-                                      related_name="projects",
-                                      editable=False)
 
     panels = [
         MultiFieldPanel([
@@ -285,15 +273,14 @@ class Project(ProjectStateMixin, TimeStampedModel):
 
 
 class ProjectMessage(TimeStampedModel):
-    message = models.ForeignKey('django_mailbox.Message',
-                                on_delete=models.CASCADE,
-                                related_name='project_messages')
     project = models.ForeignKey('Project',
                                 null=True,
                                 blank=True,
-                                on_delete=models.SET_NULL)
+                                on_delete=models.SET_NULL,
+                                related_name='messages')
     author = models.ForeignKey('Employee',
-                               on_delete=models.CASCADE)
+                               on_delete=models.CASCADE,
+                               related_name='messages')
 
     @staticmethod
     def associate(message):
@@ -393,31 +380,6 @@ class Recruiter(BaseCompany):
 
 class ClientCompany(BaseCompany):
     pass
-
-
-@receiver(message_received)
-def on_mailbox_message(sender, message, **args):
-    if not message.project_messages.count():
-        ProjectMessage.associate(message)
-
-
-class Mailbox(django_mailbox.models.Mailbox):
-    class Meta:
-        proxy = True
-        verbose_name_plural = 'mailboxes'
-
-    def get_new_mail(self, condition=None):
-        """Connect to this transport and fetch new messages."""
-        new_mail = []
-        connection = self.get_connection()
-        if not connection:
-            return new_mail
-        for message in connection.get_message(condition):
-            message_id = message['message-id'][0:255]
-            if not django_mailbox.models.Message.objects.filter(message_id=message_id).exists():
-                msg = self.process_incoming_message(message)
-                new_mail.append(msg)
-        return new_mail
 
 
 class CV(TimeStampedModel):

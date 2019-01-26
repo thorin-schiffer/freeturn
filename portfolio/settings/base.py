@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'django_fsm_log',
     'social_django',
-    'django_mailbox',
     'django_extensions',
 ]
 
@@ -193,7 +192,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 ]
 from social_core.pipeline import DEFAULT_AUTH_PIPELINE
 
-SOCIAL_AUTH_PIPELINE = ("utils.social_for_authed_only",) + DEFAULT_AUTH_PIPELINE + ("crm.utils.ensure_mailbox",)
+SOCIAL_AUTH_PIPELINE = ("utils.social_for_authed_only",) + DEFAULT_AUTH_PIPELINE
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
     'access_type': 'offline'
 }

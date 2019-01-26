@@ -6,7 +6,6 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 from crm.models import ProjectMessage
-import django_mailbox.models
 from email.message import Message as EmailMessage
 
 from home.models import Technology
@@ -56,24 +55,6 @@ def raw_email():
     message.set_payload("xxx")
     message['message-id'] = str(uuid.uuid4())
     return message
-
-
-@pytest.mark.django_db
-def test_non_repeat_get_mail(mailbox,
-                             monkeypatch,
-                             mocker,
-                             raw_email):
-    connection = mocker.MagicMock()
-    connection.get_message = lambda x: [raw_email]
-    mocker.patch('django_mailbox.models.Mailbox.get_connection', side_effect=lambda: connection)
-    result = mailbox.get_new_mail()[0]
-    assert result.message_id == raw_email['message-id']
-
-    assert django_mailbox.models.Message.objects.filter(message_id=raw_email['message-id']).count() == 1
-
-    # call again, no new messages should be created
-    mailbox.get_new_mail()
-    assert django_mailbox.models.Message.objects.filter(message_id=raw_email['message-id']).count() == 1
 
 
 @pytest.mark.django_db
