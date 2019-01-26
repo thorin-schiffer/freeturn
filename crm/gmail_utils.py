@@ -57,10 +57,15 @@ def get_raw_messages(user):
     ]
 
 
+def save_message(message):
+    raise NotImplementedError(message)
+
+
 def sync():
     for user in get_user_model().objects.exclude(social_auth=None):
         raw_messages = get_raw_messages(user)
         parsed_messages = [
             parse_message(raw_message) for raw_message in raw_messages
         ]
-        raise NotImplementedError(parsed_messages)
+        for message in parsed_messages:
+            save_message(message)
