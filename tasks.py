@@ -1,9 +1,9 @@
-import invoke
 import functools
 import os
 import sys
+
 import dotenv
-from invoke import Exit
+import invoke
 
 dotenv.load_dotenv()
 
@@ -71,30 +71,5 @@ def sync_production(ctx, backup=True):
 @invoke.task
 @with_django
 def mail(context):
-    from googleapiclient import discovery
-    from django.contrib.auth import get_user_model
-    from django.conf import settings
-    from crm.utils import Credentials
-
-    user = get_user_model().objects.get(username='sergey')
-
-    usa = user.social_auth.get(provider='google-oauth2')
-    service = discovery.build('gmail', 'v1', credentials=Credentials(usa))
-
-    labels = service.users().labels().list(userId='me').execute()
-    try:
-        label_id = next(
-            label_info['id'] for label_info in labels['labels'] if label_info['name'] == settings.MAILBOX_LABEL
-        )
-    except StopIteration:
-        raise Exit(f"Can't find label with {settings.MAILBOX_LABEL}", code=127)
-
-    # INBOX means a message is not archived
-    mail = service.users().messages().list(userId='me', labelIds=[label_id, "INBOX"]).execute()
-    message_ids = [message['id'] for message in mail['messages']]
-    messages = [
-        service.users().messages().get(userId='me',
-                                       id=message_id, format="raw").execute()
-        for message_id in message_ids
-    ]
-    print(messages)
+    from crm.gmail_utils import sync
+    sync()
