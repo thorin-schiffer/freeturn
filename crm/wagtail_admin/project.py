@@ -15,7 +15,7 @@ from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import EditView, CreateView
 
-from crm.models import Project
+from crm.models import Project, ProjectMessage
 
 
 class ProjectURLHelper(AdminURLHelper):
@@ -179,3 +179,14 @@ class ProjectSearchArea(SearchArea):
             name='projects',
             classnames='icon icon-fa-product-hunt',
             order=101)
+
+
+class MessageAdmin(ModelAdmin):
+    model = ProjectMessage
+    menu_icon = 'fa-envelope-open'
+    menu_label = 'Messages'
+    list_display = ['subject', 'author', 'project', 'created']
+    list_filter = ['project', 'author']
+    ordering = ['-created']
+    inspect_view_enabled = True
+    inspect_view_fields = ['project', 'subject', 'from_address', 'text']
