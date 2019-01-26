@@ -19,7 +19,9 @@ def parse_message(message):
     result = {
         "sent_at": datetime.utcfromtimestamp(int(message['internalDate']) / 1000).replace(tzinfo=pytz.utc),
         "subject": mime_msg['subject'],
-        "from_address": mime_msg['from'][mime_msg['from'].index("<") + 1:-1]
+        "from_address": mime_msg['from'][mime_msg['from'].index("<") + 1:-1],
+        "gmail_thread_id": message['threadId'],
+        "gmail_message_id": message['id'],
     }
     main_type = mime_msg.get_content_maintype()
     text = ""

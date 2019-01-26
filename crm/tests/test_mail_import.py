@@ -18,6 +18,8 @@ def test_parse_message(gmail_api_message):
     assert result['text'].strip() == "this is *test *email"
     assert result['subject'] == "Test email"
     assert result['from_address'] == "sergey@cheparev.com"
+    assert result['gmail_message_id'] == "1688b0102744bab7"
+    assert result['gmail_thread_id'] == "1688b00c9ec9d5e7"
 
 
 def test_save_message():
