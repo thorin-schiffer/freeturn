@@ -14,11 +14,13 @@ logger = logging.getLogger('gmail_utils')
 
 
 def parse_message(message):
-    result = {
-        "sent_at": datetime.utcfromtimestamp(int(message['internalDate']) / 1000).replace(tzinfo=pytz.utc),
-    }
     msg_str = base64.urlsafe_b64decode(message['raw'].encode('ASCII'))
     mime_msg = email.message_from_bytes(msg_str)
+    result = {
+        "sent_at": datetime.utcfromtimestamp(int(message['internalDate']) / 1000).replace(tzinfo=pytz.utc),
+        "subject": mime_msg['subject'],
+        "from_address": mime_msg['from'][mime_msg['from'].index("<") + 1:-1]
+    }
     main_type = mime_msg.get_content_maintype()
     text = ""
     if main_type == 'multipart':
