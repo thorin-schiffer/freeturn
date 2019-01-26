@@ -42,6 +42,7 @@ django-analytical = "*"
 google-api-python-client = "*"
 google-auth-httplib2 = "*"
 google-auth-oauthlib = "*"
+django-mailbox = "*"
 
 [dev-packages]
 django-livereload-server = "*"
