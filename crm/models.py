@@ -281,6 +281,15 @@ class ProjectMessage(TimeStampedModel):
     author = models.ForeignKey('Employee',
                                on_delete=models.CASCADE,
                                related_name='messages')
+    sent_at = models.DateTimeField(default=timezone.now,
+                                   help_text="Sending time")
+    subject = models.CharField(max_length=200,
+                               blank=True,
+                               null=True)
+    text = models.TextField()
+
+    gmail_message_id = models.CharField(max_length=50)
+    gmail_thread_id = models.CharField(max_length=50)
 
     @staticmethod
     def associate(message):
