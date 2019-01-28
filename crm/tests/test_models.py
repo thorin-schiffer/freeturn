@@ -58,16 +58,31 @@ def test_parse_message(gmail_api_message):
     assert result['gmail_thread_id'] == "1688b00c9ec9d5e7"
 
 
+def test_parse_message_remove_quotation():
+    raise NotImplementedError("text part should not save previos messages,"
+                              "quotation should only be cut off at the end of the text")
+
+
 @pytest.fixture
-def parsed_message():
+def parsed_message(gmail_api_message):
     return parse_message(gmail_api_message)
 
 
 @pytest.mark.django_db
-def test_associate_new(project, parsed_message):
-    assert parsed_message not in project.messages.all()
-    ProjectMessage.associate(parsed_message)
-    assert parsed_message in project.messages.all()
+def test_associate_new(parsed_message):
+    message = ProjectMessage.associate(parsed_message)
+    assert message.sent_at == parsed_message['sent_at']
+    assert message.subject == parsed_message['subject']
+    assert message.project.name == parsed_message['subject']
+    assert message.project.company == "Cheparev"
+    assert message.project.manager == message.author
+
+    assert message.author.email == parsed_message['from_address']
+    assert message.author.full_name == parsed_message['full_name']
+
+    assert message.text == parsed_message['text']
+    assert message.gmail_message_id == parsed_message['gmail_message_id']
+    assert message.gmail_thread_id == parsed_message['gmail_thread_id']
 
 
 def test_associate_manager_exists():
@@ -79,6 +94,18 @@ def test_associate_company_exists():
 
 
 def test_associate_project_exists():
+    raise NotImplementedError()
+
+
+def test_associate_project_exists_name_not_match():
+    raise NotImplementedError("but thread id does")
+
+
+def test_project_exists_inactive():
+    raise NotImplementedError("Project of this manager exists, but it's not active, new is to create")
+
+
+def test_message_already_processed():
     raise NotImplementedError()
 
 
