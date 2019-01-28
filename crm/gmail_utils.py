@@ -17,10 +17,13 @@ logger = logging.getLogger('gmail_utils')
 def parse_message(message):
     msg_str = base64.urlsafe_b64decode(message['raw'].encode('ASCII'))
     mime_msg = email.message_from_bytes(msg_str)
+    from_address = mime_msg['from'][mime_msg['from'].index("<") + 1:-1]
+    full_name = mime_msg['from'].replace(f"<{from_address}>", "").strip()
     result = {
         "sent_at": datetime.utcfromtimestamp(int(message['internalDate']) / 1000).replace(tzinfo=pytz.utc),
         "subject": mime_msg['subject'],
         "from_address": mime_msg['from'][mime_msg['from'].index("<") + 1:-1],
+        "full_name": full_name,
         "gmail_thread_id": message['threadId'],
         "gmail_message_id": message['id'],
     }
