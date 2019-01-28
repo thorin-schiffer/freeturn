@@ -81,6 +81,10 @@ class Employee(TimeStampedModel):
         return f"{self.first_name} {self.last_name} [{self.company}]"
 
     @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
+    @property
     def project_count(self):
         return self.projects.count()
 
@@ -117,6 +121,7 @@ class Project(ProjectStateMixin, TimeStampedModel):
                                 related_name='projects')
     location = models.ForeignKey('crm.City',
                                  related_name='projects',
+                                 null=True, blank=True,
                                  on_delete=models.CASCADE)
 
     original_description = RichTextField()
@@ -296,18 +301,48 @@ class ProjectMessage(TimeStampedModel):
         """
         Associates message with projects and people
         """
-        from_address = message.from_address
-        people = Employee.objects.filter(email__in=from_address)
-        for employee in people:
-            project = employee.projects.order_by('modified').last()
-            ProjectMessage.objects.update_or_create(
-                message=message,
-                defaults={
-                    "author": employee,
-                    "project": project
-                },
+        already_processed = ProjectMessage.objects.filter(gmail_message_id=message['gmail_message_id']).first()
+        if already_processed:
+            return already_processed
 
+        manager = Employee.objects.get_or_create(email__iexact=message['from_address'])
+        if not manager:
+            domain = message['from_address'].split('@')[-1]
+            company, company_created = Recruiter.objects.get_or_create(
+                name=domain.split(".")[0],
+                url=f"http://{domain}"
             )
+            try:
+                first_name, last_name = message['full_name'].split(" ")
+            except ValueError:
+                first_name, last_name = "", message['last_name']
+            manager = Employee.objects.get_or_create(
+                company=company,
+                first_name=first_name,
+                last_name=last_name,
+                email=message['from_address'],
+            )
+
+        existing_messages = ProjectMessage.objects.filter(gmail_thread_id=message['gmail_thread_id'])
+
+        if existing_messages:
+            project = existing_messages.first().project
+        else:
+            project = Project.objects.exclude(
+                state='stopped'
+            ).filter(manager=manager).first()
+            if not project:
+                project, project_created = Project.objects.get_or_create(
+                    name=message['subject'],
+                    manager=manager,
+                    location=manager.company.location,
+                    original_description=message['text']
+                )
+
+        return ProjectMessage.objects.create(
+            manager=manager,
+            project=project,
+        )
 
     @property
     def subject(self):
