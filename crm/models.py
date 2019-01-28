@@ -305,22 +305,24 @@ class ProjectMessage(TimeStampedModel):
         if already_processed:
             return already_processed
 
-        manager = Employee.objects.get_or_create(email__iexact=message['from_address'])
+        manager = Employee.objects.filter(email__iexact=message['from_address']).first()
         if not manager:
             domain = message['from_address'].split('@')[-1]
             company, company_created = Recruiter.objects.get_or_create(
-                name=domain.split(".")[0],
+                name=domain.split(".")[0].capitalize(),
                 url=f"http://{domain}"
             )
             try:
                 first_name, last_name = message['full_name'].split(" ")
             except ValueError:
                 first_name, last_name = "", message['last_name']
-            manager = Employee.objects.get_or_create(
-                company=company,
-                first_name=first_name,
-                last_name=last_name,
+            manager, manager_created = Employee.objects.get_or_create(
                 email=message['from_address'],
+                defaults={
+                    "company": company,
+                    "first_name": first_name,
+                    "last_name": last_name,
+                },
             )
 
         existing_messages = ProjectMessage.objects.filter(gmail_thread_id=message['gmail_thread_id'])
@@ -340,22 +342,13 @@ class ProjectMessage(TimeStampedModel):
                 )
 
         return ProjectMessage.objects.create(
-            manager=manager,
+            text=message['text'],
+            author=manager,
             project=project,
-        )
-
-    @property
-    def subject(self):
-        return self.message.subject
-
-    @property
-    def from_address(self):
-        return ",".join(self.message.from_address)
-
-    @property
-    def text(self):
-        return SafeText(
-            f"<pre>{self.message.text}</pre>"
+            subject=message['subject'],
+            sent_at=message['sent_at'],
+            gmail_message_id=message['gmail_message_id'],
+            gmail_thread_id=message['gmail_thread_id']
         )
 
     def __str__(self):

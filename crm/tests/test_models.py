@@ -74,7 +74,7 @@ def test_associate_new(parsed_message):
     assert message.sent_at == parsed_message['sent_at']
     assert message.subject == parsed_message['subject']
     assert message.project.name == parsed_message['subject']
-    assert message.project.company == "Cheparev"
+    assert message.project.manager.company.name == "Cheparev"
     assert message.project.manager == message.author
 
     assert message.author.email == parsed_message['from_address']
