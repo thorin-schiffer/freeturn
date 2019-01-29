@@ -71,7 +71,7 @@ class Employee(TimeStampedModel):
                     FieldPanel('email'),
                 ]),
                 MultiFieldPanel([
-                    FieldPanel('company', widget=AutoCompleteSelectWidget('companies')),
+                    FieldPanel('company', widget=AutoCompleteSelectWidget('recruiters')),
                     ImageChooserPanel('picture'),
                 ]),
             ]
