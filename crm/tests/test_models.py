@@ -118,8 +118,14 @@ def test_associate_project_exists_manager_match(project, parsed_message):
 
 
 @pytest.mark.django_db
-def test_associate_project_exists_name_match(project, parsed_message):
-    raise NotImplementedError()
+def test_associate_project_not_exist_manager_exists(employee, parsed_message):
+    parsed_message['from_address'] = employee.email
+    assert employee.projects.count() == 0
+    message = associate(parsed_message)
+    assert message.project.manager == employee
+    assert message.project.name == parsed_message['subject']
+    assert message.project.original_description == parsed_message['text']
+    assert message.project.location == employee.company.location
 
 
 def test_project_exists_inactive():

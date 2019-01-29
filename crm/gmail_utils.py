@@ -97,13 +97,15 @@ def ensure_project(message, manager):
     else:
         project = Project.objects.exclude(
             state='stopped'
-        ).filter(manager=manager).first()
+        ).filter(manager=manager).order_by('-modified').first()
         if not project:
             project, project_created = Project.objects.get_or_create(
                 name=message['subject'],
                 manager=manager,
-                location=manager.company.location,
-                original_description=message['text']
+                defaults={
+                    "location": manager.company.location,
+                    "original_description": message['text']
+                }
             )
     return project
 
