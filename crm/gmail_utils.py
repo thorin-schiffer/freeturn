@@ -23,6 +23,7 @@ def remove_quotation(text):
                 return "\n".join(lines[:i])
             else:
                 outer_quotation_started = True
+    return text
 
 
 def parse_message(message):
@@ -49,7 +50,7 @@ def parse_message(message):
         text = mime_msg.get_payload()
     else:
         logger.error(f"Unknown main mime type {main_type}")
-    result['text'] = text
+    result['text'] = remove_quotation(text)
     return result
 
 
