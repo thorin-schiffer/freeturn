@@ -93,8 +93,11 @@ def test_associate_manager_exists(employee,
     assert message.author == employee
 
 
-def test_associate_company_exists():
-    raise NotImplementedError()
+@pytest.mark.django_db
+def test_associate_company_exists(recruiter, parsed_message):
+    parsed_message['from_address'] = f"test@{recruiter.domain}"
+    message = ProjectMessage.associate(parsed_message)
+    assert message.project.manager.company == recruiter
 
 
 def test_associate_project_exists():

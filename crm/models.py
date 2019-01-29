@@ -11,6 +11,7 @@ from django.utils import timezone
 from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
 from phonenumber_field.modelfields import PhoneNumberField
+from tld import get_fld
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPanel, PageChooserPanel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
@@ -308,7 +309,8 @@ class ProjectMessage(TimeStampedModel):
         manager = Employee.objects.filter(email__iexact=message['from_address']).first()
         if not manager:
             domain = message['from_address'].split('@')[-1]
-            company, company_created = Recruiter.objects.get_or_create(
+            company = Recruiter.objects.filter(url__icontains=domain).first()
+            company = company or Recruiter.objects.create(
                 name=domain.split(".")[0].capitalize(),
                 url=f"http://{domain}"
             )
@@ -392,6 +394,10 @@ class BaseCompany(TimeStampedModel):
 
     def __str__(self):
         return self.name
+
+    @property
+    def domain(self):
+        return get_fld(self.url, fail_silently=True)
 
     class Meta:
         abstract = True
