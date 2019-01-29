@@ -297,62 +297,6 @@ class ProjectMessage(TimeStampedModel):
     gmail_message_id = models.CharField(max_length=50)
     gmail_thread_id = models.CharField(max_length=50)
 
-    @staticmethod
-    def associate(message):
-        """
-        Associates message with projects and people
-        """
-        already_processed = ProjectMessage.objects.filter(gmail_message_id=message['gmail_message_id']).first()
-        if already_processed:
-            return already_processed
-
-        manager = Employee.objects.filter(email__iexact=message['from_address']).first()
-        if not manager:
-            domain = message['from_address'].split('@')[-1]
-            company = Recruiter.objects.filter(url__icontains=domain).first()
-            company = company or Recruiter.objects.create(
-                name=domain.split(".")[0].capitalize(),
-                url=f"http://{domain}"
-            )
-            try:
-                first_name, last_name = message['full_name'].split(" ")
-            except ValueError:
-                first_name, last_name = "", message['last_name']
-            manager, manager_created = Employee.objects.get_or_create(
-                email=message['from_address'],
-                defaults={
-                    "company": company,
-                    "first_name": first_name,
-                    "last_name": last_name,
-                },
-            )
-
-        existing_messages = ProjectMessage.objects.filter(gmail_thread_id=message['gmail_thread_id'])
-
-        if existing_messages:
-            project = existing_messages.first().project
-        else:
-            project = Project.objects.exclude(
-                state='stopped'
-            ).filter(manager=manager).first()
-            if not project:
-                project, project_created = Project.objects.get_or_create(
-                    name=message['subject'],
-                    manager=manager,
-                    location=manager.company.location,
-                    original_description=message['text']
-                )
-
-        return ProjectMessage.objects.create(
-            text=message['text'],
-            author=manager,
-            project=project,
-            subject=message['subject'],
-            sent_at=message['sent_at'],
-            gmail_message_id=message['gmail_message_id'],
-            gmail_thread_id=message['gmail_thread_id']
-        )
-
     def __str__(self):
         return self.subject
 

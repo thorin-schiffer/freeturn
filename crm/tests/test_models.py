@@ -8,8 +8,7 @@ import pytest
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from crm.gmail_utils import parse_message
-from crm.models import ProjectMessage
+from crm.gmail_utils import parse_message, associate
 from home.models import Technology
 
 
@@ -70,7 +69,7 @@ def parsed_message(gmail_api_message):
 
 @pytest.mark.django_db
 def test_associate_new(parsed_message):
-    message = ProjectMessage.associate(parsed_message)
+    message = associate(parsed_message)
     assert message.sent_at == parsed_message['sent_at']
     assert message.subject == parsed_message['subject']
     assert message.project.name == parsed_message['subject']
@@ -89,14 +88,14 @@ def test_associate_new(parsed_message):
 def test_associate_manager_exists(employee,
                                   parsed_message):
     parsed_message['from_address'] = employee.email
-    message = ProjectMessage.associate(parsed_message)
+    message = associate(parsed_message)
     assert message.author == employee
 
 
 @pytest.mark.django_db
 def test_associate_company_exists(recruiter, parsed_message):
     parsed_message['from_address'] = f"test@{recruiter.domain}"
-    message = ProjectMessage.associate(parsed_message)
+    message = associate(parsed_message)
     assert message.project.manager.company == recruiter
 
 
