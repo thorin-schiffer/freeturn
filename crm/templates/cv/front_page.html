@@ -19,7 +19,7 @@
     {% with relevant_skills=instance.relevant_skills.all %}
     <tr>
         <td valign="top" style="padding-right: 20px">
-            <h2>Relevant projects</h2>
+            <h2>Recent projects</h2>
 
             {% for project in relevant_project_pages %}
             <h3>{{project.title }}</h3>
@@ -49,8 +49,12 @@
 
         </td>
         <td valign="top">
+            <h2> Pay rate</h2>
+            {{ instance.rate_overview | markdown }}
+
             <h2>Availability</h2>
             {{ instance.earliest_available | date:"F Y" }}
+
             <h2> Contact </h2>
             {{ instance.contact_details | markdown }}
 
@@ -59,9 +63,6 @@
 
             <h2> Working permit</h2>
             {{ instance.working_permit | markdown }}
-
-            <h2> Daily rate</h2>
-            {{ instance.rate_overview | markdown }}
 
         </td>
     </tr>
