@@ -1,19 +1,17 @@
 import logging
 import math
 
-import django_mailbox.models
 from ajax_select.fields import AutoCompleteSelectMultipleWidget, AutoCompleteSelectWidget
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import CASCADE
-from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
-from django_mailbox.signals import message_received
 from phonenumber_field.modelfields import PhoneNumberField
+from tld import get_fld
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPanel, PageChooserPanel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
@@ -59,10 +57,6 @@ class Employee(TimeStampedModel):
     company = models.ForeignKey('Recruiter',
                                 on_delete=models.CASCADE)
 
-    messages = models.ManyToManyField('django_mailbox.Message',
-                                      through='ProjectMessage',
-                                      related_name="authors",
-                                      editable=False)
     picture = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL,
                                 null=True, blank=True)
 
@@ -86,6 +80,10 @@ class Employee(TimeStampedModel):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} [{self.company}]"
+
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
 
     @property
     def project_count(self):
@@ -124,6 +122,7 @@ class Project(ProjectStateMixin, TimeStampedModel):
                                 related_name='projects')
     location = models.ForeignKey('crm.City',
                                  related_name='projects',
+                                 null=True, blank=True,
                                  on_delete=models.CASCADE)
 
     original_description = RichTextField()
@@ -144,11 +143,6 @@ class Project(ProjectStateMixin, TimeStampedModel):
                                      on_delete=models.SET_NULL,
                                      null=True,
                                      blank=True)
-
-    messages = models.ManyToManyField('django_mailbox.Message',
-                                      through='ProjectMessage',
-                                      related_name="projects",
-                                      editable=False)
 
     panels = [
         MultiFieldPanel([
@@ -285,50 +279,26 @@ class Project(ProjectStateMixin, TimeStampedModel):
 
 
 class ProjectMessage(TimeStampedModel):
-    message = models.ForeignKey('django_mailbox.Message',
-                                on_delete=models.CASCADE,
-                                related_name='project_messages')
     project = models.ForeignKey('Project',
                                 null=True,
                                 blank=True,
-                                on_delete=models.SET_NULL)
+                                on_delete=models.SET_NULL,
+                                related_name='messages')
     author = models.ForeignKey('Employee',
-                               on_delete=models.CASCADE)
+                               on_delete=models.CASCADE,
+                               related_name='messages')
+    sent_at = models.DateTimeField(default=timezone.now,
+                                   help_text="Sending time")
+    subject = models.CharField(max_length=200,
+                               blank=True,
+                               null=True)
+    text = models.TextField()
 
-    @staticmethod
-    def associate(message):
-        """
-        Associates message with projects and people
-        """
-        from_address = message.from_address
-        people = Employee.objects.filter(email__in=from_address)
-        for employee in people:
-            project = employee.projects.order_by('modified').last()
-            ProjectMessage.objects.update_or_create(
-                message=message,
-                defaults={
-                    "author": employee,
-                    "project": project
-                },
-
-            )
-
-    @property
-    def subject(self):
-        return self.message.subject
-
-    @property
-    def from_address(self):
-        return ",".join(self.message.from_address)
-
-    @property
-    def text(self):
-        return SafeText(
-            f"<pre>{self.message.text}</pre>"
-        )
+    gmail_message_id = models.CharField(max_length=50)
+    gmail_thread_id = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.subject
+        return str(self.subject)
 
 
 class BaseCompany(TimeStampedModel):
@@ -369,6 +339,10 @@ class BaseCompany(TimeStampedModel):
     def __str__(self):
         return self.name
 
+    @property
+    def domain(self):
+        return get_fld(self.url, fail_silently=True)
+
     class Meta:
         abstract = True
         verbose_name_plural = 'clients'
@@ -393,31 +367,6 @@ class Recruiter(BaseCompany):
 
 class ClientCompany(BaseCompany):
     pass
-
-
-@receiver(message_received)
-def on_mailbox_message(sender, message, **args):
-    if not message.project_messages.count():
-        ProjectMessage.associate(message)
-
-
-class Mailbox(django_mailbox.models.Mailbox):
-    class Meta:
-        proxy = True
-        verbose_name_plural = 'mailboxes'
-
-    def get_new_mail(self, condition=None):
-        """Connect to this transport and fetch new messages."""
-        new_mail = []
-        connection = self.get_connection()
-        if not connection:
-            return new_mail
-        for message in connection.get_message(condition):
-            message_id = message['message-id'][0:255]
-            if not django_mailbox.models.Message.objects.filter(message_id=message_id).exists():
-                msg = self.process_incoming_message(message)
-                new_mail.append(msg)
-        return new_mail
 
 
 class CV(TimeStampedModel):

@@ -1,8 +1,9 @@
-import invoke
 import functools
 import os
 import sys
+
 import dotenv
+import invoke
 
 dotenv.load_dotenv()
 
@@ -65,3 +66,10 @@ def sync_production(ctx, backup=True):
         f"aws s3 sync --acl public-read s3://{production.AWS_STORAGE_BUCKET_NAME} "
         f"s3://{production_local.AWS_STORAGE_BUCKET_NAME}"
     )
+
+
+@invoke.task
+@with_django
+def mail(context):
+    from crm.gmail_utils import sync
+    sync()

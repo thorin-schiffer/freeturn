@@ -1,10 +1,10 @@
+import uuid
 from datetime import timedelta
 
 import factory
 import wagtail_factories
 from django.contrib.auth import get_user_model
 from django.utils.timezone import get_current_timezone
-from django_mailbox.models import Message
 
 from crm import models
 from home.factories import ProjectPageFactory, TechnologyFactory
@@ -77,27 +77,12 @@ class ProjectFactory(factory.DjangoModelFactory):
             self.end_date = self.start_date + timedelta(days=90)
 
 
-class MailboxFactory(factory.DjangoModelFactory):
-    name = factory.Sequence(lambda n: f"mailbox {n}")
-    uri = factory.LazyAttribute(lambda x: f"imap+ssl://testusername:password@testserver")
-    from_email = factory.Faker('email')
-
-    class Meta:
-        model = models.Mailbox
-
-
-class MessageFactory(factory.DjangoModelFactory):
-    mailbox = factory.SubFactory(MailboxFactory)
-    subject = factory.Faker('sentence', nb_words=6, variable_nb_words=True)
-
-    class Meta:
-        model = Message
-
-
 class ProjectMessageFactory(factory.DjangoModelFactory):
     project = factory.SubFactory(ProjectFactory)
     author = factory.SubFactory(EmployeeFactory)
-    message = factory.SubFactory(MessageFactory)
+    text = factory.Faker('text')
+    gmail_message_id = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
+    gmail_thread_id = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
 
     class Meta:
         model = models.ProjectMessage

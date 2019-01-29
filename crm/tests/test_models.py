@@ -1,14 +1,15 @@
+import json
+import os
 import uuid
-from datetime import timedelta, date
+from datetime import date
+from datetime import timedelta
+from email.message import Message as EmailMessage
 
 import pytest
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from crm.models import ProjectMessage
-import django_mailbox.models
-from email.message import Message as EmailMessage
-
+from crm.gmail_utils import parse_message, associate, remove_quotation
 from home.models import Technology
 
 
@@ -40,14 +41,140 @@ def test_project_duration(project):
     assert project.duration is None
 
 
+@pytest.fixture
+def gmail_api_message():
+    from django.conf import settings
+    path = os.path.join(
+        settings.BASE_DIR, "crm", "tests", "data", "gmail_api_message.json"
+    )
+    with open(path, "r") as f:
+        return json.load(f)
+
+
+def test_parse_message(gmail_api_message):
+    result = parse_message(gmail_api_message)
+    assert result['sent_at'].date() == date(2019, 1, 26)
+    assert result['text'].strip() == "this is *test *email"
+    assert result['subject'] == "Test email"
+    assert result['from_address'] == "sergey@cheparev.com"
+    assert result['full_name'] == "Sergey Cheparev"
+    assert result['gmail_message_id'] == "1688b0102744bab7"
+    assert result['gmail_thread_id'] == "1688b00c9ec9d5e7"
+
+
+@pytest.fixture
+def quoted_email_text():
+    return """
+
+    Hi Mark,
+
+
+> this is inner quotation
+
+
+and it should remain in the text
+
+Best,
+Sergey
+
+
+> Hi Sergey,
+>
+> outer quotation should be removed
+>
+> Best,
+> Mark
+>
+    """
+
+
+def test_parse_message_remove_quotation(quoted_email_text):
+    result = remove_quotation(quoted_email_text)
+    assert "inner quotation" in result
+    assert "outer quotation" not in result
+
+
+@pytest.fixture
+def parsed_message(gmail_api_message):
+    return parse_message(gmail_api_message)
+
+
 @pytest.mark.django_db
-def test_associate(project,
-                   message,
-                   monkeypatch):
-    monkeypatch.setattr(message, 'from_header', f"Max Mustermann <{project.manager.email}>")
-    assert message not in project.messages.all()
-    ProjectMessage.associate(message)
-    assert message in project.messages.all()
+def test_associate_new(parsed_message):
+    message = associate(parsed_message)
+    assert message.sent_at == parsed_message['sent_at']
+    assert message.subject == parsed_message['subject']
+    assert message.project.name == parsed_message['subject']
+    assert message.project.manager.company.name == "Cheparev"
+    assert message.project.manager == message.author
+
+    assert message.author.email == parsed_message['from_address']
+    assert message.author.full_name == parsed_message['full_name']
+
+    assert message.text == parsed_message['text']
+    assert message.gmail_message_id == parsed_message['gmail_message_id']
+    assert message.gmail_thread_id == parsed_message['gmail_thread_id']
+
+
+@pytest.mark.django_db
+def test_associate_manager_exists(employee,
+                                  parsed_message):
+    parsed_message['from_address'] = employee.email
+    message = associate(parsed_message)
+    assert message.author == employee
+
+
+@pytest.mark.django_db
+def test_associate_company_exists(recruiter, parsed_message):
+    parsed_message['from_address'] = f"test@{recruiter.domain}"
+    message = associate(parsed_message)
+    assert message.project.manager.company == recruiter
+
+
+@pytest.mark.django_db
+def test_associate_project_messages_exist(project, project_message_factory, parsed_message):
+    existing_message = project_message_factory.create(project=project)
+    parsed_message['subject'] = existing_message.subject
+    parsed_message['gmail_thread_id'] = existing_message.gmail_thread_id
+    parsed_message['from_email'] = f"another_manager@{existing_message.project.manager.company.domain}"
+    message = associate(parsed_message)
+    assert message.project == existing_message.project
+    assert message.project.manager.company == existing_message.project.manager.company
+
+
+@pytest.mark.django_db
+def test_associate_project_exists_manager_match(project, parsed_message):
+    parsed_message['from_address'] = project.manager.email
+    message = associate(parsed_message)
+    assert message.project == project
+
+
+@pytest.mark.django_db
+def test_associate_project_not_exist_manager_exists(employee, parsed_message):
+    parsed_message['from_address'] = employee.email
+    assert employee.projects.count() == 0
+    message = associate(parsed_message)
+    assert message.project.manager == employee
+    assert message.project.name == parsed_message['subject']
+    assert message.project.original_description == parsed_message['text']
+    assert message.project.location == employee.company.location
+
+
+@pytest.mark.django_db
+def test_project_exists_inactive(project_factory, parsed_message):
+    inactive_project = project_factory.create(state='stopped')
+    parsed_message['from_address'] = inactive_project.manager.email
+    message = associate(parsed_message)
+    assert message.project != inactive_project
+    assert message.project.manager == inactive_project.manager
+
+
+@pytest.mark.django_db
+def test_message_already_processed(project_message, parsed_message):
+    parsed_message['gmail_message_id'] = project_message.gmail_message_id
+    parsed_message['gmail_thread_id'] = project_message.gmail_thread_id
+    message = associate(parsed_message)
+    assert message == project_message
 
 
 @pytest.fixture
@@ -56,24 +183,6 @@ def raw_email():
     message.set_payload("xxx")
     message['message-id'] = str(uuid.uuid4())
     return message
-
-
-@pytest.mark.django_db
-def test_non_repeat_get_mail(mailbox,
-                             monkeypatch,
-                             mocker,
-                             raw_email):
-    connection = mocker.MagicMock()
-    connection.get_message = lambda x: [raw_email]
-    mocker.patch('django_mailbox.models.Mailbox.get_connection', side_effect=lambda: connection)
-    result = mailbox.get_new_mail()[0]
-    assert result.message_id == raw_email['message-id']
-
-    assert django_mailbox.models.Message.objects.filter(message_id=raw_email['message-id']).count() == 1
-
-    # call again, no new messages should be created
-    mailbox.get_new_mail()
-    assert django_mailbox.models.Message.objects.filter(message_id=raw_email['message-id']).count() == 1
 
 
 @pytest.mark.django_db

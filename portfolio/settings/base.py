@@ -193,7 +193,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 ]
 from social_core.pipeline import DEFAULT_AUTH_PIPELINE
 
-SOCIAL_AUTH_PIPELINE = ("utils.social_for_authed_only",) + DEFAULT_AUTH_PIPELINE + ("crm.utils.ensure_mailbox",)
+SOCIAL_AUTH_PIPELINE = ("utils.social_for_authed_only",) + DEFAULT_AUTH_PIPELINE
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
     'access_type': 'offline'
 }
@@ -202,3 +202,4 @@ WKHTMLTOPDF_CMD_OPTIONS = {
     'quiet': True,
 }
 GOOGLE_ANALYTICS_PROPERTY_ID = getenv("GOOGLE_ANALYTICS_ID"),
+MAILBOX_LABEL = "CRM"

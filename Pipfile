@@ -26,7 +26,6 @@ django-fsm = "*"
 django-fsm-log = "*"
 pygments = "*"
 holidays = "*"
-django-mailbox = "*"
 python-social-auth = {version = "*",extras = ["django"]}
 social-auth-app-django = "*"
 lxml = "*"
@@ -40,6 +39,11 @@ python-dotenv = "*"
 django-redis = "*"
 wagtail-markdown = {editable = true,git = "https://github.com/eviltnan/wagtail-markdown.git",ref = "unblock-wagtail-version"}
 django-analytical = "*"
+google-api-python-client = "*"
+google-auth-httplib2 = "*"
+google-auth-oauthlib = "*"
+django-mailbox = "*"
+tld = "*"
 
 [dev-packages]
 django-livereload-server = "*"
