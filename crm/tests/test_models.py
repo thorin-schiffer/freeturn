@@ -85,8 +85,12 @@ def test_associate_new(parsed_message):
     assert message.gmail_thread_id == parsed_message['gmail_thread_id']
 
 
-def test_associate_manager_exists():
-    raise NotImplementedError()
+@pytest.mark.django_db
+def test_associate_manager_exists(employee,
+                                  parsed_message):
+    parsed_message['from_address'] = employee.email
+    message = ProjectMessage.associate(parsed_message)
+    assert message.author == employee
 
 
 def test_associate_company_exists():
