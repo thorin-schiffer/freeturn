@@ -69,7 +69,7 @@ def get_raw_messages(user):
 
     # INBOX means a message is not archived
     mail = service.users().messages().list(userId='me', labelIds=[label_id, "INBOX"]).execute()
-    message_ids = [message['id'] for message in mail['messages']]
+    message_ids = [message['id'] for message in mail.get('messages', [])]
     return [
         service.users().messages().get(userId='me',
                                        id=message_id, format='raw').execute()
