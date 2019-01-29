@@ -503,6 +503,5 @@ class CVGenerationSettings(BaseSetting):
         FieldPanel('default_languages_overview'),
         FieldPanel('default_rate_overview'),
         FieldPanel('default_working_permit'),
-        FieldPanel('default_rate_overview'),
         ImageChooserPanel('default_picture')
     ]
