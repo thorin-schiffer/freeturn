@@ -1,3 +1,4 @@
+import uuid
 from datetime import timedelta
 
 import factory
@@ -79,6 +80,9 @@ class ProjectFactory(factory.DjangoModelFactory):
 class ProjectMessageFactory(factory.DjangoModelFactory):
     project = factory.SubFactory(ProjectFactory)
     author = factory.SubFactory(EmployeeFactory)
+
+    gmail_message_id = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
+    gmail_thread_id = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
 
     class Meta:
         model = models.ProjectMessage

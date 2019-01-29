@@ -99,7 +99,19 @@ def test_associate_company_exists(recruiter, parsed_message):
     assert message.project.manager.company == recruiter
 
 
-def test_associate_project_exists():
+@pytest.mark.django_db
+def test_associate_project_messages_exist(project, project_message_factory, parsed_message):
+    existing_message = project_message_factory.create(project=project)
+    parsed_message['subject'] = existing_message.subject
+    parsed_message['gmail_thread_id'] = existing_message.gmail_thread_id
+    parsed_message['from_email'] = f"another_manager@{existing_message.project.manager.company.domain}"
+    message = associate(parsed_message)
+    assert message.project == existing_message.project
+    assert message.project.manager.company == existing_message.project.manager.company
+
+
+@pytest.mark.django_db
+def test_associate_project_exists_name_match(project, parsed_message):
     raise NotImplementedError()
 
 
