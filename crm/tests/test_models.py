@@ -111,12 +111,15 @@ def test_associate_project_messages_exist(project, project_message_factory, pars
 
 
 @pytest.mark.django_db
+def test_associate_project_exists_manager_match(project, parsed_message):
+    parsed_message['from_address'] = project.manager.email
+    message = associate(parsed_message)
+    assert message.project == project
+
+
+@pytest.mark.django_db
 def test_associate_project_exists_name_match(project, parsed_message):
     raise NotImplementedError()
-
-
-def test_associate_project_exists_name_not_match():
-    raise NotImplementedError("but thread id does")
 
 
 def test_project_exists_inactive():
