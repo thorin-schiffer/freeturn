@@ -128,8 +128,13 @@ def test_associate_project_not_exist_manager_exists(employee, parsed_message):
     assert message.project.location == employee.company.location
 
 
-def test_project_exists_inactive():
-    raise NotImplementedError("Project of this manager exists, but it's not active, new is to create")
+@pytest.mark.django_db
+def test_project_exists_inactive(project_factory, parsed_message):
+    inactive_project = project_factory.create(state='stopped')
+    parsed_message['from_address'] = inactive_project.manager.email
+    message = associate(parsed_message)
+    assert message.project != inactive_project
+    assert message.project.manager == inactive_project.manager
 
 
 def test_message_already_processed():
