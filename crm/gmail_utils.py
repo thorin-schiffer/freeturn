@@ -14,6 +14,17 @@ from crm.utils import Credentials
 logger = logging.getLogger('gmail_utils')
 
 
+def remove_quotation(text):
+    lines = text.splitlines()
+    outer_quotation_started = False
+    for i, line in enumerate(lines):
+        if line.startswith(">"):
+            if outer_quotation_started:
+                return "\n".join(lines[:i])
+            else:
+                outer_quotation_started = True
+
+
 def parse_message(message):
     msg_str = base64.urlsafe_b64decode(message['raw'].encode('ASCII'))
     mime_msg = email.message_from_bytes(msg_str)

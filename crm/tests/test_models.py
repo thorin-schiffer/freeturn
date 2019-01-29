@@ -8,7 +8,7 @@ import pytest
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from crm.gmail_utils import parse_message, associate
+from crm.gmail_utils import parse_message, associate, remove_quotation
 from home.models import Technology
 
 
@@ -57,9 +57,36 @@ def test_parse_message(gmail_api_message):
     assert result['gmail_thread_id'] == "1688b00c9ec9d5e7"
 
 
-def test_parse_message_remove_quotation():
-    raise NotImplementedError("text part should not save previos messages,"
-                              "quotation should only be cut off at the end of the text")
+@pytest.fixture
+def quoted_email_text():
+    return """
+
+    Hi Mark,
+
+
+> this is inner quotation
+
+
+and it should remain in the text
+
+Best,
+Sergey
+
+
+> Hi Sergey,
+>
+> outer quotation should be removed
+>
+> Best,
+> Mark
+>
+    """
+
+
+def test_parse_message_remove_quotation(quoted_email_text):
+    result = remove_quotation(quoted_email_text)
+    assert "inner quotation" in result
+    assert "outer quotation" not in result
 
 
 @pytest.fixture
