@@ -189,4 +189,4 @@ class MessageAdmin(ModelAdmin):
     list_filter = ['project', 'author']
     ordering = ['-created']
     inspect_view_enabled = True
-    inspect_view_fields = ['project', 'subject', 'from_address', 'text']
+    inspect_view_fields = ['project', 'subject', 'author', 'text']

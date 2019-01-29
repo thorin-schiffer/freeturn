@@ -1,4 +1,5 @@
 import json
+import os
 import uuid
 from datetime import date
 from datetime import timedelta
@@ -42,7 +43,11 @@ def test_project_duration(project):
 
 @pytest.fixture
 def gmail_api_message():
-    with open("data/gmail_api_message.json", "r") as f:
+    from django.conf import settings
+    path = os.path.join(
+        settings.BASE_DIR, "crm", "tests", "data", "gmail_api_message.json"
+    )
+    with open(path, "r") as f:
         return json.load(f)
 
 
