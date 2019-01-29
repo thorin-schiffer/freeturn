@@ -137,8 +137,12 @@ def test_project_exists_inactive(project_factory, parsed_message):
     assert message.project.manager == inactive_project.manager
 
 
-def test_message_already_processed():
-    raise NotImplementedError()
+@pytest.mark.django_db
+def test_message_already_processed(project_message, parsed_message):
+    parsed_message['gmail_message_id'] = project_message.gmail_message_id
+    parsed_message['gmail_thread_id'] = project_message.gmail_thread_id
+    message = associate(parsed_message)
+    assert message == project_message
 
 
 @pytest.fixture
