@@ -34,7 +34,7 @@ CACHES = {
         }
     }
 }
-
+DJANGO_REDIS_IGNORE_EXCEPTIONS = True
 try:
     from .local import *
 except ImportError:
