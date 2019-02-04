@@ -1,14 +1,12 @@
 {% load static wagtailuserbar %}
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
-{% load analytical %}
 {% load google_analytics_js %}
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    {% analytical_head_top %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -55,13 +53,11 @@
     {% block extra_css %}
     {# Override this in templates to add extra stylesheets #}
     {% endblock %}
-    {% analytical_head_bottom %}
     {% google_analytics_js %}
 </head>
 
 {% image page.background fill-1920x1080 as background %}
 <body class="{% block body_class %}{% endblock %}" style="padding-bottom: 100px; background: url('{{background.url}}') no-repeat center center fixed;">
-{% analytical_body_top %}
 
 
 <!-- Page Content -->
@@ -108,6 +104,5 @@
 {% block extra_js %}
 {# Override this in templates to add extra javascript #}
 {% endblock %}
-{% analytical_body_bottom %}
 </body>
 </html>
