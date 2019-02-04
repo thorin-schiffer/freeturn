@@ -26,30 +26,38 @@ def remove_quotation(text):
     return text
 
 
+def extract_text(email_message):
+    main_type = email_message.get_content_maintype()
+    if main_type == 'multipart':
+        for part in email_message.get_payload():
+            charset = part.get_content_charset()
+            if part.get_content_maintype() == 'text':
+                if part.get_content_subtype() == 'plain':
+                    return part.get_payload(decode=True).decode(charset, 'replace')
+            if part.get_content_maintype() == 'multipart':
+                return extract_text(part)
+    elif main_type == 'text':
+        charset = email_message.get_content_charset()
+        email_message.get_payload(decode=True).decode(charset, 'replace')
+    else:
+        logger.error(f"Unknown main mime type {main_type}")
+        return ""
+
+
 def parse_message(message):
     msg_str = base64.urlsafe_b64decode(message['raw'].encode('ASCII'))
-    mime_msg = email.message_from_bytes(msg_str)
-    from_address = mime_msg['from'][mime_msg['from'].index("<") + 1:-1]
-    full_name = mime_msg['from'].replace(f"<{from_address}>", "").strip()
+    email_message = email.message_from_bytes(msg_str)
+    from_address = email_message['from'][email_message['from'].index("<") + 1:-1]
+    full_name = email_message['from'].replace(f"<{from_address}>", "").strip()
     result = {
         "sent_at": datetime.utcfromtimestamp(int(message['internalDate']) / 1000).replace(tzinfo=pytz.utc),
-        "subject": mime_msg['subject'],
-        "from_address": mime_msg['from'][mime_msg['from'].index("<") + 1:-1],
+        "subject": email_message['subject'],
+        "from_address": from_address,
         "full_name": full_name,
         "gmail_thread_id": message['threadId'],
         "gmail_message_id": message['id'],
     }
-    main_type = mime_msg.get_content_maintype()
-    text = ""
-    if main_type == 'multipart':
-        for part in mime_msg.get_payload():
-            charset = part.get_content_charset()
-            if part.get_content_maintype() == 'text' and part.get_content_subtype() == 'plain':
-                text = part.get_payload(decode=True).decode(charset, 'replace')
-    elif main_type == 'text':
-        text = mime_msg.get_payload()
-    else:
-        logger.error(f"Unknown main mime type {main_type}")
+    text = extract_text(email_message)
     result['text'] = remove_quotation(text)
     return result
 
