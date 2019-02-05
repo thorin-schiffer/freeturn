@@ -1,7 +1,7 @@
 {% load wagtailmarkdown %}
 {% load wagtailimages_tags %}
 
-<table style="page-break-after: always;">
+<table {% if instance.include_portfolio %}style="page-break-after: always;" {% endif %}>
     <tbody>
     <tr>
         <td valign="top">

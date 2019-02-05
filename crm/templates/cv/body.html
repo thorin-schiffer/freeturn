@@ -11,16 +11,19 @@
         margin: 50px;
         font-size: 16px;
     };
+
     </style>
 </head>
 <body>
 {% include "cv/front_page.html" %}
 
 <!--Starting project descriptions-->
+{% if instance.include_portfolio %}
 {% with relevant_skills=instance.relevant_skills.all %}
 {% for page in project_pages %}
 {% include "cv/project_page.html" %}
 {% endfor %}
 {% endwith %}
+{% endif %}
 </body>
 </html>

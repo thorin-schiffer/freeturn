@@ -396,6 +396,10 @@ class CV(TimeStampedModel):
         related_name="applications_highlighted",
         blank=True
     )
+    include_portfolio = models.BooleanField(
+        default=True,
+        help_text="Include portfolio projects' description"
+    )
     relevant_skills = models.ManyToManyField(
         'home.Technology',
         help_text="Technologies to be included, "
@@ -439,8 +443,14 @@ class CV(TimeStampedModel):
         ),
     ]
     panels = [
-                 AutocompletePanel('relevant_project_pages', is_single=False, page_type='home.ProjectPage'),
-                 FieldPanel('relevant_skills', widget=AutoCompleteSelectMultipleWidget('technologies')),
+                 MultiFieldPanel([
+                     AutocompletePanel('relevant_project_pages', is_single=False,
+                                       page_type='home.ProjectPage'),
+                     FieldPanel('include_portfolio'),
+
+                 ]),
+                 FieldPanel('relevant_skills',
+                            widget=AutoCompleteSelectMultipleWidget('technologies')),
              ] + create_panels
 
     def set_relevant_skills_and_projects(self, limit=5):
