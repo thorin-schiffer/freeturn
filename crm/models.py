@@ -412,7 +412,7 @@ class CV(TimeStampedModel):
     )
     contact_details = MarkdownField()
     languages_overview = MarkdownField()
-    rate_overview = MarkdownField()
+    rate_overview = MarkdownField(blank=True, null=True)
     working_permit = MarkdownField()
 
     create_panels = [

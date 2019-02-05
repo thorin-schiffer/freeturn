@@ -51,8 +51,10 @@
 
         </td>
         <td valign="top">
+            {% if instance.rate_overview %}
             <h2> Pay rate</h2>
             {{ instance.rate_overview | markdown }}
+            {% endif %}
 
             <h2>Availability</h2>
             {{ instance.earliest_available | date:"F Y" }}
