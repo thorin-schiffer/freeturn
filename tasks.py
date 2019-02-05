@@ -54,14 +54,18 @@ def create_pages(context):
 
 
 @invoke.task
-def sync_production(ctx, backup=True):
-    from portfolio.settings import production, production_local
+def sync_production_db(ctx, backup=True):
     if backup:
         ctx.run("heroku pg:backups:capture")
     ctx.run("heroku pg:backups:download")
     database_url = os.environ['DATABASE_URL']
     ctx.run(f"pg_restore --verbose --clean --no-acl --no-owner --dbname={database_url} latest.dump")
     os.remove("latest.dump")
+
+
+@invoke.task
+def sync_production_s3(ctx):
+    from portfolio.settings import production, production_local
     ctx.run(
         f"aws s3 sync --acl public-read s3://{production.AWS_STORAGE_BUCKET_NAME} "
         f"s3://{production_local.AWS_STORAGE_BUCKET_NAME}"
