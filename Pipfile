@@ -66,6 +66,7 @@ flake8-tidy-imports = "*"
 pre-commit = "*"
 pytest-dotenv = "*"
 awscli = "*"
+django-debug-toolbar-template-timings = "*"
 
 [requires]
 python_version = "3.7.1"
