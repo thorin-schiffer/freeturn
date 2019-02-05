@@ -57,20 +57,20 @@
         </td>
         <td valign="top">
             {% if instance.rate_overview %}
-            <h2><i class="fa fa-credit-card"></i> Pay rate</h2>
+            <h3><i class="fa fa-credit-card"></i> Pay rate</h3>
             {{ instance.rate_overview | markdown }}
             {% endif %}
 
-            <h2><i class="fa fa-calendar"></i> Availability </h2>
+            <h3><i class="fa fa-calendar"></i> Availability </h3>
             {{ instance.earliest_available | date:"F Y" }}
 
-            <h2><i class="fa fa-user"></i> Contact</h2>
+            <h3><i class="fa fa-user"></i> Contact</h3>
             {{ instance.contact_details | markdown }}
 
-            <h2><i class="fa fa-globe"></i> Languages</h2>
+            <h3><i class="fa fa-globe"></i> Languages</h3>
             {{ instance.languages_overview | markdown }}
 
-            <h2><i class="fa fa-balance-scale"></i> Working permit</h2>
+            <h3><i class="fa fa-balance-scale"></i> Working permit</h3>
             {{ instance.working_permit | markdown }}
 
         </td>
