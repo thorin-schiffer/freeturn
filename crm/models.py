@@ -371,6 +371,8 @@ class ClientCompany(BaseCompany):
 
 class CV(TimeStampedModel):
     project = models.ForeignKey("Project",
+                                blank=True,
+                                null=True,
                                 on_delete=CASCADE,
                                 related_name="cvs")
     earliest_available = models.DateField(null=True, blank=True, default=timezone.now)

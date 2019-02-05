@@ -8,7 +8,9 @@
             <h1>{{ instance.full_name }}</h1>
             <h2>{{ instance.title }}</h2>
 
+            {% if instance.project %}
             Application for: {{ instance.project}}, strictly confidential
+            {% endif %}
 
             {{ instance.experience_overview | markdown }}
         </td>
