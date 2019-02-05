@@ -272,7 +272,7 @@ class Project(ProjectStateMixin, TimeStampedModel):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return str(self.company or self.recruiter)
+        return str(self.name or self.company or self.recruiter)
 
     class Meta:
         verbose_name_plural = "projects"
