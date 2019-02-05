@@ -4,8 +4,8 @@
 <table {% if instance.include_portfolio %}style="page-break-after: always;" {% endif %}>
     <tbody>
     <tr>
-        <td valign="top">
-            <h1>{{ instance.full_name }}</h1>
+        <td valign="top" style="padding-right: 20px">
+            <h1> {{ instance.full_name }}</h1>
             <h2>{{ instance.title }}</h2>
 
             {% if instance.project %}
@@ -13,9 +13,10 @@
             {% endif %}
 
             {{ instance.experience_overview | markdown }}
+            <hr>
         </td>
         <td width="30%">
-            {% image instance.picture fill-256x256-c80 class="img-fluid"%}
+            {% image instance.picture fill-200x200-c80 class="img-fluid"%}
         </td>
     </tr>
     {% with relevant_skills=instance.relevant_skills.all %}
@@ -24,25 +25,27 @@
             <h2>Recent projects</h2>
 
             {% for project in relevant_project_pages %}
-            <h3>{{project.title }}</h3>
+            <h3><i class="fa fa-chevron-right"></i> {{project.title }}</h3>
             <h4>
                 {{ project.start_date|date:"F Y" }} - {{ project.end_date|date:"F Y" }}
             </h4>
+
             <p>
+                <strong>{{project.position }}</strong>,
+                {{project.summary | safe}}
+            </p>
+            <p>
+                <i class="fa fa-cog"></i>
                 {% for technology in project.technologies.all %}
                 {% if technology in relevant_skills %}
                 <span class="label label-default">{{ technology }}</span>
                 {% endif %}
                 {% endfor %}
             </p>
-            <strong>{{project.position }}</strong>,
-            {{project.summary | safe}}
-
-            <br>
-            <hr>
             {% endfor %}
+            <hr>
 
-            <h2>Skills</h2>
+            <h2><i class="fa fa-cogs"></i> Skills</h2>
             {% for skill in skills %}
             {% if skill in relevant_skills %}
             <span class="label label-default">{{ skill }}</span>
@@ -54,20 +57,20 @@
         </td>
         <td valign="top">
             {% if instance.rate_overview %}
-            <h2> Pay rate</h2>
+            <h2><i class="fa fa-credit-card"></i> Pay rate</h2>
             {{ instance.rate_overview | markdown }}
             {% endif %}
 
-            <h2>Availability</h2>
+            <h2><i class="fa fa-calendar"></i> Availability </h2>
             {{ instance.earliest_available | date:"F Y" }}
 
-            <h2> Contact </h2>
+            <h2><i class="fa fa-user"></i> Contact</h2>
             {{ instance.contact_details | markdown }}
 
-            <h2> Languages </h2>
+            <h2><i class="fa fa-globe"></i> Languages</h2>
             {{ instance.languages_overview | markdown }}
 
-            <h2> Working permit</h2>
+            <h2><i class="fa fa-balance-scale"></i> Working permit</h2>
             {{ instance.working_permit | markdown }}
 
         </td>
@@ -76,7 +79,7 @@
 
     <tr>
         <td>
-            <h2> Education</h2>
+            <h2><i class="fa fa-graduation-cap"></i> Education</h2>
             {{ instance.education_overview | markdown }}
         </td>
     </tr>
