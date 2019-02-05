@@ -472,7 +472,7 @@ class CV(TimeStampedModel):
     def save(self, **kwargs):
         creating = self.pk is None
         super().save(**kwargs)
-        if creating:
+        if creating and self.project:
             self.set_relevant_skills_and_projects()
 
     def __str__(self):

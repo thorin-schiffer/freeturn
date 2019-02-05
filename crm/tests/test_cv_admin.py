@@ -32,3 +32,11 @@ def test_create(admin_app, admin_user, default_site, project, image):
 def test_inspect(admin_app, cv_with_relevant):
     url = reverse('crm_cv_modeladmin_inspect', kwargs={'instance_pk': cv_with_relevant.pk})
     admin_app.get(url)
+
+
+@pytest.mark.django_db
+def test_create_empty_project(admin_app, admin_user, default_site):
+    url = f"{reverse('crm_cv_modeladmin_create')}"
+    r = admin_app.get(url)
+    form = r.forms[1]
+    assert form.submit().status_code == 200
