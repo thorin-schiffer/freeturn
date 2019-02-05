@@ -113,6 +113,9 @@ class ProjectAdmin(ThumbnailMixin, ModelAdmin):
 
     list_display = ('admin_thumb', 'name', 'manager', 'location', 'state', 'last_activity')
     list_filter = ('location', 'state')
+    list_per_page = 10
+    list_select_related = ['manager', 'location']
+
     search_fields = ('project_page__title', 'manager__company__name', 'name', 'company__name')
     button_helper_class = ProjectButtonHelper
     url_helper_class = ProjectURLHelper
