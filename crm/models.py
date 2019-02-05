@@ -371,6 +371,8 @@ class ClientCompany(BaseCompany):
 
 class CV(TimeStampedModel):
     project = models.ForeignKey("Project",
+                                blank=True,
+                                null=True,
                                 on_delete=CASCADE,
                                 related_name="cvs")
     earliest_available = models.DateField(null=True, blank=True, default=timezone.now)
@@ -396,6 +398,10 @@ class CV(TimeStampedModel):
         related_name="applications_highlighted",
         blank=True
     )
+    include_portfolio = models.BooleanField(
+        default=True,
+        help_text="Include portfolio projects' description"
+    )
     relevant_skills = models.ManyToManyField(
         'home.Technology',
         help_text="Technologies to be included, "
@@ -408,7 +414,7 @@ class CV(TimeStampedModel):
     )
     contact_details = MarkdownField()
     languages_overview = MarkdownField()
-    rate_overview = MarkdownField()
+    rate_overview = MarkdownField(blank=True, null=True)
     working_permit = MarkdownField()
 
     create_panels = [
@@ -439,8 +445,14 @@ class CV(TimeStampedModel):
         ),
     ]
     panels = [
-                 AutocompletePanel('relevant_project_pages', is_single=False, page_type='home.ProjectPage'),
-                 FieldPanel('relevant_skills', widget=AutoCompleteSelectMultipleWidget('technologies')),
+                 MultiFieldPanel([
+                     AutocompletePanel('relevant_project_pages', is_single=False,
+                                       page_type='home.ProjectPage'),
+                     FieldPanel('include_portfolio'),
+
+                 ]),
+                 FieldPanel('relevant_skills',
+                            widget=AutoCompleteSelectMultipleWidget('technologies')),
              ] + create_panels
 
     def set_relevant_skills_and_projects(self, limit=5):

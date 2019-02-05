@@ -65,6 +65,8 @@ class CVAdmin(ThumbnailMixin, ModelAdmin):
     create_view_class = CreateCVView
     list_display = ['admin_thumb', 'project', 'created']
     list_filter = ['project', 'created']
+    list_per_page = 10
+    list_select_related = ['project']
     ordering = ['-created']
     inspect_view_enabled = True
     inspect_view_class = CVInspectView
