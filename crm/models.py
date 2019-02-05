@@ -380,7 +380,7 @@ class CV(TimeStampedModel):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text="Picture to use, default is the one used on home page"
+        help_text="Picture to use"
     )
 
     full_name = models.CharField(max_length=200,
