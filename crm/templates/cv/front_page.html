@@ -25,12 +25,14 @@
             <h3>{{project.title }}</h3>
             <h4>
                 {{ project.start_date|date:"F Y" }} - {{ project.end_date|date:"F Y" }}
+            </h4>
+            <p>
                 {% for technology in project.technologies.all %}
                 {% if technology in relevant_skills %}
                 <span class="label label-default">{{ technology }}</span>
                 {% endif %}
                 {% endfor %}
-            </h4>
+            </p>
             <strong>{{project.position }}</strong>,
             {{project.summary | safe}}
 
