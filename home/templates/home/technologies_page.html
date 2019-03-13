@@ -18,8 +18,8 @@
 
             <div class="card h-100 bg-secondary text-white technology-item">
                 <a href="{% pageurl portfolio %}?technology={{technology}}">
-                    {% if technology.info.logo %}
-                        {% image technology.info.logo fill-100x100-c100 class="mx-auto d-block technology-logo" style="background:white;"%}
+                    {% if technology.logo %}
+                        {% image technology.logo fill-100x100-c100 class="mx-auto d-block technology-logo" style="background:white;"%}
                     {% else %}
                         <img height="100" width="100" src="{% static 'img/default_technology.png' %}" class="mx-auto d-block technology-logo">
                     {% endif %}
