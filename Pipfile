@@ -44,6 +44,8 @@ google-auth-httplib2 = "*"
 google-auth-oauthlib = "*"
 django-mailbox = "*"
 tld = "*"
+pyyaml = ">=4.2b1"
+django = ">=2.1.6"
 
 [dev-packages]
 django-livereload-server = "*"
