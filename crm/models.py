@@ -12,7 +12,7 @@ from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
 from phonenumber_field.modelfields import PhoneNumberField
 from tld import get_fld
-from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPanel, PageChooserPanel
+from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPanel, PageChooserPanel, StreamFieldPanel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail.contrib.table_block.blocks import TableBlock
@@ -577,7 +577,7 @@ class Invoice(TimeStampedModel):
     receiver_vat_id = models.CharField(max_length=100, help_text="VAT ID of the receiver (you)")
     sender_vat_id = models.CharField(max_length=100, help_text="VAT ID of the sender (client)")
 
-    issued_date = models.DateField(auto_now=True)
+    issued_date = models.DateField()
     delivery_date = models.DateField()
 
     tax_id = models.CharField(max_length=100, help_text="Your local tax id")
@@ -585,9 +585,10 @@ class Invoice(TimeStampedModel):
     bank_account = MarkdownField(help_text="Payment bank account details")
     contact_data = MarkdownField()
 
-    title = MarkdownField()
+    title = models.CharField(max_length=200,
+                             default="Python development")
 
-    table = StreamField([
+    positions = StreamField([
         ('positions', TableBlock(table_options=invoice_raw_options))
     ])
     logo = models.ForeignKey(
@@ -598,6 +599,34 @@ class Invoice(TimeStampedModel):
         related_name='+',
         help_text="Picture to use"
     )
+    panels = [
+        FieldPanel('project'),
+        FieldRowPanel([
+            FieldPanel('title'),
+            FieldPanel('invoice_number'),
+        ]),
+        FieldRowPanel([
+            MultiFieldPanel([
+                FieldPanel('payment_address'),
+            ]),
+            MultiFieldPanel([
+                FieldPanel('issued_date'),
+                FieldPanel('delivery_date'),
+                FieldPanel('payment_period'),
+                FieldPanel('tax_id'),
+                FieldPanel('receiver_vat_id'),
+                FieldPanel('sender_vat_id'),
+                FieldPanel('language'),
+                FieldPanel('unit'),
+                FieldPanel('vat'),
+            ]),
+        ]),
+        StreamFieldPanel('positions'),
+        FieldRowPanel([
+            FieldPanel('bank_account'),
+            FieldPanel('contact_data')
+        ]),
+    ]
 
 
 @register_setting(icon='icon icon-fa-id-card')
