@@ -5,7 +5,8 @@ name = "pypi"
 
 [packages]
 wagtail = "<2.5,>=2.4"
-Django = "<2.2,>=2.1"
+django = ">=2.1.6"
+
 django-turbolinks = "*"
 gunicorn = "*"
 django-toolbelt = "*"
@@ -45,7 +46,6 @@ google-auth-oauthlib = "*"
 django-mailbox = "*"
 tld = "*"
 pyyaml = ">=4.2b1"
-django = ">=2.1.6"
 
 [dev-packages]
 django-livereload-server = "*"
