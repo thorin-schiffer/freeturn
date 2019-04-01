@@ -535,6 +535,11 @@ invoice_raw_options = {
     'autoColumnSize': False,
 }
 
+INVOICE_LANGUAGE_CHOICES = (
+    ("en", "English"),
+    ("de", "German")
+)
+
 
 class Invoice(TimeStampedModel):
     project = models.ForeignKey("Project",
@@ -543,10 +548,7 @@ class Invoice(TimeStampedModel):
 
     language = models.CharField(
         default="en",
-        choices=(
-            ("en", "English"),
-            ("de", "German")
-        ),
+        choices=INVOICE_LANGUAGE_CHOICES,
         max_length=4
     )
 
@@ -588,3 +590,70 @@ class Invoice(TimeStampedModel):
     table = StreamField([
         ('positions', TableBlock(table_options=invoice_raw_options))
     ])
+    logo = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Picture to use"
+    )
+
+
+@register_setting(icon='icon icon-fa-id-card')
+class InvoiceGenerationSettings(BaseSetting):
+    default_title = models.CharField(
+        max_length=255, help_text='Default title to use',
+        default="Freelance python developer")
+    default_language = models.CharField(
+        default="en",
+        choices=INVOICE_LANGUAGE_CHOICES,
+        max_length=4
+    )
+    default_unit = models.CharField(
+        max_length=200,
+        default="hour",
+        help_text="Work unit"
+    )
+    default_vat = models.FloatField(
+        default=19,
+        help_text="VAT in %"
+    )
+
+    default_payment_period = models.PositiveIntegerField(
+        default=14,
+        help_text="Amount of days for this invoice to be payed"
+    )
+
+    default_payment_address = MarkdownField()
+
+    default_receiver_vat_id = models.CharField(max_length=100, help_text="VAT ID of the receiver (you)")
+    default_sender_vat_id = models.CharField(max_length=100, help_text="VAT ID of the sender (client)")
+
+    default_tax_id = models.CharField(max_length=100, help_text="Your local tax id")
+
+    default_bank_account = MarkdownField(help_text="Payment bank account details")
+    default_contact_data = MarkdownField()
+
+    default_logo = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    panels = [
+        FieldPanel('default_title'),
+        FieldPanel('default_language'),
+        FieldPanel('default_unit'),
+        FieldPanel('default_vat'),
+        FieldPanel('default_payment_period'),
+        FieldPanel('default_payment_address'),
+        FieldPanel('default_receiver_vat_id'),
+        FieldPanel('default_sender_vat_id'),
+        FieldPanel('default_tax_id'),
+        FieldPanel('default_bank_account'),
+        FieldPanel('default_contact_data'),
+        ImageChooserPanel('default_logo')
+    ]
