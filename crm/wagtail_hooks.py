@@ -8,6 +8,7 @@ from wagtail.core import hooks
 
 from crm.models import Recruiter, City, Channel, Employee, ClientCompany
 from crm.wagtail_admin.cv import CVAdmin
+from crm.wagtail_admin.invoice import InvoiceAdmin
 from crm.wagtail_admin.project import ProjectAdmin, ProjectSearchArea, MessageAdmin
 
 
@@ -66,7 +67,8 @@ class CRMGroup(ModelAdminGroup):
     menu_order = 200
     items = (
         ProjectAdmin, CVAdmin, EmployeeAdmin, RecruiterAdmin,
-        CityAdmin, ChannelAdmin, ClientCompanyAdmin, MessageAdmin
+        CityAdmin, ChannelAdmin, ClientCompanyAdmin, MessageAdmin,
+        InvoiceAdmin
     )
 
 
