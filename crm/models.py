@@ -15,7 +15,8 @@ from tld import get_fld
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPanel, PageChooserPanel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
-from wagtail.core.fields import RichTextField
+from wagtail.contrib.table_block.blocks import TableBlock
+from wagtail.core.fields import RichTextField, StreamField
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 from wagtailmarkdown.fields import MarkdownField
@@ -517,3 +518,73 @@ class CVGenerationSettings(BaseSetting):
         FieldPanel('default_working_permit'),
         ImageChooserPanel('default_picture')
     ]
+
+
+invoice_raw_options = {
+    'minSpareRows': 0,
+    'startRows': 6,
+    'startCols': 4,
+    'colHeaders': False,
+    'rowHeaders': False,
+    'contextMenu': True,
+    'editor': 'text',
+    'stretchH': 'all',
+    'height': 216,
+    'language': 'en',
+    'renderer': 'text',
+    'autoColumnSize': False,
+}
+
+
+class Invoice(TimeStampedModel):
+    project = models.ForeignKey("Project",
+                                on_delete=CASCADE,
+                                related_name="invoices")
+
+    language = models.CharField(
+        default="en",
+        choices=(
+            ("en", "English"),
+            ("de", "German")
+        ),
+        max_length=4
+    )
+
+    unit = models.CharField(
+        max_length=200,
+        default="hour",
+        help_text="Work unit"
+    )
+
+    vat = models.FloatField(
+        default=19,
+        help_text="VAT in %"
+    )
+
+    invoice_number = models.CharField(
+        max_length=20
+    )
+
+    payment_period = models.PositiveIntegerField(
+        default=14,
+        help_text="Amount of days for this invoice to be payed"
+    )
+
+    payment_address = MarkdownField()
+
+    receiver_vat_id = models.CharField(max_length=100, help_text="VAT ID of the receiver (you)")
+    sender_vat_id = models.CharField(max_length=100, help_text="VAT ID of the sender (client)")
+
+    issued_date = models.DateField(auto_now=True)
+    delivery_date = models.DateField()
+
+    tax_id = models.CharField(max_length=100, help_text="Your local tax id")
+
+    bank_account = MarkdownField(help_text="Payment bank account details")
+    contact_data = MarkdownField()
+
+    title = MarkdownField()
+
+    table = StreamField([
+        ('positions', TableBlock(table_options=invoice_raw_options))
+    ])
