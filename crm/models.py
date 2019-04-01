@@ -654,8 +654,6 @@ class InvoiceGenerationSettings(BaseSetting):
         help_text="Amount of days for this invoice to be payed"
     )
 
-    default_payment_address = MarkdownField()
-
     default_receiver_vat_id = models.CharField(max_length=100, help_text="VAT ID of the receiver (you)")
     default_sender_vat_id = models.CharField(max_length=100, help_text="VAT ID of the sender (client)")
 
@@ -678,7 +676,6 @@ class InvoiceGenerationSettings(BaseSetting):
         FieldPanel('default_unit'),
         FieldPanel('default_vat'),
         FieldPanel('default_payment_period'),
-        FieldPanel('default_payment_address'),
         FieldPanel('default_receiver_vat_id'),
         FieldPanel('default_sender_vat_id'),
         FieldPanel('default_tax_id'),
