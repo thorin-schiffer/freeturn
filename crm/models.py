@@ -655,7 +655,6 @@ class InvoiceGenerationSettings(BaseSetting):
     )
 
     default_receiver_vat_id = models.CharField(max_length=100, help_text="VAT ID of the receiver (you)")
-    default_sender_vat_id = models.CharField(max_length=100, help_text="VAT ID of the sender (client)")
 
     default_tax_id = models.CharField(max_length=100, help_text="Your local tax id")
 
@@ -677,7 +676,6 @@ class InvoiceGenerationSettings(BaseSetting):
         FieldPanel('default_vat'),
         FieldPanel('default_payment_period'),
         FieldPanel('default_receiver_vat_id'),
-        FieldPanel('default_sender_vat_id'),
         FieldPanel('default_tax_id'),
         FieldPanel('default_bank_account'),
         FieldPanel('default_contact_data'),
