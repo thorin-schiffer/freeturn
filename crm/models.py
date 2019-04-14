@@ -610,6 +610,7 @@ class Invoice(TimeStampedModel):
                 FieldPanel('payment_address'),
             ]),
             MultiFieldPanel([
+                ImageChooserPanel('logo'),
                 FieldPanel('issued_date'),
                 FieldPanel('delivery_date'),
                 FieldPanel('payment_period'),
