@@ -115,7 +115,11 @@ class Project(ProjectStateMixin, TimeStampedModel):
                                 null=True,
                                 blank=True,
                                 related_name='projects')
-
+    company_recruiter = models.ForeignKey('Recruiter',
+                                          on_delete=models.SET_NULL,
+                                          null=True,
+                                          blank=True,
+                                          related_name='projects')
     manager = models.ForeignKey('Employee',
                                 on_delete=models.SET_NULL,
                                 null=True,
