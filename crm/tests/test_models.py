@@ -233,3 +233,17 @@ def test_auto_project_name(project_factory):
     assert project_without_company.name == str(project_without_company.company)
     project_without_company = project_factory.create(company=None)
     assert project_without_company.name == str(project_without_company.company)
+
+
+@pytest.mark.django_db
+def test_invoice_copy_company_params(invoice):
+    assert invoice.project.manager.company.payment_address
+    assert invoice.project
+    invoice.payment_address = ""
+    invoice.save()
+    assert invoice.payment_address == invoice.project.manager.company.payment_address
+
+    invoice.payment_address = ""
+    invoice.project.manager = None
+    invoice.save()
+    assert invoice.payment_address == invoice.project.company.payment_address

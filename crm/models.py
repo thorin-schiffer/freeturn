@@ -611,6 +611,15 @@ class Invoice(TimeStampedModel):
         ]),
     ]
 
+    def save(self, **kwargs):
+        if not self.payment_address and self.project:
+            if self.project.manager:
+                payment_address = self.project.manager.company.payment_address
+            else:
+                payment_address = self.project.company.payment_address
+            self.payment_address = payment_address
+        super().save(**kwargs)
+
 
 @register_setting(icon='icon icon-fa-id-card')
 class InvoiceGenerationSettings(BaseSetting):
