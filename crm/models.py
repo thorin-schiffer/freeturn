@@ -301,7 +301,7 @@ class ProjectMessage(TimeStampedModel):
         return str(self.subject)
 
 
-class BaseCompany(TimeStampedModel):
+class Recruiter(TimeStampedModel):
     name = models.CharField(max_length=200,
                             unique=True)
     location = models.ForeignKey('crm.City',
@@ -318,7 +318,13 @@ class BaseCompany(TimeStampedModel):
     notes = MarkdownField(default="", blank=True)
     logo = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL,
                              null=True, blank=True)
-
+    default_daily_rate = models.DecimalField(
+        decimal_places=2,
+        max_digits=6,
+        null=True,
+        blank=True,
+        default=settings.DEFAULT_DAILY_RATE
+    )
     panels = [
         FieldRowPanel([
             MultiFieldPanel([
@@ -333,7 +339,8 @@ class BaseCompany(TimeStampedModel):
                 ]
             )
         ]),
-        FieldRowPanel([FieldPanel('notes')])
+        FieldRowPanel([FieldPanel('notes')]),
+        FieldPanel('default_daily_rate')
     ]
 
     def __str__(self):
@@ -344,25 +351,8 @@ class BaseCompany(TimeStampedModel):
         return get_fld(self.url, fail_silently=True)
 
     class Meta:
-        abstract = True
-        verbose_name_plural = 'clients'
-        verbose_name = 'client'
-
-
-class Recruiter(BaseCompany):
-    default_daily_rate = models.DecimalField(
-        decimal_places=2,
-        max_digits=6,
-        null=True,
-        blank=True,
-        default=settings.DEFAULT_DAILY_RATE
-    )
-    panels = BaseCompany.panels + [
-        FieldPanel('default_daily_rate')
-    ]
-
-    class Meta:
-        verbose_name_plural = 'recruiters'
+        verbose_name_plural = 'companies'
+        verbose_name = 'company'
 
 
 class CV(TimeStampedModel):
