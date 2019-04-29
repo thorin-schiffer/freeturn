@@ -1,3 +1,4 @@
+from django.utils import timezone
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import CreateView
 
@@ -18,7 +19,9 @@ class CreateInvoiceView(CreateView):
             "tax_id": settings.default_tax_id,
             "bank_account": settings.default_bank_account,
             "contact_data": settings.default_contact_data,
-            "logo": settings.default_logo
+            "logo": settings.default_logo,
+            "issued_date": timezone.now().date(),
+            "delivery_date": timezone.now().date(),
         }
 
 
