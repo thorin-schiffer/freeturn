@@ -319,6 +319,8 @@ class Company(TimeStampedModel):
         blank=True,
         default=settings.DEFAULT_DAILY_RATE
     )
+    payment_address = MarkdownField(null=True, blank=True)
+
     panels = [
         FieldRowPanel([
             MultiFieldPanel([
@@ -334,7 +336,8 @@ class Company(TimeStampedModel):
             )
         ]),
         FieldRowPanel([FieldPanel('notes')]),
-        FieldPanel('default_daily_rate')
+        FieldPanel('default_daily_rate'),
+        FieldPanel('payment_address')
     ]
 
     def __str__(self):

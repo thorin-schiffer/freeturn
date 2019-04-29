@@ -31,6 +31,7 @@ class CompanyFactory(factory.DjangoModelFactory):
     channel = factory.SubFactory(ChannelFactory)
     url = factory.Faker('uri')
     logo = factory.SubFactory(wagtail_factories.ImageFactory)
+    payment_address = factory.Faker('address')
 
     class Meta:
         model = models.Company
