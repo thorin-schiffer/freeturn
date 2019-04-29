@@ -41,11 +41,6 @@ class RecruiterFactory(BaseCompanyFactory):
         model = models.Recruiter
 
 
-class ClientCompanyFactory(BaseCompanyFactory):
-    class Meta:
-        model = models.ClientCompany
-
-
 class EmployeeFactory(factory.DjangoModelFactory):
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')
@@ -59,7 +54,7 @@ class EmployeeFactory(factory.DjangoModelFactory):
 
 
 class ProjectFactory(factory.DjangoModelFactory):
-    company = factory.SubFactory(ClientCompanyFactory)
+    company = factory.SubFactory(RecruiterFactory)
     manager = factory.SubFactory(EmployeeFactory)
     location = factory.SubFactory(CityFactory)
     original_description = factory.Faker('paragraphs')

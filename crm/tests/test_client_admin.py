@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 
-from crm.models import ClientCompany
+from crm.models import Recruiter
 from utils import result_pks, required_inputs
 from faker import Faker
 
@@ -44,7 +44,7 @@ def test_add(admin_app,
     form['notes'] = fake.text()
 
     r = form.submit().follow()
-    assert ClientCompany.objects.filter(name=name).exists()
+    assert Recruiter.objects.filter(name=name).exists()
 
 
 @pytest.mark.django_db
@@ -56,7 +56,7 @@ def test_delete(admin_app,
     assert form.action == url
 
     form.submit()
-    assert not ClientCompany.objects.filter(pk=client_company.pk).exists()
+    assert not Recruiter.objects.filter(pk=client_company.pk).exists()
 
 
 @pytest.mark.django_db

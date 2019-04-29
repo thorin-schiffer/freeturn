@@ -6,7 +6,7 @@ from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
 from wagtail.core import hooks
 
-from crm.models import Recruiter, City, Channel, Employee, ClientCompany
+from crm.models import Recruiter, City, Channel, Employee
 from crm.wagtail_admin.cv import CVAdmin
 from crm.wagtail_admin.invoice import InvoiceAdmin
 from crm.wagtail_admin.project import ProjectAdmin, ProjectSearchArea, MessageAdmin
@@ -51,23 +51,13 @@ class RecruiterAdmin(ThumbnailMixin, ModelAdmin):
     thumb_default = "/static/img/default_recruiter.png"
 
 
-class ClientCompanyAdmin(ModelAdmin):
-    model = ClientCompany
-    menu_label = 'Clients'
-    menu_icon = 'fa-user-circle'
-    list_display = ('name', 'location', 'channel')
-    list_filter = ('location', 'channel',)
-    search_fields = ('name',)
-    inspect_view_enabled = True
-
-
 class CRMGroup(ModelAdminGroup):
     menu_label = "CRM"
     menu_icon = "fa-briefcase"
     menu_order = 200
     items = (
         ProjectAdmin, CVAdmin, EmployeeAdmin, RecruiterAdmin,
-        CityAdmin, ChannelAdmin, ClientCompanyAdmin, MessageAdmin,
+        CityAdmin, ChannelAdmin, MessageAdmin,
         InvoiceAdmin
     )
 

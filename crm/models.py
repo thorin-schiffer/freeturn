@@ -365,10 +365,6 @@ class Recruiter(BaseCompany):
         verbose_name_plural = 'recruiters'
 
 
-class ClientCompany(BaseCompany):
-    pass
-
-
 class CV(TimeStampedModel):
     project = models.ForeignKey("Project",
                                 blank=True,
