@@ -55,7 +55,7 @@ class Employee(TimeStampedModel):
 
     email = models.EmailField()
 
-    company = models.ForeignKey('Recruiter',
+    company = models.ForeignKey('Company',
                                 on_delete=models.CASCADE)
 
     picture = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL,
@@ -72,7 +72,7 @@ class Employee(TimeStampedModel):
                     FieldPanel('email'),
                 ]),
                 MultiFieldPanel([
-                    FieldPanel('company', widget=AutoCompleteSelectWidget('recruiters')),
+                    FieldPanel('company', widget=AutoCompleteSelectWidget('companies')),
                     ImageChooserPanel('picture'),
                 ]),
             ]
@@ -110,7 +110,7 @@ class Channel(models.Model):
 class Project(ProjectStateMixin, TimeStampedModel):
     name = models.CharField(max_length=120,
                             blank=True, null=True)
-    company = models.ForeignKey('Recruiter',
+    company = models.ForeignKey('Company',
                                 on_delete=models.SET_NULL,
                                 null=True,
                                 blank=True,
@@ -166,10 +166,6 @@ class Project(ProjectStateMixin, TimeStampedModel):
         FieldPanel('notes'),
         PageChooserPanel('project_page')
     ]
-
-    @property
-    def recruiter(self):
-        return self.manager.company if self.manager else None
 
     @property
     def duration(self):
@@ -251,9 +247,7 @@ class Project(ProjectStateMixin, TimeStampedModel):
 
     @property
     def logo(self):
-        company_logo = self.company.logo if self.company else None
-        recruiter_logo = self.recruiter.logo if self.recruiter else None
-        return company_logo or recruiter_logo
+        return self.company.logo if self.company else None
 
     def clean(self):
         if self.start_date and self.end_date and self.start_date >= self.end_date:
@@ -265,14 +259,14 @@ class Project(ProjectStateMixin, TimeStampedModel):
             )
 
     def save(self, *args, **kwargs):
-        if not self.daily_rate and self.recruiter:
-            self.daily_rate = self.recruiter.default_daily_rate
+        if not self.daily_rate and self.company:
+            self.daily_rate = self.company.default_daily_rate
         if not self.name:
-            self.name = str(self.company or self.recruiter)
+            self.name = str(self.company)
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return str(self.name or self.company or self.recruiter)
+        return str(self.name or self.company)
 
     class Meta:
         verbose_name_plural = "projects"
@@ -301,7 +295,7 @@ class ProjectMessage(TimeStampedModel):
         return str(self.subject)
 
 
-class Recruiter(TimeStampedModel):
+class Company(TimeStampedModel):
     name = models.CharField(max_length=200,
                             unique=True)
     location = models.ForeignKey('crm.City',

@@ -25,7 +25,7 @@ class ChannelFactory(factory.DjangoModelFactory):
         model = models.Channel
 
 
-class BaseCompanyFactory(factory.DjangoModelFactory):
+class CompanyFactory(factory.DjangoModelFactory):
     name = factory.Faker('company')
     location = factory.SubFactory(CityFactory)
     channel = factory.SubFactory(ChannelFactory)
@@ -33,12 +33,7 @@ class BaseCompanyFactory(factory.DjangoModelFactory):
     logo = factory.SubFactory(wagtail_factories.ImageFactory)
 
     class Meta:
-        abstract = True
-
-
-class RecruiterFactory(BaseCompanyFactory):
-    class Meta:
-        model = models.Recruiter
+        model = models.Company
 
 
 class EmployeeFactory(factory.DjangoModelFactory):
@@ -46,7 +41,7 @@ class EmployeeFactory(factory.DjangoModelFactory):
     last_name = factory.Faker('last_name')
     telephone = factory.Faker('phone_number')
 
-    company = factory.SubFactory(RecruiterFactory)
+    company = factory.SubFactory(CompanyFactory)
     email = factory.Faker('email')
 
     class Meta:
@@ -54,7 +49,7 @@ class EmployeeFactory(factory.DjangoModelFactory):
 
 
 class ProjectFactory(factory.DjangoModelFactory):
-    company = factory.SubFactory(RecruiterFactory)
+    company = factory.SubFactory(CompanyFactory)
     manager = factory.SubFactory(EmployeeFactory)
     location = factory.SubFactory(CityFactory)
     original_description = factory.Faker('paragraphs')

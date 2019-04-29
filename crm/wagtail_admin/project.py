@@ -122,7 +122,7 @@ class ProjectAdmin(ThumbnailMixin, ModelAdmin):
     ordering = ('-modified',)
     inspect_view_enabled = True
     inspect_view_fields = [
-        'state', 'recruiter', 'company', 'location',
+        'state', 'company', 'location',
         'original_description', 'original_url', 'notes',
         'start_date', 'end_date', 'duration', 'daily_rate', 'working_days',
         'budget', 'vat', 'invoice_amount', 'income_tax', 'nett_income',

@@ -125,10 +125,10 @@ def test_associate_manager_exists(employee,
 
 
 @pytest.mark.django_db
-def test_associate_company_exists(recruiter, parsed_message):
-    parsed_message['from_address'] = f"test@{recruiter.domain}"
+def test_associate_company_exists(company, parsed_message):
+    parsed_message['from_address'] = f"test@{company.domain}"
     message = associate(parsed_message)
-    assert message.project.manager.company == recruiter
+    assert message.project.manager.company == company
 
 
 @pytest.mark.django_db
@@ -216,18 +216,15 @@ def test_cv_set_relevant_projects(cv, project_pages, mocker):
 
 @pytest.mark.django_db
 def test_project_logo(project):
-    assert project.company.logo is not None
-    assert project.recruiter.logo is not None
-
     assert project.company is not None
+    assert project.company.logo is not None
     assert project.logo is project.company.logo
 
     project.company.logo = None
-    assert project.logo is project.recruiter.logo
+    assert project.logo is project.company.logo is None
 
     project.company = None
-    assert project.recruiter is not None
-    assert project.logo is project.recruiter.logo
+    assert project.logo is None
 
 
 @pytest.mark.django_db
@@ -235,4 +232,4 @@ def test_auto_project_name(project_factory):
     project_without_company = project_factory.create()
     assert project_without_company.name == str(project_without_company.company)
     project_without_company = project_factory.create(company=None)
-    assert project_without_company.name == str(project_without_company.recruiter)
+    assert project_without_company.name == str(project_without_company.company)

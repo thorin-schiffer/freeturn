@@ -1,11 +1,11 @@
 from ajax_select import register, LookupChannel
 
-from crm.models import Recruiter
+from crm.models import Company
 
 
-@register('recruiters')
-class RecruiterLookup(LookupChannel):
-    model = Recruiter
+@register('companies')
+class CompanyLookup(LookupChannel):
+    model = Company
 
     def get_query(self, q, request):
         return self.model.objects.filter(name__icontains=q)
