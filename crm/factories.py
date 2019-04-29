@@ -119,3 +119,17 @@ class CVWithRelevantFactory(CVFactory):
         if extracted:
             raise NotImplementedError()
         self.relevant_project_pages.set([ProjectPageFactory()])
+
+
+class InvoiceFactory(factory.DjangoModelFactory):
+    project = factory.SubFactory(ProjectFactory)
+    receiver_vat_id = factory.Sequence(lambda n: f"VAT-00000{n}")
+    issued_date = factory.Faker('past_datetime')
+    delivery_date = factory.Faker('past_datetime')
+    tax_id = factory.Sequence(lambda n: f"TAX-00000{n}")
+    bank_account = factory.Faker('iban')
+    contact_data = factory.Faker('email')
+    logo = factory.SubFactory(wagtail_factories.ImageFactory)
+
+    class Meta:
+        model = models.Invoice
