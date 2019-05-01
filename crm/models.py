@@ -596,18 +596,18 @@ class Invoice(TimeStampedModel):
         FieldRowPanel([
             MultiFieldPanel([
                 FieldPanel('payment_address'),
-            ]),
-            MultiFieldPanel([
-                ImageChooserPanel('logo'),
                 FieldPanel('issued_date'),
                 FieldPanel('delivery_date'),
                 FieldPanel('payment_period'),
-                FieldPanel('tax_id'),
-                FieldPanel('receiver_vat_id'),
-                FieldPanel('sender_vat_id'),
+            ]),
+            MultiFieldPanel([
+                ImageChooserPanel('logo'),
                 FieldPanel('language'),
                 FieldPanel('unit'),
                 FieldPanel('vat'),
+                FieldPanel('tax_id'),
+                FieldPanel('receiver_vat_id'),
+                FieldPanel('sender_vat_id'),
             ]),
         ]),
         StreamFieldPanel('positions'),
