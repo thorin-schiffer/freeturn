@@ -338,7 +338,11 @@ class Company(TimeStampedModel):
         ]),
         FieldRowPanel([FieldPanel('notes')]),
         FieldPanel('default_daily_rate'),
-        FieldPanel('payment_address')
+        FieldRowPanel([
+            FieldPanel('payment_address'),
+            FieldPanel('vat_id'),
+        ]),
+
     ]
 
     def __str__(self):
@@ -555,10 +559,11 @@ class Invoice(TimeStampedModel):
         help_text="Amount of days for this invoice to be payed"
     )
 
-    payment_address = MarkdownField(help_text="Copied from the company, if empty")
+    payment_address = MarkdownField(help_text="Copied from the company, if empty", blank=True)
 
     receiver_vat_id = models.CharField(max_length=100, help_text="VAT ID of the receiver (you)")
-    sender_vat_id = models.CharField(max_length=100, help_text="VAT ID of the sender (client)")
+    sender_vat_id = models.CharField(max_length=100, help_text="VAT ID of the sender (client), "
+                                                               "copied from the company if empty", blank=True)
 
     issued_date = models.DateField()
     delivery_date = models.DateField()
