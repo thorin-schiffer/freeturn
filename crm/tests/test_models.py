@@ -260,9 +260,9 @@ def test_invoice_copy_company_params(invoice):
 def test_next_invoice_number(invoice_factory):
     year = timezone.now().year
     first_number = Invoice.get_next_invoice_number()
-    first_invoice_number = f'{year}-1'
+    first_invoice_number = f'{year}-01'
     assert first_number == first_invoice_number
 
     invoice = invoice_factory.create()
     assert invoice.invoice_number == first_invoice_number
-    assert Invoice.get_next_invoice_number() == f'{year}-2'
+    assert Invoice.get_next_invoice_number() == f'{year}-02'

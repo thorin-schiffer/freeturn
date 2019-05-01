@@ -625,7 +625,7 @@ class Invoice(TimeStampedModel):
     def get_next_invoice_number():
         this_year = timezone.now().year
         count_this_year = Invoice.objects.filter(issued_date__year=this_year).count()
-        return f"{this_year}-{count_this_year + 1}"
+        return f"{this_year}-{count_this_year + 1:02d}"
 
     def copy_company_params(self):
         if self.project.manager:
