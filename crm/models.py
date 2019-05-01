@@ -633,6 +633,20 @@ class Invoice(TimeStampedModel):
         self.payment_address = payment_address or ""
         self.sender_vat_id = vat_id or ""
 
+    @staticmethod
+    def get_initial_positions():
+        table = [['asdf', 'asdf', 'asdf', 'asdf'],
+                 ['asdf', 'asd', None, None],
+                 [None, None, None, None],
+                 [None, None, None, None],
+                 [None, None, None, None],
+                 [None, None, None, None]]
+        return {
+            'data': table,
+            'first_row_is_table_header': False,
+            'first_col_is_header': False
+        }
+
     def save(self, **kwargs):
         if not self.payment_address and self.project:
             self.copy_company_params()
