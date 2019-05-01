@@ -656,6 +656,9 @@ class Invoice(TimeStampedModel):
             'first_col_is_header': False
         }
 
+    def __str__(self):
+        return f"{self.project}: #{self.invoice_number}"
+
     def save(self, **kwargs):
         if not self.payment_address and self.project:
             self.copy_company_params()
