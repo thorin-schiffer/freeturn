@@ -22,6 +22,7 @@ class CreateInvoiceView(CreateView):
             "logo": settings.default_logo,
             "issued_date": timezone.now().date(),
             "delivery_date": timezone.now().date(),
+            "invoice_number": Invoice.get_next_invoice_number()
         }
 
 
