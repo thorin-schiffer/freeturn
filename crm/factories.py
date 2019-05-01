@@ -32,6 +32,7 @@ class CompanyFactory(factory.DjangoModelFactory):
     url = factory.Faker('uri')
     logo = factory.SubFactory(wagtail_factories.ImageFactory)
     payment_address = factory.Faker('address')
+    vat_id = factory.Sequence(lambda n: f"VAT-00000{n}")
 
     class Meta:
         model = models.Company

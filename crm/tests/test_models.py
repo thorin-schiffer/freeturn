@@ -238,12 +238,18 @@ def test_auto_project_name(project_factory):
 @pytest.mark.django_db
 def test_invoice_copy_company_params(invoice):
     assert invoice.project.manager.company.payment_address
+    assert invoice.project.manager.company.vat_id
+    assert invoice.project.company.vat_id
+
     assert invoice.project
     invoice.payment_address = ""
+    invoice.sender_vat_id = ""
     invoice.save()
     assert invoice.payment_address == invoice.project.manager.company.payment_address
+    assert invoice.sender_vat_id == invoice.project.manager.company.vat_id
 
     invoice.payment_address = ""
     invoice.project.manager = None
     invoice.save()
     assert invoice.payment_address == invoice.project.company.payment_address
+    assert invoice.sender_vat_id == invoice.project.company.vat_id
