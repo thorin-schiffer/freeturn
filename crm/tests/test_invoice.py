@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from django.urls import reverse
 from django.utils import timezone
@@ -28,4 +30,8 @@ def test_create(admin_app, admin_user, default_site, image):
     assert form['issued_date'].value == str(timezone.now().date())
     assert form['delivery_date'].value == str(timezone.now().date())
     assert form['invoice_number'].value == Invoice.get_next_invoice_number()
+    # positions is a fieldset
+    positions = json.loads(form['positions-0-value'].value)['data'][0]
+    assert positions['amount']
+    assert positions['price']
     form.submit()
