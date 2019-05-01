@@ -320,6 +320,7 @@ class Company(TimeStampedModel):
         default=settings.DEFAULT_DAILY_RATE
     )
     payment_address = MarkdownField(null=True, blank=True)
+    vat_id = models.CharField(max_length=100, help_text="VAT ID", null=True, blank=True)
 
     panels = [
         FieldRowPanel([
@@ -554,7 +555,7 @@ class Invoice(TimeStampedModel):
         help_text="Amount of days for this invoice to be payed"
     )
 
-    payment_address = MarkdownField()
+    payment_address = MarkdownField(help_text="Copied from the company, if empty")
 
     receiver_vat_id = models.CharField(max_length=100, help_text="VAT ID of the receiver (you)")
     sender_vat_id = models.CharField(max_length=100, help_text="VAT ID of the sender (client)")
@@ -615,9 +616,12 @@ class Invoice(TimeStampedModel):
         if not self.payment_address and self.project:
             if self.project.manager:
                 payment_address = self.project.manager.company.payment_address
+                vat_id = self.project.manager.company.vat_id
             else:
                 payment_address = self.project.company.payment_address
-            self.payment_address = payment_address
+                vat_id = self.project.company.vat_id
+            self.payment_address = payment_address or ""
+            self.sender_vat_id = vat_id or ""
         super().save(**kwargs)
 
 
