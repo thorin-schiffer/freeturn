@@ -1,5 +1,6 @@
 import logging
 import math
+from datetime import timedelta
 
 from ajax_select.fields import AutoCompleteSelectMultipleWidget, AutoCompleteSelectWidget
 from django.conf import settings
@@ -509,9 +510,6 @@ class CVGenerationSettings(BaseSetting):
 
 invoice_raw_options = {
     'minSpareRows': 0,
-    'startRows': 6,
-    'startCols': 4,
-    'colHeaders': False,
     'rowHeaders': False,
     'contextMenu': True,
     'editor': 'text',
@@ -520,6 +518,12 @@ invoice_raw_options = {
     'language': 'en',
     'renderer': 'text',
     'autoColumnSize': False,
+    'colHeaders': ['Article', 'Amount units', 'Price per unit'],
+    'columns': [
+        {'data': 'article'},
+        {'data': 'amount', 'type': 'numeric'},
+        {'data': 'price', 'type': 'numeric', 'format': '0.00'},
+    ]
 }
 
 INVOICE_LANGUAGE_CHOICES = (
@@ -546,7 +550,7 @@ class Invoice(TimeStampedModel):
     )
 
     vat = models.FloatField(
-        default=19,
+        default=settings.DEFAULT_VAT,
         help_text="VAT in %"
     )
 
@@ -635,12 +639,17 @@ class Invoice(TimeStampedModel):
 
     @staticmethod
     def get_initial_positions():
-        table = [['asdf', 'asdf', 'asdf', 'asdf'],
-                 ['asdf', 'asd', None, None],
-                 [None, None, None, None],
-                 [None, None, None, None],
-                 [None, None, None, None],
-                 [None, None, None, None]]
+        now = timezone.now()
+        table = [
+            {
+                'article': 'Python programming',
+                'amount': len(get_working_days(
+                    now.replace(day=1),
+                    now.replace(month=(now.month + 1) % 12) - timedelta(days=1),
+                )) * 8,  # default to amount of working days * 8 hours per day working hours
+                'price': settings.DEFAULT_DAILY_RATE / 8,
+            },
+        ]
         return {
             'data': table,
             'first_row_is_table_header': False,
