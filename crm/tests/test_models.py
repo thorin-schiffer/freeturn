@@ -10,6 +10,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 from crm.gmail_utils import parse_message, associate, remove_quotation
+from crm.models import Invoice
 from home.models import Technology
 
 
@@ -253,3 +254,15 @@ def test_invoice_copy_company_params(invoice):
     invoice.save()
     assert invoice.payment_address == invoice.project.company.payment_address
     assert invoice.sender_vat_id == invoice.project.company.vat_id
+
+
+@pytest.mark.django_db
+def test_next_invoice_number(invoice_factory):
+    year = timezone.now().year
+    first_number = Invoice.get_next_invoice_number()
+    first_invoice_number = f'{year}-1'
+    assert first_number == first_invoice_number
+
+    invoice = invoice_factory.create()
+    assert invoice.invoice_number == first_invoice_number
+    assert Invoice.get_next_invoice_number() == f'{year}-2'

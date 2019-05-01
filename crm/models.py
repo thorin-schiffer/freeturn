@@ -551,7 +551,7 @@ class Invoice(TimeStampedModel):
     )
 
     invoice_number = models.CharField(
-        max_length=20
+        max_length=20, unique=True
     )
 
     payment_period = models.PositiveIntegerField(
@@ -617,16 +617,28 @@ class Invoice(TimeStampedModel):
         ]),
     ]
 
+    @staticmethod
+    def get_next_invoice_number():
+        this_year = timezone.now().year
+        count_this_year = Invoice.objects.filter(issued_date__year=this_year).count()
+        return f"{this_year}-{count_this_year + 1}"
+
+    def copy_company_params(self):
+        if self.project.manager:
+            payment_address = self.project.manager.company.payment_address
+            vat_id = self.project.manager.company.vat_id
+        else:
+            payment_address = self.project.company.payment_address
+            vat_id = self.project.company.vat_id
+        self.payment_address = payment_address or ""
+        self.sender_vat_id = vat_id or ""
+
     def save(self, **kwargs):
         if not self.payment_address and self.project:
-            if self.project.manager:
-                payment_address = self.project.manager.company.payment_address
-                vat_id = self.project.manager.company.vat_id
-            else:
-                payment_address = self.project.company.payment_address
-                vat_id = self.project.company.vat_id
-            self.payment_address = payment_address or ""
-            self.sender_vat_id = vat_id or ""
+            self.copy_company_params()
+
+        if not self.invoice_number:
+            self.invoice_number = Invoice.get_next_invoice_number()
         super().save(**kwargs)
 
 
