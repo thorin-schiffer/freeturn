@@ -26,7 +26,32 @@
 
 <h2>{{ instance.title }}</h2>
 <hr>
-{{ instance.positions }}
+<table class="table">
+    <thead>
+    <tr>
+        <th>Article</th>
+        <th>Amount</th>
+        <th>Price</th>
+        <th>VAT, %</th>
+        <th>VAT</th>
+        <th>Price incl. VAT</th>
+        <th>Subtotal</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for position in instance.invoice_positions %}
+    <tr>
+        <td>{{ position.article }}</td>
+        <td>{{ position.amount }}</td>
+        <td>{{ position.price }}</td>
+        <td>{{ position.invoice.vat }}</td>
+        <td>{{ position.vat | floatformat:2 }}</td>
+        <td>{{ position.price_with_vat | floatformat:2}}</td>
+        <td>{{ position.total | floatformat:2 }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
 
 
 <table style="width: 100%">
