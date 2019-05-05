@@ -2,14 +2,8 @@
 {% load wagtailmarkdown %}
 
 {% block body %}
-<table style="width: 100%">
-    <thead>
-    <tr>
-        <td>
-            <h3>Invoice {{instance.invoice_number}}</h3>
-        </td>
-    </tr>
-    </thead>
+<h3>Invoice {{instance.invoice_number}}</h3>
+<table style="width: 100%; margin-bottom: 40%">
     <tbody>
     <tr>
         <td width="50%">
@@ -25,6 +19,26 @@
             <br>
             TAX ID: {{ instance.tax_id }} <br>
             VAT ID: {{ instance.receiver_vat_id }}
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>{{ instance.title }}</h2>
+<hr>
+{{ instance.positions }}
+
+
+<table style="width: 100%">
+    <tbody>
+    <tr>
+        <td>
+            <h3>Bank account</h3>
+            {{ instance.bank_account }}
+        </td>
+        <td align="right">
+            <h3>Contact</h3>
+            {{ instance.contact_data }}
         </td>
     </tr>
     </tbody>
