@@ -4,13 +4,13 @@ import uuid
 from datetime import date
 from datetime import timedelta
 from email.message import Message as EmailMessage
-
 import pytest
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-
+from decimal import Decimal as D
+from django.conf import settings
 from crm.gmail_utils import parse_message, associate, remove_quotation
-from crm.models import Invoice
+from crm.models import Invoice, InvoicePosition
 from home.models import Technology
 
 
@@ -266,3 +266,12 @@ def test_next_invoice_number(invoice_factory):
     invoice = invoice_factory.create()
     assert invoice.invoice_number == first_invoice_number
     assert Invoice.get_next_invoice_number() == f'{year}-02'
+
+
+@pytest.mark.django_db
+def test_invoice_positions(invoice):
+    position = InvoicePosition(invoice=invoice, amount=10, price=D('10.00'), article='xx')
+    assert position.price_with_vat == (D('10.00') * settings.DEFAULT_VAT) / 100
+    assert position.nett_total == D('100.00')
+    assert position.total == D('100.00') + (D('100.00') * settings.DEFAULT_VAT) / 100
+    assert position.vat == D(settings.DEFAULT_VAT)

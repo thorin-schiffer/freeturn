@@ -544,19 +544,19 @@ class InvoicePosition:
 
     @property
     def vat(self):
-        return (self.nett_summary / 100) * self.invoice.vat
+        return (self.nett_total / 100) * self.invoice.vat
 
     @property
     def price_with_vat(self):
-        raise NotImplementedError()
+        return (self.price * self.invoice.vat) / 100
 
     @property
-    def nett_summary(self):
-        raise NotImplementedError()
+    def nett_total(self):
+        return self.amount * self.price
 
     @property
-    def summary(self):
-        raise NotImplementedError()
+    def total(self):
+        return self.nett_total + self.vat
 
 
 class Invoice(TimeStampedModel):
