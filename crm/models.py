@@ -514,7 +514,7 @@ class CVGenerationSettings(BaseSetting):
 invoice_raw_options = {
     'minSpareRows': 0,
     'rowHeaders': False,
-    'contextMenu': True,
+    'contextMenu': False,
     'editor': 'text',
     'stretchH': 'all',
     'height': 216,
@@ -528,6 +528,15 @@ invoice_raw_options = {
         {'data': 'price', 'type': 'numeric', 'format': '0.00'},
     ]
 }
+
+
+# sometimes positions are lists, sometimes dicts wtf
+def dictify_position_row(position):
+    if not isinstance(position, dict):
+        columns = [column['data'] for column in invoice_raw_options['columns']]
+        position = dict(zip(columns, position))
+    return position
+
 
 INVOICE_LANGUAGE_CHOICES = (
     ("en", "English"),
@@ -691,20 +700,28 @@ class Invoice(TimeStampedModel):
 
     @property
     def invoice_positions(self):
-        # position instances
-        stream_data = self.positions.stream_data[0]
-        # weird that type is changing if the instance is loaded from the db
-        if isinstance(stream_data, tuple):
-            stream_data = stream_data[1]
-        else:
-            stream_data = stream_data['value']
-        return [
-            InvoicePosition(invoice=self,
-                            price=Decimal(position['price']),
-                            amount=position['amount'],
-                            article=position['article'])
-            for position in stream_data['data']
-        ]
+        positions = []
+        for stream_data in self.positions.stream_data:
+            # weird that type is changing if the instance is loaded from the db
+            if isinstance(stream_data, tuple):
+                stream_data = stream_data[1]
+            elif isinstance(stream_data, dict):
+                stream_data = stream_data['value']
+            else:
+                raise ValueError(f"Stream data has unknown type: {stream_data.__class__}, {stream_data}")
+            if not stream_data:
+                continue
+
+            for position in stream_data['data']:
+                position = dictify_position_row(position)
+                if not all(value for value in position.values()):
+                    logger.info(f"Skipped not full position: {position}")
+                    continue
+                positions.append(InvoicePosition(invoice=self,
+                                                 price=Decimal(position['price']),
+                                                 amount=position['amount'],
+                                                 article=position['article']))
+        return positions
 
     def __str__(self):
         return f"{self.project}: #{self.invoice_number}"
