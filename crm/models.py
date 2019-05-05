@@ -581,7 +581,7 @@ class Invoice(TimeStampedModel):
 
     unit = models.CharField(
         max_length=200,
-        default="hour",
+        default="hours",
         help_text="Work unit"
     )
 
