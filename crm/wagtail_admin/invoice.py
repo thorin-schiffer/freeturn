@@ -34,9 +34,6 @@ class InvoiceInspectView(PDFTemplateView,
     show_content_in_browser = True
     template_name = "invoice.html"
 
-    def get_context_data(self, **kwargs):
-        return super().get_context_data(**kwargs)
-
     def get_filename(self):
         return f"{self.instance}.pdf"
 
@@ -45,13 +42,13 @@ class InvoiceAdmin(ModelAdmin):
     model = Invoice
     menu_icon = 'fa-file'
     menu_label = 'Invoices'
-    list_display = ['project', 'created']
+    list_display = ['invoice_number', 'project', 'created']
     list_filter = ['project', 'created']
     list_per_page = 10
     list_select_related = ['project']
     ordering = ['-created']
     inspect_view_enabled = True
-    list_display_add_buttons = 'project'
+    list_display_add_buttons = 'invoice_number'
     create_view_class = InvoiceCreateView
     inspect_view_class = InvoiceInspectView
     inspect_template_name = InvoiceInspectView.template_name
