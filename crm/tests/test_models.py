@@ -271,7 +271,7 @@ def test_next_invoice_number(invoice_factory):
 @pytest.mark.django_db
 def test_invoice_positions(invoice):
     position = InvoicePosition(invoice=invoice, amount=10, price=D('10.00'), article='xx')
-    assert position.price_with_vat == (D('10.00') * settings.DEFAULT_VAT) / 100
+    assert position.price_with_vat == D('10.00') + (D('10.00') * settings.DEFAULT_VAT) / 100
     assert position.nett_total == D('100.00')
     assert position.total == D('100.00') + (D('100.00') * settings.DEFAULT_VAT) / 100
     assert position.vat == D(settings.DEFAULT_VAT)

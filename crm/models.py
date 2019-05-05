@@ -1,6 +1,6 @@
 import logging
 import math
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import timedelta
 from decimal import Decimal
 
@@ -539,7 +539,7 @@ INVOICE_LANGUAGE_CHOICES = (
 class InvoicePosition:
     article: str
     amount: int
-    price: Decimal
+    price: Decimal = field()
     invoice: 'Invoice'
 
     @property
@@ -548,7 +548,7 @@ class InvoicePosition:
 
     @property
     def price_with_vat(self):
-        return (self.price * self.invoice.vat) / 100
+        return self.price + (self.price * self.invoice.vat) / 100
 
     @property
     def nett_total(self):
@@ -680,7 +680,7 @@ class Invoice(TimeStampedModel):
                     now.replace(day=1),
                     now.replace(month=(now.month + 1) % 12) - timedelta(days=1),
                 )) * 8,  # default to amount of working days * 8 hours per day working hours
-                'price': settings.DEFAULT_DAILY_RATE / 8,
+                'price': f"{settings.DEFAULT_DAILY_RATE / 8:.2f}",
             },
         ]
         return {
@@ -698,7 +698,13 @@ class Invoice(TimeStampedModel):
             stream_data = stream_data[1]
         else:
             stream_data = stream_data['value']
-        return [InvoicePosition(invoice=self, **position) for position in stream_data['data']]
+        return [
+            InvoicePosition(invoice=self,
+                            price=Decimal(position['price']),
+                            amount=position['amount'],
+                            article=position['article'])
+            for position in stream_data['data']
+        ]
 
     def __str__(self):
         return f"{self.project}: #{self.invoice_number}"
