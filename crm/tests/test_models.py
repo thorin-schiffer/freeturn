@@ -4,12 +4,13 @@ import uuid
 from datetime import date
 from datetime import timedelta
 from email.message import Message as EmailMessage
-
 import pytest
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-
+from decimal import Decimal as D
+from django.conf import settings
 from crm.gmail_utils import parse_message, associate, remove_quotation
+from crm.models import Invoice, InvoicePosition
 from home.models import Technology
 
 
@@ -125,10 +126,10 @@ def test_associate_manager_exists(employee,
 
 
 @pytest.mark.django_db
-def test_associate_company_exists(recruiter, parsed_message):
-    parsed_message['from_address'] = f"test@{recruiter.domain}"
+def test_associate_company_exists(company, parsed_message):
+    parsed_message['from_address'] = f"test@{company.domain}"
     message = associate(parsed_message)
-    assert message.project.manager.company == recruiter
+    assert message.project.manager.company == company
 
 
 @pytest.mark.django_db
@@ -216,18 +217,15 @@ def test_cv_set_relevant_projects(cv, project_pages, mocker):
 
 @pytest.mark.django_db
 def test_project_logo(project):
-    assert project.company.logo is not None
-    assert project.recruiter.logo is not None
-
     assert project.company is not None
+    assert project.company.logo is not None
     assert project.logo is project.company.logo
 
     project.company.logo = None
-    assert project.logo is project.recruiter.logo
+    assert project.logo is project.company.logo is None
 
     project.company = None
-    assert project.recruiter is not None
-    assert project.logo is project.recruiter.logo
+    assert project.logo is None
 
 
 @pytest.mark.django_db
@@ -235,4 +233,45 @@ def test_auto_project_name(project_factory):
     project_without_company = project_factory.create()
     assert project_without_company.name == str(project_without_company.company)
     project_without_company = project_factory.create(company=None)
-    assert project_without_company.name == str(project_without_company.recruiter)
+    assert project_without_company.name == str(project_without_company.company)
+
+
+@pytest.mark.django_db
+def test_invoice_copy_company_params(invoice):
+    assert invoice.project.manager.company.payment_address
+    assert invoice.project.manager.company.vat_id
+    assert invoice.project.company.vat_id
+
+    assert invoice.project
+    invoice.payment_address = ""
+    invoice.sender_vat_id = ""
+    invoice.save()
+    assert invoice.payment_address == invoice.project.manager.company.payment_address
+    assert invoice.sender_vat_id == invoice.project.manager.company.vat_id
+
+    invoice.payment_address = ""
+    invoice.project.manager = None
+    invoice.save()
+    assert invoice.payment_address == invoice.project.company.payment_address
+    assert invoice.sender_vat_id == invoice.project.company.vat_id
+
+
+@pytest.mark.django_db
+def test_next_invoice_number(invoice_factory):
+    year = timezone.now().year
+    first_number = Invoice.get_next_invoice_number()
+    first_invoice_number = f'{year}-01'
+    assert first_number == first_invoice_number
+
+    invoice = invoice_factory.create()
+    assert invoice.invoice_number == first_invoice_number
+    assert Invoice.get_next_invoice_number() == f'{year}-02'
+
+
+@pytest.mark.django_db
+def test_invoice_positions(invoice):
+    position = InvoicePosition(invoice=invoice, amount=10, price=D('10.00'), article='xx')
+    assert position.price_with_vat == D('10.00') + (D('10.00') * settings.DEFAULT_VAT) / 100
+    assert position.nett_total == D('100.00')
+    assert position.total == D('100.00') + (D('100.00') * settings.DEFAULT_VAT) / 100
+    assert position.vat == D(settings.DEFAULT_VAT)

@@ -1,0 +1,106 @@
+{% extends 'pdf_base.html' %}
+{% load wagtailimages_tags %}
+{% load wagtailmarkdown %}
+
+{% block body %}
+<table style="width: 100%; margin-bottom: 30%">
+    <tbody>
+    <tr style="height: 10em">
+        <td>
+            <h3>Invoice {{instance.invoice_number}}</h3>
+        </td>
+        <td align="right">
+            {% image instance.logo fill-100x100-c100 class="img-fluid"%}
+        </td>
+    </tr>
+    <tr>
+        <td width="50%">
+            <b>To</b>:
+            {{ instance.payment_address | markdown}}
+            <br>
+            <b>VAT ID</b>: {{ instance.sender_vat_id }}
+        </td>
+        <td align="right">
+
+            <b>Issued at</b>: {{ instance.issued_date }} <br>
+            <b>Delivered at</b>: {{ instance.delivery_date }} <br>
+            <b>Payable to</b>: {{ instance.payable_to }} <br>
+            <br>
+            <b>TAX ID</b>: {{ instance.tax_id }} <br>
+            <b>VAT ID</b>: {{ instance.receiver_vat_id }}
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>{{ instance.title }}</h2>
+<hr>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Article</th>
+        <th>Amount, {{ instance.unit }}</th>
+        <th>Price</th>
+        <th>VAT, %</th>
+        <th>VAT</th>
+        <th>Price incl. VAT</th>
+        <th>Subtotal</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for position in instance.invoice_positions %}
+    <tr>
+        <td>{{ position.article }}</td>
+        <td>{{ position.amount }}</td>
+        <td>{{ position.price }}</td>
+        <td>{{ position.invoice.vat }}</td>
+        <td>{{ position.vat | floatformat:2 }}</td>
+        <td>{{ position.price_with_vat | floatformat:2}}</td>
+        <td>{{ position.total | floatformat:2 }}</td>
+    </tr>
+    {% endfor %}
+        <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <th>
+            VAT
+        </th>
+        <th>
+            {{ instance.total_vat | floatformat:2 }}
+        </th>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <th>
+            Total
+        </th>
+        <th>
+            {{ instance.total | floatformat:2 }}
+        </th>
+    </tr>
+    </tbody>
+</table>
+
+
+<table style="width: 100%; margin-top: 10%">
+    <tbody>
+    <tr>
+        <td>
+            <h3>Bank account</h3>
+            {{ instance.bank_account | markdown }}
+        </td>
+        <td align="right">
+            <h3>Contact</h3>
+            {{ instance.contact_data | markdown }}
+        </td>
+    </tr>
+    </tbody>
+</table>
+{% endblock %}

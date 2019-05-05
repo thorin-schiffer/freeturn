@@ -6,8 +6,9 @@ from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
 from wagtail.core import hooks
 
-from crm.models import Recruiter, City, Channel, Employee, ClientCompany
+from crm.models import Company, City, Channel, Employee
 from crm.wagtail_admin.cv import CVAdmin
+from crm.wagtail_admin.invoice import InvoiceAdmin
 from crm.wagtail_admin.project import ProjectAdmin, ProjectSearchArea, MessageAdmin
 
 
@@ -34,9 +35,9 @@ class EmployeeAdmin(ThumbnailMixin, ModelAdmin):
     thumb_default = "/static/img/default_avatar.png"
 
 
-class RecruiterAdmin(ThumbnailMixin, ModelAdmin):
-    model = Recruiter
-    menu_label = 'Recruiters'  # ditch this to use verbose_name_plural from model
+class CompanyAdmin(ThumbnailMixin, ModelAdmin):
+    model = Company
+    menu_label = 'Companies'  # ditch this to use verbose_name_plural from model
     menu_icon = 'fa-building'  # change as required
     menu_order = 200  # will put in 3rd place (000 being 1st, 100 2nd)
     add_to_settings_menu = False  # or True to add your model to the Settings sub-menu
@@ -47,17 +48,7 @@ class RecruiterAdmin(ThumbnailMixin, ModelAdmin):
     inspect_view_enabled = True
     inspect_view_fields = ['name']
     thumb_image_field_name = 'logo'
-    thumb_default = "/static/img/default_recruiter.png"
-
-
-class ClientCompanyAdmin(ModelAdmin):
-    model = ClientCompany
-    menu_label = 'Clients'
-    menu_icon = 'fa-user-circle'
-    list_display = ('name', 'location', 'channel')
-    list_filter = ('location', 'channel',)
-    search_fields = ('name',)
-    inspect_view_enabled = True
+    thumb_default = "/static/img/default_company.png"
 
 
 class CRMGroup(ModelAdminGroup):
@@ -65,8 +56,9 @@ class CRMGroup(ModelAdminGroup):
     menu_icon = "fa-briefcase"
     menu_order = 200
     items = (
-        ProjectAdmin, CVAdmin, EmployeeAdmin, RecruiterAdmin,
-        CityAdmin, ChannelAdmin, ClientCompanyAdmin, MessageAdmin
+        ProjectAdmin, CVAdmin, EmployeeAdmin, CompanyAdmin,
+        CityAdmin, ChannelAdmin, MessageAdmin,
+        InvoiceAdmin
     )
 
 
@@ -92,18 +84,18 @@ def register_project_search_area():
     return ProjectSearchArea()
 
 
-class RecruiterSearchArea(SearchArea):
+class CompanySearchArea(SearchArea):
     def __init__(self):
         super().__init__(
-            "Recruiters", reverse('crm_recruiter_modeladmin_index'),
-            name='recruiters',
+            "Companies", reverse('crm_company_modeladmin_index'),
+            name='companies',
             classnames='icon icon-fa-building',
             order=102)
 
 
 @hooks.register('register_admin_search_area')
 def register_pages_search_area():
-    return RecruiterSearchArea()
+    return CompanySearchArea()
 
 
 @hooks.register('register_account_menu_item')

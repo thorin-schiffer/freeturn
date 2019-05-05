@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from googleapiclient import discovery
 
-from crm.models import ProjectMessage, Employee, Recruiter, Project
+from crm.models import ProjectMessage, Employee, Company, Project
 from crm.utils import Credentials
 
 logger = logging.getLogger('gmail_utils')
@@ -89,8 +89,8 @@ def ensure_manager(message):
     manager = Employee.objects.filter(email__iexact=message['from_address']).first()
     if not manager:
         domain = message['from_address'].split('@')[-1]
-        company = Recruiter.objects.filter(url__icontains=domain).first()
-        company = company or Recruiter.objects.create(
+        company = Company.objects.filter(url__icontains=domain).first()
+        company = company or Company.objects.create(
             name=domain.split(".")[0].capitalize(),
             url=f"http://{domain}"
         )

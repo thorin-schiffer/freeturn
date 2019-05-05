@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'wagtail.contrib.redirects',
     'wagtail.contrib.modeladmin',
     'wagtail.contrib.settings',
+    "wagtail.contrib.table_block",
     'wagtail.embeds',
     'wagtail.sites',
     'wagtail.users',
@@ -204,3 +205,4 @@ WKHTMLTOPDF_CMD_OPTIONS = {
 }
 GOOGLE_ANALYTICS_JS_PROPERTY_ID = getenv("GOOGLE_ANALYTICS_ID")
 MAILBOX_LABEL = "CRM"
+DEFAULT_VAT = 19

@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 from django.utils.timezone import get_current_timezone
 
 from crm import models
+from crm.models import wrap_table_data
 from home.factories import ProjectPageFactory, TechnologyFactory
 
 
@@ -25,25 +26,17 @@ class ChannelFactory(factory.DjangoModelFactory):
         model = models.Channel
 
 
-class BaseCompanyFactory(factory.DjangoModelFactory):
+class CompanyFactory(factory.DjangoModelFactory):
     name = factory.Faker('company')
     location = factory.SubFactory(CityFactory)
     channel = factory.SubFactory(ChannelFactory)
     url = factory.Faker('uri')
     logo = factory.SubFactory(wagtail_factories.ImageFactory)
+    payment_address = factory.Faker('address')
+    vat_id = factory.Sequence(lambda n: f"VAT-00000{n}")
 
     class Meta:
-        abstract = True
-
-
-class RecruiterFactory(BaseCompanyFactory):
-    class Meta:
-        model = models.Recruiter
-
-
-class ClientCompanyFactory(BaseCompanyFactory):
-    class Meta:
-        model = models.ClientCompany
+        model = models.Company
 
 
 class EmployeeFactory(factory.DjangoModelFactory):
@@ -51,7 +44,7 @@ class EmployeeFactory(factory.DjangoModelFactory):
     last_name = factory.Faker('last_name')
     telephone = factory.Faker('phone_number')
 
-    company = factory.SubFactory(RecruiterFactory)
+    company = factory.SubFactory(CompanyFactory)
     email = factory.Faker('email')
 
     class Meta:
@@ -59,7 +52,7 @@ class EmployeeFactory(factory.DjangoModelFactory):
 
 
 class ProjectFactory(factory.DjangoModelFactory):
-    company = factory.SubFactory(ClientCompanyFactory)
+    company = factory.SubFactory(CompanyFactory)
     manager = factory.SubFactory(EmployeeFactory)
     location = factory.SubFactory(CityFactory)
     original_description = factory.Faker('paragraphs')
@@ -128,3 +121,21 @@ class CVWithRelevantFactory(CVFactory):
         if extracted:
             raise NotImplementedError()
         self.relevant_project_pages.set([ProjectPageFactory()])
+
+
+class InvoiceFactory(factory.DjangoModelFactory):
+    project = factory.SubFactory(ProjectFactory)
+    receiver_vat_id = factory.Sequence(lambda n: f"VAT-00000{n}")
+    issued_date = factory.Faker('past_datetime')
+    delivery_date = factory.Faker('past_datetime')
+    tax_id = factory.Sequence(lambda n: f"TAX-00000{n}")
+    bank_account = factory.Faker('iban')
+    contact_data = factory.Faker('email')
+    logo = factory.SubFactory(wagtail_factories.ImageFactory)
+
+    class Meta:
+        model = models.Invoice
+
+    @factory.post_generation
+    def positions(self, instance, create, *args, **kwargs):
+        self.positions = wrap_table_data(models.Invoice.get_initial_positions())
