@@ -26,8 +26,8 @@
             <b>Delivered at</b>: {{ instance.delivery_date }} <br>
             <b>Payable to</b>: {{ instance.payable_to }} <br>
             <br>
-            TAX ID: {{ instance.tax_id }} <br>
-            VAT ID: {{ instance.receiver_vat_id }}
+            <b>TAX ID</b>: {{ instance.tax_id }} <br>
+            <b>VAT ID</b>: {{ instance.receiver_vat_id }}
         </td>
     </tr>
     </tbody>
@@ -59,6 +59,19 @@
         <td>{{ position.total | floatformat:2 }}</td>
     </tr>
     {% endfor %}
+        <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <th>
+            VAT
+        </th>
+        <th>
+            {{ instance.total_vat | floatformat:2 }}
+        </th>
+    </tr>
     <tr>
         <td></td>
         <td></td>

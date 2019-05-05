@@ -666,6 +666,12 @@ class Invoice(TimeStampedModel):
         )
 
     @property
+    def total_vat(self):
+        return sum(
+            position.vat for position in self.invoice_positions
+        )
+
+    @property
     def payable_to(self):
         return self.issued_date + timedelta(days=self.payment_period)
 
