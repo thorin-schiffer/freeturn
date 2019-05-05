@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 from django.utils.timezone import get_current_timezone
 
 from crm import models
+from crm.models import wrap_table_data
 from home.factories import ProjectPageFactory, TechnologyFactory
 
 
@@ -134,3 +135,7 @@ class InvoiceFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = models.Invoice
+
+    @factory.post_generation
+    def positions(self, instance, create, *args, **kwargs):
+        self.positions = wrap_table_data(models.Invoice.get_initial_positions())

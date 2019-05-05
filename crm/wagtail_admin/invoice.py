@@ -1,17 +1,9 @@
 from django.utils import timezone
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import CreateView, InspectView
-from wagtail.contrib.table_block.blocks import TableBlock
-from wagtail.core.blocks import StreamValue
-from wagtail.core.fields import StreamField
 from wkhtmltopdf.views import PDFTemplateView
 
-from crm.models import Invoice, InvoiceGenerationSettings, invoice_raw_options
-
-
-def wrap_table_data(data):
-    original_steam_block = StreamField([('positions', TableBlock(table_options=invoice_raw_options))]).stream_block
-    return StreamValue(original_steam_block, [('positions', data)])
+from crm.models import Invoice, InvoiceGenerationSettings, wrap_table_data
 
 
 class InvoiceCreateView(CreateView):

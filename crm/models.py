@@ -17,6 +17,7 @@ from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPan
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail.contrib.table_block.blocks import TableBlock
+from wagtail.core.blocks import StreamValue
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtailautocomplete.edit_handlers import AutocompletePanel
@@ -660,6 +661,16 @@ class Invoice(TimeStampedModel):
             'first_col_is_header': False
         }
 
+    @property
+    def positions_data(self):
+        stream_data = self.positions.stream_data[0]
+        # weird that type is changing if the instance is loaded from the db
+        if isinstance(stream_data, tuple):
+            stream_data = stream_data[1]
+        else:
+            stream_data = stream_data['value']
+        return stream_data['data']
+
     def __str__(self):
         return f"{self.project}: #{self.invoice_number}"
 
@@ -724,3 +735,8 @@ class InvoiceGenerationSettings(BaseSetting):
         FieldPanel('default_contact_data'),
         ImageChooserPanel('default_logo')
     ]
+
+
+def wrap_table_data(data):
+    original_steam_block = StreamField([('positions', TableBlock(table_options=invoice_raw_options))]).stream_block
+    return StreamValue(original_steam_block, [('positions', data)])
