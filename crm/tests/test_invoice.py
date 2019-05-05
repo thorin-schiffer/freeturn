@@ -35,3 +35,9 @@ def test_create(admin_app, admin_user, default_site, image):
     assert positions['amount']
     assert positions['price']
     form.submit()
+
+
+@pytest.mark.django_db
+def test_inspect(admin_app, invoice):
+    url = reverse('crm_invoice_modeladmin_inspect', kwargs={'instance_pk': invoice.pk})
+    admin_app.get(url)
