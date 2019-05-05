@@ -1,9 +1,10 @@
 from django.utils import timezone
 from wagtail.contrib.modeladmin.options import ModelAdmin
-from wagtail.contrib.modeladmin.views import CreateView
+from wagtail.contrib.modeladmin.views import CreateView, InspectView
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.core.blocks import StreamValue
 from wagtail.core.fields import StreamField
+from wkhtmltopdf.views import PDFTemplateView
 
 from crm.models import Invoice, InvoiceGenerationSettings, invoice_raw_options
 
@@ -13,7 +14,7 @@ def wrap_table_data(data):
     return StreamValue(original_steam_block, [('positions', data)])
 
 
-class CreateInvoiceView(CreateView):
+class InvoiceCreateView(CreateView):
     def get_initial(self):
         site = self.request.site
         settings = InvoiceGenerationSettings.for_site(site)
@@ -36,6 +37,18 @@ class CreateInvoiceView(CreateView):
         }
 
 
+class InvoiceInspectView(PDFTemplateView,
+                         InspectView):
+    show_content_in_browser = True
+    template_name = "invoice.html"
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs)
+
+    def get_filename(self):
+        return f"{self.instance}.pdf"
+
+
 class InvoiceAdmin(ModelAdmin):
     model = Invoice
     menu_icon = 'fa-file'
@@ -47,4 +60,6 @@ class InvoiceAdmin(ModelAdmin):
     ordering = ['-created']
     inspect_view_enabled = True
     list_display_add_buttons = 'project'
-    create_view_class = CreateInvoiceView
+    create_view_class = InvoiceCreateView
+    inspect_view_class = InvoiceInspectView
+    inspect_template_name = InvoiceInspectView.template_name

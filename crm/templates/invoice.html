@@ -1,0 +1,32 @@
+{% extends 'pdf_base.html' %}
+{% load wagtailmarkdown %}
+
+{% block body %}
+<table style="width: 100%">
+    <thead>
+    <tr>
+        <td>
+            <h3>Invoice {{instance.invoice_number}}</h3>
+        </td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td width="50%">
+            To:
+            {{ instance.payment_address | markdown}}
+            <br>
+            VAT ID: {{ instance.sender_vat_id }}
+        </td>
+        <td align="right">
+            Issued at: {{ instance.issued_date }} <br>
+            Delivered at: {{ instance.delivery_date }} <br>
+            Payable to: {{ instance.payable_to }} <br>
+            <br>
+            TAX ID: {{ instance.tax_id }} <br>
+            VAT ID: {{ instance.receiver_vat_id }}
+        </td>
+    </tr>
+    </tbody>
+</table>
+{% endblock %}
