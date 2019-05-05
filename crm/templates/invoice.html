@@ -1,21 +1,30 @@
 {% extends 'pdf_base.html' %}
+{% load wagtailimages_tags %}
 {% load wagtailmarkdown %}
 
 {% block body %}
-<h3>Invoice {{instance.invoice_number}}</h3>
-<table style="width: 100%; margin-bottom: 40%">
+<table style="width: 100%; margin-bottom: 30%">
     <tbody>
-    <tr>
-        <td width="50%">
-            To:
-            {{ instance.payment_address | markdown}}
-            <br>
-            VAT ID: {{ instance.sender_vat_id }}
+    <tr style="height: 10em">
+        <td>
+            <h3>Invoice {{instance.invoice_number}}</h3>
         </td>
         <td align="right">
-            Issued at: {{ instance.issued_date }} <br>
-            Delivered at: {{ instance.delivery_date }} <br>
-            Payable to: {{ instance.payable_to }} <br>
+            {% image instance.logo fill-100x100-c100 class="img-fluid"%}
+        </td>
+    </tr>
+    <tr>
+        <td width="50%">
+            <b>To</b>:
+            {{ instance.payment_address | markdown}}
+            <br>
+            <b>VAT ID</b>: {{ instance.sender_vat_id }}
+        </td>
+        <td align="right">
+
+            <b>Issued at</b>: {{ instance.issued_date }} <br>
+            <b>Delivered at</b>: {{ instance.delivery_date }} <br>
+            <b>Payable to</b>: {{ instance.payable_to }} <br>
             <br>
             TAX ID: {{ instance.tax_id }} <br>
             VAT ID: {{ instance.receiver_vat_id }}
@@ -50,6 +59,19 @@
         <td>{{ position.total | floatformat:2 }}</td>
     </tr>
     {% endfor %}
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <th>
+            Total
+        </th>
+        <th>
+            {{ instance.total | floatformat:2 }}
+        </th>
+    </tr>
     </tbody>
 </table>
 
