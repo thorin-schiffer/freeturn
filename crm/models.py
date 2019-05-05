@@ -1,6 +1,8 @@
 import logging
 import math
+from dataclasses import dataclass
 from datetime import timedelta
+from decimal import Decimal
 
 from ajax_select.fields import AutoCompleteSelectMultipleWidget, AutoCompleteSelectWidget
 from django.conf import settings
@@ -533,6 +535,30 @@ INVOICE_LANGUAGE_CHOICES = (
 )
 
 
+@dataclass
+class InvoicePosition:
+    article: str
+    amount: int
+    price: Decimal
+    invoice: 'Invoice'
+
+    @property
+    def vat(self):
+        return (self.nett_summary / 100) * self.invoice.vat
+
+    @property
+    def price_with_vat(self):
+        raise NotImplementedError()
+
+    @property
+    def nett_summary(self):
+        raise NotImplementedError()
+
+    @property
+    def summary(self):
+        raise NotImplementedError()
+
+
 class Invoice(TimeStampedModel):
     project = models.ForeignKey("Project",
                                 on_delete=CASCADE,
@@ -550,9 +576,11 @@ class Invoice(TimeStampedModel):
         help_text="Work unit"
     )
 
-    vat = models.FloatField(
+    vat = models.DecimalField(
         default=settings.DEFAULT_VAT,
-        help_text="VAT in %"
+        help_text="VAT in %",
+        decimal_places=2,
+        max_digits=4
     )
 
     invoice_number = models.CharField(
@@ -662,14 +690,15 @@ class Invoice(TimeStampedModel):
         }
 
     @property
-    def positions_data(self):
+    def invoice_positions(self):
+        # position instances
         stream_data = self.positions.stream_data[0]
         # weird that type is changing if the instance is loaded from the db
         if isinstance(stream_data, tuple):
             stream_data = stream_data[1]
         else:
             stream_data = stream_data['value']
-        return stream_data['data']
+        return [InvoicePosition(invoice=self, **position) for position in stream_data['data']]
 
     def __str__(self):
         return f"{self.project}: #{self.invoice_number}"
