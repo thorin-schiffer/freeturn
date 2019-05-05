@@ -89,16 +89,16 @@
 </table>
 
 
-<table style="width: 100%">
+<table style="width: 100%; margin-top: 10%">
     <tbody>
     <tr>
         <td>
             <h3>Bank account</h3>
-            {{ instance.bank_account }}
+            {{ instance.bank_account | markdown }}
         </td>
         <td align="right">
             <h3>Contact</h3>
-            {{ instance.contact_data }}
+            {{ instance.contact_data | markdown }}
         </td>
     </tr>
     </tbody>
