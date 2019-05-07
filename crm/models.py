@@ -629,6 +629,7 @@ class Invoice(TimeStampedModel):
         related_name='+',
         help_text="Picture to use"
     )
+    payed = models.BooleanField(default=False)
     panels = [
         FieldPanel('project'),
         FieldRowPanel([
@@ -653,10 +654,13 @@ class Invoice(TimeStampedModel):
             ]),
         ]),
         StreamFieldPanel('positions'),
-        FieldRowPanel([
-            FieldPanel('bank_account'),
-            FieldPanel('contact_data')
-        ]),
+        MultiFieldPanel([
+            FieldRowPanel([
+                FieldPanel('bank_account'),
+                FieldPanel('contact_data'),
+            ]),
+            FieldPanel('payed')
+        ])
     ]
 
     @property
