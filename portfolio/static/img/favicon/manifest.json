@@ -40,7 +40,7 @@
   ],
   "start_url": "/admin",
   "scope": "/admin/",
-  "background_color": "#373a3c",
+  "background_color": "#333",
   "display": "standalone",
-  "theme_color": "#373a3c"
+  "theme_color": "#333"
 }
