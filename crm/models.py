@@ -675,6 +675,11 @@ class Invoice(TimeStampedModel):
     def payable_to(self):
         return self.issued_date + timedelta(days=self.payment_period)
 
+    @property
+    def company(self):
+        if self.project:
+            return self.project.company if self.project.company else self.project.manager.company
+
     @staticmethod
     def get_next_invoice_number():
         this_year = timezone.now().year
