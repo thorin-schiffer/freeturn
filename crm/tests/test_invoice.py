@@ -1,4 +1,5 @@
 import json
+from decimal import Decimal
 
 import pytest
 from django.urls import reverse
@@ -41,3 +42,36 @@ def test_create(admin_app, admin_user, default_site, image):
 def test_inspect(admin_app, invoice):
     url = reverse('crm_invoice_modeladmin_inspect', kwargs={'instance_pk': invoice.pk})
     admin_app.get(url)
+
+
+@pytest.mark.django_db
+def test_copy(admin_app, invoice, default_site):
+    url = f"{reverse('crm_invoice_modeladmin_create')}?from_instance={invoice.pk}"
+
+    r = admin_app.get(url)
+    form = r.forms[1]
+
+    assert form['title'].value == invoice.title
+    assert form['language'].value == str(invoice.language)
+    assert form['unit'].value == invoice.unit
+    assert float(form['vat'].value) == invoice.vat
+    assert int(form['payment_period'].value) == invoice.payment_period
+    assert form['receiver_vat_id'].value == invoice.receiver_vat_id
+    assert form['tax_id'].value == invoice.tax_id
+    assert form['bank_account'].value == invoice.bank_account
+    assert form['contact_data'].value == invoice.contact_data
+    assert form['logo'].value == str(invoice.logo.id)
+    assert form['issued_date'].value == str(timezone.now().date())
+    assert form['delivery_date'].value == str(timezone.now().date())
+    new_invoice_number = Invoice.get_next_invoice_number()
+    assert form['invoice_number'].value == new_invoice_number
+    assert form['project'].value == str(invoice.pk)
+
+    # positions is a fieldset
+    positions = json.loads(form['positions-0-value'].value)['data'][0]
+    assert positions['amount'] == invoice.invoice_positions[0].amount
+    assert Decimal(positions['price']) == invoice.invoice_positions[0].price
+
+    form.submit()
+
+    assert Invoice.objects.filter(invoice_number=new_invoice_number).exists()

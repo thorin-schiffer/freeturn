@@ -1,13 +1,15 @@
 from django.utils import timezone
+from wagtail.contrib.modeladmin.helpers import ButtonHelper, AdminURLHelper
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import CreateView, InspectView, EditView
 from wkhtmltopdf.views import PDFTemplateView
+from django.contrib.admin.utils import quote
 
 from crm.models import Invoice, InvoiceGenerationSettings, wrap_table_data
 
 
 class InvoiceCreateView(CreateView):
-    def get_initial(self):
+    def get_default(self):
         site = self.request.site
         settings = InvoiceGenerationSettings.for_site(site)
 
@@ -28,6 +30,35 @@ class InvoiceCreateView(CreateView):
             "positions": wrap_table_data(Invoice.get_initial_positions())
         }
 
+    def from_instance(self, instance: Invoice):
+        return {
+            "title": instance.title,
+            "language": instance.language,
+            "unit": instance.unit,
+            "vat": instance.vat,
+            "payment_period": instance.payment_period,
+            "receiver_vat_id": instance.receiver_vat_id,
+            "tax_id": instance.tax_id,
+            "bank_account": instance.bank_account,
+            "contact_data": instance.contact_data,
+            "logo": instance.logo,
+            "issued_date": timezone.now().date(),
+            "delivery_date": timezone.now().date(),
+            "invoice_number": Invoice.get_next_invoice_number(),
+            "positions": instance.positions,
+            "project": instance.project
+        }
+
+    def get_initial(self):
+        from_instance = self.request.GET.get('from_instance')
+        if from_instance:
+            try:
+                from_instance = Invoice.objects.filter(pk=from_instance).first()
+            except ValueError:
+                from_instance = None
+            return self.from_instance(from_instance)
+        return self.get_default()
+
 
 class InvoiceInspectView(PDFTemplateView,
                          InspectView):
@@ -42,6 +73,29 @@ class InvoiceEditView(EditView):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.instance.ensure_positions_labels()
+
+
+class InvoiceURLHelper(AdminURLHelper):
+    pass
+
+
+class InvoiceButtonHelper(ButtonHelper):
+    def get_buttons_for_obj(self, obj, *args, **kwargs):
+        btns = super().get_buttons_for_obj(obj, *args, **kwargs)
+        usr = self.request.user
+        ph = self.permission_helper
+        pk = getattr(obj, self.opts.pk.attname)
+
+        if ph.user_can_edit_obj(usr, obj):
+            btns.append(
+                {
+                    'url': f"{self.url_helper.get_action_url('create')}?from_instance={quote(pk)}",
+                    'label': "Copy",
+                    'classname': self.finalise_classname(['button-small']),
+                    'title': "Copy this invoice, invoice number will be increased",
+                }
+            )
+        return btns
 
 
 class InvoiceAdmin(ModelAdmin):
@@ -59,3 +113,4 @@ class InvoiceAdmin(ModelAdmin):
     inspect_view_class = InvoiceInspectView
     inspect_template_name = InvoiceInspectView.template_name
     edit_view_class = InvoiceEditView
+    button_helper_class = InvoiceButtonHelper
