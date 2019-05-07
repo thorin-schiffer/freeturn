@@ -1,6 +1,6 @@
 from django.utils import timezone
 from wagtail.contrib.modeladmin.options import ModelAdmin
-from wagtail.contrib.modeladmin.views import CreateView, InspectView
+from wagtail.contrib.modeladmin.views import CreateView, InspectView, EditView
 from wkhtmltopdf.views import PDFTemplateView
 
 from crm.models import Invoice, InvoiceGenerationSettings, wrap_table_data
@@ -38,6 +38,12 @@ class InvoiceInspectView(PDFTemplateView,
         return f"{self.instance}.pdf"
 
 
+class InvoiceEditView(EditView):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.instance.ensure_positions_labels()
+
+
 class InvoiceAdmin(ModelAdmin):
     model = Invoice
     menu_icon = 'fa-file'
@@ -52,3 +58,4 @@ class InvoiceAdmin(ModelAdmin):
     create_view_class = InvoiceCreateView
     inspect_view_class = InvoiceInspectView
     inspect_template_name = InvoiceInspectView.template_name
+    edit_view_class = InvoiceEditView

@@ -735,6 +735,23 @@ class Invoice(TimeStampedModel):
                                                  article=position['article']))
         return positions
 
+    def ensure_positions_labels(self):
+        # positions are somehow switch from list of lists to dict of lists
+
+        for stream_data in self.positions.stream_data:
+            # weird that type is changing if the instance is loaded from the db
+            if isinstance(stream_data, tuple):
+                stream_data = stream_data[1]
+            elif isinstance(stream_data, dict):
+                stream_data = stream_data['value']
+            else:
+                raise ValueError(f"Stream data has unknown type: {stream_data.__class__}, {stream_data}")
+            if not stream_data:
+                continue
+
+            for i, position in enumerate(stream_data['data']):
+                stream_data['data'][i] = dictify_position_row(position)
+
     def __str__(self):
         return f"{self.project}: #{self.invoice_number}"
 
