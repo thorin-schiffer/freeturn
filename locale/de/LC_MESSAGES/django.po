@@ -24,7 +24,7 @@ msgstr "UmStId"
 
 #: crm/templates/invoice.html:26
 msgid "Issued at"
-msgstr "Ausstellungsdatum:"
+msgstr "Ausstellungsdatum"
 
 #: crm/templates/invoice.html:27
 msgid "Delivered at"
