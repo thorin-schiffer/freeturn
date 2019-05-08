@@ -65,7 +65,7 @@ def test_copy(admin_app, invoice, default_site):
     assert form['delivery_date'].value == str(timezone.now().date())
     new_invoice_number = Invoice.get_next_invoice_number()
     assert form['invoice_number'].value == new_invoice_number
-    assert form['project'].value == str(invoice.pk)
+    assert form['project'].value == str(invoice.project.pk)
 
     # positions is a fieldset
     positions = json.loads(form['positions-0-value'].value)['data'][0]
