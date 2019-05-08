@@ -62,9 +62,8 @@ def parse_message(message):
     return result
 
 
-def get_raw_messages(user):
-    usa = user.social_auth.get(provider='google-oauth2')
-    service = discovery.build('gmail', 'v1', credentials=Credentials(usa))
+def get_raw_messages(creds, http=None):
+    service = discovery.build('gmail', 'v1', credentials=creds, http=http)
 
     labels = service.users().labels().list(userId='me').execute()
     try:
@@ -154,7 +153,9 @@ def associate(message):
 
 def sync():
     for user in get_user_model().objects.exclude(social_auth=None):
-        raw_messages = get_raw_messages(user)
+        usa = user.social_auth.get(provider='google-oauth2')
+        creds = Credentials(usa)
+        raw_messages = get_raw_messages(creds)
         parsed_messages = [
             parse_message(raw_message) for raw_message in raw_messages
         ]
