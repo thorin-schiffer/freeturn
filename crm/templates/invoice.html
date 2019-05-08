@@ -1,13 +1,14 @@
 {% extends 'pdf_base.html' %}
 {% load wagtailimages_tags %}
 {% load wagtailmarkdown %}
+{% load i18n %}
 
 {% block body %}
 <table style="width: 100%; margin-bottom: 30%">
     <tbody>
     <tr style="height: 10em">
         <td>
-            <h3>Invoice {{instance.invoice_number}}</h3>
+            <h3>{% trans "Invoice" %} {{instance.invoice_number}}</h3>
         </td>
         <td align="right">
             {% image instance.logo fill-100x100-c100 class="img-fluid"%}
@@ -15,19 +16,19 @@
     </tr>
     <tr>
         <td width="50%">
-            <b>To</b>:
+            <b>{% trans "To" %}</b>:
             {{ instance.payment_address | markdown}}
             <br>
-            <b>VAT ID</b>: {{ instance.sender_vat_id }}
+            <b>{% trans "VAT ID" %}</b>: {{ instance.sender_vat_id }}
         </td>
         <td align="right">
 
-            <b>Issued at</b>: {{ instance.issued_date }} <br>
-            <b>Delivered at</b>: {{ instance.delivery_date }} <br>
-            <b>Payable to</b>: {{ instance.payable_to }} <br>
+            <b>{% trans "Issued at" %}</b>: {{ instance.issued_date }} <br>
+            <b>{% trans "Delivered at" %}</b>: {{ instance.delivery_date }} <br>
+            <b>{% trans "Payable to" %}</b>: {{ instance.payable_to }} <br>
             <br>
-            <b>TAX ID</b>: {{ instance.tax_id }} <br>
-            <b>VAT ID</b>: {{ instance.receiver_vat_id }}
+            <b>{% trans "TAX ID" %}</b>: {{ instance.tax_id }} <br>
+            <b>{% trans "VAT ID" %}</b>: {{ instance.receiver_vat_id }}
         </td>
     </tr>
     </tbody>
@@ -38,13 +39,13 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Article</th>
-        <th>Amount, {{ instance.unit }}</th>
-        <th>Price</th>
-        <th>VAT, %</th>
-        <th>VAT</th>
-        <th>Price incl. VAT</th>
-        <th>Subtotal</th>
+        <th>{% trans "Article" %}</th>
+        <th>{% trans "Amount" %},{{ instance.unit }}</th>
+        <th>{% trans "Price" %}</th>
+        <th>{% trans "VAT, %" %}</th>
+        <th>{% trans "VAT" %}</th>
+        <th>{% trans "Price incl. VAT" %}</th>
+        <th>{% trans "Subtotal" %}</th>
     </tr>
     </thead>
     <tbody>
@@ -93,11 +94,11 @@
     <tbody>
     <tr>
         <td>
-            <h3>Bank account</h3>
+            <h3>{% trans "Bank account" %}</h3>
             {{ instance.bank_account | markdown }}
         </td>
         <td align="right">
-            <h3>Contact</h3>
+            <h3>{% trans "Contact" %}</h3>
             {{ instance.contact_data | markdown }}
         </td>
     </tr>

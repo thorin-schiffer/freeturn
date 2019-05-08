@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-08 11:49+0200\n"
+"POT-Creation-Date: 2019-05-08 12:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,67 @@ msgstr ""
 
 #: crm/templates/invoice.html:11
 msgid "Invoice"
+msgstr "Rechnung"
+
+#: crm/templates/invoice.html:19
+msgid "To"
+msgstr ""
+
+#: crm/templates/invoice.html:22 crm/templates/invoice.html:31
+msgid "VAT ID"
+msgstr ""
+
+#: crm/templates/invoice.html:26
+msgid "Issued at"
+msgstr ""
+
+#: crm/templates/invoice.html:27
+msgid "Delivered at"
+msgstr ""
+
+#: crm/templates/invoice.html:28
+msgid "Payable to"
+msgstr ""
+
+#: crm/templates/invoice.html:30
+msgid "TAX ID"
+msgstr ""
+
+#: crm/templates/invoice.html:42
+msgid "Article"
+msgstr ""
+
+#: crm/templates/invoice.html:43
+msgid "Amount"
+msgstr ""
+
+#: crm/templates/invoice.html:44
+msgid "Price"
+msgstr ""
+
+#: crm/templates/invoice.html:45
+#, python-format
+msgid "VAT, %%"
+msgstr ""
+
+#: crm/templates/invoice.html:46
+msgid "VAT"
+msgstr ""
+
+#: crm/templates/invoice.html:47
+msgid "Price incl. VAT"
+msgstr ""
+
+#: crm/templates/invoice.html:48
+msgid "Subtotal"
+msgstr ""
+
+#: crm/templates/invoice.html:97
+msgid "Bank account"
+msgstr ""
+
+#: crm/templates/invoice.html:101
+msgid "Contact"
 msgstr ""
 
 #: portfolio/templates/wagtailadmin/skeleton.html:22
