@@ -41,11 +41,11 @@
     <tr>
         <th>{% trans "Article" %}</th>
         <th>{% trans "Amount" %},{{ instance.unit }}</th>
-        <th>{% trans "Price" %}</th>
-        <th>{% trans "VAT, %" %}</th>
-        <th>{% trans "VAT" %}</th>
-        <th>{% trans "Price incl. VAT" %}</th>
-        <th>{% trans "Subtotal" %}</th>
+        <th>{% trans "Price" %}, {{ instance.currency }}</th>
+        <th>{% trans "VAT" %}, %</th>
+        <th>{% trans "VAT" %}, {{ instance.currency }}</th>
+        <th>{% trans "Price incl. VAT" %}, {{ instance.currency }}</th>
+        <th>{% trans "Subtotal" %}, {{ instance.currency }}</th>
     </tr>
     </thead>
     <tbody>
@@ -67,7 +67,7 @@
         <td></td>
         <td></td>
         <th>
-            {% trans "VAT" %}
+            {% trans "VAT" %}, {{ instance.currency }}
         </th>
         <th>
             {{ instance.total_vat | floatformat:2 }}
@@ -80,7 +80,7 @@
         <td></td>
         <td></td>
         <th>
-            Total
+            Total, {{ instance.currency }}
         </th>
         <th>
             {{ instance.total | floatformat:2 }}

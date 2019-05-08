@@ -47,7 +47,8 @@ class InvoiceCreateView(CreateView):
             "delivery_date": timezone.now().date(),
             "invoice_number": Invoice.get_next_invoice_number(),
             "positions": instance.positions,
-            "project": instance.project
+            "project": instance.project,
+            "currency": instance.currency
         }
 
     def get_initial(self):

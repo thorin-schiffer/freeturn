@@ -543,6 +543,11 @@ INVOICE_LANGUAGE_CHOICES = (
     ("de", "German")
 )
 
+INVOICE_CURRENCY_CHOICES = (
+    ("€", "Euro"),
+    ("$", "USD")
+)
+
 
 @dataclass
 class InvoicePosition:
@@ -576,6 +581,12 @@ class Invoice(TimeStampedModel):
     language = models.CharField(
         default="en",
         choices=INVOICE_LANGUAGE_CHOICES,
+        max_length=4
+    )
+
+    currency = models.CharField(
+        default="€",
+        choices=INVOICE_CURRENCY_CHOICES,
         max_length=4
     )
 
@@ -651,6 +662,7 @@ class Invoice(TimeStampedModel):
                 FieldPanel('tax_id'),
                 FieldPanel('receiver_vat_id'),
                 FieldPanel('sender_vat_id'),
+                FieldPanel('currency')
             ]),
         ]),
         StreamFieldPanel('positions'),
