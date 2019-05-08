@@ -1,9 +1,10 @@
+from django.contrib.admin.utils import quote
 from django.utils import timezone
+from django.utils import translation
 from wagtail.contrib.modeladmin.helpers import ButtonHelper, AdminURLHelper
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import CreateView, InspectView, EditView
 from wkhtmltopdf.views import PDFTemplateView
-from django.contrib.admin.utils import quote
 
 from crm.models import Invoice, InvoiceGenerationSettings, wrap_table_data
 
@@ -67,6 +68,11 @@ class InvoiceInspectView(PDFTemplateView,
 
     def get_filename(self):
         return f"{self.instance}.pdf"
+
+    def get(self, request, *args, **kwargs):
+        request.LANGUAGE_CODE = self.instance.language
+        translation.activate(self.instance.language)
+        return super().get(request, *args, **kwargs)
 
 
 class InvoiceEditView(EditView):
