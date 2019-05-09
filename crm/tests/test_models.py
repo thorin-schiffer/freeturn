@@ -56,6 +56,11 @@ def test_parse_message(gmail_api_message):
     assert result['gmail_thread_id'] == "1688b00c9ec9d5e7"
 
 
+def test_parse_message_text(gmail_api_response_factory):
+    result = parse_message(gmail_api_response_factory("gmail_api_message_text.json"))
+    assert result
+
+
 @pytest.fixture
 def quoted_email_text():
     return """

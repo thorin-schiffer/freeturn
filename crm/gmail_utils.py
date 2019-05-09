@@ -38,7 +38,7 @@ def extract_text(email_message):
                 return extract_text(part)
     elif main_type == 'text':
         charset = email_message.get_content_charset()
-        email_message.get_payload(decode=True).decode(charset, 'replace')
+        email_message.get_payload(decode=True).decode(charset or 'utf-8', 'replace')
     else:
         logger.error(f"Unknown main mime type {main_type}")
         return ""
@@ -47,8 +47,13 @@ def extract_text(email_message):
 def parse_message(message):
     msg_str = base64.urlsafe_b64decode(message['raw'].encode('ASCII'))
     email_message = email.message_from_bytes(msg_str)
-    from_address = email_message['from'][email_message['from'].index("<") + 1:-1]
-    full_name = email_message['from'].replace(f"<{from_address}>", "").strip()
+    if email_message['from']:
+        from_address = email_message['from'][email_message['from'].index("<") + 1:-1]
+        full_name = email_message['from'].replace(f"<{from_address}>", "").strip()
+    else:
+        from_address = "unknown"
+        full_name = "unknown"
+
     result = {
         "sent_at": datetime.utcfromtimestamp(int(message['internalDate']) / 1000).replace(tzinfo=pytz.utc),
         "subject": email_message['subject'],
@@ -58,7 +63,8 @@ def parse_message(message):
         "gmail_message_id": message['id'],
     }
     text = extract_text(email_message)
-    result['text'] = remove_quotation(text)
+    if text:
+        result['text'] = remove_quotation(text)
     return result
 
 
