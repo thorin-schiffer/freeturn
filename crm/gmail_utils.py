@@ -62,10 +62,16 @@ def parse_message(message):
     return result
 
 
-def get_raw_messages(creds, http=None):
-    service = discovery.build('gmail', 'v1', credentials=creds, http=http)
+def get_labels(service):
+    return service.users().labels().list(userId='me').execute()
 
-    labels = service.users().labels().list(userId='me').execute()
+
+def get_messages(service, label_id):
+    return service.users().messages().list(userId='me', labelIds=[label_id, "INBOX"]).execute()
+
+
+def get_raw_messages(service):
+    labels = get_labels(service)
     try:
         label_id = next(
             label_info['id'] for label_info in labels['labels'] if label_info['name'] == settings.MAILBOX_LABEL
@@ -75,7 +81,7 @@ def get_raw_messages(creds, http=None):
         return []
 
     # INBOX means a message is not archived
-    mail = service.users().messages().list(userId='me', labelIds=[label_id, "INBOX"]).execute()
+    mail = get_messages(service, label_id)
     message_ids = [message['id'] for message in mail.get('messages', [])]
     return [
         service.users().messages().get(userId='me',
@@ -155,7 +161,8 @@ def sync():
     for user in get_user_model().objects.exclude(social_auth=None):
         usa = user.social_auth.get(provider='google-oauth2')
         creds = Credentials(usa)
-        raw_messages = get_raw_messages(creds)
+        service = discovery.build('gmail', 'v1', credentials=creds)
+        raw_messages = get_raw_messages(service)
         parsed_messages = [
             parse_message(raw_message) for raw_message in raw_messages
         ]
