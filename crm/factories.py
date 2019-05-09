@@ -5,6 +5,7 @@ import factory
 import wagtail_factories
 from django.contrib.auth import get_user_model
 from django.utils.timezone import get_current_timezone
+from social_django.models import UserSocialAuth
 
 from crm import models
 from crm.models import wrap_table_data
@@ -91,6 +92,19 @@ class UserFactory(factory.DjangoModelFactory):
 class AdminFactory(UserFactory):
     is_staff = True
     is_superuser = True
+
+
+class UserSocialAuthFactory(factory.DjangoModelFactory):
+    user = factory.SubFactory(UserFactory)
+    provider = 'google-oauth2'
+    extra_data = {
+        'access_token': 'xyz',
+        'refresh_token': 'xyz',
+        'expires_in': 100
+    }
+
+    class Meta:
+        model = UserSocialAuth
 
 
 class CVFactory(factory.DjangoModelFactory):

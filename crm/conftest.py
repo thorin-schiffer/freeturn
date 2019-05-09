@@ -24,6 +24,7 @@ register(HomePageFactory)
 register(ProjectPageFactory)
 register(wagtail_factories.ImageFactory)
 register(wagtail_factories.CollectionFactory)
+register(factories.UserSocialAuthFactory)
 
 
 @pytest.fixture
