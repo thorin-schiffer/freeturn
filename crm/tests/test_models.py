@@ -40,9 +40,13 @@ def test_project_duration(project):
     assert project.duration is None
 
 
-def test_parse_message(gmail_api_response_factory):
-    message = gmail_api_response_factory("gmail_api_message.json")
-    result = parse_message(message)
+@pytest.fixture
+def gmail_api_message(gmail_api_response_factory):
+    return gmail_api_response_factory("gmail_api_message.json")
+
+
+def test_parse_message(gmail_api_message):
+    result = parse_message(gmail_api_message)
     assert result['sent_at'].date() == date(2019, 1, 26)
     assert result['text'].strip() == "this is *test *email"
     assert result['subject'] == "Test email"
