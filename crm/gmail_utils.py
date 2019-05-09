@@ -72,8 +72,13 @@ def get_labels(service):
     return service.users().labels().list(userId='me').execute()
 
 
-def get_messages(service, label_id):
+def get_message_ids(service, label_id):
     return service.users().messages().list(userId='me', labelIds=[label_id, "INBOX"]).execute()
+
+
+def get_message_raws(service, message_id):
+    return service.users().messages().get(userId='me',
+                                          id=message_id, format='raw').execute()
 
 
 def get_raw_messages(service):
@@ -87,11 +92,10 @@ def get_raw_messages(service):
         return []
 
     # INBOX means a message is not archived
-    mail = get_messages(service, label_id)
+    mail = get_message_ids(service, label_id)
     message_ids = [message['id'] for message in mail.get('messages', [])]
     return [
-        service.users().messages().get(userId='me',
-                                       id=message_id, format='raw').execute()
+        get_message_raws(service, message_id)
         for message_id in message_ids
     ]
 
