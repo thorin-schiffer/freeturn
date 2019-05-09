@@ -2,7 +2,6 @@ from datetime import timedelta
 
 from django.conf.urls import url
 from django.contrib.admin.utils import quote
-from django.http import Http404
 from django.shortcuts import redirect
 from django.template.defaultfilters import pluralize
 from django.urls import reverse
@@ -136,24 +135,6 @@ class ProjectAdmin(ThumbnailMixin, ModelAdmin):
     def last_activity(self, instance):
         days = (timezone.now() - instance.modified).days
         return f"{days} day{pluralize(days)} ago"
-
-    def get_form_fields_exclude(self, request):
-        global_fields = super().get_form_fields_exclude(request)
-        state_action = request.resolver_match.kwargs.get('action')
-        if state_action:
-            transitions = [transition for transition in Project().get_all_state_transitions() if
-                           transition.method.__name__ == state_action]
-            if not transitions:
-                raise Http404
-            transition = transitions[0]
-            all_fields = [field.name for field in Project._meta.get_fields()]
-            focus_fields = transition.custom.get('fields', [])
-
-            fields = list(set(all_fields) - set(focus_fields))
-            fields = list(set(fields + global_fields))
-        else:
-            fields = global_fields
-        return fields
 
     def state_view(self, request, instance_pk, action):
         kwargs = {'model_admin': self, 'instance_pk': instance_pk, 'action': action}
