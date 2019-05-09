@@ -1,3 +1,6 @@
+import json
+import os
+
 import wagtail_factories
 from pytest_factoryboy import register
 from crm import factories
@@ -32,3 +35,16 @@ def admin_app(django_app, admin_user):
 @pytest.fixture
 def default_site(site_factory):
     return site_factory.create(is_default_site=True)
+
+
+@pytest.fixture
+def gmail_api_response_factory():
+    def _gmail_api_response_factory(filename):
+        from django.conf import settings
+        path = os.path.join(
+            settings.BASE_DIR, "crm", "tests", "data", filename
+        )
+        with open(path, "r") as f:
+            return json.load(f)
+
+    return _gmail_api_response_factory

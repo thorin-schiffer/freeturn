@@ -1,5 +1,3 @@
-import json
-import os
 import uuid
 from datetime import date
 from datetime import timedelta
@@ -42,18 +40,9 @@ def test_project_duration(project):
     assert project.duration is None
 
 
-@pytest.fixture
-def gmail_api_message():
-    from django.conf import settings
-    path = os.path.join(
-        settings.BASE_DIR, "crm", "tests", "data", "gmail_api_message.json"
-    )
-    with open(path, "r") as f:
-        return json.load(f)
-
-
-def test_parse_message(gmail_api_message):
-    result = parse_message(gmail_api_message)
+def test_parse_message(gmail_api_response_factory):
+    message = gmail_api_response_factory("gmail_api_message.json")
+    result = parse_message(message)
     assert result['sent_at'].date() == date(2019, 1, 26)
     assert result['text'].strip() == "this is *test *email"
     assert result['subject'] == "Test email"
