@@ -23,7 +23,9 @@ def test_index_action(admin_app,
 
 @pytest.mark.django_db
 def test_inspect(admin_app,
-                 project):
+                 project_factory,
+                 project_page):
+    project = project_factory.create(project_page=project_page)
     url = reverse('crm_project_modeladmin_inspect', kwargs={'instance_pk': project.pk})
     admin_app.get(url)
 

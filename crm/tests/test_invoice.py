@@ -76,3 +76,12 @@ def test_copy(admin_app, invoice, default_site):
     form.submit()
 
     assert Invoice.objects.filter(invoice_number=new_invoice_number).exists()
+
+
+@pytest.mark.django_db
+def test_edit(admin_app, invoice):
+    url = reverse('crm_invoice_modeladmin_edit', kwargs={"instance_pk": invoice.pk})
+    r = admin_app.get(url)
+    form = r.forms[1]
+    positions = json.loads(form['positions-0-value'].value)['data'][0]
+    assert Decimal(positions['price']) == invoice.invoice_positions[0].price

@@ -38,7 +38,7 @@ def extract_text(email_message):
                 return extract_text(part)
     elif main_type == 'text':
         charset = email_message.get_content_charset()
-        email_message.get_payload(decode=True).decode(charset, 'replace')
+        email_message.get_payload(decode=True).decode(charset or 'utf-8', 'replace')
     else:
         logger.error(f"Unknown main mime type {main_type}")
         return ""
@@ -47,8 +47,13 @@ def extract_text(email_message):
 def parse_message(message):
     msg_str = base64.urlsafe_b64decode(message['raw'].encode('ASCII'))
     email_message = email.message_from_bytes(msg_str)
-    from_address = email_message['from'][email_message['from'].index("<") + 1:-1]
-    full_name = email_message['from'].replace(f"<{from_address}>", "").strip()
+    if email_message['from']:
+        from_address = email_message['from'][email_message['from'].index("<") + 1:-1]
+        full_name = email_message['from'].replace(f"<{from_address}>", "").strip()
+    else:
+        from_address = "unknown"
+        full_name = "unknown"
+
     result = {
         "sent_at": datetime.utcfromtimestamp(int(message['internalDate']) / 1000).replace(tzinfo=pytz.utc),
         "subject": email_message['subject'],
@@ -58,15 +63,26 @@ def parse_message(message):
         "gmail_message_id": message['id'],
     }
     text = extract_text(email_message)
-    result['text'] = remove_quotation(text)
+    if text:
+        result['text'] = remove_quotation(text)
     return result
 
 
-def get_raw_messages(user):
-    usa = user.social_auth.get(provider='google-oauth2')
-    service = discovery.build('gmail', 'v1', credentials=Credentials(usa))
+def get_labels(service):
+    return service.users().labels().list(userId='me').execute()
 
-    labels = service.users().labels().list(userId='me').execute()
+
+def get_message_ids(service, label_id):
+    return service.users().messages().list(userId='me', labelIds=[label_id, "INBOX"]).execute()
+
+
+def get_message_raws(service, message_id):
+    return service.users().messages().get(userId='me',
+                                          id=message_id, format='raw').execute()
+
+
+def get_raw_messages(service):
+    labels = get_labels(service)
     try:
         label_id = next(
             label_info['id'] for label_info in labels['labels'] if label_info['name'] == settings.MAILBOX_LABEL
@@ -76,11 +92,10 @@ def get_raw_messages(user):
         return []
 
     # INBOX means a message is not archived
-    mail = service.users().messages().list(userId='me', labelIds=[label_id, "INBOX"]).execute()
+    mail = get_message_ids(service, label_id)
     message_ids = [message['id'] for message in mail.get('messages', [])]
     return [
-        service.users().messages().get(userId='me',
-                                       id=message_id, format='raw').execute()
+        get_message_raws(service, message_id)
         for message_id in message_ids
     ]
 
@@ -154,7 +169,10 @@ def associate(message):
 
 def sync():
     for user in get_user_model().objects.exclude(social_auth=None):
-        raw_messages = get_raw_messages(user)
+        usa = user.social_auth.get(provider='google-oauth2')
+        creds = Credentials(usa)
+        service = discovery.build('gmail', 'v1', credentials=creds)
+        raw_messages = get_raw_messages(service)
         parsed_messages = [
             parse_message(raw_message) for raw_message in raw_messages
         ]

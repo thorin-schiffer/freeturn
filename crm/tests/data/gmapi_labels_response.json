@@ -1,0 +1,171 @@
+{
+  "labels": [
+    {
+      "id": "Label_17",
+      "name": "[Gmail]/Sent Mail",
+      "type": "user"
+    },
+    {
+      "id": "Label_13",
+      "name": "darth@vader.com",
+      "messageListVisibility": "show",
+      "labelListVisibility": "labelHide",
+      "type": "user"
+    },
+    {
+      "id": "Label_2652846259134449764",
+      "name": "CRM",
+      "messageListVisibility": "show",
+      "labelListVisibility": "labelShow",
+      "type": "user"
+    },
+    {
+      "id": "Label_3651092114600383092",
+      "name": "FleetBoard",
+      "messageListVisibility": "show",
+      "labelListVisibility": "labelShow",
+      "type": "user"
+    },
+    {
+      "id": "CATEGORY_PERSONAL",
+      "name": "CATEGORY_PERSONAL",
+      "type": "system"
+    },
+    {
+      "id": "Label_15",
+      "name": "Mailspring",
+      "type": "user"
+    },
+    {
+      "id": "IMPORTANT",
+      "name": "IMPORTANT",
+      "messageListVisibility": "hide",
+      "labelListVisibility": "labelHide",
+      "type": "system"
+    },
+    {
+      "id": "CHAT",
+      "name": "CHAT",
+      "messageListVisibility": "hide",
+      "labelListVisibility": "labelHide",
+      "type": "system"
+    },
+    {
+      "id": "SENT",
+      "name": "SENT",
+      "messageListVisibility": "hide",
+      "labelListVisibility": "labelShow",
+      "type": "system"
+    },
+    {
+      "id": "INBOX",
+      "name": "INBOX",
+      "messageListVisibility": "hide",
+      "labelListVisibility": "labelShow",
+      "type": "system"
+    },
+    {
+      "id": "TRASH",
+      "name": "TRASH",
+      "messageListVisibility": "hide",
+      "labelListVisibility": "labelHide",
+      "type": "system"
+    },
+    {
+      "id": "DRAFT",
+      "name": "DRAFT",
+      "messageListVisibility": "hide",
+      "labelListVisibility": "labelHide",
+      "type": "system"
+    },
+    {
+      "id": "SPAM",
+      "name": "SPAM",
+      "messageListVisibility": "hide",
+      "labelListVisibility": "labelHide",
+      "type": "system"
+    },
+    {
+      "id": "STARRED",
+      "name": "STARRED",
+      "messageListVisibility": "hide",
+      "labelListVisibility": "labelHide",
+      "type": "system"
+    },
+    {
+      "id": "UNREAD",
+      "name": "UNREAD",
+      "type": "system"
+    },
+    {
+      "id": "Label_12",
+      "name": "Notes/\u041d\u043e\u0432\u0430\u044f \u043f\u0430\u043f\u043a\u0430",
+      "messageListVisibility": "show",
+      "labelListVisibility": "labelHide",
+      "type": "user"
+    },
+    {
+      "id": "CATEGORY_FORUMS",
+      "name": "CATEGORY_FORUMS",
+      "messageListVisibility": "hide",
+      "labelListVisibility": "labelHide",
+      "type": "system"
+    },
+    {
+      "id": "Label_16",
+      "name": "Mailspring/Snoozed",
+      "type": "user"
+    },
+    {
+      "id": "Label_4620506326345215505",
+      "name": "DSB",
+      "messageListVisibility": "show",
+      "labelListVisibility": "labelHide",
+      "type": "user"
+    },
+    {
+      "id": "CATEGORY_SOCIAL",
+      "name": "CATEGORY_SOCIAL",
+      "messageListVisibility": "hide",
+      "labelListVisibility": "labelHide",
+      "type": "system"
+    },
+    {
+      "id": "Label_9",
+      "name": "[Imap]/Archive",
+      "messageListVisibility": "show",
+      "labelListVisibility": "labelHide",
+      "type": "user"
+    },
+    {
+      "id": "Label_18",
+      "name": "[Imap]/Scheduled",
+      "type": "user"
+    },
+    {
+      "id": "Label_14",
+      "name": "Archived",
+      "messageListVisibility": "show",
+      "labelListVisibility": "labelShow",
+      "type": "user",
+      "color": {
+        "textColor": "#ffffff",
+        "backgroundColor": "#16a765"
+      }
+    },
+    {
+      "id": "CATEGORY_UPDATES",
+      "name": "CATEGORY_UPDATES",
+      "messageListVisibility": "hide",
+      "labelListVisibility": "labelHide",
+      "type": "system"
+    },
+    {
+      "id": "CATEGORY_PROMOTIONS",
+      "name": "CATEGORY_PROMOTIONS",
+      "messageListVisibility": "hide",
+      "labelListVisibility": "labelHide",
+      "type": "system"
+    }
+  ]
+}

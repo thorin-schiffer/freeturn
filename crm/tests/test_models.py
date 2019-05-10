@@ -1,5 +1,3 @@
-import json
-import os
 import uuid
 from datetime import date
 from datetime import timedelta
@@ -10,7 +8,7 @@ from django.utils import timezone
 from decimal import Decimal as D
 from django.conf import settings
 from crm.gmail_utils import parse_message, associate, remove_quotation
-from crm.models import Invoice, InvoicePosition
+from crm.models import Invoice, InvoicePosition, invoice_raw_options, dictify_position_row
 from home.models import Technology
 
 
@@ -43,13 +41,8 @@ def test_project_duration(project):
 
 
 @pytest.fixture
-def gmail_api_message():
-    from django.conf import settings
-    path = os.path.join(
-        settings.BASE_DIR, "crm", "tests", "data", "gmail_api_message.json"
-    )
-    with open(path, "r") as f:
-        return json.load(f)
+def gmail_api_message(gmail_api_response_factory):
+    return gmail_api_response_factory("gmail_api_message.json")
 
 
 def test_parse_message(gmail_api_message):
@@ -61,6 +54,11 @@ def test_parse_message(gmail_api_message):
     assert result['full_name'] == "Sergey Cheparev"
     assert result['gmail_message_id'] == "1688b0102744bab7"
     assert result['gmail_thread_id'] == "1688b00c9ec9d5e7"
+
+
+def test_parse_message_text(gmail_api_response_factory):
+    result = parse_message(gmail_api_response_factory("gmail_api_message_text.json"))
+    assert result
 
 
 @pytest.fixture
@@ -275,3 +273,9 @@ def test_invoice_positions(invoice):
     assert position.nett_total == D('100.00')
     assert position.total == D('100.00') + (D('100.00') * settings.DEFAULT_VAT) / 100
     assert position.vat == D(settings.DEFAULT_VAT)
+
+
+def test_dictify_position():
+    position = ("x",) * len(invoice_raw_options['columns'])
+    dictified_position = dictify_position_row(position)
+    assert isinstance(dictified_position, dict)
