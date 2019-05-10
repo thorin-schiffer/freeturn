@@ -8,7 +8,7 @@ from django.utils import timezone
 from decimal import Decimal as D
 from django.conf import settings
 from crm.gmail_utils import parse_message, associate, remove_quotation
-from crm.models import Invoice, InvoicePosition
+from crm.models import Invoice, InvoicePosition, invoice_raw_options, dictify_position_row
 from home.models import Technology
 
 
@@ -273,3 +273,9 @@ def test_invoice_positions(invoice):
     assert position.nett_total == D('100.00')
     assert position.total == D('100.00') + (D('100.00') * settings.DEFAULT_VAT) / 100
     assert position.vat == D(settings.DEFAULT_VAT)
+
+
+def test_dictify_position():
+    position = ("x",) * len(invoice_raw_options['columns'])
+    dictified_position = dictify_position_row(position)
+    assert isinstance(dictified_position, dict)
