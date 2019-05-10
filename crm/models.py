@@ -534,6 +534,16 @@ def dictify_position_row(position):
     return position
 
 
+def regular_positions_stream_data(stream_data):
+    # weird that type is changing if the instance is loaded from the db
+    if isinstance(stream_data, tuple):
+        return stream_data[1]
+    elif isinstance(stream_data, dict):
+        return stream_data['value']
+    else:
+        raise ValueError(f"Stream data has unknown type: {stream_data.__class__}, {stream_data}")
+
+
 INVOICE_LANGUAGE_CHOICES = (
     ("en", "English"),
     ("de", "German")
@@ -731,13 +741,8 @@ class Invoice(TimeStampedModel):
     def invoice_positions(self):
         positions = []
         for stream_data in self.positions.stream_data:
-            # weird that type is changing if the instance is loaded from the db
-            if isinstance(stream_data, tuple):
-                stream_data = stream_data[1]
-            elif isinstance(stream_data, dict):
-                stream_data = stream_data['value']
-            else:
-                raise ValueError(f"Stream data has unknown type: {stream_data.__class__}, {stream_data}")
+            stream_data = regular_positions_stream_data(stream_data)
+
             if not stream_data:
                 continue
 
@@ -756,13 +761,7 @@ class Invoice(TimeStampedModel):
         # positions are somehow switch from list of lists to dict of lists
 
         for stream_data in self.positions.stream_data:
-            # weird that type is changing if the instance is loaded from the db
-            if isinstance(stream_data, tuple):
-                stream_data = stream_data[1]
-            elif isinstance(stream_data, dict):
-                stream_data = stream_data['value']
-            else:
-                raise ValueError(f"Stream data has unknown type: {stream_data.__class__}, {stream_data}")
+            stream_data = regular_positions_stream_data(stream_data)
             if not stream_data:
                 continue
 
