@@ -2,6 +2,7 @@ import pytest
 
 from crm.gmail_utils import get_raw_messages, sync
 from crm.models import ProjectMessage
+from crm.utils import Credentials
 
 
 @pytest.fixture
@@ -31,3 +32,16 @@ def test_sync(gmail_service, user_social_auth):
     assert message.text
     assert message.gmail_message_id
     assert message.gmail_thread_id
+
+
+@pytest.mark.django_db
+def test_creds_refresh(gmail_service, user_social_auth, mock):
+    creds = Credentials(user_social_auth)
+
+    def fake_refresh_token(*args, **kwargs):
+        user_social_auth.extra_data["refresh_token"] = "x"
+
+    mock.patch("social_django.models.UserSocialAuth.refresh_token",
+               side_effect=fake_refresh_token)
+    creds.refresh(mock.Mock())
+    assert creds._refresh_token == "x"
