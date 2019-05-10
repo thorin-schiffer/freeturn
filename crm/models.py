@@ -457,10 +457,6 @@ class CV(TimeStampedModel):
         ).order_by('-start_date')[:limit])
         self.relevant_skills.set(technologies)
 
-    @property
-    def logo(self):
-        return self.project.logo if self.project else None
-
     def save(self, **kwargs):
         creating = self.pk is None
         super().save(**kwargs)

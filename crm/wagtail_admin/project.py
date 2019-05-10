@@ -125,7 +125,7 @@ class ProjectAdmin(ThumbnailMixin, ModelAdmin):
         'original_description', 'original_url', 'notes',
         'start_date', 'end_date', 'duration', 'daily_rate', 'working_days',
         'budget', 'vat', 'invoice_amount', 'income_tax', 'nett_income',
-        'project_page',
+        'project_page', 'logo'
     ]
     thumb_image_field_name = 'logo'
     thumb_default = "/static/img/default_project.png"
