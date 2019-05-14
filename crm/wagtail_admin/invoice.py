@@ -109,7 +109,7 @@ class InvoiceAdmin(ModelAdmin):
     model = Invoice
     menu_icon = 'fa-file'
     menu_label = 'Invoices'
-    list_display = ['invoice_number', 'project', 'company', 'created', 'payed']
+    list_display = ['invoice_number', 'project', 'company', 'created', 'payed', 'payable_to']
     list_filter = ['project', 'created']
     list_per_page = 10
     list_select_related = ['project']
