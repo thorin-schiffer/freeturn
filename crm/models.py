@@ -447,6 +447,10 @@ class CV(TimeStampedModel):
                             widget=AutoCompleteSelectMultipleWidget('technologies')),
              ] + create_panels
 
+    @property
+    def logo(self):
+        return self.project.logo if self.project else None
+
     def set_relevant_skills_and_projects(self, limit=5):
         technologies = Technology.match_text(self.project.original_description)
         if self.relevant_project_pages.count():
