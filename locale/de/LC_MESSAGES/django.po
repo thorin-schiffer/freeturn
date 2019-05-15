@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-08 13:27+0000\n"
+"POT-Creation-Date: 2019-05-15 19:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -50,12 +50,8 @@ msgstr "Anzahl"
 msgid "Price"
 msgstr "Preis"
 
-#: crm/templates/invoice.html:45
-#, python-format
-msgid "VAT, %%"
-msgstr "UmSt, %%"
-
-#: crm/templates/invoice.html:46
+#: crm/templates/invoice.html:45 crm/templates/invoice.html:46
+#: crm/templates/invoice.html:70
 msgid "VAT"
 msgstr "UmSt"
 
@@ -67,11 +63,19 @@ msgstr "Preis inkl. UmSt."
 msgid "Subtotal"
 msgstr "Zwischensumme"
 
-#: crm/templates/invoice.html:97
+#: crm/templates/invoice.html:83
+msgid "Nett total"
+msgstr "Gesamt netto"
+
+#: crm/templates/invoice.html:96
+msgid "Total"
+msgstr "Gesamt"
+
+#: crm/templates/invoice.html:110
 msgid "Bank account"
 msgstr "Bankverbindung"
 
-#: crm/templates/invoice.html:101
+#: crm/templates/invoice.html:114
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -92,3 +96,6 @@ msgid ""
 "JavaScript in your web browser</a>.\n"
 "        "
 msgstr ""
+
+#~ msgid "VAT, %%"
+#~ msgstr "UmSt, %%"

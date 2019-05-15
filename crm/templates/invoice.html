@@ -80,7 +80,20 @@
         <td></td>
         <td></td>
         <th>
-            Total, {{ instance.currency }}
+            {% trans "Nett total" %}, {{ instance.currency }}
+        </th>
+        <th>
+            {{ instance.nett_total | floatformat:2 }}
+        </th>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <th>
+            {% trans "Total" %}, {{ instance.currency }}
         </th>
         <th>
             {{ instance.total | floatformat:2 }}

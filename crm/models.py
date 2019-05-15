@@ -688,6 +688,12 @@ class Invoice(TimeStampedModel):
         )
 
     @property
+    def nett_total(self):
+        return sum(
+            position.nett_total for position in self.invoice_positions
+        )
+
+    @property
     def total_vat(self):
         return sum(
             position.vat for position in self.invoice_positions
