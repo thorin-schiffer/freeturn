@@ -1,17 +1,15 @@
 .portfolio-logo {
     border-radius: 200px;
     margin: 20px 0px;
-    box-shadow: 0 5px 5px 0 #C7C7C7 inset;
     background: white;
 }
 @media (min-width: 576px){
     .portfolio-item {
-        border-radius: 20px;
-    }
-    .card-footer {
-        border-radius: 200px;
-        box-shadow: 0 3px 3px -5px black inset;
-        background: none;
+        color: #373a3c;
+        background-color: white;
+        background-image: none;
+        border-color: #373a3c;
+        border: solid 1px !important
     }
     .technology-item {
         border-radius: 20px;
