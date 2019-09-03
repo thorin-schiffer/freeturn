@@ -111,11 +111,12 @@ class ProjectAdmin(ThumbnailMixin, ModelAdmin):
     menu_label = 'Projects'
 
     list_display = ('admin_thumb', 'name', 'manager', 'location', 'state', 'last_activity')
-    list_filter = ('location', 'state')
+    list_filter = ('manager', )
     list_per_page = 10
     list_select_related = ['manager', 'location']
 
-    search_fields = ('project_page__title', 'manager__company__name', 'name', 'company__name')
+    search_fields = ('project_page__title', 'manager__company__name', 'name', 'company__name',
+                     'manager__first_name', 'manager__last_name')
     button_helper_class = ProjectButtonHelper
     url_helper_class = ProjectURLHelper
     ordering = ('-modified',)
