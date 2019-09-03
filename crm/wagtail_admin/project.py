@@ -101,7 +101,7 @@ class CreateProjectView(CreateView):
 
         return {
             'start_date': next_month_first_day,
-            'end_date': next_month_first_day.replace(month=next_month_first_day.month + 3)
+            'end_date': next_month_first_day.replace(month=(next_month_first_day.month + 3) % 12)
         }
 
 
