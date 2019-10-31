@@ -736,7 +736,7 @@ class Invoice(TimeStampedModel):
                 'article': 'Python programming',
                 'amount': len(get_working_days(
                     now.replace(day=1),
-                    now.replace(month=(now.month + 1) % 12) - timedelta(days=1),
+                    now.replace(day=1, month=(now.month + 1) % 12) - timedelta(days=1),
                 )) * 8,  # default to amount of working days * 8 hours per day working hours
                 'price': f"{settings.DEFAULT_DAILY_RATE / 8:.2f}",
             },
