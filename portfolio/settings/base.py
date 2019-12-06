@@ -49,10 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
-    'phonenumber_field',
     'django_fsm_log',
     'social_django',
-    'django_mailbox',
     'django_extensions',
 ]
 

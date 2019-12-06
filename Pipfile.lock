@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d58789c95e41351f31c9bfb05a3f694e717df91cbb2642be785a7ba3b6c3b832"
+            "sha256": "a4eb9e4a808099c74a20336a720815660beb713498c3df24bb9dcb812cfc565e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -158,14 +158,6 @@
             ],
             "index": "pypi",
             "version": "==1.6.2"
-        },
-        "django-mailbox": {
-            "hashes": [
-                "sha256:d1239f833be6d5f2a7a6bfd66fea40dcafb2fa8e953f3aa9b3afcfde1247a323",
-                "sha256:db0a02aca48679b500ad6f7da867de3892b902637c9e88f93af082f10721063f"
-            ],
-            "index": "pypi",
-            "version": "==4.8.1"
         },
         "django-modelcluster": {
             "hashes": [
