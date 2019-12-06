@@ -55,9 +55,9 @@ def create_pages(context):
 
 @invoke.task
 def sync_production_db(ctx, backup=True):
-    if backup:
-        ctx.run("heroku pg:backups:capture")
-    ctx.run("heroku pg:backups:download")
+    # if backup:
+    #     ctx.run("heroku pg:backups:capture")
+    # ctx.run("heroku pg:backups:download")
     database_url = os.environ['DATABASE_URL']
     ctx.run(f"pg_restore --verbose --clean --no-acl --no-owner --dbname={database_url} latest.dump")
     os.remove("latest.dump")
