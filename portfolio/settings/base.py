@@ -174,6 +174,7 @@ TAGGIT_TAGS_FROM_STRING = 'home.utils.tags_splitter'
 from smart_getenv import getenv
 
 DEFAULT_DAILY_RATE = getenv('DEFAULT_DAILY_RATE', default=100, type=Decimal)
+DEFAULT_WORKING_DAYS = 22 * 9
 PHONENUMBER_DEFAULT_REGION = "DE"
 PHONENUMBER_DB_FORMAT = "NATIONAL"
 VAT_RATE = Decimal('0.19')

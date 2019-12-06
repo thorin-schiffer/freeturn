@@ -730,14 +730,10 @@ class Invoice(TimeStampedModel):
 
     @staticmethod
     def get_initial_positions():
-        now = timezone.now()
         table = [
             {
                 'article': 'Python programming',
-                'amount': len(get_working_days(
-                    now.replace(day=1),
-                    now.replace(day=1, month=(now.month + 1) % 12 or 1) - timedelta(days=1),
-                )) * 8,  # default to amount of working days * 8 hours per day working hours
+                'amount': settings.DEFAULT_DAILY_RATE,
                 'price': f"{settings.DEFAULT_DAILY_RATE / 8:.2f}",
             },
         ]
