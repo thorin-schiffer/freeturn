@@ -13,7 +13,6 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
-from phonenumber_field.modelfields import PhoneNumberField
 from tld import get_fld
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPanel, PageChooserPanel, StreamFieldPanel
 from wagtail.contrib.settings.models import BaseSetting
@@ -52,9 +51,11 @@ class City(models.Model):
 class Employee(TimeStampedModel):
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
-    telephone = PhoneNumberField(null=True,
+    telephone = models.CharField(max_length=200,
+                                 null=True,
                                  blank=True)
-    mobile = PhoneNumberField(null=True,
+    mobile = models.CharField(max_length=200,
+                              null=True,
                               blank=True)
 
     email = models.EmailField()
@@ -730,14 +731,10 @@ class Invoice(TimeStampedModel):
 
     @staticmethod
     def get_initial_positions():
-        now = timezone.now()
         table = [
             {
                 'article': 'Python programming',
-                'amount': len(get_working_days(
-                    now.replace(day=1),
-                    now.replace(day=1, month=(now.month + 1) % 12 or 1) - timedelta(days=1),
-                )) * 8,  # default to amount of working days * 8 hours per day working hours
+                'amount': settings.DEFAULT_DAILY_RATE,
                 'price': f"{settings.DEFAULT_DAILY_RATE / 8:.2f}",
             },
         ]
