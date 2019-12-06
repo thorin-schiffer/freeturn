@@ -1,2 +1,2 @@
 web: gunicorn portfolio.wsgi --log-file -
-release: ./manage.py migrate
+release: ./manage.py migrate --fake-initial
