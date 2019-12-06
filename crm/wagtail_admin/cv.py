@@ -15,7 +15,7 @@ class CreateCVView(CreateView):
             edit_handler = self.model.edit_handler
         else:
             edit_handler = ObjectList(CV.create_panels)
-        return edit_handler.bind_to_model(self.model)
+        return edit_handler.bind_to(self.model)
 
     def get_initial(self):
         site = self.request.site
