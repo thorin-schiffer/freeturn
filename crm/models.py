@@ -13,7 +13,6 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
-from phonenumber_field.modelfields import PhoneNumberField
 from tld import get_fld
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPanel, PageChooserPanel, StreamFieldPanel
 from wagtail.contrib.settings.models import BaseSetting
@@ -52,9 +51,11 @@ class City(models.Model):
 class Employee(TimeStampedModel):
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
-    telephone = PhoneNumberField(null=True,
+    telephone = models.CharField(max_length=200,
+                                 null=True,
                                  blank=True)
-    mobile = PhoneNumberField(null=True,
+    mobile = models.CharField(max_length=200,
+                              null=True,
                               blank=True)
 
     email = models.EmailField()

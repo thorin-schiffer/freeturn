@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "b1eb455c55cde76b5deaba0fc2e1202a6c55318f23d8215653494671be3e8638"
+            "sha256": "ec146c888a2a22e44591243abd38b9303d5c7e1958131b4d18f14cb894514bee"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,13 +16,6 @@
         ]
     },
     "default": {
-        "babel": {
-            "hashes": [
-                "sha256:af92e6106cb7c55286b25b38ad7695f8b4efb36a90ba483d7f7a6628c46158ab",
-                "sha256:e86135ae101e31e2c8ec20a4e0c5220f4eed12487d5cf3f78be7e98d3a57fc28"
-            ],
-            "version": "==2.7.0"
-        },
         "beautifulsoup4": {
             "hashes": [
                 "sha256:11a9a27b7d3bddc6d86f59fb76afb70e921a25ac2d6cc55b40d072bd68435a76",
@@ -180,14 +173,6 @@
                 "sha256:c43d4b17844bf2a3f62a9043675e03bc464abf766afd78a4294818141f8d1b81"
             ],
             "version": "==5.0"
-        },
-        "django-phonenumber-field": {
-            "hashes": [
-                "sha256:1ab19f723928582fed412bd9844221fa4ff466276d8526b8b4a9913ee1487c5e",
-                "sha256:794ebbc3068a7af75aa72a80cb0cec67e714ff8409a965968040f1fd210b2d97"
-            ],
-            "index": "pypi",
-            "version": "==3.0.1"
         },
         "django-recaptcha2": {
             "hashes": [
@@ -409,14 +394,6 @@
                 "sha256:df884cd6cbe20e32633f1db1072e9356f53638e4361bef4e8b03c9127c9328ea"
             ],
             "version": "==3.1.0"
-        },
-        "phonenumbers": {
-            "hashes": [
-                "sha256:964ecfcf261b98fa7a749ddabd289a484bef9ed8be42d2ed46c35c68c44683bd",
-                "sha256:975f1638a743ef53f1b80a8440159047f79ce484f28704b61479e119acc0a503"
-            ],
-            "index": "pypi",
-            "version": "==8.11.0"
         },
         "pillow": {
             "hashes": [
@@ -1118,10 +1095,10 @@
         },
         "more-itertools": {
             "hashes": [
-                "sha256:57cc732766f26ddc424a4ed76d837677777a03f557c7ebeecb7e2be2888ce702",
-                "sha256:a293dbdad9d4d22e1e70832b8dcab72aac20805f0fa0575aec27cab8841e09ff"
+                "sha256:b84b238cce0d9adad5ed87e745778d20a3f8487d0f0cb8b8a586816c7496458d",
+                "sha256:c833ef592a0324bcc6a60e48440da07645063c453880c9477ceb22490aec1564"
             ],
-            "version": "==8.0.1"
+            "version": "==8.0.2"
         },
         "nodeenv": {
             "hashes": [
