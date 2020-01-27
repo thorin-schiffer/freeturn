@@ -1,6 +1,10 @@
+
+
 <h1 align="center">
     <img width="512" valign="middle" src="https://cheparev-portfolio.s3.amazonaws.com/images/freeturn.original.png" alt="Freeturn">
 </h1>
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Freeturn is an open source portfolio and CRM for individual freelance developers.
 Based on Django and Wagtail.
