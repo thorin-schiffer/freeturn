@@ -26,3 +26,29 @@ CRM:
 * quick per project CV generation using your project portfolio proven working against HR managers
 * Gmail integration, parsing the project description for quick project lead and CV generation
 * invoice generation
+
+
+#### Installing locally
+
+Freeturn uses Python3. Clone this repository.
+
+##### Setting up python env
+
+* Install for managing your python versions: https://github.com/pyenv/pyenv.
+* Update your pyenv versions cache: `pyenv update`
+* Install python version 3.7.5 (or other you prefer or one specified in Pipfile): `pyenv install 3.7.5`
+* Verify installation with `pyenv versions`. 3.7.5 must be there.
+* Configure pyenv using 3.7.5 locally: `pyenv local 3.7.5`. Say `python -V`, it should reply `Python 3.7.5`
+* Install pipenv: `pip install pipenv`
+* Initialize pipenv environment: `pipenv install --dev`. Dev install dev deps for running tests.
+* Enter virtualenv: `pipenv shell`
+* Run ipython console: `ipython`. Verify you are in the right env
+
+```python
+Python 3.7.5 (default, Jan 30 2020, 12:57:36) 
+Type 'copyright', 'credits' or 'license' for more information
+IPython 7.11.1 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: import wagtail
+```
+
