@@ -52,3 +52,15 @@ IPython 7.11.1 -- An enhanced Interactive Python. Type '?' for help.
 In [1]: import wagtail
 ```
 
+##### Setting up binaries
+
+Linux is recommended platform for development, on other systems use Docker to avoid pains.
+
+###### Local development with linux
+
+* Install wkhtmltopdf: https://wkhtmltopdf.org/, version 0.12.4
+* Install wagtail deps: https://docs.wagtail.io/en/v2.7.1/getting_started/index.html#dependencies-needed-for-installation
+* Install postgres database: https://www.postgresql.org/
+* Install redis key-value storage for caching: https://redis.io/
+
+###### Docker
