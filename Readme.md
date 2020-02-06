@@ -27,6 +27,9 @@ CRM:
 * Gmail integration, parsing the project description for quick project lead and CV generation
 * invoice generation
 
+#### Prerequisites
+
+* Static files on heroku can be only hosted on a persistent file storage, AWS S3 is currently used 
 
 #### Installing locally
 
@@ -43,6 +46,8 @@ Freeturn uses Python3. Clone this repository.
 * Initialize pipenv environment: `pipenv install --dev`. Dev install dev deps for running tests.
 * Enter virtualenv: `pipenv shell`
 * Run ipython console: `ipython`. Verify you are in the right env
+* Copy dotenv template to .env and fill it up: `cp .env_template .env`
+* Install pre-commit hooks with: `pre-commit install`. Read more about pre-commit: https://pre-commit.com/
 
 ```python
 Python 3.7.5 (default, Jan 30 2020, 12:57:36) 
@@ -58,9 +63,12 @@ Linux is recommended platform for development, on other systems use Docker to av
 
 ###### Local development with linux
 
+* copy dotenv template to dotenv: `cp .env_template .env` 
 * Install wkhtmltopdf: https://wkhtmltopdf.org/, version 0.12.4
 * Install wagtail deps: https://docs.wagtail.io/en/v2.7.1/getting_started/index.html#dependencies-needed-for-installation
 * Install postgres database: https://www.postgresql.org/
 * Install redis key-value storage for caching: https://redis.io/
 
 ###### Docker
+
+Dockerfile is for running tests only, as heroku is currently considered as the main deployment platform.
