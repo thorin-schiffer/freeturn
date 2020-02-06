@@ -1,7 +1,8 @@
 FROM python:3.7.5
 ENV PYTHONUNBUFFERED 1
 
-RUN apt-get update && apt-get -y install build-essential
+RUN apt-get update && apt-get -y install build-essential wkhtmltopdf
+
 RUN pip install --upgrade pip && pip install --upgrade pipenv
 
 COPY Pipfile Pipfile
