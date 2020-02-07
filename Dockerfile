@@ -1,5 +1,6 @@
 FROM python:3.7.5
 ENV PYTHONUNBUFFERED 1
+EXPOSE 8000/tcp
 
 RUN apt-get update && apt-get -y install build-essential wkhtmltopdf
 
@@ -16,4 +17,4 @@ COPY . /app
 RUN python manage.py migrate
 RUN pytest -n auto
 
-ENTRYPOINT bash
+CMD ./start.sh

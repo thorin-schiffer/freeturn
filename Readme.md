@@ -71,4 +71,7 @@ Linux is recommended platform for development, on other systems use Docker to av
 
 ###### Docker
 
-Dockerfile is for running tests only, as heroku is currently considered as the main deployment platform.
+Dockerfile is for running tests and demonstration purposes only, as heroku is currently considered as the main deployment platform.
+Sqlite DB is used, which is not mounted to the outside of the container, so your changes will be gone after you stop the container.
+Please submit an issue or a PR with your proposals for the Docker support. 
+Bind the port 8000 (`-p 8000:8000`)
