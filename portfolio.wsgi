@@ -6,3 +6,4 @@ loglevel = 'info'
 secure_scheme_headers = {
     'HTTP_X_FORWARDED_PROTO': 'https'
 }
+worker-tmp-dir = /dev/shm
