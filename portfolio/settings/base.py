@@ -1,4 +1,7 @@
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from social_core.pipeline import DEFAULT_AUTH_PIPELINE
+from smart_getenv import getenv
+import dj_database_url
 import os
 from decimal import Decimal
 
@@ -95,7 +98,6 @@ WSGI_APPLICATION = 'portfolio.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-import dj_database_url
 
 DATABASES = {'default': dj_database_url.config()}
 # Password validation
@@ -169,7 +171,6 @@ EMAIL_PORT = 587
 
 TAGGIT_CASE_INSENSITIVE = True
 TAGGIT_TAGS_FROM_STRING = 'home.utils.tags_splitter'
-from smart_getenv import getenv
 
 DEFAULT_DAILY_RATE = getenv('DEFAULT_DAILY_RATE', default=100, type=Decimal)
 DEFAULT_WORKING_DAYS = 22 * 9
@@ -192,7 +193,6 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/gmail.send',
     'https://mail.google.com/'
 ]
-from social_core.pipeline import DEFAULT_AUTH_PIPELINE
 
 SOCIAL_AUTH_PIPELINE = ("utils.social_for_authed_only",) + DEFAULT_AUTH_PIPELINE
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {

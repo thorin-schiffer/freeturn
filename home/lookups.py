@@ -10,7 +10,7 @@ class TechnologiesLookup(LookupChannel):
         return self.model.objects.filter(name__icontains=q)
 
     def format_item_display(self, item):
-        return u"<span class='icon icon-fa-cog'>%s</span>" % item.name
+        return "<span class='icon icon-fa-cog'>%s</span>" % item.name
 
 
 @register('project_pages')
@@ -21,4 +21,4 @@ class ProjectPageLookup(LookupChannel):
         return self.model.objects.live().filter(title__icontains=q)
 
     def format_item_display(self, item):
-        return u"<span class='icon icon-fa-product-hunt'>%s</span>" % item.title
+        return "<span class='icon icon-fa-product-hunt'>%s</span>" % item.title

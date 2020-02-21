@@ -29,7 +29,7 @@ CRM:
 
 #### Prerequisites
 
-* Static files on heroku can be only hosted on a persistent file storage, AWS S3 is currently used 
+* Static files on heroku can be only hosted on a persistent file storage, AWS S3 is currently used
 
 #### Installing locally
 
@@ -50,7 +50,7 @@ Freeturn uses Python3. Clone this repository.
 * Install pre-commit hooks with: `pre-commit install`. Read more about pre-commit: https://pre-commit.com/
 
 ```python
-Python 3.7.5 (default, Jan 30 2020, 12:57:36) 
+Python 3.7.5 (default, Jan 30 2020, 12:57:36)
 Type 'copyright', 'credits' or 'license' for more information
 IPython 7.11.1 -- An enhanced Interactive Python. Type '?' for help.
 
@@ -63,7 +63,7 @@ Linux is recommended platform for development, on other systems use Docker to av
 
 ###### Local development with linux
 
-* copy dotenv template to dotenv: `cp .env_template .env` 
+* copy dotenv template to dotenv: `cp .env_template .env`
 * Install wkhtmltopdf: https://wkhtmltopdf.org/, version 0.12.4
 * Install wagtail deps: https://docs.wagtail.io/en/v2.7.1/getting_started/index.html#dependencies-needed-for-installation
 * Install postgres database: https://www.postgresql.org/
@@ -73,5 +73,5 @@ Linux is recommended platform for development, on other systems use Docker to av
 
 Dockerfile is for running tests and demonstration purposes only, as heroku is currently considered as the main deployment platform.
 Sqlite DB is used, which is not mounted to the outside of the container, so your changes will be gone after you stop the container.
-Please submit an issue or a PR with your proposals for the Docker support. 
+Please submit an issue or a PR with your proposals for the Docker support.
 Bind the port 8000 (`-p 8000:8000`)

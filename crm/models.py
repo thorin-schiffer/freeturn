@@ -438,15 +438,15 @@ class CV(TimeStampedModel):
         ),
     ]
     panels = [
-                 MultiFieldPanel([
-                     AutocompletePanel('relevant_project_pages', is_single=False,
-                                       page_type='home.ProjectPage'),
-                     FieldPanel('include_portfolio'),
+        MultiFieldPanel([
+            AutocompletePanel('relevant_project_pages', is_single=False,
+                              page_type='home.ProjectPage'),
+            FieldPanel('include_portfolio'),
 
-                 ]),
-                 FieldPanel('relevant_skills',
-                            widget=AutoCompleteSelectMultipleWidget('technologies')),
-             ] + create_panels
+        ]),
+        FieldPanel('relevant_skills',
+                   widget=AutoCompleteSelectMultipleWidget('technologies')),
+    ] + create_panels
 
     @property
     def logo(self):
