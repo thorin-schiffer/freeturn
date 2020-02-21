@@ -65,10 +65,25 @@ def mail(context):
 
 
 @invoke.task
+@with_django
+def create_admin(ctx):
+    """Creates admin for local instance"""
+    assert getattr(ctx, 'host', 'localhost') == 'localhost'
+    from django.contrib.auth import get_user_model
+
+    if not get_user_model().objects.filter(username='admin').exists():
+        user = get_user_model().objects.create_superuser(
+            'admin', 'admin@admin.com', 'admin'
+        )
+        print(f"Created user {user} with password 'admin'")
+
+
+@invoke.task
 def fill(context, migrate=False):
     configure_django()
     if migrate:
         context.run('rm db.sqlite3')
         context.run('PYTHONUNBUFFERED=1 ./manage.py migrate')
+        create_admin(context)
     from initial_filling import fill
     fill()
