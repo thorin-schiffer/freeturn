@@ -8,16 +8,21 @@ import invoke
 dotenv.load_dotenv()
 
 
+# https://github.com/pyinvoke/invoke/issues/555
+def configure_django():
+    from django.db.backends.base.base import BaseDatabaseWrapper
+    BaseDatabaseWrapper.queries_limit = 50000
+    from django.core.wsgi import get_wsgi_application
+    PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "rms.settings")
+    sys.path.append(PROJECT_DIR)
+    get_wsgi_application()
+
+
 def with_django(func):
     @functools.wraps(func)
     def _inner(context, *args, **kwargs):
-        from django.core.wsgi import get_wsgi_application
-        PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__)))
-
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "portfolio.settings.dev")
-        sys.path.append(PROJECT_DIR)
-        get_wsgi_application()
-
+        configure_django()
         func(context, *args, **kwargs)
 
     return _inner
