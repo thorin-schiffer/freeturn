@@ -39,26 +39,6 @@ def deploy(context, repo=True, db_backup=True):
 
 
 @invoke.task
-@with_django
-def create_pages(context):
-    from home.models import PortfolioPage, TechnologiesPage, HomePage
-    from treebeard.exceptions import NodeAlreadySaved
-
-    types = [PortfolioPage, TechnologiesPage]
-    home = HomePage.objects.first()
-
-    for t in types:
-        if not t.objects.exists():
-            print(f"Adding {t}")
-            title = t.__name__.replace("Page", "").lower()
-            try:
-                home.add_child(instance=t(title=title))
-            except NodeAlreadySaved:
-                print(f"Error adding {title}, page is somehow there")
-                continue
-
-
-@invoke.task
 def sync_production_db(ctx, backup=True):
     # if backup:
     #     ctx.run("heroku pg:backups:capture")
@@ -82,3 +62,13 @@ def sync_production_s3(ctx):
 def mail(context):
     from crm.gmail_utils import sync
     sync()
+
+
+@invoke.task
+def fill(context, migrate=False):
+    configure_django()
+    if migrate:
+        context.run('rm db.sqlite3')
+        context.run('PYTHONUNBUFFERED=1 ./manage.py migrate')
+    from initial_filling import fill
+    fill()
