@@ -6,13 +6,13 @@ from crm.utils import Credentials
 
 
 @pytest.fixture
-def gmail_service(mock, gmail_api_response_factory):
-    service = mock.Mock()
-    mock.patch('crm.gmail_utils.get_labels', lambda s: gmail_api_response_factory("gmapi_labels_response.json"))
-    mock.patch('crm.gmail_utils.get_message_ids',
-               lambda s, l: {"messages": [gmail_api_response_factory("gmail_api_message.json")]})
-    mock.patch('crm.gmail_utils.get_message_raws',
-               lambda s, l: gmail_api_response_factory("gmail_api_message.json"))
+def gmail_service(mocker, gmail_api_response_factory):
+    service = mocker.Mock()
+    mocker.patch('crm.gmail_utils.get_labels', lambda s: gmail_api_response_factory("gmapi_labels_response.json"))
+    mocker.patch('crm.gmail_utils.get_message_ids',
+                 lambda s, l: {"messages": [gmail_api_response_factory("gmail_api_message.json")]})
+    mocker.patch('crm.gmail_utils.get_message_raws',
+                 lambda s, l: gmail_api_response_factory("gmail_api_message.json"))
     return service
 
 
@@ -35,13 +35,13 @@ def test_sync(gmail_service, user_social_auth):
 
 
 @pytest.mark.django_db
-def test_creds_refresh(gmail_service, user_social_auth, mock):
+def test_creds_refresh(gmail_service, user_social_auth, mocker):
     creds = Credentials(user_social_auth)
 
     def fake_refresh_token(*args, **kwargs):
         user_social_auth.extra_data["refresh_token"] = "x"
 
-    mock.patch("social_django.models.UserSocialAuth.refresh_token",
-               side_effect=fake_refresh_token)
-    creds.refresh(mock.Mock())
+    mocker.patch("social_django.models.UserSocialAuth.refresh_token",
+                 side_effect=fake_refresh_token)
+    creds.refresh(mocker.Mock())
     assert creds._refresh_token == "x"
