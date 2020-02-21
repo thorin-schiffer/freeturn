@@ -85,5 +85,5 @@ def fill(context, migrate=False):
         context.run('rm db.sqlite3')
         context.run('PYTHONUNBUFFERED=1 ./manage.py migrate')
         create_admin(context)
-    from initial_filling import fill
+    from home.initial_filling import fill
     fill()
