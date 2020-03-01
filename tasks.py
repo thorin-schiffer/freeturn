@@ -1,8 +1,8 @@
 import functools
 import logging
 import os
-import sys
 import random
+import sys
 
 import dotenv
 import invoke
@@ -81,10 +81,34 @@ def create_admin(ctx):
         print(f"Created user {user} with password 'admin'")
 
 
-def fill_pages(projects_count=9):
-    from wagtail.core.models import Page
-    from home.factories import HomePageFactory, PortfolioPageFactory, TechnologiesPageFactory, ProjectPageFactory
+def fill_portfolio(home, projects_count=9):
+    from wagtail.images.models import Image
+    from wagtail.core.models import Collection
+    from home.factories import PortfolioPageFactory, ProjectPageFactory
     from home.models import Technology, Responsibility
+    background = Image.objects.filter(collection__name='Backgrounds').order_by("?").first()
+    portfolio_page = PortfolioPageFactory.build(background=random.choice(background))
+    home.add_child(instance=portfolio_page)
+    logos_collection = Collection.objects.get(name='Logos')
+    logos = Image.objects.filter(collection=logos_collection)
+    for i in range(projects_count):
+        logo = logos[i % len(logos)]
+        page = ProjectPageFactory.build(technologies=[],
+                                        description__max_nb_chars=1000,
+                                        logo=logo)
+        portfolio_page.add_child(instance=page)
+
+        page.responsibilities.set(Responsibility.objects.order_by("?")[:3])
+        page.technologies.set(Technology.objects.order_by("?")[:3])
+        page.save()
+
+        print(f"Added {page}")
+
+
+def fill_pages():
+    from wagtail.core.models import Page
+    from home.factories import HomePageFactory, TechnologiesPageFactory, \
+        ContactPageFactory
     from wagtail.images.models import Image
     from home.factories import SiteFactory
     from wagtail.core.models import Collection
@@ -105,25 +129,11 @@ def fill_pages(projects_count=9):
     default_site.port = 8000
     default_site.save()
 
-    portfolio_page = PortfolioPageFactory.build(background=random.choice(backgrounds))
-    home.add_child(instance=portfolio_page)
-    logos_collection = Collection.objects.get(name='Logos')
-    logos = Image.objects.filter(collection=logos_collection)
-    for i in range(projects_count):
-        logo = logos[i % len(logos)]
-        page = ProjectPageFactory.build(technologies=[],
-                                        description__max_nb_chars=1000,
-                                        logo=logo)
-        portfolio_page.add_child(instance=page)
-
-        page.responsibilities.set(Responsibility.objects.order_by("?")[:3])
-        page.technologies.set(Technology.objects.order_by("?")[:3])
-        page.save()
-
-        print(f"Added {page}")
-
+    fill_portfolio(home)
     technologies_page = TechnologiesPageFactory.build(background=random.choice(backgrounds))
     home.add_child(instance=technologies_page)
+
+    home.add_child(instance=ContactPageFactory.build())
 
 
 def fill_snippets(count=10):
@@ -160,10 +170,6 @@ def fill_pictures():
                 image.collection = collection
                 image.save()
         print(f"Loaded {Image.objects.count()} images from {directory}")
-
-
-def fill_forms():
-    pass
 
 
 def fill_clean():
