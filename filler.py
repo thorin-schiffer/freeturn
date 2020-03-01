@@ -1,14 +1,39 @@
 import os
 import random
 
+from django.core.files.images import ImageFile
+from wagtail.core.models import Collection
+from wagtail.core.models import Page
+from wagtail.core.models import Site
+from wagtail.images.models import Image
+from wagtail_factories import CollectionFactory
+
+from home.factories import HomePageFactory, TechnologiesPageFactory, \
+    ContactPageFactory
+from home.factories import PortfolioPageFactory, ProjectPageFactory
+from home.factories import SiteFactory
+from home.factories import TechnologyFactory, ResponsibilityFactory
+from home.models import HomePage, FormField
+from home.models import Technology, Responsibility
+
+
+def fill_form(home):
+    contact_page = ContactPageFactory.build()
+    contact_page.form_fields = [
+        FormField(label="your email", field_type='email'),
+        FormField(label="some words about your project", field_type='multiline', required=False),
+        FormField(label="technologies", field_type='singleline'),
+        FormField(label="workload (hours per week)", field_type='number'),
+        FormField(label="duration in months", field_type='number'),
+        FormField(label="location", field_type='singleline'),
+        FormField(label="privacy policy", field_type='checkbox'),
+    ]
+    home.add_child(instance=contact_page)
+
 
 def fill_portfolio(home, projects_count=9):
-    from wagtail.images.models import Image
-    from wagtail.core.models import Collection
-    from home.factories import PortfolioPageFactory, ProjectPageFactory
-    from home.models import Technology, Responsibility
     background = Image.objects.filter(collection__name='Backgrounds').order_by("?").first()
-    portfolio_page = PortfolioPageFactory.build(background=random.choice(background))
+    portfolio_page = PortfolioPageFactory.build(background=background)
     home.add_child(instance=portfolio_page)
     logos_collection = Collection.objects.get(name='Logos')
     logos = Image.objects.filter(collection=logos_collection)
@@ -27,12 +52,6 @@ def fill_portfolio(home, projects_count=9):
 
 
 def fill_pages():
-    from wagtail.core.models import Page
-    from home.factories import HomePageFactory, TechnologiesPageFactory, \
-        ContactPageFactory
-    from wagtail.images.models import Image
-    from home.factories import SiteFactory
-    from wagtail.core.models import Collection
     backgrounds_collection = Collection.objects.get(name='Backgrounds')
     backgrounds = Image.objects.filter(collection=backgrounds_collection)
     people_collection = Collection.objects.get(name='People')
@@ -51,15 +70,14 @@ def fill_pages():
     default_site.save()
 
     fill_portfolio(home)
+
     technologies_page = TechnologiesPageFactory.build(background=random.choice(backgrounds))
     home.add_child(instance=technologies_page)
 
-    home.add_child(instance=ContactPageFactory.build())
+    fill_form(home)
 
 
 def fill_snippets(count=10):
-    from home.factories import TechnologyFactory, ResponsibilityFactory
-    from wagtail.images.models import Image
     for i in range(count):
         random_image = Image.objects.filter(collection__name='Logos').order_by("?").first()
         print(f"Adding: {TechnologyFactory(logo=random_image)}")
@@ -71,11 +89,6 @@ def fill_crm_data():
 
 
 def fill_pictures():
-    from django.core.files.images import ImageFile
-    from wagtail.images.models import Image
-    from wagtail_factories import CollectionFactory
-    from wagtail.core.models import Collection
-
     images_path = "fill_media"
     directories = [filename for filename in os.listdir(images_path)]
     for directory in directories:
@@ -94,10 +107,6 @@ def fill_pictures():
 
 
 def clean():
-    from wagtail.images.models import Image
-    from home.models import Technology, Responsibility, HomePage
-    from wagtail.core.models import Site
-
     Image.objects.all().delete()
     Technology.objects.all().delete()
     Responsibility.objects.all().delete()

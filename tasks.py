@@ -86,9 +86,9 @@ def create_admin(ctx):
 })
 def fill(context, migrate=False):
     import factory.random
-    import filler
     factory.random.reseed_random('my_awesome_project')
     configure_django()
+    import filler
     if migrate:
         context.run('rm db.sqlite3')
         context.run('PYTHONUNBUFFERED=1 ./manage.py migrate')
