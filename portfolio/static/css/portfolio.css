@@ -2,6 +2,7 @@
     border-radius: 200px;
     margin: 20px 0px;
     background: white;
+    border: solid 1px #373a3c;
 }
 @media (min-width: 576px){
     .portfolio-item {
@@ -21,6 +22,7 @@
 .technology-logo {
     border-radius: 100px;
     margin: 20px;
+    border: solid 1px #373a3c;
 }
 
 .row {

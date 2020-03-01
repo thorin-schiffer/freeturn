@@ -19,7 +19,7 @@ class RecaptchaForm(AbstractEmailForm):
 
     def process_form_submission(self, form):
         remove_captcha_field(form)
-        return super(RecaptchaForm, self).process_form_submission(form)
+        return super().process_form_submission(form)
 
     class Meta:
         abstract = True

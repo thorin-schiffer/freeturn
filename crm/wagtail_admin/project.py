@@ -20,7 +20,7 @@ from crm.models import Project, ProjectMessage
 class ProjectURLHelper(AdminURLHelper):
     def get_action_url_pattern(self, action):
         if action == 'state':
-            return r'^%s/%s/%s/(?P<instance_pk>[-\w]+)/(?P<action>[-\w]+)/$' % (
+            return r'^{}/{}/{}/(?P<instance_pk>[-\w]+)/(?P<action>[-\w]+)/$'.format(
                 self.opts.app_label, self.opts.model_name, action
             )
         pattern = super().get_action_url_pattern(action)

@@ -14,7 +14,6 @@ RUN pipenv install --system --deploy --ignore-pipfile --dev
 WORKDIR /app
 COPY . /app
 
-RUN python manage.py migrate
-RUN pytest -n auto
+#RUN pytest -n auto
 
 CMD ./start.sh
