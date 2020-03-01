@@ -85,8 +85,6 @@ def create_admin(ctx):
     'migrate': 'Migrate DB and remove the datbase file before filling',
 })
 def fill(context, migrate=False):
-    import factory.random
-    factory.random.reseed_random('my_awesome_project')
     configure_django()
     import filler
     if migrate:
@@ -95,6 +93,4 @@ def fill(context, migrate=False):
         create_admin(context)
     else:
         filler.clean()
-    filler.fill_pictures()
-    filler.fill_snippets()
-    filler.fill_pages()
+    filler.fill()

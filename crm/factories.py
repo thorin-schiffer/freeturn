@@ -17,6 +17,7 @@ class CityFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = models.City
+        django_get_or_create = ('name',)
 
 
 class ChannelFactory(factory.DjangoModelFactory):
@@ -38,6 +39,7 @@ class CompanyFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = models.Company
+        django_get_or_create = ('name',)
 
 
 class EmployeeFactory(factory.DjangoModelFactory):
@@ -56,11 +58,12 @@ class ProjectFactory(factory.DjangoModelFactory):
     company = factory.SubFactory(CompanyFactory)
     manager = factory.SubFactory(EmployeeFactory)
     location = factory.SubFactory(CityFactory)
-    original_description = factory.Faker('paragraphs')
+    original_description = factory.Faker('text')
     original_url = factory.Faker('uri')
     notes = factory.Faker('text')
     daily_rate = factory.Faker('pydecimal', left_digits=3, right_digits=2, positive=True)
     start_date = factory.Faker('future_datetime', end_date="+30d")
+    name = factory.Faker('job')
 
     class Meta:
         model = models.Project
