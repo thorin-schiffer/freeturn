@@ -90,8 +90,10 @@ def fill_pages(projects_count=9):
     from wagtail.core.models import Collection
     backgrounds_collection = Collection.objects.get(name='Backgrounds')
     backgrounds = Image.objects.filter(collection=backgrounds_collection)
+    people_collection = Collection.objects.get(name='People')
 
-    home = HomePageFactory.build(picture=None, background=random.choice(backgrounds))
+    home = HomePageFactory.build(background=random.choice(backgrounds),
+                                 picture=Image.objects.filter(collection=people_collection).order_by("?").first())
     default_site = SiteFactory(is_default_site=True)
     root = Page.objects.get(pk=1)
     root.add_child(instance=home)
@@ -146,8 +148,7 @@ def fill_pictures():
     for directory in directories:
         collection = Collection.objects.filter(name=directory.capitalize()).first() or \
             CollectionFactory(name=directory.capitalize())
-        filenames = [filename for filename in os.listdir(os.path.join(images_path, directory))
-                     if filename.endswith('.png')]
+        filenames = [filename for filename in os.listdir(os.path.join(images_path, directory))]
 
         for filename in filenames:
             full_path = os.path.join(images_path, directory, filename)
