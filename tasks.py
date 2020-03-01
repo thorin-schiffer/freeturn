@@ -157,7 +157,7 @@ def fill_pictures():
                 image = Image(file=image_file, title=filename)
                 image.collection = collection
                 image.save()
-        print(f"Loaded {Image.objects.count()} images")
+        print(f"Loaded {Image.objects.count()} images from {directory}")
 
 
 def fill_forms():
