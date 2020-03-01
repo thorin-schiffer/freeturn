@@ -83,11 +83,12 @@ def create_admin(ctx):
 def fill_pages(projects_count=9):
     from wagtail.core.models import Page
     from home.factories import HomePageFactory, PortfolioPageFactory, TechnologiesPageFactory, ProjectPageFactory
-    from wagtail.core.models import Site
+    from home.models import Technology, Responsibility
     from wagtail.images.models import Image
+    from home.factories import SiteFactory
 
     home = HomePageFactory.build(picture=None)
-    default_site = Site.objects.last()
+    default_site = SiteFactory(is_default_site=True)
     root = Page.objects.get(pk=1)
     root.add_child(instance=home)
     default_site.root_page.delete()
@@ -104,14 +105,24 @@ def fill_pages(projects_count=9):
                                         description__max_nb_chars=1000,
                                         logo=logo)
         portfolio_page.add_child(instance=page)
+
+        page.responsibilities.set(Responsibility.objects.order_by("?")[:3])
+        page.technologies.set(Technology.objects.order_by("?")[:3])
+        page.save()
+
         print(f"Added {page}")
 
     technologies_page = TechnologiesPageFactory.build()
     home.add_child(instance=technologies_page)
 
 
-def fill_snippets():
-    pass
+def fill_snippets(count=10):
+    from home.factories import TechnologyFactory, ResponsibilityFactory
+    from wagtail.images.models import Image
+    for i in range(count):
+        random_image = Image.objects.order_by("?").first()
+        print(f"Adding: {TechnologyFactory(logo=random_image)}")
+        print(f"Adding: {ResponsibilityFactory()}")
 
 
 def fill_crm_data():
@@ -138,15 +149,30 @@ def fill_forms():
     pass
 
 
+def fill_clean():
+    from wagtail.images.models import Image
+    from home.models import Technology, Responsibility, HomePage
+    from wagtail.core.models import Site
+
+    Image.objects.all().delete()
+    Technology.objects.all().delete()
+    Responsibility.objects.all().delete()
+    HomePage.objects.all().delete()
+    Site.objects.all().delete()
+
+
 @invoke.task(help={
     'migrate': 'Migrate DB and remove the datbase file before filling',
-    'flush': 'Flush db (for dev mainly)'
 })
-def fill(context, migrate=False, flush=False):
+def fill(context, migrate=False):
+    import factory.random
+    factory.random.reseed_random('my_awesome_project')
     configure_django()
+    fill_clean()
     if migrate:
         context.run('rm db.sqlite3')
         context.run('PYTHONUNBUFFERED=1 ./manage.py migrate')
         create_admin(context)
     fill_pictures()
+    fill_snippets()
     fill_pages()

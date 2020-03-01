@@ -5,7 +5,7 @@ from taggit.models import Tag
 from wagtail.core.models import Site
 
 from home import models
-from home.models import Technology
+from home.models import Technology, Responsibility
 
 
 class HomePageFactory(wagtail_factories.PageFactory):
@@ -62,10 +62,13 @@ class TagFactory(factory.DjangoModelFactory):
 
 
 class TechnologyFactory(factory.DjangoModelFactory):
+
     name = factory.Faker("word")
+    summary = factory.Faker("sentence")
 
     class Meta:
         model = Technology
+        django_get_or_create = ('name',)
 
 
 class TechnologiesPageFactory(wagtail_factories.PageFactory):
@@ -83,3 +86,10 @@ class SiteFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = Site
+
+
+class ResponsibilityFactory(factory.DjangoModelFactory):
+    text = factory.Faker('sentence')
+
+    class Meta:
+        model = Responsibility
