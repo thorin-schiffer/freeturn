@@ -1,4 +1,4 @@
-from home.models import PortfolioPage, TechnologiesPage, ContactPage
+from home.models import PortfolioPage, TechnologiesPage, ContactPage, HomePage
 from utils import disabled_in_admin
 
 
@@ -11,5 +11,6 @@ def menu_items(request):
             **{
                 page.title: page for page in ContactPage.objects.live()
             }
-        }
+        },
+        'footer': HomePage.objects.live().first().title
     }

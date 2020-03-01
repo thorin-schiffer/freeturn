@@ -9,7 +9,7 @@ from home.models import Technology, Responsibility
 
 
 class HomePageFactory(wagtail_factories.PageFactory):
-    title = factory.Faker('sentence')
+    title = factory.Faker('name')
     picture = factory.SubFactory(wagtail_factories.ImageFactory)
 
     class Meta:
