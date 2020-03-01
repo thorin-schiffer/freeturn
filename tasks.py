@@ -2,6 +2,7 @@ import functools
 import logging
 import os
 import sys
+import random
 
 import dotenv
 import invoke
@@ -86,8 +87,11 @@ def fill_pages(projects_count=9):
     from home.models import Technology, Responsibility
     from wagtail.images.models import Image
     from home.factories import SiteFactory
+    from wagtail.core.models import Collection
+    backgrounds_collection = Collection.objects.get(name='Backgrounds')
+    backgrounds = Image.objects.filter(collection=backgrounds_collection)
 
-    home = HomePageFactory.build(picture=None)
+    home = HomePageFactory.build(picture=None, background=random.choice(backgrounds))
     default_site = SiteFactory(is_default_site=True)
     root = Page.objects.get(pk=1)
     root.add_child(instance=home)
@@ -96,11 +100,13 @@ def fill_pages(projects_count=9):
     default_site.port = 8000
     default_site.save()
 
-    portfolio_page = PortfolioPageFactory.build()
+    portfolio_page = PortfolioPageFactory.build(background=random.choice(backgrounds))
     home.add_child(instance=portfolio_page)
-    images = Image.objects.all()
+    logos_collection = Collection.objects.get(name='Logos')
+
+    logos = Image.objects.filter(collection=logos_collection)
     for i in range(projects_count):
-        logo = images[i % len(images)]
+        logo = logos[i % len(logos)]
         page = ProjectPageFactory.build(technologies=[],
                                         description__max_nb_chars=1000,
                                         logo=logo)
@@ -112,7 +118,7 @@ def fill_pages(projects_count=9):
 
         print(f"Added {page}")
 
-    technologies_page = TechnologiesPageFactory.build()
+    technologies_page = TechnologiesPageFactory.build(background=random.choice(backgrounds))
     home.add_child(instance=technologies_page)
 
 
