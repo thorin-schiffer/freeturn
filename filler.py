@@ -94,10 +94,11 @@ def fill_snippets(count=10):
 
 def fill_crm_data(projects_count=10):
     for i in range(projects_count):
-        logo = get_random_image('Logos')
-        project = ProjectFactory()
-        project.company.logo = logo
+        project = ProjectFactory(company__logo=None, manager__picture=None, manager__company__logo=None)
+        project.company.logo = get_random_image('Logos')
         project.company.save()
+        project.manager.picture = get_random_image('People')
+        project.manager.save()
         project.modified = make_aware(project.start_date) - timedelta(days=random.randint(30, 90))
         project.save(update_modified=False)
         print(f"Created {project}")
