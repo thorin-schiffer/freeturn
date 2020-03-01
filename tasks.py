@@ -105,7 +105,6 @@ def fill_pages(projects_count=9):
     portfolio_page = PortfolioPageFactory.build(background=random.choice(backgrounds))
     home.add_child(instance=portfolio_page)
     logos_collection = Collection.objects.get(name='Logos')
-
     logos = Image.objects.filter(collection=logos_collection)
     for i in range(projects_count):
         logo = logos[i % len(logos)]
@@ -128,7 +127,7 @@ def fill_snippets(count=10):
     from home.factories import TechnologyFactory, ResponsibilityFactory
     from wagtail.images.models import Image
     for i in range(count):
-        random_image = Image.objects.order_by("?").first()
+        random_image = Image.objects.filter(collection__name='Logos').order_by("?").first()
         print(f"Adding: {TechnologyFactory(logo=random_image)}")
         print(f"Adding: {ResponsibilityFactory()}")
 
