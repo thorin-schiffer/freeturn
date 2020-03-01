@@ -3,6 +3,7 @@ import random
 from datetime import timedelta
 
 from django.core.files.images import ImageFile
+from django.db import transaction
 from django.utils.timezone import make_aware
 from wagtail.core.models import Collection
 from wagtail.core.models import Page
@@ -122,20 +123,23 @@ def fill_pictures():
         print(f"Loaded {Image.objects.count()} images from {directory}")
 
 
+@transaction.atomic
 def clean():
     Image.objects.all().delete()
     Technology.objects.all().delete()
     Responsibility.objects.all().delete()
+    Page.objects.exclude(pk=1).delete()
     HomePage.objects.all().delete()
     Site.objects.all().delete()
     Project.objects.all().delete()
     Employee.objects.all().delete()
 
 
+@transaction.atomic
 def fill():
     import factory.random
     factory.random.reseed_random('my_awesome_project')
     fill_pictures()
-    # fill_snippets()
-    # fill_pages()
+    fill_snippets()
+    fill_pages()
     fill_crm_data()

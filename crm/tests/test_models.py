@@ -228,9 +228,9 @@ def test_project_logo(project):
 
 @pytest.mark.django_db
 def test_auto_project_name(project_factory):
-    project_without_company = project_factory.create()
+    project_without_company = project_factory.create(name=None)
     assert project_without_company.name == str(project_without_company.company)
-    project_without_company = project_factory.create(company=None)
+    project_without_company = project_factory.create(company=None, name=None)
     assert project_without_company.name == str(project_without_company.company)
 
 

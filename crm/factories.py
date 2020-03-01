@@ -63,6 +63,7 @@ class ProjectFactory(factory.DjangoModelFactory):
     notes = factory.Faker('text')
     daily_rate = factory.Faker('pydecimal', left_digits=3, right_digits=2, positive=True)
     start_date = factory.Faker('future_datetime', end_date="+30d")
+    name = factory.Faker('job')
 
     class Meta:
         model = models.Project
