@@ -1,11 +1,12 @@
 import functools
 import os
 import sys
-
+import logging
 import dotenv
 import invoke
 
 dotenv.load_dotenv()
+logger = logging.getLogger(__file__)
 
 
 # https://github.com/pyinvoke/invoke/issues/555
@@ -78,6 +79,41 @@ def create_admin(ctx):
         print(f"Created user {user} with password 'admin'")
 
 
+def fill_pages():
+    from wagtail.core.models import Page
+    from home.factories import HomePageFactory, PortfolioPageFactory, TechnologiesPageFactory
+    from wagtail.core.models import Site
+    factories = [PortfolioPageFactory, TechnologiesPageFactory]
+    home = HomePageFactory.build(picture=None)
+    default_site = Site.objects.last()
+    root = Page.objects.get(pk=1)
+    root.add_child(instance=home)
+    default_site.root_page.delete()
+    default_site.root_page = home
+    default_site.port = 8000
+    default_site.save()
+
+    for factory_class in factories:
+        logger.info(f"Adding {factory_class}")
+        home.add_child(instance=factory_class.build())
+
+
+def fill_snippets():
+    pass
+
+
+def fill_crm_data():
+    pass
+
+
+def fill_pictures():
+    pass
+
+
+def fill_forms():
+    pass
+
+
 @invoke.task
 def fill(context, migrate=False):
     configure_django()
@@ -85,5 +121,4 @@ def fill(context, migrate=False):
         context.run('rm db.sqlite3')
         context.run('PYTHONUNBUFFERED=1 ./manage.py migrate')
         create_admin(context)
-    from home.initial_filling import fill
-    fill()
+    fill_pages()
