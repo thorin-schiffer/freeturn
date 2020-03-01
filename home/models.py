@@ -51,6 +51,10 @@ class HomePage(Page):
 
     earliest_available = models.DateField(null=True, blank=True, default=timezone.now)
 
+    stackoverflow_profile = models.URLField(null=True, blank=True)
+    github_profile = models.URLField(null=True, blank=True)
+    linkedin_profile = models.URLField(null=True, blank=True)
+
     content_panels = Page.content_panels + [
         FieldPanel('title_color'),
         FieldPanel('claim'),

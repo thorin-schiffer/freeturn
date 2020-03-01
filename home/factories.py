@@ -11,6 +11,9 @@ from home.models import Technology, Responsibility
 class HomePageFactory(wagtail_factories.PageFactory):
     title = factory.Faker('name')
     picture = factory.SubFactory(wagtail_factories.ImageFactory)
+    stackoverflow_profile = factory.Faker('url')
+    github_profile = factory.Faker('url')
+    linkedin_profile = factory.Faker('url')
 
     class Meta:
         model = models.HomePage
@@ -62,7 +65,6 @@ class TagFactory(factory.DjangoModelFactory):
 
 
 class TechnologyFactory(factory.DjangoModelFactory):
-
     name = factory.Faker("word")
     summary = factory.Faker("sentence")
 

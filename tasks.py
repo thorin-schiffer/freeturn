@@ -93,7 +93,10 @@ def fill_pages(projects_count=9):
     people_collection = Collection.objects.get(name='People')
 
     home = HomePageFactory.build(background=random.choice(backgrounds),
-                                 picture=Image.objects.filter(collection=people_collection).order_by("?").first())
+                                 picture=Image.objects.filter(collection=people_collection).order_by("?").first(),
+                                 stackoverflow_profile='https://stackoverflow.com/users/1205242/eviltnan',
+                                 github_profile='https://github.com/eviltnan',
+                                 linkedin_profile='https://www.linkedin.com/in/sergey-cheparev/')
     default_site = SiteFactory(is_default_site=True)
     root = Page.objects.get(pk=1)
     root.add_child(instance=home)
