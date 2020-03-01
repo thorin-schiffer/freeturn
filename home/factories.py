@@ -25,10 +25,11 @@ class ContactPageFactory(wagtail_factories.PageFactory):
 
 
 class ProjectPageFactory(wagtail_factories.PageFactory):
+    title = factory.Faker('company')
     summary = factory.Faker('sentence')
     description = factory.Faker('text')
     position = factory.Faker('job')
-    start_date = factory.Faker('past_date', start_date="-15d", tzinfo=get_current_timezone())
+    start_date = factory.Faker('past_date', start_date="-10y", tzinfo=get_current_timezone())
     duration = 6
 
     @factory.post_generation
@@ -39,7 +40,8 @@ class ProjectPageFactory(wagtail_factories.PageFactory):
             technologies = [TechnologyFactory()]
         for technology in technologies:
             self.technologies.add(technology)
-        self.save()
+        if technologies:
+            self.save()
 
     class Meta:
         model = models.ProjectPage

@@ -79,11 +79,10 @@ def create_admin(ctx):
         print(f"Created user {user} with password 'admin'")
 
 
-def fill_pages():
+def fill_pages(projects_count=9):
     from wagtail.core.models import Page
-    from home.factories import HomePageFactory, PortfolioPageFactory, TechnologiesPageFactory
+    from home.factories import HomePageFactory, PortfolioPageFactory, TechnologiesPageFactory, ProjectPageFactory
     from wagtail.core.models import Site
-    factories = [PortfolioPageFactory, TechnologiesPageFactory]
     home = HomePageFactory.build(picture=None)
     default_site = Site.objects.last()
     root = Page.objects.get(pk=1)
@@ -93,9 +92,17 @@ def fill_pages():
     default_site.port = 8000
     default_site.save()
 
-    for factory_class in factories:
-        logger.info(f"Adding {factory_class}")
-        home.add_child(instance=factory_class.build())
+    portfolio_page = PortfolioPageFactory.build()
+    home.add_child(instance=portfolio_page)
+
+    for i in range(projects_count):
+        page = ProjectPageFactory.build(technologies=[],
+                                        description__max_nb_chars=1000)
+        portfolio_page.add_child(instance=page)
+        print(f"Added {page}")
+
+    technologies_page = TechnologiesPageFactory.build()
+    home.add_child(instance=technologies_page)
 
 
 def fill_snippets():
@@ -114,8 +121,11 @@ def fill_forms():
     pass
 
 
-@invoke.task
-def fill(context, migrate=False):
+@invoke.task(help={
+    'migrate': 'Migrate DB and remove the datbase file before filling',
+    'flush': 'Flush db (for dev mainly)'
+})
+def fill(context, migrate=False, flush=False):
     configure_django()
     if migrate:
         context.run('rm db.sqlite3')
