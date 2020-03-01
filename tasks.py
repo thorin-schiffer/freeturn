@@ -1,7 +1,8 @@
 import functools
+import logging
 import os
 import sys
-import logging
+
 import dotenv
 import invoke
 
@@ -83,6 +84,8 @@ def fill_pages(projects_count=9):
     from wagtail.core.models import Page
     from home.factories import HomePageFactory, PortfolioPageFactory, TechnologiesPageFactory, ProjectPageFactory
     from wagtail.core.models import Site
+    from wagtail.images.models import Image
+
     home = HomePageFactory.build(picture=None)
     default_site = Site.objects.last()
     root = Page.objects.get(pk=1)
@@ -94,10 +97,12 @@ def fill_pages(projects_count=9):
 
     portfolio_page = PortfolioPageFactory.build()
     home.add_child(instance=portfolio_page)
-
+    images = Image.objects.all()
     for i in range(projects_count):
+        logo = images[i % len(images)]
         page = ProjectPageFactory.build(technologies=[],
-                                        description__max_nb_chars=1000)
+                                        description__max_nb_chars=1000,
+                                        logo=logo)
         portfolio_page.add_child(instance=page)
         print(f"Added {page}")
 
@@ -114,7 +119,19 @@ def fill_crm_data():
 
 
 def fill_pictures():
-    pass
+    from django.core.files.images import ImageFile
+    from wagtail.images.models import Image
+
+    images_path = "fill_media/logos"
+    filenames = [filename for filename in os.listdir(images_path) if filename.endswith('.png')]
+
+    for filename in filenames:
+        full_path = f"{images_path}/{filename}"
+        with open(full_path, 'rb') as f:
+            image_file = ImageFile(f, name=filename)
+            image = Image(file=image_file, title=filename)
+            image.save()
+    print(f"Loaded {Image.objects.count()} images")
 
 
 def fill_forms():
@@ -131,4 +148,5 @@ def fill(context, migrate=False, flush=False):
         context.run('rm db.sqlite3')
         context.run('PYTHONUNBUFFERED=1 ./manage.py migrate')
         create_admin(context)
+    fill_pictures()
     fill_pages()
