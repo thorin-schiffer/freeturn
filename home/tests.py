@@ -2,10 +2,8 @@ from datetime import timedelta
 
 import pytest
 from faker import Faker
-from wagtail.core.models import Site
 
-from home.initial_filling import fill_pages
-from home.models import Technology, HomePage, PortfolioPage, TechnologiesPage
+from home.models import Technology
 
 fake = Faker()
 
@@ -91,13 +89,3 @@ def test_match_text(technology):
 
     result = Technology.match_text(text_match)
     assert technology in result
-
-
-@pytest.mark.django_db
-def test_fill_pages():
-    fill_pages()
-    home_page = HomePage.objects.live().first()
-    assert Site.objects.first().root_page.pk == home_page.pk
-    assert home_page
-    assert PortfolioPage.objects.child_of(home_page).live().count() == 1
-    assert TechnologiesPage.objects.child_of(home_page).live().count() == 1
