@@ -1,13 +1,17 @@
 import os
 import random
+from datetime import timedelta
 
 from django.core.files.images import ImageFile
+from django.utils.timezone import make_aware
 from wagtail.core.models import Collection
 from wagtail.core.models import Page
 from wagtail.core.models import Site
 from wagtail.images.models import Image
 from wagtail_factories import CollectionFactory
 
+from crm.factories import ProjectFactory
+from crm.models import Project, Employee
 from home.factories import HomePageFactory, TechnologiesPageFactory, \
     ContactPageFactory
 from home.factories import PortfolioPageFactory, ProjectPageFactory
@@ -15,6 +19,10 @@ from home.factories import SiteFactory
 from home.factories import TechnologyFactory, ResponsibilityFactory
 from home.models import HomePage, FormField
 from home.models import Technology, Responsibility
+
+
+def get_random_image(collection):
+    return Image.objects.filter(collection__name__iexact=collection).order_by("?").first()
 
 
 def fill_form(home):
@@ -32,7 +40,7 @@ def fill_form(home):
 
 
 def fill_portfolio(home, projects_count=9):
-    background = Image.objects.filter(collection__name='Backgrounds').order_by("?").first()
+    background = get_random_image('Backgrounds')
     portfolio_page = PortfolioPageFactory.build(background=background)
     home.add_child(instance=portfolio_page)
     logos_collection = Collection.objects.get(name='Logos')
@@ -84,8 +92,15 @@ def fill_snippets(count=10):
         print(f"Adding: {ResponsibilityFactory()}")
 
 
-def fill_crm_data():
-    pass
+def fill_crm_data(projects_count=10):
+    for i in range(projects_count):
+        logo = get_random_image('Logos')
+        project = ProjectFactory()
+        project.company.logo = logo
+        project.company.save()
+        project.modified = make_aware(project.start_date) - timedelta(days=random.randint(30, 90))
+        project.save(update_modified=False)
+        print(f"Created {project}")
 
 
 def fill_pictures():
@@ -112,3 +127,14 @@ def clean():
     Responsibility.objects.all().delete()
     HomePage.objects.all().delete()
     Site.objects.all().delete()
+    Project.objects.all().delete()
+    Employee.objects.all().delete()
+
+
+def fill():
+    import factory.random
+    factory.random.reseed_random('my_awesome_project')
+    fill_pictures()
+    # fill_snippets()
+    # fill_pages()
+    fill_crm_data()
