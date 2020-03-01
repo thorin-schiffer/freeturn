@@ -132,17 +132,25 @@ def fill_crm_data():
 def fill_pictures():
     from django.core.files.images import ImageFile
     from wagtail.images.models import Image
+    from wagtail_factories import CollectionFactory
+    from wagtail.core.models import Collection
 
-    images_path = "fill_media/logos"
-    filenames = [filename for filename in os.listdir(images_path) if filename.endswith('.png')]
+    images_path = "fill_media"
+    directories = [filename for filename in os.listdir(images_path)]
+    for directory in directories:
+        collection = Collection.objects.filter(name=directory.capitalize()).first() or \
+            CollectionFactory(name=directory.capitalize())
+        filenames = [filename for filename in os.listdir(os.path.join(images_path, directory))
+                     if filename.endswith('.png')]
 
-    for filename in filenames:
-        full_path = f"{images_path}/{filename}"
-        with open(full_path, 'rb') as f:
-            image_file = ImageFile(f, name=filename)
-            image = Image(file=image_file, title=filename)
-            image.save()
-    print(f"Loaded {Image.objects.count()} images")
+        for filename in filenames:
+            full_path = os.path.join(images_path, directory, filename)
+            with open(full_path, 'rb') as f:
+                image_file = ImageFile(f, name=filename)
+                image = Image(file=image_file, title=filename)
+                image.collection = collection
+                image.save()
+        print(f"Loaded {Image.objects.count()} images")
 
 
 def fill_forms():
@@ -168,11 +176,12 @@ def fill(context, migrate=False):
     import factory.random
     factory.random.reseed_random('my_awesome_project')
     configure_django()
-    fill_clean()
     if migrate:
         context.run('rm db.sqlite3')
         context.run('PYTHONUNBUFFERED=1 ./manage.py migrate')
         create_admin(context)
+    else:
+        fill_clean()
     fill_pictures()
     fill_snippets()
     fill_pages()
