@@ -8,7 +8,6 @@ RUN pip install --upgrade pip && pip install --upgrade pipenv
 
 COPY Pipfile Pipfile
 COPY Pipfile.lock Pipfile.lock
-COPY Pipfile.lock Pipfile.lock
 RUN pipenv install --system --deploy --ignore-pipfile --dev
 
 WORKDIR /app
