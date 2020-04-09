@@ -16,7 +16,7 @@ jobs:
             - ~/.apt-cache
           key: pip-package-v1-{{ .Branch }}
       - run: pip install --upgrade pip && pip install --upgrade pipenv
-      - run: pipenv install --deploy --ignore-pipfile --dev
+      - run: pipenv install --system --deploy --ignore-pipfile --dev
       - save_cache:
           paths:
             - ~/.local/
