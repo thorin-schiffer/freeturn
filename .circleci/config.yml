@@ -20,7 +20,7 @@ jobs:
       - run: pipenv install --system --deploy --ignore-pipfile --dev
       - save_cache:
           paths:
-            - $PIPENV_CACHE_DIR
+            - ~/.local/pipenv-cache
             - ~/.apt-cache
           key: pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
       - run: pytest -n 2
