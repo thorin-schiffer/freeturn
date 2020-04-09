@@ -2,26 +2,28 @@ version: 2.1
 
 jobs:
   test:
+    envirionment:
+      - PIPENV_CACHE_DIR: "~/.local/pipenv-cache"
+      - DJANGO_SETTINGS_MODULE: portfolio.settings.testing
+      - DATABASE_URL: sqlite://./db.sqlite3
     docker:
       - image: python:3.7.5
     steps:
       - checkout
       - restore_cache:
           keys:
-            - pip-packages-v1-{{ .Branch }}
+            - pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - pip-packages-v1-{{ .Branch }}-
             - pip-packages-v1-
       - run: apt-get update && apt-get -y install build-essential wkhtmltopdf
-      - save_cache:
-          paths:
-            - ~/.apt-cache
-          key: pip-package-v1-{{ .Branch }}
       - run: pip install --upgrade pip && pip install --upgrade pipenv
       - run: pipenv install --system --deploy --ignore-pipfile --dev
       - save_cache:
           paths:
-            - ~/.local/
-          key: pip-package-v1-{{ .Branch }}
-      - run: pytest -n auto
+            - $PIPENV_CACHE_DIR
+            - ~/.apt-cache
+          key: pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+      - run: pytest -n 2
 
 workflows:
   main:
