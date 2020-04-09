@@ -75,3 +75,8 @@ Dockerfile is for running tests and demonstration purposes only, as heroku is cu
 Sqlite DB is used, which is not mounted to the outside of the container, so your changes will be gone after you stop the container.
 Please submit an issue or a PR with your proposals for the Docker support.
 Bind the port 8000 (`-p 8000:8000`)
+
+###### Updating existing installation
+
+The default task for inv is `bootstrap`, use `invoke` to utilize local bootstrapping for development. This would recreate
+all the objects created automatically as fixtures.
