@@ -5,7 +5,7 @@ import sys
 
 import dotenv
 import invoke
-
+from invoke import Exit
 
 dotenv.load_dotenv()
 logger = logging.getLogger(__file__)
@@ -87,6 +87,10 @@ def create_admin(ctx):
 def fill(context, migrate=False):
     configure_django()
     import filler
+    from django.conf import settings
+    if not settings.DEBUG:
+        raise Exit("Won't fill in non debug envs, possible data loss or corruption")
+
     if migrate:
         context.run('rm db.sqlite3')
         context.run('PYTHONUNBUFFERED=1 ./manage.py migrate')
@@ -94,3 +98,50 @@ def fill(context, migrate=False):
     else:
         filler.clean()
     filler.fill()
+
+
+@invoke.task
+def update(context):
+    """Updates code from gitlab and reinstalls pipenv deps"""
+    context.run(f"pipenv clean")
+    # https://github.com/pypa/pipenv/issues/3493
+    context.run(f"pipenv install --ignore-pipfile --deploy")
+
+
+@invoke.task
+def collect_static(context, local=False):
+    """Django collect static"""
+    print("Collecting static...")
+    context.run(f"./manage.py collectstatic --noinput -v 0")
+
+
+@invoke.task(help={
+    "make": "update *.mo translation file before parsing (makemessages)"
+})
+def i18n(ctx, make=False):
+    """Runs django translation routines"""
+    print("Collecting i18n")
+    if make:
+        ctx.run(f"./manage.py makemessages -i 'venv/*' -l de")
+    ctx.run(f"./manage.py compilemessages -l de")
+
+
+@invoke.task
+def install_hooks(context):
+    """Installs pre-commit hooks"""
+    print("Installing pre-commit hook")
+    context.run(f"pre_commit install")
+
+
+@invoke.task(default=True)
+def bootstrap(context):
+    """Local bootstrap for development in non-containerized env"""
+    configure_django()
+    env = os.environ.get('DJANGO_SETTINGS_MODULE').rsplit(".")[-1]
+    if env != 'dev':
+        Exit("Won't bootstrap in non dev env")
+    update(context)
+    fill(context, migrate=True)
+    collect_static(context)
+    i18n(context)
+    install_hooks(context)
