@@ -1,4 +1,4 @@
-version: 2.1
+version: 2
 
 jobs:
   test:
@@ -10,7 +10,8 @@ jobs:
           keys:
             - pip-packages-v1-{{ .Branch }}
             - pip-packages-v1-
-      - run: pipenv install --system --deploy --ignore-pipfile --dev
+      - run: whoami && groups && echo ~
+      - run: pipenv install --deploy --ignore-pipfile --dev
       - save_cache:
           paths:
             - ~/.local/
