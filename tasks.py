@@ -91,12 +91,10 @@ def fill(context, migrate=False):
     if not settings.DEBUG:
         raise Exit("Won't fill in non debug envs, possible data loss or corruption")
 
+    filler.clean()
     if migrate:
-        context.run('rm db.sqlite3')
         context.run('PYTHONUNBUFFERED=1 ./manage.py migrate')
         create_admin(context)
-    else:
-        filler.clean()
     filler.fill()
 
 
