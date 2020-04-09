@@ -1,0 +1,23 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: circleci/python:3.7.5
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - pip-packages-v1-{{ .Branch }}
+            - pip-packages-v1-
+      - run: pipenv install --system --deploy --ignore-pipfile --dev
+      - save_cache:
+          paths:
+            - ~/.local/
+          key: pip-package-v1-{{ .Branch }}
+      - run: pytest -n auto
+
+workflows:
+  main:
+    jobs:
+      - test
