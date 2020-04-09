@@ -2,8 +2,6 @@ version: 2.1
 
 jobs:
   test:
-    machine:
-      docker_layer_caching: true
     environment:
       - PIPENV_CACHE_DIR: "~/.local/pipenv-cache"
       - DJANGO_SETTINGS_MODULE: portfolio.settings.testing
@@ -13,6 +11,8 @@ jobs:
       - image: python:3.7.5
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - restore_cache:
           keys:
             - pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
