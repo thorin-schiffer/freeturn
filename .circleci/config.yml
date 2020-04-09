@@ -10,7 +10,7 @@ jobs:
           keys:
             - pip-packages-v1-{{ .Branch }}
             - pip-packages-v1-
-      - run: RUN apt-get update && apt-get -y install build-essential wkhtmltopdf
+      - run: apt-get update && apt-get -y install build-essential wkhtmltopdf
       - save_cache:
           paths:
             - ~/.apt-cache
