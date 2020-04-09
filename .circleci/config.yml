@@ -23,7 +23,12 @@ jobs:
             - ~/.local/pipenv-cache
             - ~/.apt-cache
           key: pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-      - run: pytest -n 2
+      - run: pytest -n 2 --junitxml=test-results/junit.xml
+      - store_test_results:
+          path: test-results
+
+      - store_artifacts:
+          path: test-results
 
 workflows:
   main:
