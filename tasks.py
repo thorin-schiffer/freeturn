@@ -105,7 +105,7 @@ def update(context):
     """Updates code from gitlab and reinstalls pipenv deps"""
     context.run(f"pipenv clean")
     # https://github.com/pypa/pipenv/issues/3493
-    context.run(f"pipenv install --ignore-pipfile --deploy")
+    context.run(f"pipenv install --ignore-pipfile --deploy --dev")
 
 
 @invoke.task
@@ -130,7 +130,7 @@ def i18n(ctx, make=False):
 def install_hooks(context):
     """Installs pre-commit hooks"""
     print("Installing pre-commit hook")
-    context.run(f"pre_commit install")
+    context.run(f"pre-commit install")
 
 
 @invoke.task(default=True)
