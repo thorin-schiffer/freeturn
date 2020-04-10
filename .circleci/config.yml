@@ -1,14 +1,47 @@
 version: 2.1
 
+
+
+commands:
+  install_binaries:
+    steps:
+      - run:
+          name: Installing binaries
+          command: apt-get update && apt-get -y install build-essential wkhtmltopdf
+
+  install_pip_env:
+    steps:
+      - run:
+          name: Installing pip and pipenv
+          command: pip install --upgrade pip && pip install --upgrade pipenv
+
+  install_python_deps:
+    steps:
+      - run:
+          name: Installing python dependencies
+          command: pipenv install --system --deploy --ignore-pipfile --dev
+
+  check_pre_commit:
+    steps:
+      - run:
+          name: Installing pre-commit
+          command: pip install pre-commit
+      - run:
+          name: Executing pre-commit hook checks
+          command: pre-commit run --all-files
+
+defaults: &defaults
+  docker:
+    - image: python:3.7.5
+  environment:
+    - PIPENV_CACHE_DIR: "~/.local/pipenv-cache"
+    - DJANGO_SETTINGS_MODULE: portfolio.settings.testing
+    - DATABASE_URL: sqlite://./db.sqlite3
+    - GOOGLE_ANALYTICS_ID: UA-123456-7
+
 jobs:
   test:
-    environment:
-      - PIPENV_CACHE_DIR: "~/.local/pipenv-cache"
-      - DJANGO_SETTINGS_MODULE: portfolio.settings.testing
-      - DATABASE_URL: sqlite://./db.sqlite3
-      - GOOGLE_ANALYTICS_ID: UA-123456-7
-    docker:
-      - image: python:3.7.5
+    <<: *defaults
     steps:
       - checkout
       - restore_cache:
@@ -16,8 +49,9 @@ jobs:
             - pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
             - pip-packages-v1-{{ .Branch }}-
             - pip-packages-v1-
-      - run: apt-get update && apt-get -y install build-essential wkhtmltopdf && pip install --upgrade pip && pip install --upgrade pipenv
-      - run: pipenv install --system --deploy --ignore-pipfile --dev
+      - install_binaries
+      - install_pip_env
+      - install_python_deps
       - save_cache:
           paths:
             - ~/.local/pipenv-cache
@@ -26,11 +60,17 @@ jobs:
       - run: pytest -n 2 --junitxml=test-results/junit.xml
       - store_test_results:
           path: test-results
-
       - store_artifacts:
           path: test-results
+  lint:
+    <<: *defaults
+    steps:
+      - checkout
+      - install_pip_env
+      - check_pre_commit
 
 workflows:
   main:
     jobs:
+      - lint
       - test
