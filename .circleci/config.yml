@@ -24,6 +24,9 @@ commands:
   check_pre_commit:
     steps:
       - run:
+          name: Installing pre-commit
+          command: pip install pre-commit
+      - run:
           name: Executing pre-commit hook checks
           command: pre-commit run --all-files
 
