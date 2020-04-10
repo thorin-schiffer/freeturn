@@ -23,15 +23,18 @@ commands:
           name: Installing python dependencies
           command: pipenv install --system --deploy --ignore-pipfile --dev
 
+default_env: &default_env
+  environment:
+    - PIPENV_CACHE_DIR: "~/.local/pipenv-cache"
+    - DJANGO_SETTINGS_MODULE: portfolio.settings.testing
+    - DATABASE_URL: sqlite://./db.sqlite3
+    - GOOGLE_ANALYTICS_ID: UA-123456-7
+
 jobs:
   test:
-    environment:
-      - PIPENV_CACHE_DIR: "~/.local/pipenv-cache"
-      - DJANGO_SETTINGS_MODULE: portfolio.settings.testing
-      - DATABASE_URL: sqlite://./db.sqlite3
-      - GOOGLE_ANALYTICS_ID: UA-123456-7
+    <<: *default_env
     docker:
-      - image: python:3.7.5
+        - image: python:3.7.5
     steps:
       - checkout
       - install_pip_env
