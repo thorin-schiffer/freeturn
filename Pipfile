@@ -69,6 +69,7 @@ pre-commit = "==1.14.4"
 pytest-dotenv = "*"
 awscli = "*"
 django-debug-toolbar-template-timings = "*"
+python-coveralls = "*"
 
 [requires]
 python_version = "3.7.5"
