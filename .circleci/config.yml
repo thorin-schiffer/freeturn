@@ -1,5 +1,17 @@
 version: 2.1
 
+
+
+commands:
+  install_binaries:
+    steps:
+      - run: apt-get update && apt-get -y install build-essential wkhtmltopdf
+
+  install_pip_env:
+    steps:
+      - install_binaries
+      - run: pip install --upgrade pip && pip install --upgrade pipenv
+
 jobs:
   test:
     environment:
@@ -11,12 +23,13 @@ jobs:
       - image: python:3.7.5
     steps:
       - checkout
+      - install_pip_env
       - restore_cache:
           keys:
             - pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
             - pip-packages-v1-{{ .Branch }}-
             - pip-packages-v1-
-      - run: apt-get update && apt-get -y install build-essential wkhtmltopdf && pip install --upgrade pip && pip install --upgrade pipenv
+
       - run: pipenv install --system --deploy --ignore-pipfile --dev
       - save_cache:
           paths:
