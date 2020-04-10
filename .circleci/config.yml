@@ -11,17 +11,21 @@ commands:
 
   install_pip_env:
     steps:
-      - install_binaries
       - run:
           name: Installing pip and pipenv
           command: pip install --upgrade pip && pip install --upgrade pipenv
 
   install_python_deps:
     steps:
-      - install_pip_env
       - run:
           name: Installing python dependencies
           command: pipenv install --system --deploy --ignore-pipfile --dev
+
+  check_pre_commit:
+    steps:
+      - run:
+          name: Executing pre-commit hook checks
+          command: pre-commit run --all-files
 
 defaults: &defaults
   docker:
@@ -37,12 +41,13 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - install_pip_env
       - restore_cache:
           keys:
             - pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
             - pip-packages-v1-{{ .Branch }}-
             - pip-packages-v1-
+      - install_binaries
+      - install_pip_env
       - install_python_deps
       - save_cache:
           paths:
@@ -54,8 +59,15 @@ jobs:
           path: test-results
       - store_artifacts:
           path: test-results
+  lint:
+    <<: *defaults
+    steps:
+      - checkout
+      - install_pip_env
+      - check_pre_commit
 
 workflows:
   main:
     jobs:
+      - lint
       - test
