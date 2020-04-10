@@ -5,12 +5,16 @@ version: 2.1
 commands:
   install_binaries:
     steps:
-      - run: apt-get update && apt-get -y install build-essential wkhtmltopdf
+      - run:
+          name: Installing binaries
+          command: apt-get update && apt-get -y install build-essential wkhtmltopdf
 
   install_pip_env:
     steps:
       - install_binaries
-      - run: pip install --upgrade pip && pip install --upgrade pipenv
+      - run:
+          name: Installing pip and pipenv
+          command: pip install --upgrade pip && pip install --upgrade pipenv
 
 jobs:
   test:
