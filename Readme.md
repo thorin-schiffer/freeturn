@@ -4,7 +4,9 @@
     <img width="512" valign="middle" src="https://cheparev-portfolio.s3.amazonaws.com/images/freeturn.original.png" alt="Freeturn">
 </h1>
 
+[![eviltnan](https://circleci.com/gh/eviltnan/freeturn.svg?style=shield)](https://app.circleci.com/pipelines/github/eviltnan/freeturn)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![codecov](https://codecov.io/gh/eviltnan/freeturn/branch/develop/graph/badge.svg)](https://codecov.io/gh/eviltnan/freeturn)
 
 Freeturn is an open source portfolio and CRM for individual freelance developers.
 Based on Django and Wagtail.
