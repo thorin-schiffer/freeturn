@@ -16,6 +16,13 @@ commands:
           name: Installing pip and pipenv
           command: pip install --upgrade pip && pip install --upgrade pipenv
 
+  install_python_deps:
+    steps:
+      - install_pip_env
+      - run:
+          name: Installing python dependencies
+          command: pipenv install --system --deploy --ignore-pipfile --dev
+
 jobs:
   test:
     environment:
@@ -33,8 +40,7 @@ jobs:
             - pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
             - pip-packages-v1-{{ .Branch }}-
             - pip-packages-v1-
-
-      - run: pipenv install --system --deploy --ignore-pipfile --dev
+      - install_python_deps
       - save_cache:
           paths:
             - ~/.local/pipenv-cache
@@ -43,7 +49,6 @@ jobs:
       - run: pytest -n 2 --junitxml=test-results/junit.xml
       - store_test_results:
           path: test-results
-
       - store_artifacts:
           path: test-results
 
