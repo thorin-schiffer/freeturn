@@ -1,6 +1,7 @@
 version: 2.1
 
-
+orbs:
+  codecov: codecov/codecov@1.0.2
 
 commands:
   install_binaries:
@@ -57,11 +58,13 @@ jobs:
             - ~/.local/pipenv-cache
             - ~/.apt-cache
           key: pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-      - run: pytest -n 2 --junitxml=test-results/junit.xml --cov-report=html --cov=.
+      - run: pytest -n 2 --junitxml=test-results/junit.xml --cov-report=html --cov-report=xml --cov=.
       - store_test_results:
           path: test-results
       - store_artifacts:
           path: htmlcov
+      - codecov/upload:
+          file: coverage.xml
   lint:
     <<: *defaults
     steps:
