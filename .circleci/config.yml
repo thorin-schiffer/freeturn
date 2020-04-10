@@ -23,7 +23,9 @@ commands:
           name: Installing python dependencies
           command: pipenv install --system --deploy --ignore-pipfile --dev
 
-default_env: &default_env
+defaults: &defaults
+  docker:
+    - image: python:3.7.5
   environment:
     - PIPENV_CACHE_DIR: "~/.local/pipenv-cache"
     - DJANGO_SETTINGS_MODULE: portfolio.settings.testing
@@ -32,9 +34,7 @@ default_env: &default_env
 
 jobs:
   test:
-    <<: *default_env
-    docker:
-        - image: python:3.7.5
+    <<: *defaults
     steps:
       - checkout
       - install_pip_env
