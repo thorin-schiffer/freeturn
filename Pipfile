@@ -46,7 +46,6 @@ l18n = "*"
 django-environ = "*"
 
 [dev-packages]
-django-livereload-server = "*"
 django-debug-toolbar = "*"
 django-extensions = "*"
 pytest = ">=5.3.1"
