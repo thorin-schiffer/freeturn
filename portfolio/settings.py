@@ -6,21 +6,20 @@ import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 from social_core.pipeline import DEFAULT_AUTH_PIPELINE
 
-env = environ.Env(
-    DEBUG=(bool, False)
-)
-environ.Env.read_env()
-DEBUG = env('DEBUG')
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+env = environ.Env()
+environ.Env.read_env(os.path.join(os.path.dirname(PROJECT_DIR), '.env'))
+
+DEBUG = env.bool('DEBUG', False)
 DEBUG_TOOLBAR = env.bool('DEBUG_TOOLBAR', False)
 
-SENTRY_DSN = env.str("SENTRY_DSN")
+SENTRY_DSN = env.str("SENTRY_DSN", None)
 if SENTRY_DSN:
     sentry_sdk.init(
         dsn=SENTRY_DSN,
         integrations=[DjangoIntegration()]
     )
 
-PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 INSTALLED_APPS = [
@@ -115,16 +114,15 @@ TEMPLATES = [
         },
     },
 ]
-
 WSGI_APPLICATION = 'portfolio.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env.str('SECRET_KEY')
+DEFAULT_SQLITE_PATH = os.path.join(PROJECT_DIR, 'db.sqlite3')
 DATABASES = {
-    'default': env.db(),
-    'extra': env.db('SQLITE_URL', default='sqlite://./db.sqlite3')
+    'default': env.db(default=f'sqlite:///{DEFAULT_SQLITE_PATH}'),
+    'extra': env.db('SQLITE_URL', default=f'sqlite:///{DEFAULT_SQLITE_PATH}')
 }
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -173,7 +171,7 @@ WAGTAIL_SITE_NAME = "portfolio"
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = 'https://cheparev.com'
+BASE_URL = env.str("BASE_URL", "http://localhost:8000")
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 RECAPTCHA_PUBLIC_KEY = env.str("RECAPTCHA_PUBLIC_KEY", None)
 RECAPTCHA_PRIVATE_KEY = env.str("RECAPTCHA_PRIVATE_KEY", None)
@@ -195,8 +193,8 @@ AUTHENTICATION_BACKENDS = (
 )
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env.str("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY")
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env.str("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET")
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env.str("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY", None)
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env.str("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET", None)
 
 SOCIAL_AUTH_LOGIN_URL = "/admin/account/"
 LOGIN_REDIRECT_URL = SOCIAL_AUTH_LOGIN_URL

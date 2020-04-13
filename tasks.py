@@ -13,7 +13,7 @@ logger = logging.getLogger(__file__)
 def configure_django():
     from django.core.wsgi import get_wsgi_application
     PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__)))
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "rms.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "portfolio.settings")
     sys.path.append(PROJECT_DIR)
     get_wsgi_application()
 
