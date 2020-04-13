@@ -3,18 +3,14 @@ import logging
 import os
 import sys
 
-import dotenv
 import invoke
 from invoke import Exit
 
-dotenv.load_dotenv()
 logger = logging.getLogger(__file__)
 
 
 # https://github.com/pyinvoke/invoke/issues/555
 def configure_django():
-    from django.db.backends.base.base import BaseDatabaseWrapper
-    BaseDatabaseWrapper.queries_limit = 50000
     from django.core.wsgi import get_wsgi_application
     PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__)))
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "rms.settings")
@@ -135,8 +131,8 @@ def install_hooks(context):
 def bootstrap(context):
     """Local bootstrap for development in non-containerized env"""
     configure_django()
-    env = os.environ.get('DJANGO_SETTINGS_MODULE').rsplit(".")[-1]
-    if env != 'dev':
+    from django.conf import settings
+    if not settings.DEBUG:
         Exit("Won't bootstrap in non dev env")
     update(context)
     fill(context, migrate=True)
