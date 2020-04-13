@@ -48,7 +48,7 @@ Freeturn uses Python3. Clone this repository.
 * Initialize pipenv environment: `pipenv install --dev`. Dev install dev deps for running tests.
 * Enter virtualenv: `pipenv shell`
 * Run ipython console: `ipython`. Verify you are in the right env
-* Copy dotenv template to .env and fill it up: `cp .env_template .env`
+* Copy dotenv template to .env and fill it up: `cp .env_template .env`. See https://github.com/joke2k/django-environ for more information.
 * Install pre-commit hooks with: `pre-commit install`. Read more about pre-commit: https://pre-commit.com/
 
 ```python
