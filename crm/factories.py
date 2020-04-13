@@ -78,6 +78,7 @@ class ProjectMessageFactory(factory.DjangoModelFactory):
     project = factory.SubFactory(ProjectFactory)
     author = factory.SubFactory(EmployeeFactory)
     text = factory.Faker('text')
+    subject = factory.Faker('sentence')
     gmail_message_id = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
     gmail_thread_id = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
 
