@@ -29,12 +29,14 @@ def get_random_image(collection):
 def fill_form(home):
     contact_page = ContactPageFactory.build()
     contact_page.form_fields = [
-        FormField(label="your email", field_type='email'),
-        FormField(label="some words about your project", field_type='multiline', required=False),
-        FormField(label="technologies", field_type='singleline'),
-        FormField(label="workload (hours per week)", field_type='number'),
-        FormField(label="duration in months", field_type='number'),
-        FormField(label="location", field_type='singleline'),
+        FormField(label="your email", field_type='email', default_value='sergey@cheparev.com'),
+        FormField(label="some words about your project", field_type='multiline', required=False,
+                  default_value="some words"),
+        FormField(label="technologies", field_type='singleline',
+                  default_value="Python"),
+        FormField(label="workload (hours per week)", field_type='number', default_value=40),
+        FormField(label="duration in months", field_type='number', default_value=6),
+        FormField(label="location", field_type='singleline', default_value="Berlin"),
         FormField(label="privacy policy", field_type='checkbox'),
     ]
     home.add_child(instance=contact_page)
