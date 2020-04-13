@@ -21,7 +21,7 @@ class CityFactory(factory.DjangoModelFactory):
 
 
 class ChannelFactory(factory.DjangoModelFactory):
-    name = factory.Sequence(lambda n: f"channel {n}")
+    name = factory.Faker('sentence')
     url = factory.Faker('uri')
 
     class Meta:
