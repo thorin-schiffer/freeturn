@@ -37,8 +37,6 @@ defaults: &defaults
   environment:
     - PIPENV_CACHE_DIR: "~/.local/pipenv-cache"
     - DJANGO_SETTINGS_MODULE: portfolio.settings.testing
-    - DATABASE_URL: sqlite://./db.sqlite3
-    - GOOGLE_ANALYTICS_ID: UA-123456-7
 
 jobs:
   test:

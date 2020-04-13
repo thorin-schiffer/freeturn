@@ -1,9 +1,13 @@
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from social_core.pipeline import DEFAULT_AUTH_PIPELINE
-from smart_getenv import getenv
-import dj_database_url
 import os
 from decimal import Decimal
+import environ
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+environ.Env.read_env()
+DEBUG = env('DEBUG')
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -98,8 +102,11 @@ WSGI_APPLICATION = 'portfolio.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
-DATABASES = {'default': dj_database_url.config()}
+SECRET_KEY = env('SECRET_KEY')
+DATABASES = {
+    'default': env.db(),
+    'extra': env.db('SQLITE_URL', default='sqlite://./db.sqlite3')
+}
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
@@ -159,20 +166,16 @@ WAGTAIL_SITE_NAME = "portfolio"
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'https://cheparev.com'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
-RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
-RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
+RECAPTCHA_PUBLIC_KEY = env.str("RECAPTCHA_PUBLIC_KEY", None)
+RECAPTCHA_PRIVATE_KEY = env.str("RECAPTCHA_PRIVATE_KEY", None)
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.udag.de'
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-EMAIL_PORT = 587
+EMAIL_CONFIG = env.email_url('EMAIL_URL', default='memorymail://')
+vars().update(EMAIL_CONFIG)
 
 TAGGIT_CASE_INSENSITIVE = True
 TAGGIT_TAGS_FROM_STRING = 'home.utils.tags_splitter'
 
-DEFAULT_DAILY_RATE = getenv('DEFAULT_DAILY_RATE', default=100, type=Decimal)
+DEFAULT_DAILY_RATE = 100
 DEFAULT_WORKING_DAYS = 22 * 9
 VAT_RATE = Decimal('0.19')
 INCOME_TAX_RATE = Decimal('0.41')
@@ -183,8 +186,8 @@ AUTHENTICATION_BACKENDS = (
 )
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = getenv("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY")
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = getenv("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET")
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env.str("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env.str("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET")
 
 SOCIAL_AUTH_LOGIN_URL = "/admin/account/"
 LOGIN_REDIRECT_URL = SOCIAL_AUTH_LOGIN_URL
@@ -202,6 +205,6 @@ WKHTMLTOPDF_CMD = '/usr/bin/wkhtmltopdf'
 WKHTMLTOPDF_CMD_OPTIONS = {
     'quiet': True,
 }
-GOOGLE_ANALYTICS_JS_PROPERTY_ID = getenv("GOOGLE_ANALYTICS_ID")
+GOOGLE_ANALYTICS_JS_PROPERTY_ID = env.str("GOOGLE_ANALYTICS_ID", default="UA-123456-7")
 MAILBOX_LABEL = "CRM"
 DEFAULT_VAT = 19
