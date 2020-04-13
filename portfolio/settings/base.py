@@ -1,13 +1,24 @@
-from social_core.pipeline import DEFAULT_AUTH_PIPELINE
 import os
 from decimal import Decimal
+
 import environ
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+from social_core.pipeline import DEFAULT_AUTH_PIPELINE
+
 env = environ.Env(
     DEBUG=(bool, False)
 )
 environ.Env.read_env()
 DEBUG = env('DEBUG')
 DEBUG_TOOLBAR = env.bool('DEBUG_TOOLBAR', False)
+
+SENTRY_DSN = env.str("SENTRY_DSN")
+if SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()]
+    )
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -78,13 +89,14 @@ if DEBUG_TOOLBAR:
 
 ROOT_URLCONF = 'portfolio.urls'
 
+CACHE_TEMPLATES = env.bool('CACHE_TEMPLATES', False)
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(PROJECT_DIR, 'templates'),
         ],
-        'APP_DIRS': True,
+        'APP_DIRS': not CACHE_TEMPLATES,
 
         'OPTIONS': {
             'context_processors': [
@@ -94,6 +106,12 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'context_processors.menu_items'
             ],
+            **({'loaders': [
+                ('django.template.loaders.cached.Loader', [
+                    'django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader',
+                ]),
+            ], } if CACHE_TEMPLATES else {})
         },
     },
 ]
@@ -199,3 +217,25 @@ WKHTMLTOPDF_CMD_OPTIONS = {
 GOOGLE_ANALYTICS_JS_PROPERTY_ID = env.str("GOOGLE_ANALYTICS_ID", default="UA-123456-7")
 MAILBOX_LABEL = "CRM"
 DEFAULT_VAT = 19
+
+AWS_STORAGE_BUCKET_NAME = env.str("AWS_STORAGE_BUCKET_NAME", None)
+if AWS_STORAGE_BUCKET_NAME:
+    AWS_ACCESS_KEY_ID = env.str("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY")
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+DJANGO_REDIS_IGNORE_EXCEPTIONS = True
+CACHES = {
+    'default': env.cache('REDIS_URL', 'locmemcache://')
+}
+SECURE_PROXY_SSL = env.bool('SECURE_PROXY_SSL', False)
+if SECURE_PROXY_SSL:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+
+WHITENOISE_STORAGE = env.bool('SECURE_PROXY_SSL', False)
+if WHITENOISE_STORAGE:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+WKHTMLTOPDF_CMD = env.str('WKHTMLTOPDF_CMD', default='/usr/bin/wkhtmltopdf')
