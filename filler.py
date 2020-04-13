@@ -11,7 +11,7 @@ from wagtail.core.models import Site
 from wagtail.images.models import Image
 from wagtail_factories import CollectionFactory
 
-from crm.factories import ProjectFactory
+from crm.factories import ProjectFactory, CVFactory
 from crm.models import Project, Employee, Channel
 from home.factories import HomePageFactory, TechnologiesPageFactory, \
     ContactPageFactory
@@ -103,6 +103,10 @@ def fill_crm_data(projects_count=10):
         project.modified = make_aware(project.start_date) - timedelta(days=random.randint(30, 90))
         project.save(update_modified=False)
         print(f"Created {project}")
+
+        cv = CVFactory(project=project, picture=None)
+        cv.picture = get_random_image('People')
+        cv.save()
 
 
 def fill_pictures():

@@ -120,6 +120,7 @@ class CVFactory(factory.DjangoModelFactory):
     contact_details = factory.Faker('phone_number')
     rate_overview = "100 schmeckles"
     working_permit = "permanent"
+    languages_overview = "Lhammas: fluent"
 
     class Meta:
         model = models.CV
