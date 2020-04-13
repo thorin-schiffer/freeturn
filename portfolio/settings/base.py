@@ -8,6 +8,7 @@ env = environ.Env(
 )
 environ.Env.read_env()
 DEBUG = env('DEBUG')
+DEBUG_TOOLBAR = env.bool('DEBUG_TOOLBAR', False)
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -75,6 +76,12 @@ MIDDLEWARE = [
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
+ALLOWED_HOSTS = ['*']
+INTERNAL_IPS = ['127.0.0.1']
+
+if DEBUG_TOOLBAR:
+    INSTALLED_APPS += ['debug_toolbar']
+    MIDDLEWARE = MIDDLEWARE + ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
 ROOT_URLCONF = 'portfolio.urls'
 
@@ -169,7 +176,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 RECAPTCHA_PUBLIC_KEY = env.str("RECAPTCHA_PUBLIC_KEY", None)
 RECAPTCHA_PRIVATE_KEY = env.str("RECAPTCHA_PRIVATE_KEY", None)
 
-EMAIL_CONFIG = env.email_url('EMAIL_URL', default='memorymail://')
+EMAIL_CONFIG = env.email_url('EMAIL_URL', default='consolemail://')
 vars().update(EMAIL_CONFIG)
 
 TAGGIT_CASE_INSENSITIVE = True
