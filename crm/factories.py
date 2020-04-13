@@ -21,7 +21,7 @@ class CityFactory(factory.DjangoModelFactory):
 
 
 class ChannelFactory(factory.DjangoModelFactory):
-    name = factory.Sequence(lambda n: f"channel {n}")
+    name = factory.Faker('sentence')
     url = factory.Faker('uri')
 
     class Meta:
@@ -78,6 +78,7 @@ class ProjectMessageFactory(factory.DjangoModelFactory):
     project = factory.SubFactory(ProjectFactory)
     author = factory.SubFactory(EmployeeFactory)
     text = factory.Faker('text')
+    subject = factory.Faker('sentence')
     gmail_message_id = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
     gmail_thread_id = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
 
@@ -120,6 +121,7 @@ class CVFactory(factory.DjangoModelFactory):
     contact_details = factory.Faker('phone_number')
     rate_overview = "100 schmeckles"
     working_permit = "permanent"
+    languages_overview = "Lhammas: fluent"
 
     class Meta:
         model = models.CV

@@ -11,8 +11,8 @@ from wagtail.core.models import Site
 from wagtail.images.models import Image
 from wagtail_factories import CollectionFactory
 
-from crm.factories import ProjectFactory
-from crm.models import Project, Employee
+from crm.factories import ProjectFactory, CVFactory, ProjectMessageFactory, InvoiceFactory
+from crm.models import Project, Employee, Channel
 from home.factories import HomePageFactory, TechnologiesPageFactory, \
     ContactPageFactory
 from home.factories import PortfolioPageFactory, ProjectPageFactory
@@ -29,12 +29,14 @@ def get_random_image(collection):
 def fill_form(home):
     contact_page = ContactPageFactory.build()
     contact_page.form_fields = [
-        FormField(label="your email", field_type='email'),
-        FormField(label="some words about your project", field_type='multiline', required=False),
-        FormField(label="technologies", field_type='singleline'),
-        FormField(label="workload (hours per week)", field_type='number'),
-        FormField(label="duration in months", field_type='number'),
-        FormField(label="location", field_type='singleline'),
+        FormField(label="your email", field_type='email', default_value='sergey@cheparev.com'),
+        FormField(label="some words about your project", field_type='multiline', required=False,
+                  default_value="some words"),
+        FormField(label="technologies", field_type='singleline',
+                  default_value="Python"),
+        FormField(label="workload (hours per week)", field_type='number', default_value=40),
+        FormField(label="duration in months", field_type='number', default_value=6),
+        FormField(label="location", field_type='singleline', default_value="Berlin"),
         FormField(label="privacy policy", field_type='checkbox'),
     ]
     home.add_child(instance=contact_page)
@@ -104,6 +106,13 @@ def fill_crm_data(projects_count=10):
         project.save(update_modified=False)
         print(f"Created {project}")
 
+        cv = CVFactory(project=project, picture=None)
+        cv.picture = get_random_image('People')
+        cv.save()
+
+        ProjectMessageFactory(project=project, author=project.manager)
+        InvoiceFactory(project=project, logo=project.company.logo)
+
 
 def fill_pictures():
     images_path = "fill_media"
@@ -133,6 +142,7 @@ def clean():
     Site.objects.all().delete()
     Project.objects.all().delete()
     Employee.objects.all().delete()
+    Channel.objects.all().delete()
 
 
 @transaction.atomic

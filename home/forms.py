@@ -2,7 +2,7 @@ from snowpenguin.django.recaptcha2.fields import ReCaptchaField
 from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
 from wagtail.contrib.forms.forms import FormBuilder
 from wagtail.contrib.forms.models import AbstractEmailForm
-
+from django.conf import settings
 CAPTCHA_FIELD_NAME = 'wagtailcaptcha'
 
 
@@ -10,7 +10,8 @@ class RecaptchaFormBuilder(FormBuilder):
     @property
     def formfields(self):
         fields = super().formfields
-        fields[CAPTCHA_FIELD_NAME] = ReCaptchaField(widget=ReCaptchaWidget(), label='Captcha')
+        if settings.RECAPTCHA_PUBLIC_KEY:
+            fields[CAPTCHA_FIELD_NAME] = ReCaptchaField(widget=ReCaptchaWidget(), label='Captcha')
         return fields
 
 

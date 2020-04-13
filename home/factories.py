@@ -21,6 +21,7 @@ class HomePageFactory(wagtail_factories.PageFactory):
 
 class ContactPageFactory(wagtail_factories.PageFactory):
     title = "Contact"
+    thank_you_text = "Thank you!"
     show_on_home = True
 
     class Meta:
