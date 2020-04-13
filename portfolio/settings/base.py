@@ -1,4 +1,3 @@
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from social_core.pipeline import DEFAULT_AUTH_PIPELINE
 import os
 from decimal import Decimal
@@ -12,12 +11,6 @@ DEBUG_TOOLBAR = env.bool('DEBUG_TOOLBAR', False)
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'home',
@@ -76,7 +69,7 @@ MIDDLEWARE = [
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default="*")
 INTERNAL_IPS = ['127.0.0.1']
 
 if DEBUG_TOOLBAR:
@@ -114,9 +107,6 @@ DATABASES = {
     'default': env.db(),
     'extra': env.db('SQLITE_URL', default='sqlite://./db.sqlite3')
 }
-# Password validation
-# https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -132,9 +122,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -146,9 +133,6 @@ USE_L10N = True
 LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
 
 USE_TZ = True
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',

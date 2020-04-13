@@ -37,6 +37,7 @@ defaults: &defaults
   environment:
     - PIPENV_CACHE_DIR: "~/.local/pipenv-cache"
     - DJANGO_SETTINGS_MODULE: portfolio.settings.testing
+    - SECRET_KEY: '1234567'
 
 jobs:
   test:
