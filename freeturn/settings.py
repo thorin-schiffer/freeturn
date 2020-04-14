@@ -86,7 +86,7 @@ if DEBUG_TOOLBAR:
     INSTALLED_APPS += ['debug_toolbar']
     MIDDLEWARE = MIDDLEWARE + ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
-ROOT_URLCONF = 'portfolio.urls'
+ROOT_URLCONF = 'freeturn.urls'
 
 CACHE_TEMPLATES = env.bool('CACHE_TEMPLATES', False)
 TEMPLATES = [
@@ -114,7 +114,7 @@ TEMPLATES = [
         },
     },
 ]
-WSGI_APPLICATION = 'portfolio.wsgi.application'
+WSGI_APPLICATION = 'freeturn.wsgi.application'
 
 SECRET_KEY = env.str('SECRET_KEY')
 DEFAULT_SQLITE_PATH = os.path.join(PROJECT_DIR, 'db.sqlite3')
@@ -167,7 +167,7 @@ MEDIA_URL = '/media/'
 
 # Wagtail settings
 
-WAGTAIL_SITE_NAME = "portfolio"
+WAGTAIL_SITE_NAME = "freeturn"
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash

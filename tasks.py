@@ -48,15 +48,6 @@ def sync_production_db(ctx, backup=True):
 
 
 @invoke.task
-def sync_production_s3(ctx):
-    from portfolio.settings import production, production_local
-    ctx.run(
-        f"aws s3 sync --acl public-read s3://{production.AWS_STORAGE_BUCKET_NAME} "
-        f"s3://{production_local.AWS_STORAGE_BUCKET_NAME}"
-    )
-
-
-@invoke.task
 @with_django
 def mail(context):
     from crm.gmail_utils import sync
