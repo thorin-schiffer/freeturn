@@ -61,6 +61,9 @@ class HomePage(Page):
         FieldPanel('earliest_available'),
         ImageChooserPanel('picture'),
         ImageChooserPanel('background'),
+        FieldPanel('stackoverflow_profile'),
+        FieldPanel('github_profile'),
+        FieldPanel('linkedin_profile'),
     ]
 
     def get_context(self, request, *args, **kwargs):
