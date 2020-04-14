@@ -90,7 +90,7 @@ def fill(context, migrate=False):
     filler.clean()
     if migrate:
         context.run('PYTHONUNBUFFERED=1 ./manage.py migrate')
-        create_admin(context)
+    create_admin(context)
     filler.fill()
 
 
