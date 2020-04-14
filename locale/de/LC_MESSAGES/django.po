@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-15 19:19+0000\n"
+"POT-Creation-Date: 2020-04-14 12:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -79,14 +79,14 @@ msgstr "Bankverbindung"
 msgid "Contact"
 msgstr "Kontakt"
 
-#: portfolio/templates/wagtailadmin/skeleton.html:22
+#: freeturn/templates/wagtailadmin/skeleton.html:22
 msgid ""
 "You are using an <strong>outdated</strong> browser not supported by this "
 "software. Please <a href=\"http://browsehappy.com/\">upgrade your browser</"
 "a>."
 msgstr ""
 
-#: portfolio/templates/wagtailadmin/skeleton.html:25
+#: freeturn/templates/wagtailadmin/skeleton.html:25
 msgid ""
 "\n"
 "            Javascript is required to use Wagtail, but it is currently "

@@ -13,7 +13,7 @@ logger = logging.getLogger(__file__)
 def configure_django():
     from django.core.wsgi import get_wsgi_application
     PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__)))
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "portfolio.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "freeturn.settings")
     sys.path.append(PROJECT_DIR)
     get_wsgi_application()
 
@@ -45,15 +45,6 @@ def sync_production_db(ctx, backup=True):
     database_url = os.environ['DATABASE_URL']
     ctx.run(f"pg_restore --verbose --clean --no-acl --no-owner --dbname={database_url} latest.dump")
     os.remove("latest.dump")
-
-
-@invoke.task
-def sync_production_s3(ctx):
-    from portfolio.settings import production, production_local
-    ctx.run(
-        f"aws s3 sync --acl public-read s3://{production.AWS_STORAGE_BUCKET_NAME} "
-        f"s3://{production_local.AWS_STORAGE_BUCKET_NAME}"
-    )
 
 
 @invoke.task
@@ -112,11 +103,10 @@ def collect_static(context, local=False):
 @invoke.task(help={
     "make": "update *.mo translation file before parsing (makemessages)"
 })
-def i18n(ctx, make=False):
+def i18n(ctx):
     """Runs django translation routines"""
     print("Collecting i18n")
-    if make:
-        ctx.run(f"./manage.py makemessages -i 'venv/*' -l de")
+    ctx.run(f"./manage.py makemessages -i 'venv/*' -l de")
     ctx.run(f"./manage.py compilemessages -l de")
 
 
