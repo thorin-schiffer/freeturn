@@ -19,7 +19,7 @@
             <div class="row">
                 {% if page.stackoverflow_profile %}
                 <div class="col-lg-2">
-                    <a href="https://stackoverflow.com/users/1205242/eviltnan">
+                    <a href="{{page.stackoverflow_profile}}">
                         <img height="50" width="50" src="{% static 'img/stack_overflow.png' %}" class="mx-auto d-block">
                     </a>
                     <div class="text-center">
@@ -29,7 +29,7 @@
                 {% endif %}
                 {% if page.github_profile %}
                 <div class="col-lg-2">
-                    <a href="https://github.com/eviltnan">
+                    <a href="{{page.github_profile}}">
                         <img height="50" width="50" src="{% static 'img/github.png' %}" class="mx-auto d-block">
                     </a>
                     <div class="text-center">
@@ -39,7 +39,7 @@
                 {% endif %}
                 {% if page.linkedin_profile %}
                 <div class="col-lg-2">
-                    <a href="https://www.linkedin.com/in/sergey-cheparev/">
+                    <a href="{{page.linkedin_profile}}">
                         <img height="50" width="50" src="{% static 'img/linkedin.png' %}" class="mx-auto d-block">
                     </a>
                     <div class="text-center">
