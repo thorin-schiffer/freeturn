@@ -1,2 +1,2 @@
-web: gunicorn freeturn.wsgi --log-file - -b 0.0.0.0
+web: gunicorn freeturn.wsgi --log-file -
 release: ./manage.py migrate
