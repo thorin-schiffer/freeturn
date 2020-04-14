@@ -342,10 +342,10 @@
         },
         "google-api-core": {
             "hashes": [
-                "sha256:859f7392676761f2b160c6ee030c3422135ada4458f0948c5690a6a7c8d86294",
-                "sha256:92e962a087f1c4b8d1c5c88ade1c1dfd550047dcffb320c57ef6a534a20403e2"
+                "sha256:c0e430658ed6be902d7ba7095fb0a9cac810270d71bf7ac4484e76c300407aae",
+                "sha256:e4082a0b479dc2dee2f8d7b80ea8b5d0184885b773caab15ab1836277a01d689"
             ],
-            "version": "==1.16.0"
+            "version": "==1.17.0"
         },
         "google-api-python-client": {
             "hashes": [
@@ -357,10 +357,10 @@
         },
         "google-auth": {
             "hashes": [
-                "sha256:a5ee4c40fef77ea756cf2f1c0adcf475ecb53af6700cf9c133354cdc9b267148",
-                "sha256:cab6c707e6ee20e567e348168a5c69dc6480384f777a9e5159f4299ad177dcc0"
+                "sha256:050f1713142fa57d4b34f4fd4a998210e330f6a29c84c6ce359b928cc11dc8ad",
+                "sha256:9813eaae335c45e8a1b5d274610fa961ac8aa650568d1cfb005b2c07da6bde6c"
             ],
-            "version": "==1.13.1"
+            "version": "==1.14.0"
         },
         "google-auth-httplib2": {
             "hashes": [
@@ -438,9 +438,10 @@
         },
         "korean-lunar-calendar": {
             "hashes": [
-                "sha256:dd2583f47ea22d9d104db694c9e8b48e742dba078256838a6ddb12f19b892c87"
+                "sha256:12ce54b1392ed45a82dc6cea85ee5f7e33630556e82488f57e37a22482c8275d",
+                "sha256:a619ea88610129019267467b85cc9faf0fab6e1694b2e782d1aeb610cdd382d5"
             ],
-            "version": "==0.2.0"
+            "version": "==0.2.1"
         },
         "l18n": {
             "hashes": [
@@ -823,11 +824,11 @@
         },
         "wagtail": {
             "hashes": [
-                "sha256:580a75944f805a3686dbec97a3479e631cee2dc29fdea3d916055b1db36ad475",
-                "sha256:69d1b5ca5fcac0812f923fa900040a15768961942f76e71c92f7043f172ea7a3"
+                "sha256:357cdb5733aeed18ae36c865eefd04484f545387331371d26a40b99affb1a327",
+                "sha256:e4d129ec3560cc4ee1fc9dae384c898938dded2bd7e7197376da8517be6b688b"
             ],
             "index": "pypi",
-            "version": "==2.7.1"
+            "version": "==2.7.2"
         },
         "wagtail-autocomplete": {
             "hashes": [
@@ -1130,10 +1131,10 @@
         },
         "faker": {
             "hashes": [
-                "sha256:2d3f866ef25e1a5af80e7b0ceeacc3c92dec5d0fdbad3e2cb6adf6e60b22188f",
-                "sha256:b89aa33837498498e15c709eb40c31386408a901a53c7a5e12a425737a767976"
+                "sha256:53bf2c8a2de8af271466e7b9cc2f08ecf83c4c947981680eb61080779a0adace",
+                "sha256:7292806948ed848f1bcea1e7b963bae6f398687d1da0ea096e156fea2787f454"
             ],
-            "version": "==4.0.2"
+            "version": "==4.0.3"
         },
         "filelock": {
             "hashes": [
@@ -1219,10 +1220,10 @@
         },
         "jedi": {
             "hashes": [
-                "sha256:b4f4052551025c6b0b0b193b29a6ff7bdb74c52450631206c262aef9f7159ad2",
-                "sha256:d5c871cb9360b414f981e7072c52c33258d598305280fef91c6cae34739d65d5"
+                "sha256:cd60c93b71944d628ccac47df9a60fec53150de53d42dc10a7fc4b5ba6aae798",
+                "sha256:df40c97641cb943661d2db4c33c2e1ff75d491189423249e989bcea4464f3030"
             ],
-            "version": "==0.16.0"
+            "version": "==0.17.0"
         },
         "jmespath": {
             "hashes": [
@@ -1267,10 +1268,10 @@
         },
         "parso": {
             "hashes": [
-                "sha256:0c5659e0c6eba20636f99a04f469798dca8da279645ce5c387315b2c23912157",
-                "sha256:8515fc12cfca6ee3aa59138741fc5624d62340c97e401c74875769948d4f2995"
+                "sha256:158c140fc04112dc45bca311633ae5033c2c2a7b732fa33d0955bad8152a8dd0",
+                "sha256:908e9fae2144a076d72ae4e25539143d40b8e3eafbaeae03c1bfe226f4cdf12c"
             ],
-            "version": "==0.6.2"
+            "version": "==0.7.0"
         },
         "pexpect": {
             "hashes": [
@@ -1559,11 +1560,11 @@
         },
         "wagtail": {
             "hashes": [
-                "sha256:580a75944f805a3686dbec97a3479e631cee2dc29fdea3d916055b1db36ad475",
-                "sha256:69d1b5ca5fcac0812f923fa900040a15768961942f76e71c92f7043f172ea7a3"
+                "sha256:357cdb5733aeed18ae36c865eefd04484f545387331371d26a40b99affb1a327",
+                "sha256:e4d129ec3560cc4ee1fc9dae384c898938dded2bd7e7197376da8517be6b688b"
             ],
             "index": "pypi",
-            "version": "==2.7.1"
+            "version": "==2.7.2"
         },
         "wagtail-factories": {
             "hashes": [
