@@ -79,7 +79,7 @@ jobs:
       - heroku/install
       - run:
           name: Backup db...
-          command: heroku pg:backups:capture
+          command: heroku pg:backups:capture --app $HEROKU_APP_NAME
 
 workflows:
   main:
