@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   codecov: codecov/codecov@1.0.2
+  heroku: circleci/heroku@0.0.10.
 
 commands:
   install_binaries:
@@ -77,3 +78,10 @@ workflows:
     jobs:
       - lint
       - test
+      - heroku/deploy-via-git:
+          requires:
+            - test
+            - lint
+          filters:
+            branches:
+              only: develop
