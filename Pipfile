@@ -28,7 +28,7 @@ social-auth-app-django = "*"
 lxml = "*"
 psycopg2-binary = "*"
 fuzzywuzzy = {extras = ["speedup"],version = "*"}
-django-ajax-selects = "*"
+django-ajax-selects = ">=1.7.0,<1.8.0"
 django-wkhtmltopdf = "*"
 bleach = "*"
 wagtail-autocomplete = "*"
