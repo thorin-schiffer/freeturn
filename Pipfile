@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-wagtail = "<2.8,>=2.7"
-django = ">=2.2"
+wagtail = "<2.9,>=2.8"
+django = ">=2.2,<3.0"
 django-turbolinks = "*"
 gunicorn = "*"
 django-toolbelt = "*"

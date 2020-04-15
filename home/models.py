@@ -12,8 +12,8 @@ from wagtail.contrib.forms.edit_handlers import FormSubmissionsPanel
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Page
+from wagtail.documents import get_document_model_string
 from wagtail.documents.edit_handlers import DocumentChooserPanel
-from wagtail.documents.models import get_document_model
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
@@ -144,7 +144,7 @@ class ProjectPage(Page):
     project_url = models.URLField(null=True, blank=True)  # url is a part of the parent model
 
     reference_letter = models.ForeignKey(
-        get_document_model(),
+        get_document_model_string(),
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
