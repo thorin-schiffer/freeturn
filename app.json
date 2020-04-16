@@ -16,12 +16,12 @@
     }
   },
   "scripts": {
-    "postdeploy": "python manage.py migrate --noinput && invoke fill"
+    "postdeploy": "python manage.py migrate --noinput"
   },
   "environments": {
     "test": {
       "scripts": {
-        "test": "echo 1"
+        "test": "invoke fill"
       }
     }
   }
