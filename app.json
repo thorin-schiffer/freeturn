@@ -16,7 +16,7 @@
     }
   },
   "scripts": {
-    "postdeploy": "invoke fill"
+    "postdeploy": "python manage.py migrate --noinput"
   },
   "environments": {
     "test": {

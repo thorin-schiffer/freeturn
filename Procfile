@@ -1,2 +1,2 @@
 web: gunicorn freeturn.wsgi --log-file -
-release: ./manage.py migrate
+release: ./manage.py migrate --noinput
