@@ -107,5 +107,4 @@ venv.bak/
 /.idea
 
 # django
-/media
 /static
