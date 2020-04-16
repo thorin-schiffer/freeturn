@@ -16,12 +16,12 @@
     }
   },
   "scripts": {
-    "postdeploy": "python manage.py migrate --noinput"
+    "release": "python manage.py migrate --noinput && inv fill"
   },
   "environments": {
     "test": {
       "scripts": {
-        "test": "invoke fill"
+        "review": "echo 1"
       }
     }
   }
