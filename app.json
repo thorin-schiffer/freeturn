@@ -15,9 +15,6 @@
       "value": "true"
     }
   },
-  "scripts": {
-    "release": "python manage.py migrate --noinput && inv fill"
-  },
   "environments": {
     "test": {
       "scripts": {
