@@ -4,7 +4,7 @@
   "website": "https://github.com/eviltnan/freeturn",
   "repository": "https://github.com/eviltnan/freeturn",
   "logo": "https://portfolio.cheparev.com/static/img/favicon/favicon-96x96.png",
-  "success_url": "/",
+  "success_url": "/admin/login/?next=/",
   "env": {
     "SECRET_KEY": {
       "description": "A secret key for verifying the integrity of signed cookies.",

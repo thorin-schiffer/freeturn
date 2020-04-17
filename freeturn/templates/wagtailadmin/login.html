@@ -1,3 +1,8 @@
 {% extends "wagtailadmin/login.html" %}
 
-{% block branding_login %}Sign in{% endblock %}
+{% block branding_login %}
+    Sign in
+    {% if debug %}
+        [admin:admin]
+    {% endif %}
+{% endblock %}
