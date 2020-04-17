@@ -36,6 +36,7 @@ CRM:
 **WARNING Heroku doesn't provide persistent storage on the [free plan](https://help.heroku.com/K1PPS2WM/why-are-my-file-uploads-missing-deleted),
 use s3 or other storage for it**
 
+**Heroku deployments fixtured with superuser admin:admin**
 #### Getting started
 
 Freeturn uses Python3. Clone this repository.
