@@ -16,9 +16,9 @@
     }
   },
   "environments": {
-    "test": {
+    "review": {
       "scripts": {
-        "review": "pipenv install --dev"
+        "dev-deps": "pipenv install --dev"
       }
     }
   }
