@@ -18,7 +18,7 @@
   "environments": {
     "test": {
       "scripts": {
-        "review": "echo 1"
+        "review": "pipenv install --dev"
       }
     }
   }
