@@ -59,7 +59,7 @@ jobs:
           key: pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
       - run:
           name: Testing...
-          command: pytest -n 2 --junitxml=test-results/junit.xml --cov-report=html --cov-report=xml --cov=.
+          command: pytest -n 2 --junitxml=test-results/junit.xml --cov-report=html --cov-report=xml --cov=. unit_tests/
       - store_test_results:
           path: test-results
       - store_artifacts:
