@@ -4,14 +4,21 @@
   "website": "https://github.com/eviltnan/freeturn",
   "repository": "https://github.com/eviltnan/freeturn",
   "logo": "https://portfolio.cheparev.com/static/img/favicon/favicon-96x96.png",
-  "success_url": "/",
-  "scripts": {
-    "predeploy": "heroku pg:backups:capture"
+  "success_url": "/admin/login/?next=/",
+  "env": {
+    "SECRET_KEY": {
+      "description": "A secret key for verifying the integrity of signed cookies.",
+      "generator": "secret"
+    },
+    "DEBUG": {
+      "description": "Debug mode",
+      "value": "true"
+    }
   },
   "environments": {
     "test": {
       "scripts": {
-        "test": "pytest"
+        "review": "echo 1"
       }
     }
   }

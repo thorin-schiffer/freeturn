@@ -8,6 +8,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![codecov](https://codecov.io/gh/eviltnan/freeturn/branch/develop/graph/badge.svg)](https://codecov.io/gh/eviltnan/freeturn)
 
+
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 Freeturn is an open source portfolio and CRM for individual freelance developers.
 Based on Django and Wagtail.
 
@@ -29,10 +33,10 @@ CRM:
 * Gmail integration, parsing the project description for quick project lead and CV generation
 * invoice generation
 
-#### Prerequisites
+**WARNING Heroku doesn't provide persistent storage on the [free plan](https://help.heroku.com/K1PPS2WM/why-are-my-file-uploads-missing-deleted),
+use s3 or other storage for it**
 
-* Static files on heroku can be only hosted on a persistent file storage, AWS S3 is currently used
-
+**Heroku deployments fixtured with superuser admin:admin**
 #### Getting started
 
 Freeturn uses Python3. Clone this repository.

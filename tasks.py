@@ -68,10 +68,8 @@ def create_admin(ctx):
         print(f"Created user {user} with password 'admin'")
 
 
-@invoke.task(help={
-    'migrate': 'Migrate DB and remove the datbase file before filling',
-})
-def fill(context, migrate=False):
+@invoke.task
+def fill(context):
     configure_django()
     import filler
     from django.conf import settings
@@ -79,8 +77,6 @@ def fill(context, migrate=False):
         raise Exit("Won't fill in non debug envs, possible data loss or corruption")
 
     filler.clean()
-    if migrate:
-        context.run('PYTHONUNBUFFERED=1 ./manage.py migrate')
     create_admin(context)
     filler.fill()
 
@@ -129,3 +125,19 @@ def bootstrap(context):
     collect_static(context)
     i18n(context)
     install_hooks(context)
+
+
+@invoke.task(
+    help={
+        "fill": "Fixtures the database",
+        "host": "Host to bind"
+    }
+)
+def unicorn(context, fill_db=False, host=None):
+    """Starts gunicorn as webserver"""
+    if fill_db or os.getenv("FILL_DB", None):
+        fill(context)
+    if host:
+        context.run(f"gunicorn freeturn.wsgi --log-file - -b {host}")
+    else:
+        context.run("gunicorn freeturn.wsgi --log-file -")

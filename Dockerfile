@@ -15,4 +15,4 @@ COPY . /app
 
 #RUN pytest -n auto
 
-CMD ./start.sh
+CMD inv unicorn -f -h 0.0.0.0
