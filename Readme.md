@@ -33,9 +33,8 @@ CRM:
 * Gmail integration, parsing the project description for quick project lead and CV generation
 * invoice generation
 
-#### Prerequisites
-
-* Static files on heroku can be only hosted on a persistent file storage, AWS S3 is currently used
+**WARNING Heroku doesn't provide persistent storage on the [free plan](https://help.heroku.com/K1PPS2WM/why-are-my-file-uploads-missing-deleted),
+use s3 or other storage for it**
 
 #### Getting started
 
