@@ -43,7 +43,7 @@ def gmail_api_response_factory():
     def _gmail_api_response_factory(filename):
         from django.conf import settings
         path = os.path.join(
-            settings.BASE_DIR, "crm", "tests", "data", filename
+            settings.BASE_DIR, "unit_tests", "crm_tests", "data", filename
         )
         with open(path, "r") as f:
             return json.load(f)
