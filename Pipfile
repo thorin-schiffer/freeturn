@@ -60,13 +60,14 @@ django-webtest = "*"
 pytest-factoryboy = "*"
 ipython = "*"
 pytest-mock = "*"
-
 flake8 = "*"
 flake8-mutable = "*"
 flake8-tidy-imports = "*"
 pre-commit = "==1.14.4"
 awscli = "*"
 django-debug-toolbar-template-timings = "*"
+selenium = "*"
+pytest-selenium = "*"
 
 [requires]
 python_version = "3.7.5"
