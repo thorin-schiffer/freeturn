@@ -9,7 +9,7 @@
     {
       "plan": "deployhooks:http",
       "options": {
-        "url": "http://example.org"
+        "url": "https://freeturn-heroku-hook-forwarder.herokuapp.com/"
       }
     }
   ],
