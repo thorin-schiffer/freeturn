@@ -40,7 +40,7 @@ defaults: &defaults
     - SECRET_KEY: '1234567'
 
 jobs:
-  test:
+  unit_tests:
     <<: *defaults
     steps:
       - checkout
@@ -59,7 +59,7 @@ jobs:
           key: pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
       - run:
           name: Testing...
-          command: pytest -n 2 --junitxml=test-results/junit.xml --cov-report=html --cov-report=xml --cov=.
+          command: pytest -n 2 --junitxml=test-results/junit.xml --cov-report=html --cov-report=xml --cov=. unit_tests/
       - store_test_results:
           path: test-results
       - store_artifacts:
@@ -80,12 +80,26 @@ jobs:
       - run:
           name: Backup db...
           command: heroku pg:backups:capture --app $HEROKU_APP_NAME
+  acceptance_tests:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - pip-packages-v1-{{ .Branch }}-
+            - pip-packages-v1-
+      - install_pip_env
+      - install_python_deps
+      - run:
+          name: Running acceptance tests
+          command: pytest --driver BrowserStack --capability browserName Chrome --capability build $CIRCLE_BRANCH --capability project freeturn --base-url $REVIEW_URL acceptance_tests/
 
 workflows:
   main:
     jobs:
       - lint
-      - test
+      - unit_tests
       - backup_db:
           filters:
             branches:

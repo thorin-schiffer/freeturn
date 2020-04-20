@@ -27,8 +27,14 @@ def with_django(func):
     return _inner
 
 
-@invoke.task
+@invoke.task(
+    help={
+        'repo': 'Push to your repo first',
+        'db_backup': 'Backup the database before deployment'
+    }
+)
 def deploy(context, repo=True, db_backup=True):
+    """Deploy the project manually to heroku using git deployment, see https://devcenter.heroku.com/articles/git"""
     if db_backup:
         context.run("heroku pg:backups:capture ")
     if repo:
@@ -38,18 +44,9 @@ def deploy(context, repo=True, db_backup=True):
 
 
 @invoke.task
-def sync_production_db(ctx, backup=True):
-    # if backup:
-    #     ctx.run("heroku pg:backups:capture")
-    # ctx.run("heroku pg:backups:download")
-    database_url = os.environ['DATABASE_URL']
-    ctx.run(f"pg_restore --verbose --clean --no-acl --no-owner --dbname={database_url} latest.dump")
-    os.remove("latest.dump")
-
-
-@invoke.task
 @with_django
 def mail(context):
+    """Simple mail check task, use in cron"""
     from crm.gmail_utils import sync
     sync()
 
@@ -70,6 +67,7 @@ def create_admin(ctx):
 
 @invoke.task
 def fill(context):
+    """Fill the database with test fixtures , won't work in non debug envs"""
     configure_django()
     import filler
     from django.conf import settings
@@ -111,6 +109,12 @@ def install_hooks(context):
     """Installs pre-commit hooks"""
     print("Installing pre-commit hook")
     context.run(f"pre-commit install")
+
+
+@invoke.task
+def validate_ci_config(context):
+    """Check circle ci config"""
+    context.run("circleci config validate")
 
 
 @invoke.task(default=True)

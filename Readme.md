@@ -15,6 +15,8 @@
 Freeturn is an open source portfolio and CRM for individual freelance developers.
 Based on Django and Wagtail.
 
+😊 Please star and fork if you want to say thank you or just help the project, arigato! 😊
+
 ![CRM area](https://cheparev-portfolio.s3.amazonaws.com/images/Office_-_Projects_070.original.png)
 ![Front page](https://cheparev-portfolio.s3.amazonaws.com/images/Selection_069.original.png)
 
@@ -87,3 +89,10 @@ Bind the port 8000 (`-p 8000:8000`)
 
 The default task for inv is `bootstrap`, use `invoke` to utilize local bootstrapping for development. This would recreate
 all the objects created automatically as fixtures.
+
+
+##### CLI and invoke tasks
+
+CLI tasks are wrapped up with [pyinvoke](https://github.com/pyinvoke/invoke). Invoke is a former fabric1 CLI part now existing as
+a separate project. This is preferred over django management commands as the one subjectively requiring less boilerplate.
+Please read the docs for pyinvoke for the basics. Available commands can be listed with `inv -l` (`inv` is a shortcut to `invoke`).
