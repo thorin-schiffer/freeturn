@@ -40,7 +40,7 @@ defaults: &defaults
     - SECRET_KEY: '1234567'
 
 jobs:
-  test:
+  unit_tests:
     <<: *defaults
     steps:
       - checkout
@@ -80,12 +80,16 @@ jobs:
       - run:
           name: Backup db...
           command: heroku pg:backups:capture --app $HEROKU_APP_NAME
+  acceptance_tests:
+    <<: *defaults
+    steps:
+      - run: echo "this is acceptance test"
 
 workflows:
   main:
     jobs:
       - lint
-      - test
+      - unit_tests
       - backup_db:
           filters:
             branches:
