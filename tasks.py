@@ -113,6 +113,12 @@ def install_hooks(context):
     context.run(f"pre-commit install")
 
 
+@invoke.task
+def check_ci_config(context):
+    """Check circle ci config"""
+    context.run("circleci config validate")
+
+
 @invoke.task(default=True)
 def bootstrap(context):
     """Local bootstrap for development in non-containerized env"""
