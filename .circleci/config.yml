@@ -83,14 +83,17 @@ jobs:
   acceptance_tests:
     <<: *defaults
     steps:
-      - run: echo "this is acceptance test"
+      - run:
+          name: Running acceptance tests
+          command: pytest --driver BrowserStack --capability browserName Chrome --base-url https://portfolio-pi-feature-se-yhhzyc.herokuapp.com/ acceptance_tests/
 
 workflows:
   main:
     jobs:
-      - lint
-      - unit_tests
-      - backup_db:
-          filters:
-            branches:
-              only: develop
+      - acceptance_tests
+#      - lint
+#      - unit_tests
+#      - backup_db:
+#          filters:
+#            branches:
+#              only: develop
