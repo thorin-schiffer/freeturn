@@ -89,20 +89,18 @@ jobs:
             - pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
             - pip-packages-v1-{{ .Branch }}-
             - pip-packages-v1-
-      - install_binaries
       - install_pip_env
       - install_python_deps
       - run:
           name: Running acceptance tests
-          command: pytest --driver BrowserStack --capability browserName Chrome --base-url https://portfolio-pi-feature-se-yhhzyc.herokuapp.com/ acceptance_tests/
+          command: pytest --driver BrowserStack --capability browserName Chrome --base-url $REVIEW_URL acceptance_tests/
 
 workflows:
   main:
     jobs:
-      - acceptance_tests
-#      - lint
-#      - unit_tests
-#      - backup_db:
-#          filters:
-#            branches:
-#              only: develop
+      - lint
+      - unit_tests
+      - backup_db:
+          filters:
+            branches:
+              only: develop
