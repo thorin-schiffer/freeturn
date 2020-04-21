@@ -29,4 +29,5 @@ def test_portfolio_listing(selenium, base_url):
 
     date = selenium.find_element_by_xpath("//h2")
     assert date.text
-    assert selenium.find_element_by_id('position')
+    assert selenium.find_element_by_id('position').text.strip()
+    assert selenium.find_element_by_id('responsibilities').text.strip()
