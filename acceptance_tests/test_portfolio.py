@@ -21,11 +21,11 @@ def test_portfolio_listing(selenium, base_url):
     assert len(portfolio_items) == 9
     assert "Portfolio" in selenium.find_element_by_xpath("//h1").text
 
-    first_project = portfolio_items[0]
-    first_project_name = first_project.find_element_by_xpath('//h4[@class="card-title"]').text
-    first_project.find_element_by_xpath('.//a').click()
+    last_project = portfolio_items[0]
+    last_project_name = last_project.find_element_by_xpath('//h4[@class="card-title"]').text
+    last_project.find_element_by_xpath('.//a').click()
 
-    assert selenium.current_url == f"{base_url}/portfolio/{slugify(first_project_name)}/"
+    assert selenium.current_url == f"{base_url}/portfolio/{slugify(last_project_name)}/"
 
     date = selenium.find_element_by_xpath("//h2")
     assert date.text
@@ -38,3 +38,21 @@ def test_portfolio_listing(selenium, base_url):
 
     selenium.find_element_by_id('back').click()
     assert selenium.current_url == f"{base_url}/portfolio/"
+
+
+@mark.nondestructive
+def test_current_project(selenium, base_url):
+    selenium.get(base_url)
+
+    portfolio_button = selenium.find_element_by_id('link-portfolio')
+    portfolio_button.click()
+    last_project = selenium.find_elements_by_class_name('portfolio-item')[0]
+    last_project_name = last_project.find_element_by_xpath('//h4[@class="card-title"]').text
+
+    home_button = selenium.find_element_by_class_name('navbar-brand')
+    home_button.click()
+    assert selenium.current_url == f"{base_url}/"
+
+    current_project_button = selenium.find_element_by_id('link-current-project')
+    current_project_button.click()
+    assert selenium.find_element_by_xpath('//h1').text == last_project_name
