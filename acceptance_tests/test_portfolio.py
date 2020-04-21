@@ -31,3 +31,10 @@ def test_portfolio_listing(selenium, base_url):
     assert date.text
     assert selenium.find_element_by_id('position').text.strip()
     assert selenium.find_element_by_id('responsibilities').text.strip()
+    assert selenium.find_element_by_id('project-link').get_attribute('href')
+
+    technology_links = selenium.find_elements_by_xpath('//a[contains(@id, "technology-")]')
+    assert technology_links
+
+    selenium.find_element_by_id('back').click()
+    assert selenium.current_url == f"{base_url}/portfolio/"
