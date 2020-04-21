@@ -56,3 +56,16 @@ def test_current_project(selenium, base_url):
     current_project_button = selenium.find_element_by_id('link-current-project')
     current_project_button.click()
     assert selenium.find_element_by_xpath('//h1').text == last_project_name
+
+
+@mark.nondestructive
+def test_contact(selenium, base_url):
+    selenium.get(base_url)
+    portfolio_button = selenium.find_element_by_id('form-contact')
+    portfolio_button.click()
+    input = selenium.find_element_by_name("some-words-about-your-project")
+    input.clear()
+    input.send_keys("test")
+    selenium.find_element_by_name("privacy-policy").click()
+    selenium.find_element_by_xpath("//input[@type='submit']").submit()
+    assert "Thank you!" in selenium.page_source
