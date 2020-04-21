@@ -61,7 +61,7 @@
                 <div class="btn-group" role="group">
                     {% for technology in page.technologies.all %}
 
-                    <a class="btn btn-outline-light"
+                    <a class="btn btn-light"
                        href="{% pageurl menu_items.portfolio %}?technology={{technology}}"
                        id="technology-{{technology|slugify}}">
                         {% if technology.logo %}
