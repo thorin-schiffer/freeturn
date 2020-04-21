@@ -67,6 +67,7 @@ awscli = "*"
 django-debug-toolbar-template-timings = "*"
 selenium = "*"
 pytest-selenium = "*"
+pytest-faker = "*"
 
 [requires]
 python_version = "3.7.5"
