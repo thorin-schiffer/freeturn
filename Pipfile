@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 wagtail = "<2.9,>=2.8"
 django = ">=2.2,<3.0"
-django-turbolinks = "*"
 gunicorn = "*"
 django-toolbelt = "*"
 django-colorful = "*"
