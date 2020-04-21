@@ -59,13 +59,30 @@ def test_current_project(selenium, base_url):
 
 
 @mark.nondestructive
-def test_contact(selenium, base_url):
+def test_contact(selenium, base_url, faker):
     selenium.get(base_url)
     portfolio_button = selenium.find_element_by_id('form-contact')
     portfolio_button.click()
+    assert selenium.current_url == f"{base_url}/contact/"
     input = selenium.find_element_by_name("some-words-about-your-project")
     input.clear()
-    input.send_keys("test")
+    text = faker.text()
+    input.send_keys(text)
     selenium.find_element_by_name("privacy-policy").click()
     selenium.find_element_by_xpath("//input[@type='submit']").submit()
     assert "Thank you!" in selenium.page_source
+
+    selenium.get(f"{base_url}/admin/login/")
+    selenium.find_element_by_name("username").send_keys("admin")
+    selenium.find_element_by_name("password").send_keys("admin")
+    selenium.find_element_by_xpath("//*[@type='submit']").submit()
+    assert selenium.current_url == f"{base_url}/admin/"
+
+    selenium.find_element_by_class_name("icon-form").click()
+    assert selenium.current_url == f"{base_url}/admin/forms/"
+    contact_forms = selenium.find_elements_by_xpath("//table[@class='listing']//td[@class='title']//a")[0]
+    assert contact_forms.text == 'Contact'
+    contact_forms.click()
+
+    last_entry = selenium.find_elements_by_xpath("//table[@class='listing']//tbody/tr")[0]
+    assert text in last_entry.text
