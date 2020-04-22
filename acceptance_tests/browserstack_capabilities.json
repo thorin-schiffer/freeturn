@@ -1,4 +1,7 @@
 {
-  "browserName": "Firefox",
-  "resolution": "1920x1080"
+  "os": "OS X",
+  "os_version": "Catalina",
+  "browser": "Chrome",
+  "resolution": "1920x1080",
+  "project": "freeturn"
 }
