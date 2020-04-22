@@ -10,7 +10,7 @@
 [![BrowserStack Status](https://automate.browserstack.com/badge.svg?badge_key=OW9FSlpEWUdYb2htbFJYTjRPbEtUVmlNRUhZM2RCNVUwejZ5MzAxUTJLMD0tLUcySUFHVGJVMDdVNzZxZ3VGSTdhSEE9PQ==--2fb0726c5380e49390677a7fdb8e19a5903d2828)](https://automate.browserstack.com/public-build/OW9FSlpEWUdYb2htbFJYTjRPbEtUVmlNRUhZM2RCNVUwejZ5MzAxUTJLMD0tLUcySUFHVGJVMDdVNzZxZ3VGSTdhSEE9PQ==--2fb0726c5380e49390677a7fdb8e19a5903d2828)
 
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/eviltnan/freeturn/tree/develop)
 
 Freeturn is an open source portfolio and CRM for individual freelance developers.
 Based on Django and Wagtail.
