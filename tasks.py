@@ -162,10 +162,10 @@ def browserstack(context, review_url=None):
         capabilities = json.load(f)
     branch = os.getenv("CIRCLE_BRANCH", None)
     if not branch:
-        result = context.run("git rev-parse --abbrev-ref HEAD")
-        branch = result.stdout.strip()
+        branch = context.run("git rev-parse --abbrev-ref HEAD").stdout.strip()
+        sha = context.run("git rev-parse --short HEAD").stdout.strip()
     capabilities.update({
-        "build": branch
+        "build": f"{branch}:{sha}"
     })
     capabilities_string = " ".join([
         f"--capability {key} \"{value}\""
