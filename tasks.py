@@ -5,8 +5,11 @@ import sys
 
 import invoke
 from invoke import Exit
+import environ
 
 logger = logging.getLogger(__file__)
+env = environ.Env()
+environ.Env.read_env('.env')
 
 
 # https://github.com/pyinvoke/invoke/issues/555
@@ -145,3 +148,22 @@ def unicorn(context, fill_db=False, host=None):
         context.run(f"gunicorn freeturn.wsgi --log-file - -b {host}")
     else:
         context.run("gunicorn freeturn.wsgi --log-file -")
+
+
+@invoke.task(
+    help={
+        "review_url": "Review URL from heroku, defaults to $REVIEW_URL"
+    }
+)
+def browserstack(context, review_url=None):
+    branch = os.getenv("CIRCLE_BRANCH", None)
+    if not branch:
+        result = context.run("git rev-parse --abbrev-ref HEAD")
+        branch = result.stdout.strip()
+    review_url = review_url or os.getenv("REVIEW_URL")
+    command = f"pytest --driver BrowserStack --base-url \"{review_url}\" " \
+              f"--variables acceptance_tests/browserstack_capabilities.json " \
+              f"--capability build \"{branch}\" " \
+              f"acceptance_tests/"
+    print(command)
+    context.run(command)
