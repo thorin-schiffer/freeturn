@@ -160,10 +160,8 @@ def browserstack(context, review_url=None):
     config_path = os.path.join("acceptance_tests", "browserstack_capabilities.json")
     with open(config_path, "r") as f:
         capabilities = json.load(f)
-    branch = os.getenv("CIRCLE_BRANCH", None)
-    if not branch:
-        branch = context.run("git rev-parse --abbrev-ref HEAD").stdout.strip()
-        sha = context.run("git rev-parse --short HEAD").stdout.strip()
+    branch = os.getenv("CIRCLE_BRANCH", context.run("git rev-parse --abbrev-ref HEAD").stdout.strip())
+    sha = os.getenv("CIRCLE_SHA1", context.run("git rev-parse HEAD").stdout.strip())
     capabilities.update({
         "build": f"{branch}:{sha}"
     })
