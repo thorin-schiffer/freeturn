@@ -76,7 +76,8 @@ def fill(context):
     import filler
     from django.conf import settings
     if not settings.DEBUG:
-        raise Exit("Won't fill in non debug envs, possible data loss or corruption")
+        print("Won't fill in non debug envs, possible data loss or corruption")
+        return
 
     filler.clean()
     create_admin(context)
