@@ -66,8 +66,9 @@ def test_contact(selenium, base_url, faker):
     assert selenium.current_url == f"{base_url}/contact/"
     input = selenium.find_element_by_name("some-words-about-your-project")
     input.clear()
-    text = faker.text()
+    text = faker.word()
     input.send_keys(text)
+    selenium.execute_script("window.scrollTo(0, document.body.scrollHeight)")
     selenium.find_element_by_name("privacy-policy").click()
     selenium.find_element_by_xpath("//input[@type='submit']").submit()
     assert "Thank you!" in selenium.page_source
