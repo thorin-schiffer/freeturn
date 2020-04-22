@@ -93,11 +93,7 @@ jobs:
       - install_python_deps
       - run:
           name: Running acceptance tests
-          command: pytest --driver BrowserStack --capability browserName Firefox \
-            --capability build $CIRCLE_BRANCH \
-            --capability project freeturn \
-            --capability resolution 1920x1080 \
-            --base-url $REVIEW_URL acceptance_tests/
+          command: inv browserstack
 
 workflows:
   main:
