@@ -164,6 +164,7 @@ def browserstack(context, review_url=None):
     command = f"pytest --driver BrowserStack --base-url \"{review_url}\" " \
               f"--variables acceptance_tests/browserstack_capabilities.json " \
               f"--capability build \"{branch}\" " \
-              f"acceptance_tests/"
+              f"--capability project freeturn " \
+              f"acceptance_tests/test_portfolio.py::test_portfolio_listing"
     print(command)
     context.run(command)
