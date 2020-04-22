@@ -1,3 +1,5 @@
+import time
+
 from django.utils.text import slugify
 from pytest import mark
 
@@ -71,12 +73,14 @@ def test_contact(selenium, base_url, faker):
     selenium.execute_script("window.scrollTo(0, document.body.scrollHeight)")
     selenium.find_element_by_name("privacy-policy").click()
     selenium.find_element_by_xpath("//input[@type='submit']").submit()
-    assert "Thank you!" in selenium.page_source
+    time.sleep(1)
+    assert "Thank you!" in selenium.page_source, selenium.page_source
 
     selenium.get(f"{base_url}/admin/login/")
     selenium.find_element_by_name("username").send_keys("admin")
     selenium.find_element_by_name("password").send_keys("admin")
     selenium.find_element_by_xpath("//*[@type='submit']").submit()
+    time.sleep(1)
     assert selenium.current_url == f"{base_url}/admin/"
 
     selenium.find_element_by_class_name("icon-form").click()
