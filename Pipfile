@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 wagtail = "<2.9,>=2.8"
 django = ">=2.2,<3.0"
-django-turbolinks = "*"
 gunicorn = "*"
 django-toolbelt = "*"
 django-colorful = "*"
@@ -68,6 +67,7 @@ awscli = "*"
 django-debug-toolbar-template-timings = "*"
 selenium = "*"
 pytest-selenium = "*"
+pytest-faker = "*"
 
 [requires]
 python_version = "3.7.5"

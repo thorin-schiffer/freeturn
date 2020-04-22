@@ -34,6 +34,7 @@ class ProjectPageFactory(wagtail_factories.PageFactory):
     description = factory.Faker('text')
     position = factory.Faker('job')
     start_date = factory.Faker('past_date', start_date="-10y", tzinfo=get_current_timezone())
+    project_url = factory.Faker('url')
     duration = 6
 
     @factory.post_generation

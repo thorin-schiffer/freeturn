@@ -1,12 +1,16 @@
 import functools
+import json
 import logging
 import os
 import sys
 
 import invoke
 from invoke import Exit
+import environ
 
 logger = logging.getLogger(__file__)
+env = environ.Env()
+environ.Env.read_env('.env')
 
 
 # https://github.com/pyinvoke/invoke/issues/555
@@ -145,3 +149,30 @@ def unicorn(context, fill_db=False, host=None):
         context.run(f"gunicorn freeturn.wsgi --log-file - -b {host}")
     else:
         context.run("gunicorn freeturn.wsgi --log-file -")
+
+
+@invoke.task(
+    help={
+        "review_url": "Review URL from heroku, defaults to $REVIEW_URL"
+    }
+)
+def browserstack(context, review_url=None):
+    config_path = os.path.join("acceptance_tests", "browserstack_capabilities.json")
+    with open(config_path, "r") as f:
+        capabilities = json.load(f)
+    branch = os.getenv("CIRCLE_BRANCH", context.run("git rev-parse --abbrev-ref HEAD").stdout.strip())
+    sha = os.getenv("CIRCLE_SHA1", context.run("git rev-parse HEAD").stdout.strip())
+    capabilities.update({
+        "build": f"{branch}:{sha}"
+    })
+    capabilities_string = " ".join([
+        f"--capability {key} \"{value}\""
+        for key, value in capabilities.items()
+    ])
+
+    review_url = review_url or os.getenv("REVIEW_URL")
+    command = f"pytest --driver BrowserStack --base-url \"{review_url}\" " \
+              f"{capabilities_string} " \
+              f"acceptance_tests/"
+    print(command)
+    context.run(command)

@@ -93,7 +93,7 @@ jobs:
       - install_python_deps
       - run:
           name: Running acceptance tests
-          command: pytest --driver BrowserStack --capability browserName Chrome --capability build $CIRCLE_BRANCH --capability project freeturn --base-url $REVIEW_URL acceptance_tests/
+          command: inv browserstack
 
 workflows:
   main:

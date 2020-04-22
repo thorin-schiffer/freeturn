@@ -56,13 +56,13 @@
             <div class="row">
                 <div class="btn-group col-md-4" role="group">
                     {% if current_project %}
-                        <a href="{% pageurl current_project %}" class="btn btn-outline-dark">current project</a>
+                        <a href="{% pageurl current_project %}" id="link-current-project" class="btn btn-outline-dark">current project</a>
                     {% endif %}
 
-                    <a href="{% pageurl menu_items.portfolio %}" class="btn btn-outline-dark">to portfolio</a>
+                    <a href="{% pageurl menu_items.portfolio %}" id="link-portfolio" class="btn btn-outline-dark">to portfolio</a>
 
                     {% for form in forms %}
-                        <a href="{% pageurl form %}" class="btn btn-outline-dark">{{ form.title }}</a>
+                        <a href="{% pageurl form %}" id="form-{{form.slug}}" class="btn btn-outline-dark">{{ form.title }}</a>
                     {% endfor %}
                 </div>
             </div>
