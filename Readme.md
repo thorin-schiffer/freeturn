@@ -7,7 +7,7 @@
 [![eviltnan](https://circleci.com/gh/eviltnan/freeturn.svg?style=shield)](https://app.circleci.com/pipelines/github/eviltnan/freeturn)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![codecov](https://codecov.io/gh/eviltnan/freeturn/branch/develop/graph/badge.svg)](https://codecov.io/gh/eviltnan/freeturn)
-[![BrowserStack Status](https://automate.browserstack.com/badge.svg?badge_key=VFU2OURIaGtPZVJUbWQxb0NYbEY2Y2Z0TGxiZ25lUFJSRmNOcWt4dXYraz0tLUFjUWc3cjBMMW54NjVGdDZDbldpelE9PQ==--8e33db32de9d5462086b4d536dcf5c2994f653a0)](https://automate.browserstack.com/public-build/VFU2OURIaGtPZVJUbWQxb0NYbEY2Y2Z0TGxiZ25lUFJSRmNOcWt4dXYraz0tLUFjUWc3cjBMMW54NjVGdDZDbldpelE9PQ==--8e33db32de9d5462086b4d536dcf5c2994f653a0)
+[![BrowserStack Status](https://automate.browserstack.com/badge.svg?badge_key=OW9FSlpEWUdYb2htbFJYTjRPbEtUVmlNRUhZM2RCNVUwejZ5MzAxUTJLMD0tLUcySUFHVGJVMDdVNzZxZ3VGSTdhSEE9PQ==--2fb0726c5380e49390677a7fdb8e19a5903d2828)](https://automate.browserstack.com/public-build/OW9FSlpEWUdYb2htbFJYTjRPbEtUVmlNRUhZM2RCNVUwejZ5MzAxUTJLMD0tLUcySUFHVGJVMDdVNzZxZ3VGSTdhSEE9PQ==--2fb0726c5380e49390677a7fdb8e19a5903d2828)
 
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
