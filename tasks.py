@@ -1,4 +1,5 @@
 import functools
+import json
 import logging
 import os
 import sys
@@ -156,15 +157,24 @@ def unicorn(context, fill_db=False, host=None):
     }
 )
 def browserstack(context, review_url=None):
+    config_path = os.path.join("acceptance_tests", "browserstack_capabilities.json")
+    with open(config_path, "r") as f:
+        capabilities = json.load(f)
     branch = os.getenv("CIRCLE_BRANCH", None)
     if not branch:
         result = context.run("git rev-parse --abbrev-ref HEAD")
         branch = result.stdout.strip()
+    capabilities.update({
+        "build": branch
+    })
+    capabilities_string = " ".join([
+        f"--capability {key} \"{value}\""
+        for key, value in capabilities.items()
+    ])
+
     review_url = review_url or os.getenv("REVIEW_URL")
     command = f"pytest --driver BrowserStack --base-url \"{review_url}\" " \
-              f"--variables acceptance_tests/browserstack_capabilities.json " \
-              f"--capability build \"{branch}\" " \
-              f"--capability project freeturn " \
-              f"acceptance_tests/test_portfolio.py::test_portfolio_listing"
+              f"{capabilities_string} " \
+              f"acceptance_tests/"
     print(command)
     context.run(command)
