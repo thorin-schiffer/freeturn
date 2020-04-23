@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "0dbbcff475f5f9c0e12f84ed1f33ef88d8345633260b1bf1022564a4f024fbe2"
+            "sha256": "829d607619fa2369076f02b13aa48ab1c071ab4d279eb3e6f83b016ada7aa660"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -263,6 +263,9 @@
             "version": "==4.11.0"
         },
         "django-storages": {
+            "extras": [
+                "boto3"
+            ],
             "hashes": [
                 "sha256:3103991c2ee8cef8a2ff096709973ffe7106183d211a79f22cf855f33533d924",
                 "sha256:a59e9923cbce7068792f75344ed7727021ee4ac20f227cf17297d0d03d141e91"
@@ -861,6 +864,14 @@
             "editable": true,
             "git": "https://github.com/eviltnan/wagtail-markdown.git",
             "ref": "16d98af40fddd28393acf570ccacfbbbedc637ff"
+        },
+        "wagtail-storages": {
+            "hashes": [
+                "sha256:823771dad39353a519be5d53907084ca0649569a57fc40792573f0d90e4355b9",
+                "sha256:bd7d2c02acf71cab6fc16b2ee7ee847d58acb309eeb9b8ba0794a060551a6922"
+            ],
+            "index": "pypi",
+            "version": "==0.0.4"
         },
         "wagtailfontawesome": {
             "hashes": [
