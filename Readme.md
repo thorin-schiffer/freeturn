@@ -96,3 +96,9 @@ all the objects created automatically as fixtures.
 CLI tasks are wrapped up with [pyinvoke](https://github.com/pyinvoke/invoke). Invoke is a former fabric1 CLI part now existing as
 a separate project. This is preferred over django management commands as the one subjectively requiring less boilerplate.
 Please read the docs for pyinvoke for the basics. Available commands can be listed with `inv -l` (`inv` is a shortcut to `invoke`).
+
+
+##### Setting up s3 for uploads
+
+Consult [the official guide by wagtial](https://wagtail.io/blog/amazon-s3-for-media-files/) and docs for [collections](https://docs.wagtail.io/en/v2.8.1/editor_manual/documents_images_snippets/collections.html).
+Collections perms are not usually synced with the ACL for s3, so [wagtail-storages](https://github.com/torchbox/wagtail-storages) is keep the in sync.
