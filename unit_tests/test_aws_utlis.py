@@ -1,6 +1,6 @@
 import pytest
 import boto3
-from moto import mock_s3, mock_sts
+from moto import mock_s3, mock_sts, mock_iam
 
 from aws_utils import install_policy
 
@@ -20,12 +20,19 @@ def sts():
 
 
 @pytest.fixture
+def iam():
+    with mock_iam():
+        iam = boto3.client('iam')
+        yield iam
+
+
+@pytest.fixture
 def bucket(s3):
     conn = boto3.resource('s3', region_name='eu-central-1')
     return conn.create_bucket(Bucket='bucket')
 
 
-def test_install_s3_policy(bucket, sts, faker):
+def test_install_s3_policy(bucket, sts, iam, faker):
     account_id = sts.get_caller_identity().get('Account')
     user = 'root'
     install_policy('bucket', account_id, user)
