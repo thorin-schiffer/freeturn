@@ -32,7 +32,17 @@ def bucket(s3):
     return conn.create_bucket(Bucket='bucket')
 
 
-def test_install_s3_policy(bucket, sts, iam, faker):
+@pytest.fixture
+def user(iam, faker):
+    name = faker.first_name()
+    iam.create_user(UserName=name)
+    return name
+
+
+def test_install_s3_policy(bucket, sts, iam, faker, user):
     account_id = sts.get_caller_identity().get('Account')
-    user = 'root'
-    install_policy('bucket', account_id, user)
+    install_policy('bucket', account_id, f"user/{user}")
+
+
+def test_reinstall_s3_policy():
+    raise NotImplementedError

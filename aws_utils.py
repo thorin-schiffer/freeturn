@@ -13,8 +13,8 @@ def render_policy(bucket, account, user):
 def install_policy(bucket, account, user):
     import boto3
     policy = render_policy(bucket, account, user)
-    iam = boto3.client('iam')
-    return iam.create_policy(
-        PolicyName=f'bucket-{bucket}',
-        PolicyDocument=policy
+    s3 = boto3.client('s3')
+    return s3.put_bucket_policy(
+        Bucket=bucket,
+        Policy=policy
     )
