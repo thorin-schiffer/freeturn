@@ -68,6 +68,7 @@ django-debug-toolbar-template-timings = "*"
 selenium = "*"
 pytest-selenium = "*"
 pytest-faker = "*"
+moto = "*"
 
 [requires]
 python_version = "3.7.5"
