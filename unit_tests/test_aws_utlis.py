@@ -1,8 +1,10 @@
+import json
+
 import pytest
 import boto3
 from moto import mock_s3, mock_sts, mock_iam
 
-from aws_utils import install_policy
+from aws_utils import install_policy, render_policy
 
 
 @pytest.fixture
@@ -39,9 +41,11 @@ def user(iam, faker):
     return name
 
 
-def test_install_s3_policy(bucket, sts, iam, faker, user):
+def test_install_s3_policy(bucket, sts, iam, faker, user, s3):
     account_id = sts.get_caller_identity().get('Account')
     install_policy('bucket', account_id, f"user/{user}")
+    policy = s3.get_bucket_policy(Bucket='bucket')
+    assert json.loads(policy['Policy']) == json.loads(render_policy('bucket', account_id, f"user/{user}"))
 
 
 def test_reinstall_s3_policy():
