@@ -177,3 +177,18 @@ def browserstack(context, review_url=None):
               f"acceptance_tests/"
     print(command)
     context.run(command)
+
+
+@invoke.task
+def install_s3_policy(context):
+    configure_django()
+    from aws_utils import install_policy
+    bucket = env.str("AWS_STORAGE_BUCKET_NAME", None)
+    account = env.str("AWS_STORAGE_ACCOUNT_ID", None)
+    user = env.str("AWS_STORAGE_USER", None)
+    if not (bucket and account and user):
+        raise Exit("Can't install s3 policy, s3 is not configured"
+                   "set bucket, user and account in env, see .env_template for info", code=127)
+
+    response = install_policy(bucket, account, user)
+    print(response)
