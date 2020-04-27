@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "8e59c4b0aa7b27f0d10b493bf05174a1de276c50a0f2364c196e9b7ef43a0830"
+            "sha256": "cf5dea16b684efef9c6b8091c579bca19d3a02ca22e699d66744c37081662c18"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -861,9 +861,12 @@
             "version": "==2.0.0"
         },
         "wagtail-markdown": {
-            "editable": true,
-            "git": "https://github.com/eviltnan/wagtail-markdown.git",
-            "ref": "16d98af40fddd28393acf570ccacfbbbedc637ff"
+            "hashes": [
+                "sha256:91700b68138019d482c1954f1a7aec9c13db5933be6b63b84c8bccdebce451ac",
+                "sha256:cb914b900d6ae5d769367977b0e68d8b23c25bfa9505dcd6e1038838686b4739"
+            ],
+            "index": "pypi",
+            "version": "==0.6"
         },
         "wagtail-storages": {
             "hashes": [
@@ -1852,11 +1855,11 @@
         },
         "webtest": {
             "hashes": [
-                "sha256:71114cd778a7d7b237ec5c8a5c32084f447d869ae62e48bcd5b73af211133e74",
-                "sha256:da9cf14c103ff51a40dee4cac7657840d1317456eb8f0ca81289b5cbff175f4b"
+                "sha256:44ddfe99b5eca4cf07675e7222c81dd624d22f9a26035d2b93dc8862dc1153c6",
+                "sha256:aac168b5b2b4f200af4e35867cf316712210e3d5db81c1cbdff38722647bb087"
             ],
             "index": "pypi",
-            "version": "==2.0.34"
+            "version": "==2.0.35"
         },
         "werkzeug": {
             "hashes": [
