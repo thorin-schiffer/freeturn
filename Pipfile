@@ -69,6 +69,8 @@ selenium = "*"
 pytest-selenium = "*"
 pytest-faker = "*"
 moto = "*"
+pytest-socket = "*"
+pytest-env = "*"
 
 [requires]
 python_version = "3.7.5"
