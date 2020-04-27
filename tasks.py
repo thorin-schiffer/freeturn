@@ -188,6 +188,7 @@ def install_s3_policy(context):
     try:
         response = install_storage_policy()
     except ImproperlyConfigured:
-        raise Exit("Can't install s3 policy, s3 is not configured"
-                   "set bucket, user and account in env, see .env_template for info", code=127)
+        print("Can't install s3 policy, s3 is not configured"
+              "set bucket, user and account in env, see .env_template for info")
+        return
     print(response)
