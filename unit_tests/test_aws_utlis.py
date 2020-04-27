@@ -41,12 +41,16 @@ def user(iam, faker):
     return name
 
 
-def test_install_s3_policy(bucket, sts, iam, faker, user, s3):
+def test_install_s3_policy(bucket, sts, user, s3):
     account_id = sts.get_caller_identity().get('Account')
-    install_policy('bucket', account_id, f"user/{user}")
-    policy = s3.get_bucket_policy(Bucket='bucket')
-    assert json.loads(policy['Policy']) == json.loads(render_policy('bucket', account_id, f"user/{user}"))
+    install_policy(bucket.name, account_id, f"user/{user}")
+    policy = s3.get_bucket_policy(Bucket=bucket.name)
+    assert json.loads(policy['Policy']) == json.loads(render_policy(bucket.name, account_id, f"user/{user}"))
 
 
-def test_reinstall_s3_policy():
-    raise NotImplementedError
+def test_reinstall_s3_policy(bucket, sts, user, s3):
+    account_id = sts.get_caller_identity().get('Account')
+    install_policy(bucket.name, account_id, f"user/{user}")
+    s3.get_bucket_policy(Bucket=bucket.name)
+    policy = s3.get_bucket_policy(Bucket=bucket.name)
+    assert json.loads(policy['Policy']) == json.loads(render_policy(bucket.name, account_id, f"user/{user}"))
