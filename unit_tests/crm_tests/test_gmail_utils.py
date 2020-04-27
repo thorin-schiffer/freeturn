@@ -1,13 +1,20 @@
 import pytest
 
-from crm.gmail_utils import get_raw_messages, sync
+from crm import gmail_utils
 from crm.models import ProjectMessage
 from crm.utils import Credentials
 
 
 @pytest.fixture
-def gmail_service(mocker, gmail_api_response_factory):
+def gmail_service(mocker, gmail_api_response_factory, monkeypatch, settings):
+    monkeypatch.setenv("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY", "111")
+    monkeypatch.setenv("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET", "111")
+    settings.AUTHENTICATION_BACKENDS = (
+        'social_core.backends.google.GoogleOAuth2',
+        'django.contrib.auth.backends.ModelBackend',
+    )
     service = mocker.Mock()
+    mocker.patch('googleapiclient.discovery.build', return_value=service)
     mocker.patch('crm.gmail_utils.get_labels', lambda s: gmail_api_response_factory("gmapi_labels_response.json"))
     mocker.patch('crm.gmail_utils.get_message_ids',
                  lambda s, l: {"messages": [gmail_api_response_factory("gmail_api_message.json")]})
@@ -17,13 +24,13 @@ def gmail_service(mocker, gmail_api_response_factory):
 
 
 def test_get_raw_messages(gmail_service):
-    result = get_raw_messages(gmail_service)
+    result = gmail_utils.get_raw_messages(gmail_service)
     assert len(result) == 1
 
 
 @pytest.mark.django_db
 def test_sync(gmail_service, user_social_auth):
-    sync()
+    gmail_utils.sync()
     message = ProjectMessage.objects.first()
     assert message.project
     assert message.author
