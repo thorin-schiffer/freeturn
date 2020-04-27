@@ -1,4 +1,5 @@
 import os
+import sys
 from decimal import Decimal
 
 import environ
@@ -8,7 +9,9 @@ from social_core.pipeline import DEFAULT_AUTH_PIPELINE
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 env = environ.Env()
-environ.Env.read_env(os.path.join(os.path.dirname(PROJECT_DIR), '.env'))
+TESTING = "pytest" in sys.modules
+if not TESTING:
+    environ.Env.read_env(os.path.join(os.path.dirname(PROJECT_DIR), '.env'))
 
 DEBUG = env.bool('DEBUG', False)
 DEBUG_TOOLBAR = env.bool('DEBUG_TOOLBAR', False)
