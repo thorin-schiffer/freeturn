@@ -3,9 +3,9 @@ from wagtail.admin.edit_handlers import ObjectList
 from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import CreateView, InspectView
-from wkhtmltopdf.views import PDFTemplateView
 
 from crm.models import CV, CVGenerationSettings, Project
+from crm.utils import BasePDFView
 from home.models import Technology, ProjectPage
 
 
@@ -39,9 +39,8 @@ class CreateCVView(CreateView):
         }
 
 
-class CVInspectView(PDFTemplateView,
+class CVInspectView(BasePDFView,
                     InspectView):
-    show_content_in_browser = True
     template_name = "cv/body.html"
 
     def get_context_data(self, **kwargs):

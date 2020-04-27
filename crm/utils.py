@@ -6,6 +6,9 @@ from google.auth.exceptions import RefreshError
 from google.oauth2.credentials import Credentials as GoogleCredentials
 from requests import exceptions as requests_errors
 from social_django.utils import load_strategy
+from wkhtmltopdf.views import PDFTemplateView
+
+from freeturn import settings
 
 
 def get_working_days(start_date, end_date):
@@ -78,3 +81,13 @@ class Credentials(GoogleCredentials):
         self.token = data['access_token']
         self._refresh_token = data['refresh_token']
         self.expiry = self._parse_expiry(data)
+
+
+class BasePDFView(PDFTemplateView):
+    show_content_in_browser = True
+
+    def get_context_data(self, **kwargs):
+        return {
+            **super().get_context_data(**kwargs),
+            "load_styles": not settings.TESTING
+        }
