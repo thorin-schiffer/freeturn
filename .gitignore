@@ -109,3 +109,5 @@ venv.bak/
 # django
 /media
 /static
+
+.wkhtml-cache

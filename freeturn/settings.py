@@ -1,4 +1,5 @@
 import os
+import sys
 from decimal import Decimal
 
 import environ
@@ -8,7 +9,9 @@ from social_core.pipeline import DEFAULT_AUTH_PIPELINE
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 env = environ.Env()
-environ.Env.read_env(os.path.join(os.path.dirname(PROJECT_DIR), '.env'))
+TESTING = "pytest" in sys.modules
+if not TESTING:
+    environ.Env.read_env(os.path.join(os.path.dirname(PROJECT_DIR), '.env'))
 
 DEBUG = env.bool('DEBUG', False)
 DEBUG_TOOLBAR = env.bool('DEBUG_TOOLBAR', False)
@@ -48,6 +51,7 @@ INSTALLED_APPS = [
     'taggit',
     'colorful',
     'storages',
+    'wagtail_storages',
     'ajax_select',
     'wkhtmltopdf',
     'analytical',
@@ -185,15 +189,18 @@ DEFAULT_WORKING_DAYS = 22 * 9
 VAT_RATE = Decimal('0.19')
 INCOME_TAX_RATE = Decimal('0.41')
 
-AUTHENTICATION_BACKENDS = (
-    'social_core.backends.google.GoogleOAuth2',
+AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-)
+]
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env.str("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY", None)
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env.str("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET", None)
-
+if SOCIAL_AUTH_GOOGLE_OAUTH2_KEY and SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET:
+    AUTHENTICATION_BACKENDS = [
+        'social_core.backends.google.GoogleOAuth2',
+        *AUTHENTICATION_BACKENDS
+    ]
 SOCIAL_AUTH_LOGIN_URL = "/admin/account/"
 LOGIN_REDIRECT_URL = SOCIAL_AUTH_LOGIN_URL
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
@@ -206,19 +213,21 @@ SOCIAL_AUTH_PIPELINE = ("utils.social_for_authed_only",) + DEFAULT_AUTH_PIPELINE
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
     'access_type': 'offline'
 }
-WKHTMLTOPDF_CMD = '/usr/bin/wkhtmltopdf'
-WKHTMLTOPDF_CMD_OPTIONS = {
-    'quiet': True,
-}
+
 GOOGLE_ANALYTICS_JS_PROPERTY_ID = env.str("GOOGLE_ANALYTICS_ID", default="UA-123456-7")
 MAILBOX_LABEL = "CRM"
 DEFAULT_VAT = 19
 
 AWS_STORAGE_BUCKET_NAME = env.str("AWS_STORAGE_BUCKET_NAME", None)
+AWS_STORAGE_ACCOUNT_ID = env.str("AWS_STORAGE_ACCOUNT_ID", None)
+AWS_STORAGE_USER = env.str("AWS_STORAGE_USER", None)
+
 if AWS_STORAGE_BUCKET_NAME:
     AWS_ACCESS_KEY_ID = env.str("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY")
     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+    AWS_DEFAULT_ACL = "private"
+    AWS_S3_FILE_OVERWRITE = False
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 DJANGO_REDIS_IGNORE_EXCEPTIONS = True
@@ -235,3 +244,7 @@ if WHITENOISE_STORAGE:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 WKHTMLTOPDF_CMD = env.str('WKHTMLTOPDF_CMD', default='/usr/bin/wkhtmltopdf')
+WKHTMLTOPDF_CMD_OPTIONS = {
+    'quiet': True,
+    'cache-dir': ".wkhtml-cache"
+}

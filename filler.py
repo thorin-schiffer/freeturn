@@ -117,9 +117,10 @@ def fill_crm_data(projects_count=10):
 def fill_pictures():
     images_path = "fill_media"
     directories = [filename for filename in os.listdir(images_path)]
+    root_collection = Collection.get_first_root_node() or CollectionFactory(name='Root')
     for directory in directories:
-        collection = Collection.objects.filter(name=directory.capitalize()).first() or \
-            CollectionFactory(name=directory.capitalize())
+        name = directory.capitalize()
+        collection = Collection.objects.filter(name=name).first() or root_collection.add_child(name=name)
         filenames = [filename for filename in os.listdir(os.path.join(images_path, directory))]
 
         for filename in filenames:
@@ -143,6 +144,7 @@ def clean():
     Project.objects.all().delete()
     Employee.objects.all().delete()
     Channel.objects.all().delete()
+    Collection.objects.all().delete()
 
 
 @transaction.atomic

@@ -4,9 +4,9 @@ from django.utils import translation
 from wagtail.contrib.modeladmin.helpers import ButtonHelper, AdminURLHelper
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import CreateView, InspectView, EditView
-from wkhtmltopdf.views import PDFTemplateView
 
 from crm.models import Invoice, InvoiceGenerationSettings, wrap_table_data
+from crm.utils import BasePDFView
 
 
 class InvoiceCreateView(CreateView):
@@ -62,7 +62,7 @@ class InvoiceCreateView(CreateView):
         return self.get_default()
 
 
-class InvoiceInspectView(PDFTemplateView,
+class InvoiceInspectView(BasePDFView,
                          InspectView):
     show_content_in_browser = True
     template_name = "invoice.html"

@@ -1,5 +1,5 @@
 [run]
-omit = */tests/*, */migrations/*, */urls.py, */settings/*, */wsgi.py, manage.py, fabfile.py, tasks.py, filler.py, src/*,acceptance_tests/*
+omit = */tests/*, */migrations/*, */urls.py, */settings.py, */wsgi.py, manage.py, fabfile.py, tasks.py, filler.py, src/*,acceptance_tests/*
 source = .
 
 [report]

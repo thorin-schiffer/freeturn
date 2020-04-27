@@ -29,7 +29,6 @@ psycopg2-binary = "*"
 fuzzywuzzy = {extras = ["speedup"],version = "*"}
 django-ajax-selects = ">=1.7.0,<1.8.0"
 django-wkhtmltopdf = "*"
-bleach = "*"
 wagtail-autocomplete = "*"
 django-redis = "*"
 wagtail-markdown = {editable = true,git = "https://github.com/eviltnan/wagtail-markdown.git",ref = "unblock-wagtail-version"}
@@ -45,6 +44,7 @@ l18n = "*"
 django-environ = "*"
 wagtail-factories = "*"
 factory-boy = "*"
+wagtail-storages = "*"
 
 [dev-packages]
 django-debug-toolbar = "*"
@@ -68,6 +68,9 @@ django-debug-toolbar-template-timings = "*"
 selenium = "*"
 pytest-selenium = "*"
 pytest-faker = "*"
+moto = "*"
+pytest-socket = "*"
+pytest-env = "*"
 
 [requires]
 python_version = "3.7.5"

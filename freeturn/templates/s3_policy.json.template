@@ -1,0 +1,35 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::{{bucket}}/images/*"
+        },
+        {
+            "Sid": "AllowUserManageBucket",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::{{account_id}}:{{user}}"
+            },
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetBucketLocation",
+                "s3:ListBucketMultipartUploads",
+                "s3:ListBucketVersions"
+            ],
+            "Resource": "arn:aws:s3:::{{bucket}}"
+        },
+        {
+            "Sid": "AllowUserManageBucketObjects",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::{{account_id}}:{{user}}"
+            },
+            "Action": "s3:*",
+            "Resource": "arn:aws:s3:::{{bucket}}/*"
+        }
+    ]
+}
