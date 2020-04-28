@@ -15,40 +15,40 @@ class InvoiceCreateView(CreateView):
         settings = InvoiceGenerationSettings.for_site(site)
 
         return {
-            "title": settings.default_title,
-            "language": settings.default_language,
-            "unit": settings.default_unit,
-            "vat": settings.default_vat,
-            "payment_period": settings.default_payment_period,
-            "receiver_vat_id": settings.default_receiver_vat_id,
-            "tax_id": settings.default_tax_id,
-            "bank_account": settings.default_bank_account,
-            "contact_data": settings.default_contact_data,
-            "logo": settings.default_logo,
-            "issued_date": timezone.now().date(),
-            "delivery_date": timezone.now().date(),
-            "invoice_number": Invoice.get_next_invoice_number(),
-            "positions": wrap_table_data(Invoice.get_initial_positions())
+            'title': settings.default_title,
+            'language': settings.default_language,
+            'unit': settings.default_unit,
+            'vat': settings.default_vat,
+            'payment_period': settings.default_payment_period,
+            'receiver_vat_id': settings.default_receiver_vat_id,
+            'tax_id': settings.default_tax_id,
+            'bank_account': settings.default_bank_account,
+            'contact_data': settings.default_contact_data,
+            'logo': settings.default_logo,
+            'issued_date': timezone.now().date(),
+            'delivery_date': timezone.now().date(),
+            'invoice_number': Invoice.get_next_invoice_number(),
+            'positions': wrap_table_data(Invoice.get_initial_positions())
         }
 
     def from_instance(self, instance: Invoice):
         return {
-            "title": instance.title,
-            "language": instance.language,
-            "unit": instance.unit,
-            "vat": instance.vat,
-            "payment_period": instance.payment_period,
-            "receiver_vat_id": instance.receiver_vat_id,
-            "tax_id": instance.tax_id,
-            "bank_account": instance.bank_account,
-            "contact_data": instance.contact_data,
-            "logo": instance.logo,
-            "issued_date": timezone.now().date(),
-            "delivery_date": timezone.now().date(),
-            "invoice_number": Invoice.get_next_invoice_number(),
-            "positions": instance.positions,
-            "project": instance.project,
-            "currency": instance.currency
+            'title': instance.title,
+            'language': instance.language,
+            'unit': instance.unit,
+            'vat': instance.vat,
+            'payment_period': instance.payment_period,
+            'receiver_vat_id': instance.receiver_vat_id,
+            'tax_id': instance.tax_id,
+            'bank_account': instance.bank_account,
+            'contact_data': instance.contact_data,
+            'logo': instance.logo,
+            'issued_date': timezone.now().date(),
+            'delivery_date': timezone.now().date(),
+            'invoice_number': Invoice.get_next_invoice_number(),
+            'positions': instance.positions,
+            'project': instance.project,
+            'currency': instance.currency
         }
 
     def get_initial(self):
@@ -65,10 +65,10 @@ class InvoiceCreateView(CreateView):
 class InvoiceInspectView(BasePDFView,
                          InspectView):
     show_content_in_browser = True
-    template_name = "invoice.html"
+    template_name = 'invoice.html'
 
     def get_filename(self):
-        return f"{self.instance}.pdf"
+        return f'{self.instance}.pdf'
 
     def get(self, request, *args, **kwargs):
         request.LANGUAGE_CODE = self.instance.language
@@ -97,9 +97,9 @@ class InvoiceButtonHelper(ButtonHelper):
             btns.append(
                 {
                     'url': f"{self.url_helper.get_action_url('create')}?from_instance={quote(pk)}",
-                    'label': "Copy",
+                    'label': 'Copy',
                     'classname': self.finalise_classname(['button-small']),
-                    'title': "Copy this invoice, invoice number will be increased",
+                    'title': 'Copy this invoice, invoice number will be increased',
                 }
             )
         return btns

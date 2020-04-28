@@ -32,7 +32,7 @@ class EmployeeAdmin(ThumbnailMixin, ModelAdmin):
     search_fields = ('telephone', 'first_name', 'last_name', 'company__name', 'email', 'mobile')
     list_display = ('admin_thumb', 'first_name', 'last_name', 'company', 'project_count')
     thumb_image_field_name = 'picture'
-    thumb_default = "/static/img/default_avatar.png"
+    thumb_default = '/static/img/default_avatar.png'
 
 
 class CompanyAdmin(ThumbnailMixin, ModelAdmin):
@@ -48,12 +48,12 @@ class CompanyAdmin(ThumbnailMixin, ModelAdmin):
     inspect_view_enabled = True
     inspect_view_fields = ['name']
     thumb_image_field_name = 'logo'
-    thumb_default = "/static/img/default_company.png"
+    thumb_default = '/static/img/default_company.png'
 
 
 class CRMGroup(ModelAdminGroup):
-    menu_label = "CRM"
-    menu_icon = "fa-briefcase"
+    menu_label = 'CRM'
+    menu_icon = 'fa-briefcase'
     menu_order = 200
     items = (
         ProjectAdmin, CVAdmin, EmployeeAdmin, CompanyAdmin,
@@ -68,7 +68,7 @@ modeladmin_register(CRMGroup)
 class PeopleSearchArea(SearchArea):
     def __init__(self):
         super().__init__(
-            "People", reverse('crm_employee_modeladmin_index'),
+            'People', reverse('crm_employee_modeladmin_index'),
             name='people',
             classnames='icon icon-fa-users',
             order=100)
@@ -87,7 +87,7 @@ def register_project_search_area():
 class CompanySearchArea(SearchArea):
     def __init__(self):
         super().__init__(
-            "Companies", reverse('crm_company_modeladmin_index'),
+            'Companies', reverse('crm_company_modeladmin_index'),
             name='companies',
             classnames='icon icon-fa-building',
             order=102)
@@ -101,10 +101,10 @@ def register_pages_search_area():
 @hooks.register('register_account_menu_item')
 def google_login(request):
     existing_google_account = UserSocialAuth.objects.filter(user=request.user).first()
-    hint = "Associate google account" if not existing_google_account \
-        else f"Logged in with: {existing_google_account.uid}"
+    hint = 'Associate google account' if not existing_google_account \
+        else f'Logged in with: {existing_google_account.uid}'
     return {
-        'url': reverse('social:begin', args=("google-oauth2",)),
-        'label': "Google login",
+        'url': reverse('social:begin', args=('google-oauth2',)),
+        'label': 'Google login',
         'help_text': hint
     }

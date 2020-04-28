@@ -10,7 +10,7 @@ def test_index_action(admin_app,
     assert project.state == 'requested'
     url = reverse('crm_project_modeladmin_index')
     r = admin_app.get(url)
-    r = r.click("Drop")
+    r = r.click('Drop')
     inputs = r.lxml.xpath(".//*[@id='id_notes']")
     assert len(inputs) == 1
 

@@ -17,7 +17,7 @@ environ.Env.read_env('.env')
 def configure_django():
     from django.core.wsgi import get_wsgi_application
     PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__)))
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "freeturn.settings")
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'freeturn.settings')
     sys.path.append(PROJECT_DIR)
     get_wsgi_application()
 
@@ -40,11 +40,11 @@ def with_django(func):
 def deploy(context, repo=True, db_backup=True):
     """Deploy the project manually to heroku using git deployment, see https://devcenter.heroku.com/articles/git"""
     if db_backup:
-        context.run("heroku pg:backups:capture ")
+        context.run('heroku pg:backups:capture ')
     if repo:
-        context.run("git push origin && git push heroku develop:master")
+        context.run('git push origin && git push heroku develop:master')
     else:
-        context.run("git push heroku develop:master")
+        context.run('git push heroku develop:master')
 
 
 @invoke.task
@@ -87,39 +87,39 @@ def fill(context):
 @invoke.task
 def update(context):
     """Updates code from gitlab and reinstalls pipenv deps"""
-    context.run(f"pipenv clean")
+    context.run(f'pipenv clean')
     # https://github.com/pypa/pipenv/issues/3493
-    context.run(f"pipenv install --ignore-pipfile --deploy --dev")
+    context.run(f'pipenv install --ignore-pipfile --deploy --dev')
 
 
 @invoke.task
 def collect_static(context, local=False):
     """Django collect static"""
-    print("Collecting static...")
-    context.run(f"./manage.py collectstatic --noinput -v 0")
+    print('Collecting static...')
+    context.run(f'./manage.py collectstatic --noinput -v 0')
 
 
 @invoke.task(help={
-    "make": "update *.mo translation file before parsing (makemessages)"
+    'make': 'update *.mo translation file before parsing (makemessages)'
 })
 def i18n(ctx):
     """Runs django translation routines"""
-    print("Collecting i18n")
+    print('Collecting i18n')
     ctx.run(f"./manage.py makemessages -i 'venv/*' -l de")
-    ctx.run(f"./manage.py compilemessages -l de")
+    ctx.run(f'./manage.py compilemessages -l de')
 
 
 @invoke.task
 def install_hooks(context):
     """Installs pre-commit hooks"""
-    print("Installing pre-commit hook")
-    context.run(f"pre-commit install")
+    print('Installing pre-commit hook')
+    context.run(f'pre-commit install')
 
 
 @invoke.task
 def validate_ci_config(context):
     """Check circle ci config"""
-    context.run("circleci config validate")
+    context.run('circleci config validate')
 
 
 @invoke.task(default=True)
@@ -138,43 +138,43 @@ def bootstrap(context):
 
 @invoke.task(
     help={
-        "fill": "Fixtures the database",
-        "host": "Host to bind"
+        'fill': 'Fixtures the database',
+        'host': 'Host to bind'
     }
 )
 def unicorn(context, fill_db=False, host=None):
     """Starts gunicorn as webserver"""
-    if fill_db or os.getenv("FILL_DB", None):
+    if fill_db or os.getenv('FILL_DB', None):
         fill(context)
     if host:
-        context.run(f"gunicorn freeturn.wsgi --log-file - -b {host}")
+        context.run(f'gunicorn freeturn.wsgi --log-file - -b {host}')
     else:
-        context.run("gunicorn freeturn.wsgi --log-file -")
+        context.run('gunicorn freeturn.wsgi --log-file -')
 
 
 @invoke.task(
     help={
-        "review_url": "Review URL from heroku, defaults to $REVIEW_URL"
+        'review_url': 'Review URL from heroku, defaults to $REVIEW_URL'
     }
 )
 def browserstack(context, review_url=None):
-    config_path = os.path.join("acceptance_tests", "browserstack_capabilities.json")
-    with open(config_path, "r") as f:
+    config_path = os.path.join('acceptance_tests', 'browserstack_capabilities.json')
+    with open(config_path, 'r') as f:
         capabilities = json.load(f)
-    branch = os.getenv("CIRCLE_BRANCH", context.run("git rev-parse --abbrev-ref HEAD").stdout.strip())
-    sha = os.getenv("CIRCLE_SHA1", context.run("git rev-parse HEAD").stdout.strip())
+    branch = os.getenv('CIRCLE_BRANCH', context.run('git rev-parse --abbrev-ref HEAD').stdout.strip())
+    sha = os.getenv('CIRCLE_SHA1', context.run('git rev-parse HEAD').stdout.strip())
     capabilities.update({
-        "build": f"{branch}:{sha}"
+        'build': f'{branch}:{sha}'
     })
-    capabilities_string = " ".join([
+    capabilities_string = ' '.join([
         f"--capability {key} \"{value}\""
         for key, value in capabilities.items()
     ])
 
-    review_url = review_url or os.getenv("REVIEW_URL")
+    review_url = review_url or os.getenv('REVIEW_URL')
     command = f"pytest --driver BrowserStack --base-url \"{review_url}\" " \
-              f"{capabilities_string} " \
-              f"acceptance_tests/"
+              f'{capabilities_string} ' \
+              f'acceptance_tests/'
     print(command)
     context.run(command)
 
@@ -189,6 +189,6 @@ def install_s3_policy(context):
         response = install_storage_policy()
     except ImproperlyConfigured:
         print("Can't install s3 policy, s3 is not configured"
-              "set bucket, user and account in env, see .env_template for info")
+              'set bucket, user and account in env, see .env_template for info')
         return
     print(response)

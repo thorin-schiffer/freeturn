@@ -80,7 +80,7 @@ def test_copy(admin_app, invoice, default_site):
 
 @pytest.mark.django_db
 def test_edit(admin_app, invoice):
-    url = reverse('crm_invoice_modeladmin_edit', kwargs={"instance_pk": invoice.pk})
+    url = reverse('crm_invoice_modeladmin_edit', kwargs={'instance_pk': invoice.pk})
     r = admin_app.get(url)
     form = r.forms[1]
     positions = json.loads(form['positions-0-value'].value)['data'][0]

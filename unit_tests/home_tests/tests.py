@@ -14,7 +14,7 @@ def test_home(home_page,
               contact_page_factory,
               project_page,
               rf):
-    request = rf.get("/")
+    request = rf.get('/')
     context = home_page.get_context(request)
 
     form_no_button = contact_page_factory.create(show_on_home=False)
@@ -38,7 +38,7 @@ def test_portfolio(portfolio_page,
     project_page = project_page_factory.create(parent=portfolio_page)
     project_page.technologies.add(technology)
     project_page.save()
-    request = rf.get(f"/?technology={technology.name}")
+    request = rf.get(f'/?technology={technology.name}')
     context = portfolio_page.get_context(request)
 
     assert context['technology'] == technology
@@ -51,7 +51,7 @@ def test_technologies(rf,
                       project_page_factory,
                       technologies_page,
                       portfolio_page):
-    request = rf.get("/")
+    request = rf.get('/')
     project_page = project_page_factory.create(parent=portfolio_page)
     context = technologies_page.get_context(request)
     project_page.technologies.add(technology)
@@ -71,19 +71,19 @@ def test_contact_form_recaptcha(django_app,
                                 home_page,
                                 contact_page_factory):
     contact_page = contact_page_factory.create(parent=default_site.root_page)
-    r = django_app.get(f"/{contact_page.slug}/", status="*")
+    r = django_app.get(f'/{contact_page.slug}/', status='*')
     r.form.submit()
 
 
 @pytest.mark.django_db
 def test_match_text(technology):
     # avoid vocabulary collision
-    technology.name = "xxx"
+    technology.name = 'xxx'
     technology.save()
 
     text_no_match = fake.text()
     assert technology.name not in text_no_match
-    text_match = f"{text_no_match} {technology.name}"
+    text_match = f'{text_no_match} {technology.name}'
 
     result = Technology.match_text(text_no_match)
     assert technology not in result

@@ -18,9 +18,9 @@ def remove_quotation(text):
     lines = text.splitlines()
     outer_quotation_started = False
     for i, line in enumerate(lines):
-        if line.startswith(">"):
+        if line.startswith('>'):
             if outer_quotation_started:
-                return "\n".join(lines[:i])
+                return '\n'.join(lines[:i])
             else:
                 outer_quotation_started = True
     return text
@@ -40,27 +40,27 @@ def extract_text(email_message):
         charset = email_message.get_content_charset()
         email_message.get_payload(decode=True).decode(charset or 'utf-8', 'replace')
     else:
-        logger.error(f"Unknown main mime type {main_type}")
-        return ""
+        logger.error(f'Unknown main mime type {main_type}')
+        return ''
 
 
 def parse_message(message):
     msg_str = base64.urlsafe_b64decode(message['raw'].encode('ASCII'))
     email_message = email.message_from_bytes(msg_str)
     if email_message['from']:
-        from_address = email_message['from'][email_message['from'].index("<") + 1:-1]
-        full_name = email_message['from'].replace(f"<{from_address}>", "").strip()
+        from_address = email_message['from'][email_message['from'].index('<') + 1:-1]
+        full_name = email_message['from'].replace(f'<{from_address}>', '').strip()
     else:
-        from_address = "unknown"
-        full_name = "unknown"
+        from_address = 'unknown'
+        full_name = 'unknown'
 
     result = {
-        "sent_at": datetime.utcfromtimestamp(int(message['internalDate']) / 1000).replace(tzinfo=pytz.utc),
-        "subject": email_message['subject'],
-        "from_address": from_address,
-        "full_name": full_name,
-        "gmail_thread_id": message['threadId'],
-        "gmail_message_id": message['id'],
+        'sent_at': datetime.utcfromtimestamp(int(message['internalDate']) / 1000).replace(tzinfo=pytz.utc),
+        'subject': email_message['subject'],
+        'from_address': from_address,
+        'full_name': full_name,
+        'gmail_thread_id': message['threadId'],
+        'gmail_message_id': message['id'],
     }
     text = extract_text(email_message)
     if text:
@@ -73,7 +73,7 @@ def get_labels(service):
 
 
 def get_message_ids(service, label_id):
-    return service.users().messages().list(userId='me', labelIds=[label_id, "INBOX"]).execute()
+    return service.users().messages().list(userId='me', labelIds=[label_id, 'INBOX']).execute()
 
 
 def get_message_raws(service, message_id):
@@ -106,19 +106,19 @@ def ensure_manager(message):
         domain = message['from_address'].split('@')[-1]
         company = Company.objects.filter(url__icontains=domain).first()
         company = company or Company.objects.create(
-            name=domain.split(".")[0].capitalize(),
-            url=f"http://{domain}"
+            name=domain.split('.')[0].capitalize(),
+            url=f'http://{domain}'
         )
         try:
-            first_name, last_name = message['full_name'].split(" ")
+            first_name, last_name = message['full_name'].split(' ')
         except ValueError:
-            first_name, last_name = "", message['last_name']
+            first_name, last_name = '', message['last_name']
         manager, _ = Employee.objects.get_or_create(
             email=message['from_address'],
             defaults={
-                "company": company,
-                "first_name": first_name,
-                "last_name": last_name,
+                'company': company,
+                'first_name': first_name,
+                'last_name': last_name,
             }
         )
     return manager
@@ -138,8 +138,8 @@ def ensure_project(message, manager):
                 name=message['subject'],
                 manager=manager,
                 defaults={
-                    "location": manager.company.location,
-                    "original_description": message['text']
+                    'location': manager.company.location,
+                    'original_description': message['text']
                 }
             )
     return project

@@ -22,7 +22,7 @@ def test_create(admin_app, admin_user, default_site, project, image):
     assert form['languages_overview'].value == cv_settings.default_languages_overview
     assert form['rate_overview'].value == cv_settings.default_rate_overview
     assert form['working_permit'].value == cv_settings.default_working_permit
-    assert form['full_name'].value == admin_user.first_name + " " + admin_user.last_name
+    assert form['full_name'].value == admin_user.first_name + ' ' + admin_user.last_name
     assert form['picture'].value == str(cv_settings.default_picture.id)
     assert form['project'].value == str(project.id)
     form.submit()

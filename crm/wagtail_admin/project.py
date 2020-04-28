@@ -32,7 +32,7 @@ class StateTransitionView(EditView):
 
     def __init__(self, **kwargs):
         self.action = kwargs.pop('action')
-        self.page_title = f"{self.action.capitalize()} {Project._meta.verbose_name}"
+        self.page_title = f'{self.action.capitalize()} {Project._meta.verbose_name}'
         super().__init__(**kwargs)
 
     def edit_url(self):
@@ -90,7 +90,7 @@ class CreateProjectView(CreateView):
 
         messages.info(
             self.request,
-            "Now you can create CV for this project"
+            'Now you can create CV for this project'
         )
 
         cv_create_url = f"{reverse('crm_cv_modeladmin_create')}?for_project={instance.pk}"
@@ -129,13 +129,13 @@ class ProjectAdmin(ThumbnailMixin, ModelAdmin):
         'project_page', 'logo'
     ]
     thumb_image_field_name = 'logo'
-    thumb_default = "/static/img/default_project.png"
+    thumb_default = '/static/img/default_project.png'
     list_display_add_buttons = 'name'
     create_view_class = CreateProjectView
 
     def last_activity(self, instance):
         days = (timezone.now() - instance.modified).days
-        return f"{days} day{pluralize(days)} ago"
+        return f'{days} day{pluralize(days)} ago'
 
     def state_view(self, request, instance_pk, action):
         kwargs = {'model_admin': self, 'instance_pk': instance_pk, 'action': action}
@@ -152,7 +152,7 @@ class ProjectAdmin(ThumbnailMixin, ModelAdmin):
     def get_extra_attrs_for_field_col(self, obj, field_name):
         if field_name == 'state':
             return {
-                "style": f"color: {obj.state_color};text-transform: uppercase;"
+                'style': f'color: {obj.state_color};text-transform: uppercase;'
             }
         return {}
 
@@ -160,7 +160,7 @@ class ProjectAdmin(ThumbnailMixin, ModelAdmin):
 class ProjectSearchArea(SearchArea):
     def __init__(self):
         super().__init__(
-            "Projects", reverse('crm_project_modeladmin_index'),
+            'Projects', reverse('crm_project_modeladmin_index'),
             name='projects',
             classnames='icon icon-fa-product-hunt',
             order=101)

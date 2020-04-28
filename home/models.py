@@ -30,9 +30,9 @@ class HomePage(Page):
         related_name='+'
     )
     claim = models.CharField(max_length=300,
-                             help_text="Claim text placed under the name",
-                             default="Freelance python developer")
-    title_color = RGBColorField(default="#373a3c")
+                             help_text='Claim text placed under the name',
+                             default='Freelance python developer')
+    title_color = RGBColorField(default='#373a3c')
 
     picture = models.ForeignKey(
         'wagtailimages.Image',
@@ -40,7 +40,7 @@ class HomePage(Page):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text="My picture"
+        help_text='My picture'
     )
     max_count = 1
     subpage_types = [
@@ -118,15 +118,15 @@ class ProjectPage(Page):
         related_name='+'
     )
     summary = models.CharField(max_length=511,
-                               help_text="Short description to show on tiles and lists")
-    description = RichTextField(help_text="Long description to show on the detail page")
+                               help_text='Short description to show on tiles and lists')
+    description = RichTextField(help_text='Long description to show on the detail page')
 
     start_date = models.DateField(null=True, blank=True, db_index=True)
-    duration = models.IntegerField(help_text="Duration in months, null=till now",
+    duration = models.IntegerField(help_text='Duration in months, null=till now',
                                    null=True, blank=True)
 
     position = models.CharField(max_length=100,
-                                default="Backend developer")
+                                default='Backend developer')
 
     search_fields = Page.search_fields + [
         index.SearchField('summary'),
@@ -138,7 +138,7 @@ class ProjectPage(Page):
 
     technologies = ParentalManyToManyField(
         'Technology',
-        related_name="projects",
+        related_name='projects',
         blank=True
     )
     project_url = models.URLField(null=True, blank=True)  # url is a part of the parent model
@@ -149,11 +149,11 @@ class ProjectPage(Page):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text="Reference letter for this project"
+        help_text='Reference letter for this project'
     )
     responsibilities = ParentalManyToManyField(
         'Responsibility',
-        related_name="projects",
+        related_name='projects',
         blank=True
     )
     content_panels = Page.content_panels + [
@@ -186,7 +186,7 @@ class TechnologiesPage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    title_color = RGBColorField(default="#373a3c")
+    title_color = RGBColorField(default='#373a3c')
 
     content_panels = Page.content_panels + [
         FieldPanel('title_color'),
@@ -216,7 +216,7 @@ class Technology(index.Indexed, models.Model):
     summary = RichTextField(blank=True)
     name = models.CharField(max_length=100, unique=True)
     match_in_cv = models.BooleanField(default=True,
-                                      help_text="Match for technology in CV relevant projects?")
+                                      help_text='Match for technology in CV relevant projects?')
     panels = [
         FieldPanel('name'),
         ImageChooserPanel('logo'),
@@ -261,19 +261,19 @@ class ContactPage(RecaptchaForm):
     intro = RichTextField(blank=True)
     thank_you_text = RichTextField(blank=True)
     show_on_home = models.BooleanField(default=False,
-                                       help_text="Show link to this form on home page?")
+                                       help_text='Show link to this form on home page?')
     content_panels = AbstractEmailForm.content_panels + [
         FormSubmissionsPanel(),
-        FieldPanel('intro', classname="full"),
-        InlinePanel('form_fields', label="Form fields"),
-        FieldPanel('thank_you_text', classname="full"),
+        FieldPanel('intro', classname='full'),
+        InlinePanel('form_fields', label='Form fields'),
+        FieldPanel('thank_you_text', classname='full'),
         MultiFieldPanel([
             FieldRowPanel([
-                FieldPanel('from_address', classname="col6"),
-                FieldPanel('to_address', classname="col6"),
+                FieldPanel('from_address', classname='col6'),
+                FieldPanel('to_address', classname='col6'),
             ]),
             FieldPanel('subject'),
-        ], "Email"),
+        ], 'Email'),
     ]
     settings_panels = AbstractEmailForm.settings_panels + [
         FieldPanel('show_on_home')
@@ -288,4 +288,4 @@ class Responsibility(models.Model):
         return self.text
 
     class Meta:
-        verbose_name_plural = "responsibilities"
+        verbose_name_plural = 'responsibilities'
