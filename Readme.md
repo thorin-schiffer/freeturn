@@ -8,7 +8,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![codecov](https://codecov.io/gh/eviltnan/freeturn/branch/develop/graph/badge.svg)](https://codecov.io/gh/eviltnan/freeturn)
 [![BrowserStack Status](https://automate.browserstack.com/badge.svg?badge_key=OW9FSlpEWUdYb2htbFJYTjRPbEtUVmlNRUhZM2RCNVUwejZ5MzAxUTJLMD0tLUcySUFHVGJVMDdVNzZxZ3VGSTdhSEE9PQ==--2fb0726c5380e49390677a7fdb8e19a5903d2828)](https://automate.browserstack.com/public-build/OW9FSlpEWUdYb2htbFJYTjRPbEtUVmlNRUhZM2RCNVUwejZ5MzAxUTJLMD0tLUcySUFHVGJVMDdVNzZxZ3VGSTdhSEE9PQ==--2fb0726c5380e49390677a7fdb8e19a5903d2828)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6bbd9900e7ec47bbabaec4c2cb1db7b0)](https://www.codacy.com/manual/eviltnan/freeturn?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=eviltnan/freeturn&amp;utm_campaign=Badge_Grade)
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/eviltnan/freeturn/tree/develop)
 
