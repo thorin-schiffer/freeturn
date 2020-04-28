@@ -130,7 +130,7 @@ def bootstrap(context):
     if not settings.DEBUG:
         Exit("Won't bootstrap in non dev env")
     update(context)
-    fill(context, migrate=True)
+    fill(context)
     collect_static(context)
     i18n(context)
     install_hooks(context)
