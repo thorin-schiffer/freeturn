@@ -4,12 +4,12 @@ from django.conf import settings
 
 
 def render_policy(bucket, account, user):
-    vars = {
+    variables = {
         "bucket": bucket,
         "account_id": account,
         "user": user
     }
-    return render_to_string("s3_policy.json.template", context=vars)
+    return render_to_string("s3_policy.json.template", context=variables)
 
 
 def install_policy(bucket, account, user):

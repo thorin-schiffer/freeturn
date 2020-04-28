@@ -61,10 +61,10 @@ def test_contact(selenium, base_url, faker):
     portfolio_button = selenium.find_element_by_id('form-contact')
     portfolio_button.click()
     assert selenium.current_url == f"{base_url}/contact/"
-    input = selenium.find_element_by_name("some-words-about-your-project")
-    input.clear()
+    input_element = selenium.find_element_by_name("some-words-about-your-project")
+    input_element.clear()
     text = faker.word()
-    input.send_keys(text)
+    input_element.send_keys(text)
     selenium.execute_script("window.scrollTo(0, document.body.scrollHeight)")
     selenium.find_element_by_name("privacy-policy").click()
     selenium.find_element_by_xpath("//input[@type='submit']").submit()

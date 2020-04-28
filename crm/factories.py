@@ -69,7 +69,7 @@ class ProjectFactory(factory.DjangoModelFactory):
         model = models.Project
 
     @factory.post_generation
-    def end_date(self, *args, **kwargs):
+    def generate_end_date(self, *args, **kwargs):
         if self.start_date:
             self.end_date = self.start_date + timedelta(days=90)
 
@@ -156,5 +156,5 @@ class InvoiceFactory(factory.DjangoModelFactory):
         model = models.Invoice
 
     @factory.post_generation
-    def positions(self, instance, create, *args, **kwargs):
+    def generate_positions(self, instance, create, *args, **kwargs):
         self.positions = wrap_table_data(models.Invoice.get_initial_positions())

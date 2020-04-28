@@ -113,7 +113,7 @@ def ensure_manager(message):
             first_name, last_name = message['full_name'].split(" ")
         except ValueError:
             first_name, last_name = "", message['last_name']
-        manager, manager_created = Employee.objects.get_or_create(
+        manager, _ = Employee.objects.get_or_create(
             email=message['from_address'],
             defaults={
                 "company": company,
