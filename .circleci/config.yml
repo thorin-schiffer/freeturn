@@ -7,101 +7,101 @@ orbs:
 commands:
   install_binaries:
     steps:
-      - run:
-          name: Installing binaries
-          command: apt-get update && apt-get -y install build-essential wkhtmltopdf
+    - run:
+        name: Installing binaries
+        command: apt-get update && apt-get -y install build-essential wkhtmltopdf
 
   install_pip_env:
     steps:
-      - run:
-          name: Installing pip and pipenv
-          command: pip install --upgrade pip && pip install --upgrade pipenv
+    - run:
+        name: Installing pip and pipenv
+        command: pip install --upgrade pip && pip install --upgrade pipenv
 
   install_python_deps:
     steps:
-      - run:
-          name: Installing python dependencies
-          command: pipenv install --system --deploy --ignore-pipfile --dev
+    - run:
+        name: Installing python dependencies
+        command: pipenv install --system --deploy --ignore-pipfile --dev
 
   check_pre_commit:
     steps:
-      - run:
-          name: Installing pre-commit
-          command: pip install pre-commit
-      - run:
-          name: Executing pre-commit hook checks
-          command: pre-commit run --all-files
+    - run:
+        name: Installing pre-commit
+        command: pip install pre-commit
+    - run:
+        name: Executing pre-commit hook checks
+        command: pre-commit run --all-files
 
 defaults: &defaults
   docker:
-    - image: python:3.7.5
+  - image: python:3.7.5
   environment:
-    - PIPENV_CACHE_DIR: "~/.local/pipenv-cache"
-    - SECRET_KEY: '1234567'
+  - PIPENV_CACHE_DIR: ~/.local/pipenv-cache
+  - SECRET_KEY: '1234567'
 
 jobs:
   unit_tests:
     <<: *defaults
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-            - pip-packages-v1-{{ .Branch }}-
-            - pip-packages-v1-
-      - install_binaries
-      - install_pip_env
-      - install_python_deps
-      - save_cache:
-          paths:
-            - ~/.local/pipenv-cache
-            - ~/.apt-cache
-            - .wkhtml-cache
-          key: pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-      - run:
-          name: Testing...
-          command: pytest -n 2 --junitxml=test-results/junit.xml --cov-report=html --cov-report=xml --cov=. unit_tests/
-      - store_test_results:
-          path: test-results
-      - store_artifacts:
-          path: htmlcov
-      - codecov/upload:
-          file: coverage.xml
+    - checkout
+    - restore_cache:
+        keys:
+        - pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+        - pip-packages-v1-{{ .Branch }}-
+        - pip-packages-v1-
+    - install_binaries
+    - install_pip_env
+    - install_python_deps
+    - save_cache:
+        paths:
+        - ~/.local/pipenv-cache
+        - ~/.apt-cache
+        - .wkhtml-cache
+        key: pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+    - run:
+        name: Testing...
+        command: pytest -n 2 --junitxml=test-results/junit.xml --cov-report=html --cov-report=xml --cov=. unit_tests/
+    - store_test_results:
+        path: test-results
+    - store_artifacts:
+        path: htmlcov
+    - codecov/upload:
+        file: coverage.xml
   lint:
     <<: *defaults
     steps:
-      - checkout
-      - install_pip_env
-      - check_pre_commit
+    - checkout
+    - install_pip_env
+    - check_pre_commit
   backup_db:
     executor: heroku/default
     steps:
-      - checkout
-      - heroku/install
-      - run:
-          name: Backup db...
-          command: heroku pg:backups:capture --app $HEROKU_APP_NAME
+    - checkout
+    - heroku/install
+    - run:
+        name: Backup db...
+        command: heroku pg:backups:capture --app $HEROKU_APP_NAME
   acceptance_tests:
     <<: *defaults
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-            - pip-packages-v1-{{ .Branch }}-
-            - pip-packages-v1-
-      - install_pip_env
-      - install_python_deps
-      - run:
-          name: Running acceptance tests
-          command: inv browserstack
+    - checkout
+    - restore_cache:
+        keys:
+        - pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+        - pip-packages-v1-{{ .Branch }}-
+        - pip-packages-v1-
+    - install_pip_env
+    - install_python_deps
+    - run:
+        name: Running acceptance tests
+        command: inv browserstack
 
 workflows:
   main:
     jobs:
-      - lint
-      - unit_tests
-      - backup_db:
-          filters:
-            branches:
-              only: develop
+    - lint
+    - unit_tests
+    - backup_db:
+        filters:
+          branches:
+            only: develop
