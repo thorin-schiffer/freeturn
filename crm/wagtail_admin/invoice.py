@@ -5,7 +5,7 @@ from wagtail.contrib.modeladmin.helpers import ButtonHelper, AdminURLHelper
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import CreateView, InspectView, EditView
 
-from crm.models import Invoice, InvoiceGenerationSettings, wrap_table_data
+from crm.models.invoice import Invoice, wrap_table_data, InvoiceGenerationSettings
 from crm.utils import BasePDFView
 
 

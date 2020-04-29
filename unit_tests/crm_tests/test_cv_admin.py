@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 
-from crm.models import CVGenerationSettings
+from crm.models.cv import CVGenerationSettings
 
 
 @pytest.mark.django_db

@@ -8,7 +8,7 @@ from django.utils import timezone
 from decimal import Decimal as D
 from django.conf import settings
 from crm.gmail_utils import parse_message, associate, remove_quotation
-from crm.models import Invoice, InvoicePosition, invoice_raw_options, dictify_position_row
+from crm.models.invoice import Invoice, InvoicePosition, invoice_raw_options, dictify_position_row
 from home.models import Technology
 
 
