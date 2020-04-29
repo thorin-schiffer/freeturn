@@ -172,6 +172,9 @@ def browserstack(context, review_url=None):
     ])
 
     review_url = review_url or os.getenv('REVIEW_URL')
+    if not review_url:
+        raise Exit("Can't execute browserstack tests, review url is empty")
+    print(f'Testing {review_url}')
     command = f"pytest --driver BrowserStack --base-url \"{review_url}\" " \
               f'{capabilities_string} ' \
               f'acceptance_tests/'
