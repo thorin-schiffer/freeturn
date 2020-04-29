@@ -6,8 +6,6 @@ from django.db.models import CASCADE
 from django.utils import timezone
 from django_extensions.db.models import TimeStampedModel
 from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel
-from wagtail.contrib.settings.models import BaseSetting
-from wagtail.contrib.settings.registry import register_setting
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 from wagtailmarkdown.fields import MarkdownField
@@ -128,40 +126,3 @@ class CV(TimeStampedModel):
 
     class Meta:
         verbose_name = 'CV'
-
-
-@register_setting(icon='icon icon-fa-id-card')
-class CVGenerationSettings(BaseSetting):
-    default_title = models.CharField(
-        max_length=255, help_text='Default title to use', default='Freelance python developer')
-    default_experience_overview = MarkdownField(
-        help_text='Notice on your experience',
-        default='Python developer experience: 7 years'
-    )
-
-    default_education_overview = MarkdownField(
-        help_text='Notice on your education',
-        default='Novosibirsk State Technical University'
-    )
-    default_contact_details = MarkdownField(default='sergey@cheparev.com')
-    default_languages_overview = MarkdownField(default='English: fluent')
-    default_rate_overview = MarkdownField(default='<<change default in settings>>')
-    default_working_permit = MarkdownField(default='PERMANENT RESIDENCE')
-    default_picture = models.ForeignKey(
-        'wagtailimages.Image',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
-    )
-
-    panels = [
-        FieldPanel('default_title'),
-        FieldPanel('default_experience_overview'),
-        FieldPanel('default_education_overview'),
-        FieldPanel('default_contact_details'),
-        FieldPanel('default_languages_overview'),
-        FieldPanel('default_rate_overview'),
-        FieldPanel('default_working_permit'),
-        ImageChooserPanel('default_picture')
-    ]

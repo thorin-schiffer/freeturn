@@ -5,7 +5,8 @@ import pytest
 from django.urls import reverse
 from django.utils import timezone
 
-from crm.models.invoice import InvoiceGenerationSettings, Invoice
+from crm.models.invoice import Invoice
+from crm.models.settings import InvoiceGenerationSettings
 
 
 @pytest.mark.django_db
