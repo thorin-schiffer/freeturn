@@ -14,7 +14,7 @@ class Company(TimeStampedModel):
                                  on_delete=models.CASCADE,
                                  blank=True,
                                  null=True)
-    channel = models.ForeignKey('Channel',
+    channel = models.ForeignKey('crm.Channel',
                                 on_delete=models.SET_NULL,
                                 help_text='Lead channel this company came from',
                                 null=True,
