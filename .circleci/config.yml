@@ -31,6 +31,16 @@ commands:
     - run:
         name: Executing pre-commit hook checks
         command: pre-commit run --all-files
+  install_code_climate:
+    steps:
+    - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+    - run: chmod +x ./cc-test-reporter
+    - ./cc-test-reporter before-build
+  collect_coverage_report:
+    steps:
+    - run: /cc-test-reporter format-coverage -t coverage.py -o ./.coverage
+    - run: ./cc-test-reporter upload-coverage
+    - run: ./cc-test-reporter after-build --exit-code $?
 
 defaults: &defaults
   docker:
@@ -58,6 +68,7 @@ jobs:
         - ~/.apt-cache
         - .wkhtml-cache
         key: pip-packages-v1-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+    - install_code_climate
     - run:
         name: Testing...
         command: pytest -n 2 --junitxml=test-results/junit.xml --cov-report=html --cov-report=xml --cov=. unit_tests/
