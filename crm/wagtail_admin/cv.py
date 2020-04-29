@@ -8,7 +8,8 @@ from crm.models.cv import CV
 from crm.models.settings import CVGenerationSettings
 from crm.models.project import Project
 from crm.utils import BasePDFView
-from home.models import Technology, ProjectPage
+from home.models import ProjectPage
+from home.models.snippets import Technology
 
 
 class CreateCVView(CreateView):

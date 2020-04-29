@@ -9,7 +9,7 @@ from decimal import Decimal as D
 from django.conf import settings
 from crm.gmail_utils import parse_message, associate, remove_quotation
 from crm.models.invoice import Invoice, InvoicePosition, invoice_raw_options, dictify_position_row
-from home.models import Technology
+from home.models.snippets import Technology
 
 
 @pytest.mark.django_db

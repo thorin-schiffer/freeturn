@@ -10,7 +10,8 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 from wagtailmarkdown.fields import MarkdownField
 
-from home.models import Technology, ProjectPage
+from home.models import ProjectPage
+from home.models.snippets import Technology
 
 logger = logging.getLogger(__file__)
 
