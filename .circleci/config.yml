@@ -38,8 +38,6 @@ commands:
     - run: ./cc-test-reporter before-build
   collect_coverage_report:
     steps:
-    - run: ./cc-test-reporter format-coverage -t coverage.py -o ./.coverage
-    - run: ./cc-test-reporter upload-coverage
     - run: ./cc-test-reporter after-build --exit-code $?
 
 defaults: &defaults
