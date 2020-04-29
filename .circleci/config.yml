@@ -35,10 +35,10 @@ commands:
     steps:
     - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
     - run: chmod +x ./cc-test-reporter
-    - ./cc-test-reporter before-build
+    - run: ./cc-test-reporter before-build
   collect_coverage_report:
     steps:
-    - run: /cc-test-reporter format-coverage -t coverage.py -o ./.coverage
+    - run: ./cc-test-reporter format-coverage -t coverage.py -o ./.coverage
     - run: ./cc-test-reporter upload-coverage
     - run: ./cc-test-reporter after-build --exit-code $?
 
@@ -72,6 +72,7 @@ jobs:
     - run:
         name: Testing...
         command: pytest -n 2 --junitxml=test-results/junit.xml --cov-report=html --cov-report=xml --cov=. unit_tests/
+    - collect_coverage_report
     - store_test_results:
         path: test-results
     - store_artifacts:
