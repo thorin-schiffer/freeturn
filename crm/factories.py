@@ -156,5 +156,5 @@ class InvoiceFactory(factory.DjangoModelFactory):
         model = models.Invoice
 
     @factory.post_generation
-    def generate_positions(self, instance, create, *args, **kwargs):
+    def generate_positions(self, *args, **kwargs):
         self.positions = wrap_table_data(models.Invoice.get_initial_positions())
