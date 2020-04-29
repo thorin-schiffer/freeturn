@@ -26,22 +26,22 @@ class CreateCVView(CreateView):
         except ValueError:
             for_project = None
         return {
-            "title": settings.default_title,
-            "experience_overview": settings.default_experience_overview,
-            "education_overview": settings.default_education_overview,
-            "contact_details": settings.default_contact_details,
-            "languages_overview": settings.default_languages_overview,
-            "rate_overview": settings.default_rate_overview,
-            "working_permit": settings.default_working_permit,
-            "full_name": f"{user.first_name} {user.last_name}",
-            "picture": settings.default_picture,
-            "project": for_project
+            'title': settings.default_title,
+            'experience_overview': settings.default_experience_overview,
+            'education_overview': settings.default_education_overview,
+            'contact_details': settings.default_contact_details,
+            'languages_overview': settings.default_languages_overview,
+            'rate_overview': settings.default_rate_overview,
+            'working_permit': settings.default_working_permit,
+            'full_name': f'{user.first_name} {user.last_name}',
+            'picture': settings.default_picture,
+            'project': for_project
         }
 
 
 class CVInspectView(BasePDFView,
                     InspectView):
-    template_name = "cv/body.html"
+    template_name = 'cv/body.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -54,7 +54,7 @@ class CVInspectView(BasePDFView,
         return context
 
     def get_filename(self):
-        return f"{self.instance.full_name} CV and project portfolio for {self.instance.project}.pdf"
+        return f'{self.instance.full_name} CV and project portfolio for {self.instance.project}.pdf'
 
 
 class CVAdmin(ThumbnailMixin, ModelAdmin):
@@ -71,5 +71,5 @@ class CVAdmin(ThumbnailMixin, ModelAdmin):
     inspect_view_class = CVInspectView
     inspect_template_name = CVInspectView.template_name
     thumb_image_field_name = 'logo'
-    thumb_default = "/static/img/default_project.png"
+    thumb_default = '/static/img/default_project.png'
     list_display_add_buttons = 'project'

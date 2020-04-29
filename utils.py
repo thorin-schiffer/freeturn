@@ -15,16 +15,16 @@ def result_pks(response, cast=None):
     :return: ids list
     """
     cast = cast or int
-    result_rows = response.lxml.xpath(".//tr[@data-object-pk]/@data-object-pk")
+    result_rows = response.lxml.xpath('.//tr[@data-object-pk]/@data-object-pk')
     return [
         cast(r) for r in result_rows
     ]
 
 
 def required_inputs(response):
-    inputs = response.lxml.xpath(".//*[@required]/@id")
+    inputs = response.lxml.xpath('.//*[@required]/@id')
     return [
-        i.replace("id_", "") for i in inputs
+        i.replace('id_', '') for i in inputs
     ]
 
 
@@ -35,7 +35,7 @@ def disabled_in_admin(func):
 
     def _inner(request):
 
-        if request.path.startswith("/admin/"):
+        if request.path.startswith('/admin/'):
             return {}
         return func(request)
 

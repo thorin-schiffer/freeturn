@@ -9,14 +9,14 @@ from social_core.pipeline import DEFAULT_AUTH_PIPELINE
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 env = environ.Env()
-TESTING = "pytest" in sys.modules
+TESTING = 'pytest' in sys.modules
 if not TESTING:
     environ.Env.read_env(os.path.join(os.path.dirname(PROJECT_DIR), '.env'))
 
 DEBUG = env.bool('DEBUG', False)
 DEBUG_TOOLBAR = env.bool('DEBUG_TOOLBAR', False)
 
-SENTRY_DSN = env.str("SENTRY_DSN", None)
+SENTRY_DSN = env.str('SENTRY_DSN', None)
 if SENTRY_DSN:
     sentry_sdk.init(
         dsn=SENTRY_DSN,
@@ -26,14 +26,13 @@ if SENTRY_DSN:
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 INSTALLED_APPS = [
-    "scout_apm.django",
     'home',
     'crm',
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.contrib.modeladmin',
     'wagtail.contrib.settings',
-    "wagtail.contrib.table_block",
+    'wagtail.contrib.table_block',
     'wagtail.embeds',
     'wagtail.sites',
     'wagtail.users',
@@ -82,7 +81,7 @@ MIDDLEWARE = [
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default="*")
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default='*')
 INTERNAL_IPS = ['127.0.0.1']
 
 if DEBUG_TOOLBAR:
@@ -170,14 +169,14 @@ MEDIA_URL = '/media/'
 
 # Wagtail settings
 
-WAGTAIL_SITE_NAME = "freeturn"
+WAGTAIL_SITE_NAME = 'freeturn'
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = env.str("BASE_URL", "http://localhost:8000")
+BASE_URL = env.str('BASE_URL', 'http://localhost:8000')
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
-RECAPTCHA_PUBLIC_KEY = env.str("RECAPTCHA_PUBLIC_KEY", None)
-RECAPTCHA_PRIVATE_KEY = env.str("RECAPTCHA_PRIVATE_KEY", None)
+RECAPTCHA_PUBLIC_KEY = env.str('RECAPTCHA_PUBLIC_KEY', None)
+RECAPTCHA_PRIVATE_KEY = env.str('RECAPTCHA_PRIVATE_KEY', None)
 
 EMAIL_CONFIG = env.email_url('EMAIL_URL', default='consolemail://')
 vars().update(EMAIL_CONFIG)
@@ -195,14 +194,14 @@ AUTHENTICATION_BACKENDS = [
 ]
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env.str("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY", None)
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env.str("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET", None)
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env.str('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY', None)
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env.str('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET', None)
 if SOCIAL_AUTH_GOOGLE_OAUTH2_KEY and SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET:
     AUTHENTICATION_BACKENDS = [
         'social_core.backends.google.GoogleOAuth2',
         *AUTHENTICATION_BACKENDS
     ]
-SOCIAL_AUTH_LOGIN_URL = "/admin/account/"
+SOCIAL_AUTH_LOGIN_URL = '/admin/account/'
 LOGIN_REDIRECT_URL = SOCIAL_AUTH_LOGIN_URL
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/gmail.readonly',
@@ -210,29 +209,29 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://mail.google.com/'
 ]
 
-SOCIAL_AUTH_PIPELINE = ("utils.social_for_authed_only",) + DEFAULT_AUTH_PIPELINE
+SOCIAL_AUTH_PIPELINE = ('utils.social_for_authed_only',) + DEFAULT_AUTH_PIPELINE
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
     'access_type': 'offline'
 }
 
-GOOGLE_ANALYTICS_JS_PROPERTY_ID = env.str("GOOGLE_ANALYTICS_ID", default="UA-123456-7")
-MAILBOX_LABEL = "CRM"
+GOOGLE_ANALYTICS_JS_PROPERTY_ID = env.str('GOOGLE_ANALYTICS_ID', default='UA-123456-7')
+MAILBOX_LABEL = 'CRM'
 DEFAULT_VAT = 19
 
-AWS_STORAGE_BUCKET_NAME = env.str("AWS_STORAGE_BUCKET_NAME", None)
-AWS_STORAGE_ACCOUNT_ID = env.str("AWS_STORAGE_ACCOUNT_ID", None)
-AWS_STORAGE_USER = env.str("AWS_STORAGE_USER", None)
+AWS_STORAGE_BUCKET_NAME = env.str('AWS_STORAGE_BUCKET_NAME', None)
+AWS_STORAGE_ACCOUNT_ID = env.str('AWS_STORAGE_ACCOUNT_ID', None)
+AWS_STORAGE_USER = env.str('AWS_STORAGE_USER', None)
 
 if AWS_STORAGE_BUCKET_NAME:
     AWS_S3_REGION_NAME = 'eu-central-1'
     AWS_S3_SIGNATURE_VERSION = 's3v4'
-    AWS_ACCESS_KEY_ID = env.str("AWS_ACCESS_KEY_ID")
-    AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY")
+    AWS_ACCESS_KEY_ID = env.str('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = env.str('AWS_SECRET_ACCESS_KEY')
     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-    AWS_DEFAULT_ACL = "private"
+    AWS_DEFAULT_ACL = 'private'
     AWS_S3_FILE_OVERWRITE = False
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+    MEDIA_URL = 'https://%s/' % AWS_S3_CUSTOM_DOMAIN
 DJANGO_REDIS_IGNORE_EXCEPTIONS = True
 CACHES = {
     'default': env.cache('REDIS_URL', 'locmemcache://')
@@ -249,6 +248,12 @@ if WHITENOISE_STORAGE:
 WKHTMLTOPDF_CMD = env.str('WKHTMLTOPDF_CMD', default='/usr/bin/wkhtmltopdf')
 WKHTMLTOPDF_CMD_OPTIONS = {
     'quiet': True,
-    'cache-dir': ".wkhtml-cache"
+    'cache-dir': '.wkhtml-cache'
 }
-SCOUT_NAME = env.str("SCOUT_NAME", "freeturn")
+SCOUT_MONITOR = env.str('SCOUT_MONITOR', False)
+if SCOUT_MONITOR:
+    SCOUT_NAME = env.str('SCOUT_NAME', 'freeturn')
+    INSTALLED_APPS = [
+        'scout_apm.django',
+        *INSTALLED_APPS
+    ]

@@ -89,5 +89,5 @@ class BasePDFView(PDFTemplateView):
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            "load_styles": not settings.TESTING
+            'load_styles': not settings.TESTING
         }

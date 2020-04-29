@@ -15,9 +15,9 @@ register(factories.CompanyFactory)
 register(factories.ProjectFactory)
 register(factories.ProjectMessageFactory)
 register(factories.UserFactory)
-register(factories.AdminFactory, "admin_user")
+register(factories.AdminFactory, 'admin_user')
 register(factories.CVFactory)
-register(factories.CVWithRelevantFactory, "cv_with_relevant")
+register(factories.CVWithRelevantFactory, 'cv_with_relevant')
 register(factories.InvoiceFactory)
 register(SiteFactory)
 register(HomePageFactory)
@@ -43,9 +43,9 @@ def gmail_api_response_factory():
     def _gmail_api_response_factory(filename):
         from django.conf import settings
         path = os.path.join(
-            settings.BASE_DIR, "unit_tests", "crm_tests", "data", filename
+            settings.BASE_DIR, 'unit_tests', 'crm_tests', 'data', filename
         )
-        with open(path, "r") as f:
+        with open(path, 'r') as f:
             return json.load(f)
 
     return _gmail_api_response_factory

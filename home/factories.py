@@ -20,8 +20,8 @@ class HomePageFactory(wagtail_factories.PageFactory):
 
 
 class ContactPageFactory(wagtail_factories.PageFactory):
-    title = "Contact"
-    thank_you_text = "Thank you!"
+    title = 'Contact'
+    thank_you_text = 'Thank you!'
     show_on_home = True
 
     class Meta:
@@ -33,7 +33,7 @@ class ProjectPageFactory(wagtail_factories.PageFactory):
     summary = factory.Faker('sentence')
     description = factory.Faker('text')
     position = factory.Faker('job')
-    start_date = factory.Faker('past_date', start_date="-10y", tzinfo=get_current_timezone())
+    start_date = factory.Faker('past_date', start_date='-10y', tzinfo=get_current_timezone())
     project_url = factory.Faker('url')
     duration = 6
 
@@ -53,22 +53,22 @@ class ProjectPageFactory(wagtail_factories.PageFactory):
 
 
 class PortfolioPageFactory(wagtail_factories.PageFactory):
-    title = "Portfolio"
+    title = 'Portfolio'
 
     class Meta:
         model = models.PortfolioPage
 
 
 class TagFactory(factory.DjangoModelFactory):
-    name = factory.Faker("word")
+    name = factory.Faker('word')
 
     class Meta:
         model = Tag
 
 
 class TechnologyFactory(factory.DjangoModelFactory):
-    name = factory.Faker("word")
-    summary = factory.Faker("sentence")
+    name = factory.Faker('word')
+    summary = factory.Faker('sentence')
 
     class Meta:
         model = Technology
@@ -76,7 +76,7 @@ class TechnologyFactory(factory.DjangoModelFactory):
 
 
 class TechnologiesPageFactory(wagtail_factories.PageFactory):
-    title = "Technologies"
+    title = 'Technologies'
 
     class Meta:
         model = models.TechnologiesPage

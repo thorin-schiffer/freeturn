@@ -29,7 +29,7 @@ from crm.project_states import ProjectStateMixin
 from crm.utils import get_working_days
 from home.models import Technology, ProjectPage
 
-logger = logging.getLogger("crm.models")
+logger = logging.getLogger('crm.models')
 
 
 class City(models.Model):
@@ -44,7 +44,7 @@ class City(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = "city"
+        verbose_name_plural = 'city'
         ordering = ['name']
 
 
@@ -85,11 +85,11 @@ class Employee(TimeStampedModel):
     ]
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name} [{self.company}]"
+        return f'{self.first_name} {self.last_name} [{self.company}]'
 
     @property
     def full_name(self):
-        return f"{self.first_name} {self.last_name}"
+        return f'{self.first_name} {self.last_name}'
 
     @property
     def project_count(self):
@@ -180,7 +180,7 @@ class Project(ProjectStateMixin, TimeStampedModel):
             pass
 
     def get_duration_display(self):
-        return f"{self.duration} months"
+        return f'{self.duration} months'
 
     def get_original_description_display(self):
         return SafeText(self.original_description)
@@ -191,7 +191,7 @@ class Project(ProjectStateMixin, TimeStampedModel):
     def get_project_page_display(self):
         if not self.project_page:
             return
-        url = reverse("wagtailadmin_pages:edit", args=(self.project_page.pk,))
+        url = reverse('wagtailadmin_pages:edit', args=(self.project_page.pk,))
         return SafeText(
             f"<a href='{url}'>{self.project_page}</a>"
         )
@@ -236,19 +236,19 @@ class Project(ProjectStateMixin, TimeStampedModel):
         return len(get_working_days(self.start_date, self.end_date))
 
     def get_budget_display(self):
-        return f"{self.budget} €" if self.budget else None
+        return f'{self.budget} €' if self.budget else None
 
     def get_vat_display(self):
-        return f"{self.vat:.2f} €" if self.vat else None
+        return f'{self.vat:.2f} €' if self.vat else None
 
     def get_invoice_amount_display(self):
-        return f"{self.invoice_amount:.2f} €" if self.invoice_amount else None
+        return f'{self.invoice_amount:.2f} €' if self.invoice_amount else None
 
     def get_income_tax_display(self):
-        return f"{self.income_tax:.2f} €" if self.income_tax else None
+        return f'{self.income_tax:.2f} €' if self.income_tax else None
 
     def get_nett_income_display(self):
-        return f"{self.nett_income:.2f} €" if self.nett_income else None
+        return f'{self.nett_income:.2f} €' if self.nett_income else None
 
     @property
     def logo(self):
@@ -258,8 +258,8 @@ class Project(ProjectStateMixin, TimeStampedModel):
         if self.start_date and self.end_date and self.start_date >= self.end_date:
             raise ValidationError(
                 {
-                    "start_date": "End date can't be earlier than start date",
-                    "end_date": "End date can't be earlier than start date",
+                    'start_date': "End date can't be earlier than start date",
+                    'end_date': "End date can't be earlier than start date",
                 }
             )
 
@@ -274,7 +274,7 @@ class Project(ProjectStateMixin, TimeStampedModel):
         return str(self.name or self.company)
 
     class Meta:
-        verbose_name_plural = "projects"
+        verbose_name_plural = 'projects'
 
 
 class ProjectMessage(TimeStampedModel):
@@ -287,7 +287,7 @@ class ProjectMessage(TimeStampedModel):
                                on_delete=models.CASCADE,
                                related_name='messages')
     sent_at = models.DateTimeField(default=timezone.now,
-                                   help_text="Sending time")
+                                   help_text='Sending time')
     subject = models.CharField(max_length=200,
                                blank=True,
                                null=True)
@@ -309,12 +309,12 @@ class Company(TimeStampedModel):
                                  null=True)
     channel = models.ForeignKey('Channel',
                                 on_delete=models.SET_NULL,
-                                help_text="Lead channel this company came from",
+                                help_text='Lead channel this company came from',
                                 null=True,
                                 blank=True)
     url = models.URLField(blank=True,
                           null=True)
-    notes = MarkdownField(default="", blank=True)
+    notes = MarkdownField(default='', blank=True)
     logo = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL,
                              null=True, blank=True)
     default_daily_rate = models.DecimalField(
@@ -325,7 +325,7 @@ class Company(TimeStampedModel):
         default=settings.DEFAULT_DAILY_RATE
     )
     payment_address = MarkdownField(null=True, blank=True)
-    vat_id = models.CharField(max_length=100, help_text="VAT ID", null=True, blank=True)
+    vat_id = models.CharField(max_length=100, help_text='VAT ID', null=True, blank=True)
 
     panels = [
         FieldRowPanel([
@@ -363,11 +363,11 @@ class Company(TimeStampedModel):
 
 
 class CV(TimeStampedModel):
-    project = models.ForeignKey("Project",
+    project = models.ForeignKey('Project',
                                 blank=True,
                                 null=True,
                                 on_delete=CASCADE,
-                                related_name="cvs")
+                                related_name='cvs')
     earliest_available = models.DateField(null=True, blank=True, default=timezone.now)
     picture = models.ForeignKey(
         'wagtailimages.Image',
@@ -375,20 +375,20 @@ class CV(TimeStampedModel):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text="Picture to use"
+        help_text='Picture to use'
     )
 
     full_name = models.CharField(max_length=200,
-                                 help_text="Name to use in the title of the file, default is current user")
-    title = models.CharField(max_length=200, help_text="Title to be placed under the name")
+                                 help_text='Name to use in the title of the file, default is current user')
+    title = models.CharField(max_length=200, help_text='Title to be placed under the name')
     experience_overview = MarkdownField(
-        help_text="Notice on your experience",
+        help_text='Notice on your experience',
     )
 
     relevant_project_pages = models.ManyToManyField(
-        "home.ProjectPage",
-        help_text="Project pages to be placed on the first page, eye catcher for this project",
-        related_name="applications_highlighted",
+        'home.ProjectPage',
+        help_text='Project pages to be placed on the first page, eye catcher for this project',
+        related_name='applications_highlighted',
         blank=True
     )
     include_portfolio = models.BooleanField(
@@ -397,13 +397,13 @@ class CV(TimeStampedModel):
     )
     relevant_skills = models.ManyToManyField(
         'home.Technology',
-        help_text="Technologies to be included, "
-                  "will be automatically formed to look relevant",
+        help_text='Technologies to be included, '
+                  'will be automatically formed to look relevant',
         blank=True
     )
 
     education_overview = MarkdownField(
-        help_text="Notice on your education",
+        help_text='Notice on your education',
     )
     contact_details = MarkdownField()
     languages_overview = MarkdownField()
@@ -422,7 +422,7 @@ class CV(TimeStampedModel):
                         FieldPanel('experience_overview'),
                         FieldPanel('education_overview'),
                     ],
-                    heading="Header data"
+                    heading='Header data'
                 ),
                 MultiFieldPanel(
                     [
@@ -472,26 +472,26 @@ class CV(TimeStampedModel):
         return str(self.project)
 
     class Meta:
-        verbose_name = "CV"
+        verbose_name = 'CV'
 
 
 @register_setting(icon='icon icon-fa-id-card')
 class CVGenerationSettings(BaseSetting):
     default_title = models.CharField(
-        max_length=255, help_text='Default title to use', default="Freelance python developer")
+        max_length=255, help_text='Default title to use', default='Freelance python developer')
     default_experience_overview = MarkdownField(
-        help_text="Notice on your experience",
-        default="Python developer experience: 7 years"
+        help_text='Notice on your experience',
+        default='Python developer experience: 7 years'
     )
 
     default_education_overview = MarkdownField(
-        help_text="Notice on your education",
-        default="Novosibirsk State Technical University"
+        help_text='Notice on your education',
+        default='Novosibirsk State Technical University'
     )
-    default_contact_details = MarkdownField(default="sergey@cheparev.com")
-    default_languages_overview = MarkdownField(default="English: fluent")
-    default_rate_overview = MarkdownField(default="<<change default in settings>>")
-    default_working_permit = MarkdownField(default="PERMANENT RESIDENCE")
+    default_contact_details = MarkdownField(default='sergey@cheparev.com')
+    default_languages_overview = MarkdownField(default='English: fluent')
+    default_rate_overview = MarkdownField(default='<<change default in settings>>')
+    default_working_permit = MarkdownField(default='PERMANENT RESIDENCE')
     default_picture = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
@@ -546,17 +546,17 @@ def regular_positions_stream_data(stream_data):
     elif isinstance(stream_data, dict):
         return stream_data['value']
     else:
-        raise ValueError(f"Stream data has unknown type: {stream_data.__class__}, {stream_data}")
+        raise ValueError(f'Stream data has unknown type: {stream_data.__class__}, {stream_data}')
 
 
 INVOICE_LANGUAGE_CHOICES = (
-    ("en", "English"),
-    ("de", "German")
+    ('en', 'English'),
+    ('de', 'German')
 )
 
 INVOICE_CURRENCY_CHOICES = (
-    ("€", "Euro"),
-    ("$", "USD")
+    ('€', 'Euro'),
+    ('$', 'USD')
 )
 
 
@@ -585,31 +585,31 @@ class InvoicePosition:
 
 
 class Invoice(TimeStampedModel):
-    project = models.ForeignKey("Project",
+    project = models.ForeignKey('Project',
                                 on_delete=CASCADE,
-                                related_name="invoices")
+                                related_name='invoices')
 
     language = models.CharField(
-        default="en",
+        default='en',
         choices=INVOICE_LANGUAGE_CHOICES,
         max_length=4
     )
 
     currency = models.CharField(
-        default="€",
+        default='€',
         choices=INVOICE_CURRENCY_CHOICES,
         max_length=4
     )
 
     unit = models.CharField(
         max_length=200,
-        default="hours",
-        help_text="Work unit"
+        default='hours',
+        help_text='Work unit'
     )
 
     vat = models.DecimalField(
         default=settings.DEFAULT_VAT,
-        help_text="VAT in %",
+        help_text='VAT in %',
         decimal_places=2,
         max_digits=4
     )
@@ -620,25 +620,25 @@ class Invoice(TimeStampedModel):
 
     payment_period = models.PositiveIntegerField(
         default=14,
-        help_text="Amount of days for this invoice to be payed"
+        help_text='Amount of days for this invoice to be payed'
     )
 
-    payment_address = MarkdownField(help_text="Copied from the company, if empty", blank=True)
+    payment_address = MarkdownField(help_text='Copied from the company, if empty', blank=True)
 
-    receiver_vat_id = models.CharField(max_length=100, help_text="VAT ID of the receiver (you)")
-    sender_vat_id = models.CharField(max_length=100, help_text="VAT ID of the sender (client), "
-                                                               "copied from the company if empty", blank=True)
+    receiver_vat_id = models.CharField(max_length=100, help_text='VAT ID of the receiver (you)')
+    sender_vat_id = models.CharField(max_length=100, help_text='VAT ID of the sender (client), '
+                                                               'copied from the company if empty', blank=True)
 
     issued_date = models.DateField()
     delivery_date = models.DateField()
 
-    tax_id = models.CharField(max_length=100, help_text="Your local tax id")
+    tax_id = models.CharField(max_length=100, help_text='Your local tax id')
 
-    bank_account = MarkdownField(help_text="Payment bank account details")
+    bank_account = MarkdownField(help_text='Payment bank account details')
     contact_data = MarkdownField()
 
     title = models.CharField(max_length=200,
-                             default="Python development")
+                             default='Python development')
 
     positions = StreamField([
         ('positions', TableBlock(table_options=invoice_raw_options))
@@ -649,7 +649,7 @@ class Invoice(TimeStampedModel):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text="Picture to use"
+        help_text='Picture to use'
     )
     payed = models.BooleanField(default=False)
     panels = [
@@ -717,7 +717,7 @@ class Invoice(TimeStampedModel):
     def get_next_invoice_number():
         this_year = timezone.now().year
         count_this_year = Invoice.objects.filter(issued_date__year=this_year).count()
-        return f"{this_year}-{count_this_year + 1:02d}"
+        return f'{this_year}-{count_this_year + 1:02d}'
 
     def copy_company_params(self):
         if self.project.manager:
@@ -726,8 +726,8 @@ class Invoice(TimeStampedModel):
         else:
             payment_address = self.project.company.payment_address
             vat_id = self.project.company.vat_id
-        self.payment_address = payment_address or ""
-        self.sender_vat_id = vat_id or ""
+        self.payment_address = payment_address or ''
+        self.sender_vat_id = vat_id or ''
 
     @staticmethod
     def get_initial_positions():
@@ -735,7 +735,7 @@ class Invoice(TimeStampedModel):
             {
                 'article': 'Python programming',
                 'amount': settings.DEFAULT_DAILY_RATE,
-                'price': f"{settings.DEFAULT_DAILY_RATE / 8:.2f}",
+                'price': f'{settings.DEFAULT_DAILY_RATE / 8:.2f}',
             },
         ]
         return {
@@ -756,7 +756,7 @@ class Invoice(TimeStampedModel):
             for position in stream_data['data']:
                 position = dictify_position_row(position)
                 if not all(value for value in position.values()):
-                    logger.info(f"Skipped not full position: {position}")
+                    logger.info(f'Skipped not full position: {position}')
                     continue
                 positions.append(InvoicePosition(invoice=self,
                                                  price=Decimal(position['price']),
@@ -776,7 +776,7 @@ class Invoice(TimeStampedModel):
                 stream_data['data'][i] = dictify_position_row(position)
 
     def __str__(self):
-        return f"{self.project}: #{self.invoice_number}"
+        return f'{self.project}: #{self.invoice_number}'
 
     def save(self, **kwargs):
         if not self.payment_address and self.project:
@@ -791,32 +791,32 @@ class Invoice(TimeStampedModel):
 class InvoiceGenerationSettings(BaseSetting):
     default_title = models.CharField(
         max_length=255, help_text='Default title to use',
-        default="Freelance python developer")
+        default='Freelance python developer')
     default_language = models.CharField(
-        default="en",
+        default='en',
         choices=INVOICE_LANGUAGE_CHOICES,
         max_length=4
     )
     default_unit = models.CharField(
         max_length=200,
-        default="hour",
-        help_text="Work unit"
+        default='hour',
+        help_text='Work unit'
     )
     default_vat = models.FloatField(
         default=19,
-        help_text="VAT in %"
+        help_text='VAT in %'
     )
 
     default_payment_period = models.PositiveIntegerField(
         default=14,
-        help_text="Amount of days for this invoice to be payed"
+        help_text='Amount of days for this invoice to be payed'
     )
 
-    default_receiver_vat_id = models.CharField(max_length=100, help_text="VAT ID of the receiver (you)")
+    default_receiver_vat_id = models.CharField(max_length=100, help_text='VAT ID of the receiver (you)')
 
-    default_tax_id = models.CharField(max_length=100, help_text="Your local tax id")
+    default_tax_id = models.CharField(max_length=100, help_text='Your local tax id')
 
-    default_bank_account = MarkdownField(help_text="Payment bank account details")
+    default_bank_account = MarkdownField(help_text='Payment bank account details')
     default_contact_data = MarkdownField()
 
     default_logo = models.ForeignKey(

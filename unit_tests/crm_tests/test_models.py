@@ -42,22 +42,22 @@ def test_project_duration(project):
 
 @pytest.fixture
 def gmail_api_message(gmail_api_response_factory):
-    return gmail_api_response_factory("gmail_api_message.json")
+    return gmail_api_response_factory('gmail_api_message.json')
 
 
 def test_parse_message(gmail_api_message):
     result = parse_message(gmail_api_message)
     assert result['sent_at'].date() == date(2019, 1, 26)
-    assert result['text'].strip() == "this is *test *email"
-    assert result['subject'] == "Test email"
-    assert result['from_address'] == "sergey@cheparev.com"
-    assert result['full_name'] == "Sergey Cheparev"
-    assert result['gmail_message_id'] == "1688b0102744bab7"
-    assert result['gmail_thread_id'] == "1688b00c9ec9d5e7"
+    assert result['text'].strip() == 'this is *test *email'
+    assert result['subject'] == 'Test email'
+    assert result['from_address'] == 'sergey@cheparev.com'
+    assert result['full_name'] == 'Sergey Cheparev'
+    assert result['gmail_message_id'] == '1688b0102744bab7'
+    assert result['gmail_thread_id'] == '1688b00c9ec9d5e7'
 
 
 def test_parse_message_text(gmail_api_response_factory):
-    result = parse_message(gmail_api_response_factory("gmail_api_message_text.json"))
+    result = parse_message(gmail_api_response_factory('gmail_api_message_text.json'))
     assert result
 
 
@@ -89,8 +89,8 @@ Sergey
 
 def test_parse_message_remove_quotation(quoted_email_text):
     result = remove_quotation(quoted_email_text)
-    assert "inner quotation" in result
-    assert "outer quotation" not in result
+    assert 'inner quotation' in result
+    assert 'outer quotation' not in result
 
 
 @pytest.fixture
@@ -104,7 +104,7 @@ def test_associate_new(parsed_message):
     assert message.sent_at == parsed_message['sent_at']
     assert message.subject == parsed_message['subject']
     assert message.project.name == parsed_message['subject']
-    assert message.project.manager.company.name == "Cheparev"
+    assert message.project.manager.company.name == 'Cheparev'
     assert message.project.manager == message.author
 
     assert message.author.email == parsed_message['from_address']
@@ -125,7 +125,7 @@ def test_associate_manager_exists(employee,
 
 @pytest.mark.django_db
 def test_associate_company_exists(company, parsed_message):
-    parsed_message['from_address'] = f"test@{company.domain}"
+    parsed_message['from_address'] = f'test@{company.domain}'
     message = associate(parsed_message)
     assert message.project.manager.company == company
 
@@ -135,7 +135,7 @@ def test_associate_project_messages_exist(project, project_message_factory, pars
     existing_message = project_message_factory.create(project=project)
     parsed_message['subject'] = existing_message.subject
     parsed_message['gmail_thread_id'] = existing_message.gmail_thread_id
-    parsed_message['from_email'] = f"another_manager@{existing_message.project.manager.company.domain}"
+    parsed_message['from_email'] = f'another_manager@{existing_message.project.manager.company.domain}'
     message = associate(parsed_message)
     assert message.project == existing_message.project
     assert message.project.manager.company == existing_message.project.manager.company
@@ -179,7 +179,7 @@ def test_message_already_processed(project_message, parsed_message):
 @pytest.fixture
 def raw_email():
     message = EmailMessage()
-    message.set_payload("xxx")
+    message.set_payload('xxx')
     message['message-id'] = str(uuid.uuid4())
     return message
 
@@ -241,13 +241,13 @@ def test_invoice_copy_company_params(invoice):
     assert invoice.project.company.vat_id
 
     assert invoice.project
-    invoice.payment_address = ""
-    invoice.sender_vat_id = ""
+    invoice.payment_address = ''
+    invoice.sender_vat_id = ''
     invoice.save()
     assert invoice.payment_address == invoice.project.manager.company.payment_address
     assert invoice.sender_vat_id == invoice.project.manager.company.vat_id
 
-    invoice.payment_address = ""
+    invoice.payment_address = ''
     invoice.project.manager = None
     invoice.save()
     assert invoice.payment_address == invoice.project.company.payment_address
@@ -276,6 +276,6 @@ def test_invoice_positions(invoice):
 
 
 def test_dictify_position():
-    position = ("x",) * len(invoice_raw_options['columns'])
+    position = ('x',) * len(invoice_raw_options['columns'])
     dictified_position = dictify_position_row(position)
     assert isinstance(dictified_position, dict)
