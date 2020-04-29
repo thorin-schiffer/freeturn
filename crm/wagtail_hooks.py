@@ -6,7 +6,10 @@ from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
 from wagtail.core import hooks
 
-from crm.models import Company, City, Channel, Employee
+from crm.models.channel import Channel
+from crm.models.city import City
+from crm.models.company import Company
+from crm.models.employee import Employee
 from crm.wagtail_admin.cv import CVAdmin
 from crm.wagtail_admin.invoice import InvoiceAdmin
 from crm.wagtail_admin.project import ProjectAdmin, ProjectSearchArea, MessageAdmin

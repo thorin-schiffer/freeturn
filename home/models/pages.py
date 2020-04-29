@@ -5,20 +5,19 @@ from colorful.fields import RGBColorField
 from django.db import models
 from django.db.models import Count
 from django.utils import timezone
-from fuzzywuzzy import process
-from modelcluster.fields import ParentalKey, ParentalManyToManyField
+from modelcluster.fields import ParentalManyToManyField, ParentalKey
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, FieldRowPanel
 from wagtail.contrib.forms.edit_handlers import FormSubmissionsPanel
-from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
+from wagtail.contrib.forms.models import AbstractFormField, AbstractEmailForm
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Page
 from wagtail.documents import get_document_model_string
 from wagtail.documents.edit_handlers import DocumentChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
-from wagtail.snippets.models import register_snippet
 
 from home.forms import RecaptchaForm
+from home.models.snippets import Technology
 
 
 class HomePage(Page):
@@ -204,48 +203,6 @@ class TechnologiesPage(Page):
         return context
 
 
-@register_snippet
-class Technology(index.Indexed, models.Model):
-    logo = models.ForeignKey(
-        'wagtailimages.Image',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
-    )
-    summary = RichTextField(blank=True)
-    name = models.CharField(max_length=100, unique=True)
-    match_in_cv = models.BooleanField(default=True,
-                                      help_text='Match for technology in CV relevant projects?')
-    panels = [
-        FieldPanel('name'),
-        ImageChooserPanel('logo'),
-        FieldPanel('summary'),
-    ]
-    search_fields = [
-        index.SearchField('name', partial_match=True),
-    ]
-
-    @staticmethod
-    def match_text(text, limit=5, cutoff=40):
-        choices = Technology.objects.filter(match_in_cv=True).values_list(
-            'name', flat=True
-        )
-        if not choices.exists():
-            return Technology.objects.none()
-        results = process.extract(text, choices, limit=limit)
-        return Technology.objects.filter(
-            name__in=[r[0] for r in results if r[1] > cutoff]
-        )
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'technology'
-        verbose_name_plural = 'technologies'
-
-
 class FormField(AbstractFormField):
     page = ParentalKey('ContactPage', on_delete=models.CASCADE, related_name='form_fields')
 
@@ -278,14 +235,3 @@ class ContactPage(RecaptchaForm):
     settings_panels = AbstractEmailForm.settings_panels + [
         FieldPanel('show_on_home')
     ]
-
-
-@register_snippet
-class Responsibility(models.Model):
-    text = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.text
-
-    class Meta:
-        verbose_name_plural = 'responsibilities'

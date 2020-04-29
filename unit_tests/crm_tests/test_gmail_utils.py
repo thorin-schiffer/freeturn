@@ -1,7 +1,7 @@
 import pytest
 
 from crm import gmail_utils
-from crm.models import ProjectMessage
+from crm.models.project_message import ProjectMessage
 from crm.utils import Credentials
 
 

@@ -3,7 +3,7 @@ from datetime import timedelta
 import pytest
 from faker import Faker
 
-from home.models import Technology
+from home.models.snippets import Technology
 
 fake = Faker()
 

@@ -56,6 +56,15 @@ def test_current_project(selenium, base_url):
     assert selenium.find_element_by_xpath('//h1').text == last_project_name
 
 
+def admin_login(selenium, base_url):
+    selenium.get(f'{base_url}/admin/login/')
+    selenium.find_element_by_name('username').send_keys('admin')
+    selenium.find_element_by_name('password').send_keys('admin')
+    selenium.find_element_by_xpath("//*[@type='submit']").submit()
+    time.sleep(1)
+    assert selenium.current_url == f'{base_url}/admin/'
+
+
 def test_contact(selenium, base_url, faker):
     selenium.get(base_url)
     portfolio_button = selenium.find_element_by_id('form-contact')
@@ -71,13 +80,7 @@ def test_contact(selenium, base_url, faker):
     time.sleep(1)
     assert 'Thank you!' in selenium.page_source, selenium.page_source
 
-    selenium.get(f'{base_url}/admin/login/')
-    selenium.find_element_by_name('username').send_keys('admin')
-    selenium.find_element_by_name('password').send_keys('admin')
-    selenium.find_element_by_xpath("//*[@type='submit']").submit()
-    time.sleep(1)
-    assert selenium.current_url == f'{base_url}/admin/'
-
+    admin_login(selenium, base_url)
     selenium.find_element_by_class_name('icon-form').click()
     assert selenium.current_url == f'{base_url}/admin/forms/'
     contact_forms = selenium.find_elements_by_xpath("//table[@class='listing']//td[@class='title']//a")[0]

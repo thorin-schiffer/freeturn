@@ -19,7 +19,7 @@ from home.factories import PortfolioPageFactory, ProjectPageFactory
 from home.factories import SiteFactory
 from home.factories import TechnologyFactory, ResponsibilityFactory
 from home.models import HomePage, FormField
-from home.models import Technology, Responsibility
+from home.models.snippets import Technology, Responsibility
 
 
 def get_random_image(collection):

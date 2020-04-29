@@ -1,5 +1,6 @@
 from ajax_select import register, LookupChannel
-from home.models import ProjectPage, Technology
+from home.models import ProjectPage
+from home.models.snippets import Technology
 
 
 @register('technologies')

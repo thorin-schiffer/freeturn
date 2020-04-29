@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 
-from crm.models import Company
+from crm.models.company import Company
 from utils import result_pks, required_inputs
 from faker import Faker
 

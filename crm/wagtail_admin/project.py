@@ -14,7 +14,8 @@ from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import EditView, CreateView
 
-from crm.models import Project, ProjectMessage
+from crm.models.project import Project
+from crm.models.project_message import ProjectMessage
 
 
 class ProjectURLHelper(AdminURLHelper):

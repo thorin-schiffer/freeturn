@@ -7,8 +7,15 @@ from django.contrib.auth import get_user_model
 from django.utils.timezone import get_current_timezone
 from social_django.models import UserSocialAuth
 
-from crm import models
-from crm.models import wrap_table_data
+import crm.models.channel
+import crm.models.city
+import crm.models.company
+import crm.models.cv
+import crm.models.employee
+import crm.models.invoice
+import crm.models.project
+import crm.models.project_message
+from crm.models.invoice import wrap_table_data
 from home.factories import ProjectPageFactory, TechnologyFactory
 
 
@@ -16,7 +23,7 @@ class CityFactory(factory.DjangoModelFactory):
     name = factory.Faker('city')
 
     class Meta:
-        model = models.City
+        model = crm.models.city.City
         django_get_or_create = ('name',)
 
 
@@ -25,7 +32,7 @@ class ChannelFactory(factory.DjangoModelFactory):
     url = factory.Faker('uri')
 
     class Meta:
-        model = models.Channel
+        model = crm.models.channel.Channel
 
 
 class CompanyFactory(factory.DjangoModelFactory):
@@ -38,7 +45,7 @@ class CompanyFactory(factory.DjangoModelFactory):
     vat_id = factory.Sequence(lambda n: f'VAT-00000{n}')
 
     class Meta:
-        model = models.Company
+        model = crm.models.company.Company
         django_get_or_create = ('name',)
 
 
@@ -51,7 +58,7 @@ class EmployeeFactory(factory.DjangoModelFactory):
     email = factory.Faker('email')
 
     class Meta:
-        model = models.Employee
+        model = crm.models.employee.Employee
 
 
 class ProjectFactory(factory.DjangoModelFactory):
@@ -66,7 +73,7 @@ class ProjectFactory(factory.DjangoModelFactory):
     name = factory.Faker('job')
 
     class Meta:
-        model = models.Project
+        model = crm.models.project.Project
 
     @factory.post_generation
     def generate_end_date(self, *args, **kwargs):
@@ -83,7 +90,7 @@ class ProjectMessageFactory(factory.DjangoModelFactory):
     gmail_thread_id = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
 
     class Meta:
-        model = models.ProjectMessage
+        model = crm.models.project_message.ProjectMessage
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -124,7 +131,7 @@ class CVFactory(factory.DjangoModelFactory):
     languages_overview = 'Lhammas: fluent'
 
     class Meta:
-        model = models.CV
+        model = crm.models.cv.CV
 
 
 class CVWithRelevantFactory(CVFactory):
@@ -153,8 +160,8 @@ class InvoiceFactory(factory.DjangoModelFactory):
     logo = factory.SubFactory(wagtail_factories.ImageFactory)
 
     class Meta:
-        model = models.Invoice
+        model = crm.models.invoice.Invoice
 
     @factory.post_generation
-    def generate_positions(self, instance, create, *args, **kwargs):
-        self.positions = wrap_table_data(models.Invoice.get_initial_positions())
+    def generate_positions(self, *args, **kwargs):
+        self.positions = wrap_table_data(crm.models.invoice.Invoice.get_initial_positions())

@@ -4,8 +4,8 @@ from django.utils.timezone import get_current_timezone
 from taggit.models import Tag
 from wagtail.core.models import Site
 
-from home import models
-from home.models import Technology, Responsibility
+import home.models.pages
+from home.models.snippets import Technology, Responsibility
 
 
 class HomePageFactory(wagtail_factories.PageFactory):
@@ -16,7 +16,7 @@ class HomePageFactory(wagtail_factories.PageFactory):
     linkedin_profile = factory.Faker('url')
 
     class Meta:
-        model = models.HomePage
+        model = home.models.pages.HomePage
 
 
 class ContactPageFactory(wagtail_factories.PageFactory):
@@ -25,7 +25,7 @@ class ContactPageFactory(wagtail_factories.PageFactory):
     show_on_home = True
 
     class Meta:
-        model = models.ContactPage
+        model = home.models.pages.ContactPage
 
 
 class ProjectPageFactory(wagtail_factories.PageFactory):
@@ -49,14 +49,14 @@ class ProjectPageFactory(wagtail_factories.PageFactory):
             self.save()
 
     class Meta:
-        model = models.ProjectPage
+        model = home.models.pages.ProjectPage
 
 
 class PortfolioPageFactory(wagtail_factories.PageFactory):
     title = 'Portfolio'
 
     class Meta:
-        model = models.PortfolioPage
+        model = home.models.pages.PortfolioPage
 
 
 class TagFactory(factory.DjangoModelFactory):
@@ -79,7 +79,7 @@ class TechnologiesPageFactory(wagtail_factories.PageFactory):
     title = 'Technologies'
 
     class Meta:
-        model = models.TechnologiesPage
+        model = home.models.pages.TechnologiesPage
 
 
 class SiteFactory(factory.DjangoModelFactory):

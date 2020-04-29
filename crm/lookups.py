@@ -1,6 +1,6 @@
 from ajax_select import register, LookupChannel
 
-from crm.models import Company
+from crm.models.company import Company
 
 
 @register('companies')

@@ -8,7 +8,10 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from googleapiclient import discovery
 
-from crm.models import ProjectMessage, Employee, Company, Project
+from crm.models.company import Company
+from crm.models.employee import Employee
+from crm.models.project import Project
+from crm.models.project_message import ProjectMessage
 from crm.utils import Credentials
 
 logger = logging.getLogger('gmail_utils')
