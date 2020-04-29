@@ -26,7 +26,6 @@ if SENTRY_DSN:
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 INSTALLED_APPS = [
-    'scout_apm.django',
     'home',
     'crm',
     'wagtail.contrib.forms',
@@ -251,4 +250,10 @@ WKHTMLTOPDF_CMD_OPTIONS = {
     'quiet': True,
     'cache-dir': '.wkhtml-cache'
 }
-SCOUT_NAME = env.str('SCOUT_NAME', 'freeturn')
+SCOUT_MONITOR = env.str('SCOUT_MONITOR', False)
+if SCOUT_MONITOR:
+    SCOUT_NAME = env.str('SCOUT_NAME', 'freeturn')
+    INSTALLED_APPS = [
+        'scout_apm.django',
+        *INSTALLED_APPS
+    ]
