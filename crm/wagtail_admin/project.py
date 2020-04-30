@@ -180,3 +180,4 @@ class MessageAdmin(ModelAdmin):
     ordering = ['-created']
     inspect_view_enabled = True
     inspect_view_fields = ['project', 'subject', 'author', 'text']
+    inspect_template_name = 'message_inspect.html'

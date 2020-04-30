@@ -1,0 +1,26 @@
+{% extends "modeladmin/inspect.html" %}
+{% load wagtailcore_tags %}
+{% load i18n %}
+
+{% block content_main %}
+<div class="nice-padding">
+    <p class="back">
+        <a href="{{ view.index_url }}" class="icon icon-arrow-left">
+            {% blocktrans with view.verbose_name as model_name %}Back to {{ model_name }} list{% endblocktrans %}</a>
+    </p>
+
+
+    <h1 class="inspect-header">
+        <i class="icon icon-fa-building"></i>{{instance.subject}}
+        <span class="right"><i class="icon icon-fa-map-marker"></i> {{instance.author}}</span>
+    </h1>
+
+    <h3>{{ instance.project }}</h3>
+
+
+    <h2><i class="icon icon-fa-file"></i> Text</h2>
+
+    {{instance.text}}
+
+</div>
+{% endblock %}
