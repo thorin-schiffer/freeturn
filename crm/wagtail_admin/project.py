@@ -12,7 +12,7 @@ from wagtail.admin.search import SearchArea
 from wagtail.contrib.modeladmin.helpers import AdminURLHelper, ButtonHelper
 from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
-from wagtail.contrib.modeladmin.views import EditView, CreateView
+from wagtail.contrib.modeladmin.views import EditView, CreateView, InspectView
 
 from crm.models.project import Project
 from crm.models.project_message import ProjectMessage
@@ -106,13 +106,21 @@ class CreateProjectView(CreateView):
         }
 
 
+class ProjectInspectView(InspectView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for field_config in context['fields']:
+            context[field_config['label']] = field_config['value']
+        return context
+
+
 class ProjectAdmin(ThumbnailMixin, ModelAdmin):
     model = Project
     menu_icon = 'fa-product-hunt'
     menu_label = 'Projects'
 
     list_display = ('admin_thumb', 'name', 'manager', 'location', 'state', 'last_activity')
-    list_filter = ('manager', )
+    list_filter = ('manager',)
     list_per_page = 10
     list_select_related = ['manager', 'location']
 
@@ -129,6 +137,8 @@ class ProjectAdmin(ThumbnailMixin, ModelAdmin):
         'budget', 'vat', 'invoice_amount', 'income_tax', 'nett_income',
         'project_page', 'logo'
     ]
+    inspect_view_class = ProjectInspectView
+    inspect_template_name = 'project_inspect.html'
     thumb_image_field_name = 'logo'
     thumb_default = '/static/img/default_project.png'
     list_display_add_buttons = 'name'
