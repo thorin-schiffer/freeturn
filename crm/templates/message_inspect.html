@@ -9,14 +9,23 @@
             {% blocktrans with view.verbose_name as model_name %}Back to {{ model_name }} list{% endblocktrans %}</a>
     </p>
 
-
     <h1 class="inspect-header">
-        <i class="icon icon-fa-building"></i>{{instance.subject}}
-        <span class="right"><i class="icon icon-fa-map-marker"></i> {{instance.author}}</span>
+        {{instance.subject}}
+        <a href="{% url 'crm_employee_modeladmin_edit' instance_pk=instance.author.pk %}">
+            <span class="right"><i class="icon icon-fa-user"></i> {{instance.author.full_name}}</span>
+        </a>
     </h1>
 
-    <h3>{{ instance.project }}</h3>
-
+    <h3>
+        <a href="{% url 'crm_project_modeladmin_inspect' instance_pk=instance.project.pk %}">
+            <i class="icon icon-fa-product-hunt"></i> {{ instance.project }}
+        </a>
+        {% if instance.author.company.pk %}
+        <a href="{% url 'crm_company_modeladmin_edit' instance_pk=instance.author.company.pk %}">
+            <span class="right"><i class="icon icon-fa-building"></i> {{instance.author.company}}</span>
+        </a>
+        {% endif %}
+    </h3>
 
     <h2><i class="icon icon-fa-file"></i> Text</h2>
 
