@@ -48,8 +48,6 @@ class CompanyAdmin(ThumbnailMixin, ModelAdmin):
     list_display = ('admin_thumb', 'name', 'location')
     list_filter = ('location', 'channel',)
     search_fields = ('name',)
-    inspect_view_enabled = True
-    inspect_view_fields = ['name']
     thumb_image_field_name = 'logo'
     thumb_default = '/static/img/default_company.png'
 

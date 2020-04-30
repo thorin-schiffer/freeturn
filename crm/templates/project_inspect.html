@@ -1,0 +1,48 @@
+{% extends "modeladmin/inspect.html" %}
+{% load wagtailmarkdown %}
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
+{% load i18n %}
+
+{% block content_main %}
+<div class="nice-padding">
+    <p class="back">
+        <a href="{{ view.index_url }}" class="icon icon-arrow-left">
+            {% blocktrans with view.verbose_name as model_name %}Back to {{ model_name }} list{% endblocktrans %}</a>
+        {% if instance.project_page %}
+        <span class="right"> <a class='button button-small' href="{% pageurl instance.project_page %}"><i
+                class="icon icon-fa-external-link"></i> view</a></span>
+        {% endif %}
+    </p>
+
+
+    <h1 class="inspect-header">
+        <i class="icon icon-fa-building"></i>{{instance.company}}
+        <span style="color: {{instance.state_color}}" class="project-state">{{instance.state}}</span>
+        <span class="right"><i class="icon icon-fa-map-marker"></i> {{instance.location}}</span>
+    </h1>
+
+    <h3>{{instance.start_date }} - {{instance.end_date }}
+        <span class="right"><i class="icon icon-fa-hourglass"></i> {{instance.duration }} months</span>
+    </h3>
+
+
+    <h2><i class="icon icon-fa-file"></i> Original description
+        {% if instance.original_url %}
+        <a href="{{instance.original_url}}"><i class="icon icon-fa-external-link"></i></a>
+        {% endif %}
+        {% image instance.logo fill-128x128-c80 class="img-fluid right" %}
+    </h2>
+
+    {{instance.original_description|safe}}
+
+    <h2><i class="icon icon-fa-list"></i> Budget</h2>
+    <p>Daily rate: <i class="icon icon-fa-euro"></i>{{ instance.daily_rate }}</p>
+    <p>Working days: {{ instance.working_days }} <i class="icon icon-fa-briefcase"></i></p>
+    <p>Budget: <i class="icon icon-fa-euro"></i>{{ instance.budget }}</p>
+    <p>Nett income: <i class="icon icon-fa-euro"></i>{{ instance.nett_income|floatformat:2 }}</p>
+
+    <h2><i class="icon icon-fa-sticky-note"></i> Notes</h2>
+    {{instance.notes | markdown}}
+</div>
+{% endblock %}

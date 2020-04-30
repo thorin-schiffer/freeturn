@@ -1,0 +1,12 @@
+.project-state {
+    text-transform: uppercase;
+}
+.right {
+    float: right;
+}
+h2 {
+    padding-top: 10px;
+}
+.inspect-header {
+    padding-top: 10px;
+}
