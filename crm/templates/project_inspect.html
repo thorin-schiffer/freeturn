@@ -1,0 +1,22 @@
+{% extends "modeladmin/inspect.html" %}
+{% load wagtailmarkdown %}
+{% block fields_output %}
+<span style="color: {{instance.state_color}}" class="project-state">{{instance.state}}</span>
+<i class="icon icon-fa-building"></i>{{instance.company}}
+<i class="icon icon-fa-map-marker"></i>{{instance.location}}
+<i class="icon icon-fa-file"></i><a href="{{instance.original_url}}"><i class="icon icon-fa-external-link"></i></a>{{instance.original_description|safe}}
+<i class="icon icon-fa-sticky-note"></i>{{instance.notes | markdown}}
+<i class="icon icon-fa-play"></i>{{instance.start_date }}
+<i class="icon icon-fa-pause"></i>{{instance.end_date }}
+<i class="icon icon-fa-hourglass"></i>{{instance.duration }} months
+
+<i class="icon icon-fa-euro"></i>{{instance.daily_rate }}
+
+<i class="icon icon-fa-euro"></i>{{instance.budget }}
+<i class="icon icon-fa-euro"></i>{{instance.nett_income|floatformat:2 }}
+<i class="icon icon-fa-briefcase"></i>{{instance.working_days }} working days
+
+<br>
+<i class="icon icon-fa-euro"></i>{{instance.project_page }}
+{{ Logo }}
+{% endblock %}
