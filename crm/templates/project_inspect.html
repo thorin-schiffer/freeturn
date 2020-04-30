@@ -1,22 +1,47 @@
 {% extends "modeladmin/inspect.html" %}
 {% load wagtailmarkdown %}
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
 {% block fields_output %}
-<span style="color: {{instance.state_color}}" class="project-state">{{instance.state}}</span>
-<i class="icon icon-fa-building"></i>{{instance.company}}
-<i class="icon icon-fa-map-marker"></i>{{instance.location}}
-<i class="icon icon-fa-file"></i><a href="{{instance.original_url}}"><i class="icon icon-fa-external-link"></i></a>{{instance.original_description|safe}}
-<i class="icon icon-fa-sticky-note"></i>{{instance.notes | markdown}}
-<i class="icon icon-fa-play"></i>{{instance.start_date }}
-<i class="icon icon-fa-pause"></i>{{instance.end_date }}
-<i class="icon icon-fa-hourglass"></i>{{instance.duration }} months
+<h1>
+    <i class="icon icon-fa-building"></i>{{instance.company}}
+    <span style="color: {{instance.state_color}}" class="project-state">{{instance.state}}</span>
+    <span class="right"><i class="icon icon-fa-map-marker"></i> {{instance.location}}</span>
+</h1>
+<div class="right">
 
-<i class="icon icon-fa-euro"></i>{{instance.daily_rate }}
 
-<i class="icon icon-fa-euro"></i>{{instance.budget }}
-<i class="icon icon-fa-euro"></i>{{instance.nett_income|floatformat:2 }}
-<i class="icon icon-fa-briefcase"></i>{{instance.working_days }} working days
+</div>
+<i class="icon icon-fa-play"></i> {{instance.start_date }}
+<i class="icon icon-fa-pause"></i> {{instance.end_date }}
+<span class="right"><i class="icon icon-fa-hourglass"></i> {{instance.duration }} months</span>
+
+<h2><i class="icon icon-fa-file"></i> Original description
+    {% if instance.original_url %}
+    <a href="{{instance.original_url}}"><i class="icon icon-fa-external-link"></i></a>
+    {% endif %}
+</h2>
+{{instance.original_description|safe}}
+
+<h2><i class="icon icon-fa-list"></i> Budget</h2>
+<p>Daily rate: <i class="icon icon-fa-euro"></i>{{ instance.daily_rate }}</p>
+<p>Working days: {{ instance.working_days }} <i class="icon icon-fa-briefcase"></i></p>
+<p>Budget: <i class="icon icon-fa-euro"></i>{{ instance.budget }}</p>
+<p>Nett income: <i class="icon icon-fa-euro"></i>{{ instance.nett_income|floatformat:2 }}</p>
+
+<h2><i class="icon icon-fa-sticky-note"></i> Notes</h2>
+{{instance.notes | markdown}}
+
+
+
+
+
 
 <br>
-<i class="icon icon-fa-euro"></i>{{instance.project_page }}
-{{ Logo }}
+
+{% if instance.project_page %}
+    Project page: <a href="{% pageurl instance.project_page %}"><i class="icon icon-fa-image"></i>{{instance.project_page }}</a>
+{% endif %}
+
+{% image instance.logo fill-128x128-c80 class="img-fluid right" %}
 {% endblock %}
