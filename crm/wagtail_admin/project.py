@@ -12,7 +12,7 @@ from wagtail.admin.search import SearchArea
 from wagtail.contrib.modeladmin.helpers import AdminURLHelper, ButtonHelper
 from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
-from wagtail.contrib.modeladmin.views import EditView, CreateView
+from wagtail.contrib.modeladmin.views import EditView, CreateView, InspectView
 
 from crm.models.project import Project
 from crm.models.project_message import ProjectMessage
@@ -57,14 +57,17 @@ class ProjectButtonHelper(ButtonHelper):
     def state_buttons(self, obj, pk):
         available_transitions = obj.get_available_state_transitions()
         buttons = []
+        small = not isinstance(self.view, InspectView)
         for transition in available_transitions:
             action = transition.method.__name__
             buttons.append(
                 {
                     'url': self.url_helper.get_action_url('state', quote(pk), action),
                     'label': action.capitalize(),
-                    'classname': self.finalise_classname(['button-small'] +
-                                                         transition.custom.get('classes', [])),
+                    'classname': self.finalise_classname(
+                        ['button-small' if small else 'button'] +
+                        transition.custom.get('classes', [])
+                    ),
                     'title': transition.custom['help'].capitalize(),
                 }
             )
