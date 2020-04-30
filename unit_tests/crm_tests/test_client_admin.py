@@ -57,10 +57,3 @@ def test_delete(admin_app,
 
     form.submit()
     assert not Company.objects.filter(pk=company.pk).exists()
-
-
-@pytest.mark.django_db
-def test_inspect(admin_app,
-                 company):
-    url = reverse('crm_company_modeladmin_inspect', kwargs={'instance_pk': company.pk})
-    admin_app.get(url)
