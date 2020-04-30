@@ -57,5 +57,13 @@
         <h2><i class="icon icon-fa-sticky-note"></i> Notes</h2>
         {{instance.notes | markdown}}
     {% endif %}
+
+    {% if instance.cvs.all %}
+        <h2> CVs:
+        {% for cv in instance.cvs.all %}
+        <a href="{% url 'crm_cv_modeladmin_edit' instance_pk=cv.pk %}"><i class="icon icon-fa-id-card"></i>{{cv.created|date}}</a>
+        {% endfor %}
+        </h2>
+    {% endif %}
 </div>
 {% endblock %}
