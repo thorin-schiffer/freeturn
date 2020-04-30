@@ -15,11 +15,10 @@
         {% endif %}
     </p>
 
-
     <h1 class="inspect-header">
-        <i class="icon icon-fa-building"></i>{{instance.company}}
+        <i class="icon icon-fa-building"></i>{{instance.company| default:instance}}
         <span style="color: {{instance.state_color}}" class="project-state">{{instance.state}}</span>
-        <span class="right"><i class="icon icon-fa-map-marker"></i> {{instance.location}}</span>
+        {% if instance.location %}<span class="right"><i class="icon icon-fa-map-marker"></i> {{instance.location}}</span>{% endif %}
     </h1>
 
     <h3>{{instance.start_date }} - {{instance.end_date }}
@@ -37,12 +36,14 @@
     {{instance.original_description|safe}}
 
     <h2><i class="icon icon-fa-list"></i> Budget</h2>
-    <p>Daily rate: <i class="icon icon-fa-euro"></i>{{ instance.daily_rate }}</p>
+    {% if instance.daily_rate %}<p>Daily rate: <i class="icon icon-fa-euro"></i>{{ instance.daily_rate }}</p>{% endif %}
     <p>Working days: {{ instance.working_days }} <i class="icon icon-fa-briefcase"></i></p>
-    <p>Budget: <i class="icon icon-fa-euro"></i>{{ instance.budget }}</p>
-    <p>Nett income: <i class="icon icon-fa-euro"></i>{{ instance.nett_income|floatformat:2 }}</p>
+    {% if instance.budget %}<p>Budget: <i class="icon icon-fa-euro"></i>{{ instance.budget }}</p>{% endif %}
+    {% if instance.nett_income %} <p>Nett income: <i class="icon icon-fa-euro"></i>{{ instance.nett_income|floatformat:2 }}</p> {% endif %}
 
-    <h2><i class="icon icon-fa-sticky-note"></i> Notes</h2>
-    {{instance.notes | markdown}}
+    {% if instance.notes %}
+        <h2><i class="icon icon-fa-sticky-note"></i> Notes</h2>
+        {{instance.notes | markdown}}
+    {% endif %}
 </div>
 {% endblock %}
