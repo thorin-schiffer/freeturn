@@ -16,13 +16,25 @@
     </p>
 
     <h1 class="inspect-header">
-        <i class="icon icon-fa-building"></i>{{instance.company| default:instance}}
+        {% if instance.company %}
+            <a href="{% url 'crm_company_modeladmin_edit' instance_pk=instance.company.pk %}"><i class="icon icon-fa-building"></i>{{instance.company}}</a>
+        {% else %}
+            <i class="icon icon-fa-product-hunt"></i>{{instance.project}}
+        {% endif %}
         <span style="color: {{instance.state_color}}" class="project-state">{{instance.state}}</span>
         {% if instance.location %}<span class="right"><i class="icon icon-fa-map-marker"></i> {{instance.location}}</span>{% endif %}
     </h1>
+    <h2>
+        {% if instance.manager %}
+            <a href="{% url 'crm_employee_modeladmin_edit' instance_pk=instance.manager.pk %}">
+                <i class="icon icon-fa-user"></i> {{instance.manager.full_name}}
+            </a>
+        {% endif %}
+        <span class="right"><i class="icon icon-fa-hourglass"></i> {{instance.duration }} months</span>
+    </h2>
 
     <h3>{{instance.start_date }} - {{instance.end_date }}
-        <span class="right"><i class="icon icon-fa-hourglass"></i> {{instance.duration }} months</span>
+
     </h3>
 
 
