@@ -1,6 +1,6 @@
-from ajax_select.fields import AutoCompleteSelectWidget
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
+from instance_selector.edit_handlers import InstanceSelectorPanel
 from wagtail.admin.edit_handlers import FieldRowPanel, MultiFieldPanel, FieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 
@@ -34,7 +34,7 @@ class Employee(TimeStampedModel):
                     FieldPanel('email'),
                 ]),
                 MultiFieldPanel([
-                    FieldPanel('company', widget=AutoCompleteSelectWidget('companies')),
+                    InstanceSelectorPanel('company'),
                     ImageChooserPanel('picture'),
                 ]),
             ]

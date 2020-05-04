@@ -45,6 +45,7 @@ django-environ = "*"
 wagtail-factories = "*"
 factory-boy = "*"
 wagtail-storages = "*"
+wagtail-instance-selector = "*"
 
 [dev-packages]
 django-debug-toolbar = "*"
@@ -71,6 +72,7 @@ pytest-faker = "*"
 moto = "*"
 pytest-socket = "*"
 pytest-env = "*"
+flaky = "*"
 
 [requires]
 python_version = "3.7.5"

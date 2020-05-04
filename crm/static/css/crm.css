@@ -10,3 +10,11 @@ h2 {
 .inspect-header {
     padding-top: 10px;
 }
+.instance-selector-widget__display__image {
+    float: left;
+    margin-right: 10px;
+}
+.user-avatar {
+    vertical-align:middle;
+    border-radius: 100px;
+}
