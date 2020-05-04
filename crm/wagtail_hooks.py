@@ -1,16 +1,15 @@
 from django.urls import reverse
 from social_django.models import UserSocialAuth
 from wagtail.admin.search import SearchArea
-from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
 from wagtail.core import hooks
 
 from crm.models.channel import Channel
 from crm.models.city import City
-from crm.models.employee import Employee
 from crm.wagtail_admin.company import CompanyAdmin
 from crm.wagtail_admin.cv import CVAdmin
+from crm.wagtail_admin.employee import EmployeeAdmin
 from crm.wagtail_admin.invoice import InvoiceAdmin
 from crm.wagtail_admin.project import ProjectAdmin, ProjectSearchArea, MessageAdmin
 
@@ -26,16 +25,6 @@ class ChannelAdmin(ModelAdmin):
     model = Channel
     menu_icon = 'fa-arrow-circle-up'
     menu_label = 'Channels'
-
-
-class EmployeeAdmin(ThumbnailMixin, ModelAdmin):
-    model = Employee
-    menu_icon = 'fa-users'
-    menu_label = 'People'
-    search_fields = ('telephone', 'first_name', 'last_name', 'company__name', 'email', 'mobile')
-    list_display = ('admin_thumb', 'first_name', 'last_name', 'company', 'project_count')
-    thumb_image_field_name = 'picture'
-    thumb_default = '/static/img/default_avatar.png'
 
 
 class CRMGroup(ModelAdminGroup):
