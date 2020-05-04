@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.urls import reverse
 from social_django.models import UserSocialAuth
 from wagtail.admin.search import SearchArea
@@ -19,6 +20,9 @@ class CityAdmin(ModelAdmin):
     menu_icon = 'fa-location-arrow'
     menu_label = 'Cities'
     list_display = ('name', 'project_count')
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(c=Count('projects')).order_by('-c')
 
 
 class ChannelAdmin(ModelAdmin):

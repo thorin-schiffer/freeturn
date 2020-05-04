@@ -14,4 +14,3 @@ class City(models.Model):
 
     class Meta:
         verbose_name_plural = 'city'
-        ordering = ['name']
