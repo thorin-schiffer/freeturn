@@ -58,12 +58,11 @@ class Project(ProjectStateMixin, TimeStampedModel):
             FieldPanel('name'),
             FieldPanel('original_url'),
             FieldPanel('original_description'),
-
+            InstanceSelectorPanel('company'),
+            InstanceSelectorPanel('manager'),
         ]),
         FieldRowPanel([
             MultiFieldPanel([
-                InstanceSelectorPanel('company'),
-                InstanceSelectorPanel('manager'),
                 FieldPanel('location')
             ]),
             MultiFieldPanel([

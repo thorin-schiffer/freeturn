@@ -27,9 +27,5 @@ class CompanySelector(ModelAdminInstanceSelector):
         if instance and instance.logo:
             return instance.logo.file.url
 
-    def get_instance_display_image_styles(self, instance):
-        if instance:
-            return {'max-width': '64px'}
-
 
 registry.register_instance_selector(Company, CompanySelector())
