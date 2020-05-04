@@ -1,6 +1,7 @@
 import time
 
 from django.utils.text import slugify
+from flaky import flaky
 
 
 def test_home(selenium, base_url):
@@ -65,6 +66,7 @@ def admin_login(selenium, base_url):
     assert selenium.current_url == f'{base_url}/admin/'
 
 
+@flaky
 def test_contact(selenium, base_url, faker):
     selenium.get(base_url)
     portfolio_button = selenium.find_element_by_id('form-contact')
