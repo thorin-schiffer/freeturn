@@ -1,9 +1,18 @@
+from django.db.models import Count
 from instance_selector.registry import registry
 from instance_selector.selectors import ModelAdminInstanceSelector
+from wagtail.contrib.modeladmin.views import CreateView
 from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
 
-from crm.models import Company
+from crm.models import Company, City
+
+
+class CreateCompanyView(CreateView):
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['location'] = City.objects.annotate(c=Count('projects')).order_by('-c').first()
+        return initial
 
 
 class CompanyAdmin(ThumbnailMixin, ModelAdmin):
@@ -18,6 +27,7 @@ class CompanyAdmin(ThumbnailMixin, ModelAdmin):
     search_fields = ('name',)
     thumb_image_field_name = 'logo'
     thumb_default = '/static/img/default_company.png'
+    create_view_class = CreateCompanyView
 
 
 class CompanySelector(ModelAdminInstanceSelector):

@@ -1,6 +1,7 @@
 import pytest
 from django.urls import reverse
 
+from crm.factories import CityFactory, ProjectFactory
 from crm.models.company import Company
 from utils import result_pks, required_inputs
 from faker import Faker
@@ -45,6 +46,19 @@ def test_add(admin_app,
 
     form.submit().follow()
     assert Company.objects.filter(name=name).exists()
+
+
+@pytest.mark.django_db
+def test_add_location_defaults_most_frequent_city(admin_app,
+                                                  city):
+    most_frequent_city = CityFactory()
+    ProjectFactory(location=most_frequent_city)
+    ProjectFactory(location=most_frequent_city)
+    assert city.project_count < most_frequent_city.project_count
+    url = reverse('crm_company_modeladmin_create')
+    r = admin_app.get(url)
+    form = r.forms[1]
+    assert form['location'].value == str(most_frequent_city.pk)
 
 
 @pytest.mark.django_db
