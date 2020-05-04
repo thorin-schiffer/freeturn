@@ -45,6 +45,7 @@ django-environ = "*"
 wagtail-factories = "*"
 factory-boy = "*"
 wagtail-storages = "*"
+wagtail-instance-selector = "*"
 
 [dev-packages]
 django-debug-toolbar = "*"

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'wagtailfontawesome',
     'wagtailmarkdown',
     'wagtailautocomplete',
+    'instance_selector',
 
     'snowpenguin.django.recaptcha2',
     'modelcluster',
