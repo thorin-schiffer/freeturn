@@ -60,16 +60,12 @@ class Project(ProjectStateMixin, TimeStampedModel):
             FieldPanel('original_description'),
             InstanceSelectorPanel('company'),
             InstanceSelectorPanel('manager'),
+            InstanceSelectorPanel('location')
         ]),
         FieldRowPanel([
-            MultiFieldPanel([
-                FieldPanel('location')
-            ]),
-            MultiFieldPanel([
-                FieldPanel('daily_rate'),
-                FieldPanel('start_date'),
-                FieldPanel('end_date')
-            ])
+            FieldPanel('daily_rate'),
+            FieldPanel('start_date'),
+            FieldPanel('end_date')
         ]),
         FieldPanel('notes'),
         PageChooserPanel('project_page')

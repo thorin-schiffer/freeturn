@@ -16,7 +16,7 @@ class EmployeeAdmin(ThumbnailMixin, ModelAdmin):
     thumb_default = '/static/img/default_avatar.png'
 
 
-class CompanySelector(ModelAdminInstanceSelector):
+class EmployeeSelector(ModelAdminInstanceSelector):
     model_admin = EmployeeAdmin()
 
     def get_instance_display_image_url(self, instance):
@@ -24,4 +24,4 @@ class CompanySelector(ModelAdminInstanceSelector):
             return instance.picture.file.url
 
 
-registry.register_instance_selector(Employee, CompanySelector())
+registry.register_instance_selector(Employee, EmployeeSelector())
