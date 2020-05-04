@@ -1,12 +1,12 @@
 import math
 
-from ajax_select.fields import AutoCompleteSelectWidget
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
+from instance_selector.edit_handlers import InstanceSelectorPanel
 from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel, FieldRowPanel, PageChooserPanel
 from wagtail.core.fields import RichTextField
 from wagtailmarkdown.fields import MarkdownField
@@ -62,8 +62,8 @@ class Project(ProjectStateMixin, TimeStampedModel):
         ]),
         FieldRowPanel([
             MultiFieldPanel([
-                FieldPanel('company', widget=AutoCompleteSelectWidget('companies')),
-                FieldPanel('manager'),
+                InstanceSelectorPanel('company'),
+                InstanceSelectorPanel('manager'),
                 FieldPanel('location')
             ]),
             MultiFieldPanel([
