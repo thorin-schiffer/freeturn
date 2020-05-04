@@ -8,8 +8,8 @@ from wagtail.core import hooks
 
 from crm.models.channel import Channel
 from crm.models.city import City
-from crm.models.company import Company
 from crm.models.employee import Employee
+from crm.wagtail_admin.company import CompanyAdmin
 from crm.wagtail_admin.cv import CVAdmin
 from crm.wagtail_admin.invoice import InvoiceAdmin
 from crm.wagtail_admin.project import ProjectAdmin, ProjectSearchArea, MessageAdmin
@@ -36,20 +36,6 @@ class EmployeeAdmin(ThumbnailMixin, ModelAdmin):
     list_display = ('admin_thumb', 'first_name', 'last_name', 'company', 'project_count')
     thumb_image_field_name = 'picture'
     thumb_default = '/static/img/default_avatar.png'
-
-
-class CompanyAdmin(ThumbnailMixin, ModelAdmin):
-    model = Company
-    menu_label = 'Companies'  # ditch this to use verbose_name_plural from model
-    menu_icon = 'fa-building'  # change as required
-    menu_order = 200  # will put in 3rd place (000 being 1st, 100 2nd)
-    add_to_settings_menu = False  # or True to add your model to the Settings sub-menu
-    exclude_from_explorer = False  # or True to exclude pages of this type from Wagtail's explorer view
-    list_display = ('admin_thumb', 'name', 'location')
-    list_filter = ('location', 'channel',)
-    search_fields = ('name',)
-    thumb_image_field_name = 'logo'
-    thumb_default = '/static/img/default_company.png'
 
 
 class CRMGroup(ModelAdminGroup):
