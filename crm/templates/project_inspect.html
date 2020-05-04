@@ -27,7 +27,12 @@
     <h2>
         {% if instance.manager %}
             <a href="{% url 'crm_employee_modeladmin_edit' instance_pk=instance.manager.pk %}">
-                <i class="icon icon-fa-user"></i> {{instance.manager.full_name}}
+                {% if instance.manager %}
+                    {% image instance.manager.picture fill-32x32-c80 class="img-fluid user-avatar" %}
+                {% else %}
+                     <i class="icon icon-fa-user"></i>
+                {% endif %}
+                {{instance.manager.full_name}}
             </a>
         {% endif %}
         <span class="right"><i class="icon icon-fa-hourglass"></i> {{instance.duration }} months</span>

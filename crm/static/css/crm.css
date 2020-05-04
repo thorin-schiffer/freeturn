@@ -14,3 +14,7 @@ h2 {
     float: left;
     margin-right: 10px;
 }
+.user-avatar {
+    vertical-align:middle;
+    border-radius: 100px;
+}
