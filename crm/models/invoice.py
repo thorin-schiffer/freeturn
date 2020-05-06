@@ -11,9 +11,8 @@ from django_extensions.db.models import TimeStampedModel
 from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel, StreamFieldPanel
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.core.blocks import StreamValue
-from wagtail.core.fields import StreamField
+from wagtail.core.fields import StreamField, RichTextField
 from wagtail.images.edit_handlers import ImageChooserPanel
-from wagtailmarkdown.fields import MarkdownField
 
 from crm.models.settings import INVOICE_LANGUAGE_CHOICES
 
@@ -124,7 +123,7 @@ class Invoice(TimeStampedModel):
         help_text='Amount of days for this invoice to be payed'
     )
 
-    payment_address = MarkdownField(help_text='Copied from the company, if empty', blank=True)
+    payment_address = RichTextField(help_text='Copied from the company, if empty', blank=True)
 
     receiver_vat_id = models.CharField(max_length=100, help_text='VAT ID of the receiver (you)')
     sender_vat_id = models.CharField(max_length=100, help_text='VAT ID of the sender (client), '
@@ -135,8 +134,8 @@ class Invoice(TimeStampedModel):
 
     tax_id = models.CharField(max_length=100, help_text='Your local tax id')
 
-    bank_account = MarkdownField(help_text='Payment bank account details')
-    contact_data = MarkdownField()
+    bank_account = RichTextField(help_text='Payment bank account details')
+    contact_data = RichTextField()
 
     title = models.CharField(max_length=200,
                              default='Python development')

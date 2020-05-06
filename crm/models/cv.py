@@ -6,9 +6,9 @@ from django.db.models import CASCADE
 from django.utils import timezone
 from django_extensions.db.models import TimeStampedModel
 from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel
+from wagtail.core.fields import RichTextField
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtailautocomplete.edit_handlers import AutocompletePanel
-from wagtailmarkdown.fields import MarkdownField
 
 from home.models import ProjectPage
 from home.models.snippets import Technology
@@ -35,7 +35,7 @@ class CV(TimeStampedModel):
     full_name = models.CharField(max_length=200,
                                  help_text='Name to use in the title of the file, default is current user')
     title = models.CharField(max_length=200, help_text='Title to be placed under the name')
-    experience_overview = MarkdownField(
+    experience_overview = RichTextField(
         help_text='Notice on your experience',
     )
 
@@ -56,13 +56,13 @@ class CV(TimeStampedModel):
         blank=True
     )
 
-    education_overview = MarkdownField(
+    education_overview = RichTextField(
         help_text='Notice on your education',
     )
-    contact_details = MarkdownField()
-    languages_overview = MarkdownField()
-    rate_overview = MarkdownField(blank=True, null=True)
-    working_permit = MarkdownField()
+    contact_details = RichTextField()
+    languages_overview = RichTextField()
+    rate_overview = RichTextField(blank=True, null=True)
+    working_permit = RichTextField()
 
     create_panels = [
         FieldPanel('project'),
