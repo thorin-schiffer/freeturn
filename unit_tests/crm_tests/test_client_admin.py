@@ -1,5 +1,6 @@
 import pytest
 from django.urls import reverse
+from wagtail.tests.utils.form_data import rich_text
 
 from crm.factories import CityFactory, ProjectFactory
 from crm.models.company import Company
@@ -42,7 +43,7 @@ def test_add(admin_app,
     form['location'] = city.id
     form['channel'] = channel.id
     form['url'] = fake.uri()
-    form['notes'] = fake.text()
+    form['notes'] = rich_text(fake.text())
 
     form.submit().follow()
     assert Company.objects.filter(name=name).exists()
