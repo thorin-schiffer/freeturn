@@ -7,7 +7,6 @@ import django_extensions.db.fields
 import django_fsm
 import wagtail.contrib.table_block.blocks
 import wagtail.core.fields
-import wagtailmarkdown.fields
 
 
 class Migration(migrations.Migration):
@@ -48,9 +47,9 @@ class Migration(migrations.Migration):
                 ('modified', django_extensions.db.fields.ModificationDateTimeField(auto_now=True, verbose_name='modified')),
                 ('name', models.CharField(max_length=200, unique=True)),
                 ('url', models.URLField(blank=True, null=True)),
-                ('notes', wagtailmarkdown.fields.MarkdownField(blank=True, default='')),
+                ('notes', models.TextField(blank=True, default='')),
                 ('default_daily_rate', models.DecimalField(blank=True, decimal_places=2, default=100, max_digits=6, null=True)),
-                ('payment_address', wagtailmarkdown.fields.MarkdownField(blank=True, null=True)),
+                ('payment_address', models.TextField(blank=True, null=True)),
                 ('vat_id', models.CharField(blank=True, help_text='VAT ID', max_length=100, null=True)),
             ],
             options={
@@ -67,13 +66,13 @@ class Migration(migrations.Migration):
                 ('earliest_available', models.DateField(blank=True, default=django.utils.timezone.now, null=True)),
                 ('full_name', models.CharField(help_text='Name to use in the title of the file, default is current user', max_length=200)),
                 ('title', models.CharField(help_text='Title to be placed under the name', max_length=200)),
-                ('experience_overview', wagtailmarkdown.fields.MarkdownField(help_text='Notice on your experience')),
+                ('experience_overview', models.TextField(help_text='Notice on your experience')),
                 ('include_portfolio', models.BooleanField(default=True, help_text="Include portfolio projects' description")),
-                ('education_overview', wagtailmarkdown.fields.MarkdownField(help_text='Notice on your education')),
-                ('contact_details', wagtailmarkdown.fields.MarkdownField()),
-                ('languages_overview', wagtailmarkdown.fields.MarkdownField()),
-                ('rate_overview', wagtailmarkdown.fields.MarkdownField(blank=True, null=True)),
-                ('working_permit', wagtailmarkdown.fields.MarkdownField()),
+                ('education_overview', models.TextField(help_text='Notice on your education')),
+                ('contact_details', models.TextField()),
+                ('languages_overview', models.TextField()),
+                ('rate_overview', models.TextField(blank=True, null=True)),
+                ('working_permit', models.TextField()),
             ],
             options={
                 'verbose_name': 'CV',
@@ -84,12 +83,12 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('default_title', models.CharField(default='Freelance python developer', help_text='Default title to use', max_length=255)),
-                ('default_experience_overview', wagtailmarkdown.fields.MarkdownField(default='Python developer experience: 7 years', help_text='Notice on your experience')),
-                ('default_education_overview', wagtailmarkdown.fields.MarkdownField(default='Novosibirsk State Technical University', help_text='Notice on your education')),
-                ('default_contact_details', wagtailmarkdown.fields.MarkdownField(default='sergey@cheparev.com')),
-                ('default_languages_overview', wagtailmarkdown.fields.MarkdownField(default='English: fluent')),
-                ('default_rate_overview', wagtailmarkdown.fields.MarkdownField(default='<<change default in settings>>')),
-                ('default_working_permit', wagtailmarkdown.fields.MarkdownField(default='PERMANENT RESIDENCE')),
+                ('default_experience_overview', models.TextField(default='Python developer experience: 7 years', help_text='Notice on your experience')),
+                ('default_education_overview', models.TextField(default='Novosibirsk State Technical University', help_text='Notice on your education')),
+                ('default_contact_details', models.TextField(default='sergey@cheparev.com')),
+                ('default_languages_overview', models.TextField(default='English: fluent')),
+                ('default_rate_overview', models.TextField(default='<<change default in settings>>')),
+                ('default_working_permit', models.TextField(default='PERMANENT RESIDENCE')),
             ],
             options={
                 'abstract': False,
@@ -124,14 +123,14 @@ class Migration(migrations.Migration):
                 ('vat', models.DecimalField(decimal_places=2, default=19, help_text='VAT in %', max_digits=4)),
                 ('invoice_number', models.CharField(max_length=20, unique=True)),
                 ('payment_period', models.PositiveIntegerField(default=14, help_text='Amount of days for this invoice to be payed')),
-                ('payment_address', wagtailmarkdown.fields.MarkdownField(blank=True, help_text='Copied from the company, if empty')),
+                ('payment_address', models.TextField(blank=True, help_text='Copied from the company, if empty')),
                 ('receiver_vat_id', models.CharField(help_text='VAT ID of the receiver (you)', max_length=100)),
                 ('sender_vat_id', models.CharField(blank=True, help_text='VAT ID of the sender (client), copied from the company if empty', max_length=100)),
                 ('issued_date', models.DateField()),
                 ('delivery_date', models.DateField()),
                 ('tax_id', models.CharField(help_text='Your local tax id', max_length=100)),
-                ('bank_account', wagtailmarkdown.fields.MarkdownField(help_text='Payment bank account details')),
-                ('contact_data', wagtailmarkdown.fields.MarkdownField()),
+                ('bank_account', models.TextField(help_text='Payment bank account details')),
+                ('contact_data', models.TextField()),
                 ('title', models.CharField(default='Python development', max_length=200)),
                 ('positions', wagtail.core.fields.StreamField([('positions', wagtail.contrib.table_block.blocks.TableBlock(table_options={'autoColumnSize': False, 'colHeaders': ['Article', 'Amount units', 'Price per unit'], 'columns': [{'data': 'article'}, {'data': 'amount', 'type': 'numeric'}, {'data': 'price', 'format': '0.00', 'type': 'numeric'}], 'contextMenu': False, 'editor': 'text', 'height': 216, 'language': 'en', 'minSpareRows': 0, 'renderer': 'text', 'rowHeaders': False, 'stretchH': 'all'}))])),
                 ('payed', models.BooleanField(default=False)),
@@ -153,8 +152,8 @@ class Migration(migrations.Migration):
                 ('default_payment_period', models.PositiveIntegerField(default=14, help_text='Amount of days for this invoice to be payed')),
                 ('default_receiver_vat_id', models.CharField(help_text='VAT ID of the receiver (you)', max_length=100)),
                 ('default_tax_id', models.CharField(help_text='Your local tax id', max_length=100)),
-                ('default_bank_account', wagtailmarkdown.fields.MarkdownField(help_text='Payment bank account details')),
-                ('default_contact_data', wagtailmarkdown.fields.MarkdownField()),
+                ('default_bank_account', models.TextField(help_text='Payment bank account details')),
+                ('default_contact_data', models.TextField()),
             ],
             options={
                 'abstract': False,
@@ -170,7 +169,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(blank=True, max_length=120, null=True)),
                 ('original_description', wagtail.core.fields.RichTextField()),
                 ('original_url', models.URLField(blank=True, null=True)),
-                ('notes', wagtailmarkdown.fields.MarkdownField(blank=True, null=True)),
+                ('notes', models.TextField(blank=True, null=True)),
                 ('daily_rate', models.DecimalField(blank=True, decimal_places=2, max_digits=6, null=True)),
                 ('start_date', models.DateField(blank=True, null=True)),
                 ('end_date', models.DateField(blank=True, null=True)),

@@ -9,7 +9,6 @@ from django_extensions.db.models import TimeStampedModel
 from instance_selector.edit_handlers import InstanceSelectorPanel
 from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel, FieldRowPanel, PageChooserPanel
 from wagtail.core.fields import RichTextField
-from wagtailmarkdown.utils import render_markdown
 
 from crm.project_states import ProjectStateMixin
 from crm.utils import get_working_days
@@ -79,12 +78,6 @@ class Project(ProjectStateMixin, TimeStampedModel):
 
     def get_duration_display(self):
         return f'{self.duration} months'
-
-    def get_original_description_display(self):
-        return SafeText(self.original_description)
-
-    def get_notes_display(self):
-        return SafeText(render_markdown(self.notes))
 
     def get_project_page_display(self):
         if not self.project_page:
