@@ -72,6 +72,7 @@ moto = "*"
 pytest-socket = "*"
 pytest-env = "*"
 flaky = "*"
+mkdocs = "*"
 
 [requires]
 python_version = "3.7.5"
