@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'wagtail.admin',
     'wagtail.core',
     'wagtailfontawesome',
-    'wagtailmarkdown',
     'wagtailautocomplete',
     'instance_selector',
 
