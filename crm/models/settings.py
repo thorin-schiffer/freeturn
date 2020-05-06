@@ -80,7 +80,7 @@ class CVGenerationSettings(BaseSetting):
     )
     default_contact_details = RichTextField(default='sergey@cheparev.com')
     default_languages_overview = RichTextField(default='English: fluent')
-    default_rate_overview = RichTextField(default='<<change default in settings>>')
+    default_rate_overview = RichTextField(default='100 schmeckles')
     default_working_permit = RichTextField(default='PERMANENT RESIDENCE')
     default_picture = models.ForeignKey(
         'wagtailimages.Image',
