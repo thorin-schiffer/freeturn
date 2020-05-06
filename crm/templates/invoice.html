@@ -1,6 +1,6 @@
 {% extends 'pdf_base.html' %}
 {% load wagtailimages_tags %}
-{% load wagtailmarkdown %}
+{% load wagtailcore_tags %}
 {% load i18n %}
 
 {% block body %}
@@ -17,7 +17,7 @@
     <tr>
         <td width="50%">
             <b>{% trans "To" %}</b>:
-            {{ instance.payment_address | markdown}}
+            {{ instance.payment_address | richtext}}
             <br>
             <b>{% trans "VAT ID" %}</b>: {{ instance.sender_vat_id }}
         </td>
@@ -108,11 +108,11 @@
     <tr>
         <td>
             <h3>{% trans "Bank account" %}</h3>
-            {{ instance.bank_account | markdown }}
+            {{ instance.bank_account | richtext }}
         </td>
         <td align="right">
             <h3>{% trans "Contact" %}</h3>
-            {{ instance.contact_data | markdown }}
+            {{ instance.contact_data | richtext }}
         </td>
     </tr>
     </tbody>

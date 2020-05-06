@@ -1,5 +1,4 @@
 {% extends "modeladmin/inspect.html" %}
-{% load wagtailmarkdown %}
 {% load wagtailimages_tags %}
 {% load wagtailcore_tags %}
 {% load i18n %}
@@ -60,7 +59,7 @@
 
     {% if instance.notes %}
         <h2><i class="icon icon-fa-sticky-note"></i> Notes</h2>
-        {{instance.notes | markdown}}
+        {{instance.notes | richtext }}
     {% endif %}
 
     {% if instance.cvs.all %}

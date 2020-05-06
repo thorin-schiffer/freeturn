@@ -1,4 +1,4 @@
-{% load wagtailmarkdown %}
+{% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
 <table {% if instance.include_portfolio %}style="page-break-after: always;" {% endif %}>
@@ -12,7 +12,7 @@
             Application for: {{ instance.project}}, strictly confidential
             {% endif %}
 
-            {{ instance.experience_overview | markdown }}
+            {{ instance.experience_overview | richtext }}
             <hr>
         </td>
         <td width="30%">
@@ -58,20 +58,20 @@
         <td valign="top">
             {% if instance.rate_overview %}
             <h3><i class="fa fa-credit-card"></i> Pay rate</h3>
-            {{ instance.rate_overview | markdown }}
+            {{ instance.rate_overview | richtext }}
             {% endif %}
 
             <h3><i class="fa fa-calendar"></i> Availability </h3>
             {{ instance.earliest_available | date:"F Y" }}
 
             <h3><i class="fa fa-user"></i> Contact</h3>
-            {{ instance.contact_details | markdown }}
+            {{ instance.contact_details | richtext }}
 
             <h3><i class="fa fa-globe"></i> Languages</h3>
-            {{ instance.languages_overview | markdown }}
+            {{ instance.languages_overview | richtext }}
 
             <h3><i class="fa fa-balance-scale"></i> Working permit</h3>
-            {{ instance.working_permit | markdown }}
+            {{ instance.working_permit | richtext }}
 
         </td>
     </tr>
@@ -80,7 +80,7 @@
     <tr>
         <td>
             <h2><i class="fa fa-graduation-cap"></i> Education</h2>
-            {{ instance.education_overview | markdown }}
+            {{ instance.education_overview | richtext }}
         </td>
     </tr>
     </tbody>
