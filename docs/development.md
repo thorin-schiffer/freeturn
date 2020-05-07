@@ -1,10 +1,10 @@
 # Development
 
-Freeturn uses Python3. Clone this repository.
+Freeturn uses Python3.
 
 ## Setting up python env
 
-* Install for managing your python versions: https://github.com/pyenv/pyenv.
+* Install pyenv for managing your python versions: https://github.com/pyenv/pyenv.
 * Update your pyenv versions cache: `pyenv update`
 * Install python version 3.7.5 (or other you prefer or one specified in Pipfile): `pyenv install 3.7.5`
 * Verify installation with `pyenv versions`. 3.7.5 must be there.

@@ -1,4 +1,4 @@
-# Summary
+# Getting started
 
 Freeturn is an open source portfolio and CRM for individual freelance developers.
 Based on Django and Wagtail.
