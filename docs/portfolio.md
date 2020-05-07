@@ -29,7 +29,7 @@ Besides that you can configure the color of title and don't forget about the pro
 of the box. Page title will be used by the search engines to represent your page in the search results, and you would
 probably want it to look pretty.
 
-## Projects listing
+## Project listing
 
 ![Screenshot](img/portfolio.png)
 
@@ -59,3 +59,24 @@ only projects using this technology and also a brief description, which you spec
 1. **back to portfolio**: the button to get to the overview of the projects.
 
 ## Contact form
+
+![Screenshot](img/contact_form.png)
+
+Contact form let's your visitors send you a project inquiry - the actual purpose of the whole thing.
+Here are the elements on the page:
+
+1. **title**: as usual a title of the page
+1. **intro**: a free text or call for action, that you want your visitors to read before the submission
+1. **form fields**: form fields collecting the information needed for the project inquiry. Consult [wagtail form builder] (https://docs.wagtail.io/en/latest/reference/contrib/forms/index.html)
+documentation for more information.
+1. **privacy policy**: don't forget to link your privacy policy
+1. **captcha**: as probably this page is available to all the internets, you'd want to protect it with captcha. Freeturn
+supports google's recaptcha, [configurable over the environment](configuration.md#recaptcha)
+1. **submit**: submit button
+
+The submitted requirements can be found in the forms view of the admin interface.
+
+![Screenshot](img/submissions.png)
+
+Each inquiry would also fire an email
+notification, so you can answer quickly, find out how to [configure emailing](configuration.md#email).
