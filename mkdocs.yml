@@ -5,3 +5,5 @@ nav:
 - portfolio.md
 - development.md
 - deployment.md
+theme:
+  name: rtd-dropdown
