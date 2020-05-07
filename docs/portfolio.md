@@ -1,4 +1,4 @@
-# Homepage
+# Portfolio
 
 Besides the obvious pieces on your freelance web identity like popular professional networks, the hiring companies and
 client would want to see your personal and unique portfolio website. Freeturn offers a quickly configurable yet

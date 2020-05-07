@@ -2,3 +2,6 @@ site_name: Freeturn
 dev_addr: localhost:5001
 nav:
 - index.md
+- portfolio.md
+- development.md
+- deployment.md
