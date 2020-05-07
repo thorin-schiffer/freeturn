@@ -80,3 +80,22 @@ The submitted requirements can be found in the forms view of the admin interface
 
 Each inquiry would also fire an email
 notification, so you can answer quickly, find out how to [configure emailing](configuration.md#email).
+
+## Technologies
+
+![Screenshot](img/technologies.png)
+
+Technologies page is listing all the technologies your project pages have mentioned. It also counts how many projects
+in which technology you've made so far and clicking on a technology tile would lead to the listing of the projects
+using that technology. The title as usual is customizable.
+
+
+## Page types
+
+In order to make the pages hierarchy logical, the home page is only instantiated once and have portfolio, technologies
+and form pages as children; portfolio page can only have project pages as children.
+
+## Menu
+
+The menu in the footer is currently custom and generates the entries in the following way: portfolio page,
+technology page and all the forms after them published so far.
