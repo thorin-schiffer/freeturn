@@ -83,3 +83,42 @@ Once your CV is created, it would probably need some polishing and customization
  best.
  - uncheck **include portfolio**, if you don't want to include your project listing in that document.
  - **relevant skills** is the list of technologies you want to be highlighted the cv
+
+## Generating invoices
+
+When the work is done, it's time to pay, and you might need an invoice for it. Freeturn offers invoice generation
+functionality.
+
+Go to CRM -> Invoices to list all your invoices. Here you can see the basic information and payment status of your
+invoices.
+
+![Screenshot](img/crm/invoice_listing.png)
+
+Click "add invoice" to create an invoice.
+
+![Screenshot](img/crm/invoice_adding.png)
+
+Like CV the form is prefilled from invoice generation settings
+![Screenshot](img/crm/invoice_generation_settings.png)
+
+Usually you would associate an invoice with a project and a company, if you leave the payment data empty, they will be
+automatically filled from the company's payment data. Go to CRM -> Companies, and click "edit" button at the company's
+line, you want to alter the payment data for:
+
+![Screenshot](img/crm/company_edit.png)
+
+- **invoice number** is autoincremental and will be generated automatically.
+- invoices can be created in different language. English and German are currently supported.
+- **positions** are listed as a wagtail table block, click the + to add more rows
+- check **payed** when the money arrives at your account
+
+Sometimes you need to create a series of invoices, repeating the majority of the data of the previous invoice. In order
+to copy the invoice, navigate to the invoice list, pick the one you want to copy, and click the copy data. The form will
+be prefilled with the data from the original invoice.
+
+![Screenshot](img/crm/cv_copy.gif)
+
+Once the data is filled, you can inspect and download the pdf document. In order to do that, navigate to the invoice list,
+pick the invoice and click the inspect button. Now you can review and download the invoice in PDF format.
+
+![Screenshot](img/crm/invoice_preview.png)
