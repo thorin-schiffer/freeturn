@@ -122,3 +122,27 @@ Once the data is filled, you can inspect and download the pdf document. In order
 pick the invoice and click the inspect button. Now you can review and download the invoice in PDF format.
 
 ![Screenshot](img/crm/invoice_preview.png)
+
+## Messages
+
+Mostly the project inquiries are made over email, and those can be many. An annoying routine of copypasting the project
+description can be overcome with Freeturn's gmail integration.
+
+!!! warning
+    Make sure your [google oauth2 integration](configuration.md#google-oauth2) is activated
+
+Navigate to your account settings, click "google login" button and log in to your google account.
+
+![Screenshot](img/activating_google_account.png)
+
+All emails labeled with "CRM" tag will be loaded and processed.
+
+!!! warning
+    Make sure your [email checker is set up](configuration.md#setting-up-mail-checker)
+
+Navigate to CRM->Messages to see the messages loaded from your gmail account.
+Text of the emails will be used to generate the projects, which you can find in the [project list](#tracking-project-leads).
+Besides that Freeturn will generate a company and contact entry for the author of the email.
+
+!!! note
+    You can find all your companies at CRM -> Company and contacts at CRM -> People

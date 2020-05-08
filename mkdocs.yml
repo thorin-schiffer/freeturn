@@ -3,6 +3,7 @@ dev_addr: localhost:5001
 nav:
 - index.md
 - portfolio.md
+- configuration.md
 - crm.md
 - deployment.md
 - development.md

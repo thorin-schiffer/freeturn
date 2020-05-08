@@ -15,3 +15,7 @@
 
 ## Recaptcha
 ## Email
+## Google oauth2
+TBD: mention auth backends?
+## Setting up mail checker
+TBD
