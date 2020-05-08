@@ -3,7 +3,16 @@ dev_addr: localhost:5001
 nav:
 - index.md
 - portfolio.md
+- crm.md
 - deployment.md
 - development.md
 theme:
-  name: rtd-dropdown
+  name: readthedocs
+  highlightjs: true
+  hljs_languages:
+  - yaml
+  - django
+  - python
+
+markdown_extensions:
+- admonition

@@ -73,7 +73,6 @@ pytest-socket = "*"
 pytest-env = "*"
 flaky = "*"
 mkdocs = "*"
-mkdocs-rtd-dropdown = "*"
 
 [requires]
 python_version = "3.7.5"
