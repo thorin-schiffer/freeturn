@@ -2,8 +2,8 @@ from django.db import models
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
+from wagtail.core.fields import RichTextField
 from wagtail.images.edit_handlers import ImageChooserPanel
-from wagtailmarkdown.fields import MarkdownField
 
 INVOICE_LANGUAGE_CHOICES = (
     ('en', 'English'),
@@ -40,8 +40,8 @@ class InvoiceGenerationSettings(BaseSetting):
 
     default_tax_id = models.CharField(max_length=100, help_text='Your local tax id')
 
-    default_bank_account = MarkdownField(help_text='Payment bank account details')
-    default_contact_data = MarkdownField()
+    default_bank_account = RichTextField(help_text='Payment bank account details')
+    default_contact_data = RichTextField()
 
     default_logo = models.ForeignKey(
         'wagtailimages.Image',
@@ -69,19 +69,19 @@ class InvoiceGenerationSettings(BaseSetting):
 class CVGenerationSettings(BaseSetting):
     default_title = models.CharField(
         max_length=255, help_text='Default title to use', default='Freelance python developer')
-    default_experience_overview = MarkdownField(
+    default_experience_overview = RichTextField(
         help_text='Notice on your experience',
         default='Python developer experience: 7 years'
     )
 
-    default_education_overview = MarkdownField(
+    default_education_overview = RichTextField(
         help_text='Notice on your education',
         default='Novosibirsk State Technical University'
     )
-    default_contact_details = MarkdownField(default='sergey@cheparev.com')
-    default_languages_overview = MarkdownField(default='English: fluent')
-    default_rate_overview = MarkdownField(default='<<change default in settings>>')
-    default_working_permit = MarkdownField(default='PERMANENT RESIDENCE')
+    default_contact_details = RichTextField(default='sergey@cheparev.com')
+    default_languages_overview = RichTextField(default='English: fluent')
+    default_rate_overview = RichTextField(default='100 schmeckles')
+    default_working_permit = RichTextField(default='PERMANENT RESIDENCE')
     default_picture = models.ForeignKey(
         'wagtailimages.Image',
         null=True,

@@ -4,8 +4,8 @@ from django_extensions.db.models import TimeStampedModel
 from instance_selector.edit_handlers import InstanceSelectorPanel
 from tld import get_fld
 from wagtail.admin.edit_handlers import FieldRowPanel, MultiFieldPanel, FieldPanel
+from wagtail.core.fields import RichTextField
 from wagtail.images.edit_handlers import ImageChooserPanel
-from wagtailmarkdown.fields import MarkdownField
 
 
 class Company(TimeStampedModel):
@@ -22,7 +22,7 @@ class Company(TimeStampedModel):
                                 blank=True)
     url = models.URLField(blank=True,
                           null=True)
-    notes = MarkdownField(default='', blank=True)
+    notes = RichTextField(default='', blank=True)
     logo = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL,
                              null=True, blank=True)
     default_daily_rate = models.DecimalField(
@@ -32,7 +32,7 @@ class Company(TimeStampedModel):
         blank=True,
         default=settings.DEFAULT_DAILY_RATE
     )
-    payment_address = MarkdownField(null=True, blank=True)
+    payment_address = RichTextField(null=True, blank=True)
     vat_id = models.CharField(max_length=100, help_text='VAT ID', null=True, blank=True)
 
     panels = [

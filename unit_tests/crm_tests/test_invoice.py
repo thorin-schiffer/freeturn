@@ -26,8 +26,8 @@ def test_create(admin_app, admin_user, default_site, image):
     assert int(form['payment_period'].value) == settings.default_payment_period
     assert form['receiver_vat_id'].value == settings.default_receiver_vat_id
     assert form['tax_id'].value == settings.default_tax_id
-    assert form['bank_account'].value == settings.default_bank_account
-    assert form['contact_data'].value == settings.default_contact_data
+    assert settings.default_bank_account in form['bank_account'].value
+    assert settings.default_contact_data in form['contact_data'].value
     assert form['logo'].value == str(settings.default_logo.id)
     assert form['issued_date'].value == str(timezone.now().date())
     assert form['delivery_date'].value == str(timezone.now().date())
@@ -59,8 +59,8 @@ def test_copy(admin_app, invoice, default_site):
     assert int(form['payment_period'].value) == invoice.payment_period
     assert form['receiver_vat_id'].value == invoice.receiver_vat_id
     assert form['tax_id'].value == invoice.tax_id
-    assert form['bank_account'].value == invoice.bank_account
-    assert form['contact_data'].value == invoice.contact_data
+    assert invoice.bank_account in form['bank_account'].value
+    assert invoice.contact_data in form['contact_data'].value
     assert form['logo'].value == str(invoice.logo.id)
     assert form['issued_date'].value == str(timezone.now().date())
     assert form['delivery_date'].value == str(timezone.now().date())
