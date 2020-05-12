@@ -130,9 +130,18 @@ docs to learn how those URLs are built and also make sure you to take at least a
 to find out the difference.
 
 ## Google oauth2
-- enabling google account connection
-- enabling messaging
-TBD: mention auth backends?
+```python
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY=''
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET=''
+```
+
+In order to activate the [gmail integration](crm.md#messages), freeturn uses wonderful [python-social-auth](https://python-social-auth.readthedocs.io/en/latest/)
+and it's [google oauth2 integration](https://python-social-auth.readthedocs.io/en/latest/backends/google.html#google-oauth2).
+Consulte [the official docs](https://developers.google.com/identity/protocols/oauth2) to find the access keys.
+
+!!! warning
+    python-social-auth backend will be only used if the keys are not empty
+
 ## Setting up mail checker
 TBD
 
