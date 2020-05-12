@@ -35,6 +35,24 @@ can be reviewed individually.
 
 [this text was thankfully stolen at wagtail docs]
 
+## Code of conducts
+
+However you would like to contribute your idea, comment, PR or anything else, please keep in mind the following things:
+
+- no insulting ✋
+- no sexism ♂️ = ♀
+- no ageism 👴 = 👨
+- no homophobia 💑 = 👨‍❤️‍👨 = 👩‍❤️‍👨 = 👩‍❤️‍👩 = ❤
+- no transphobia ⚧ = ♂️ = ♀
+- no xenophobia 🌎
+- no racism 👩🏻‍🤝‍👩🏾
+- no condescending tone 🥺
+- be friendly to other participants 😊
+- be constructive 📊 📈📉
+- be open minded ☮️
+- don't be a jerk 🦄
+- don't forget it is a human being at the other end 🤝
+
 ## Setting up python env
 
 * Install pyenv for managing your python versions: https://github.com/pyenv/pyenv.
