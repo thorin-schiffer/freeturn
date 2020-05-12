@@ -5,7 +5,6 @@ nav:
 - portfolio.md
 - configuration.md
 - crm.md
-- deployment.md
 - contribution.md
 theme:
   name: readthedocs

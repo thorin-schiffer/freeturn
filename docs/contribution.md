@@ -33,6 +33,23 @@ For large-scale changes, we'd generally recommend breaking them down
 into smaller pull requests that achieve a single well-defined task and
 can be reviewed individually.
 
+!!! tip
+    Freeturn supports [heroku review apps](https://devcenter.heroku.com/articles/github-integration-review-apps).
+    For all in-repo pull requests the review apps will be created automatically and will be linked on the PR page.
+    ![Screenshot](img/pr_deploy.png)
+
+## Checks
+
+All the PRs will be checked using diverse tools, which include:
+
+- circle ci main pipeline: lint + unit tests
+- codeclimate issues and test coverage
+- browserstack acceptance tests
+
+all the checks must pass and the PR must be based on the current hot branch to be allowed to merge.
+
+![Screenshot](img/pr_checks.png)
+
 [this text was thankfully stolen at wagtail docs]
 
 ## Code of conducts
