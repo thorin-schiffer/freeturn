@@ -212,3 +212,20 @@ DEBUG_TOOLBAR=False
 Enables [django debug toolbar](https://django-debug-toolbar.readthedocs.io/en/latest/). Django debug toolbar is a an
 extremely useful tool for finding the templates used, SQL queries made and much more, which you would probably need
 for development.
+
+## WKHTML to PDF
+
+[WKHTML](https://github.com/wkhtmltopdf/wkhtmltopdf) is a tool for rendering html pages to pdf documents. Freeturn uses
+it for creating pdf documents such as [cvs](crm.md#cvs) and [invoices](crm.md#generating-invoices).
+In order to make it work wkhtml within your container must be installed and understood by [django-wkhtmltopdf](https://pypi.org/project/django-wkhtmltopdf/).
+Heroku luckily several buildpacks for it,  [wkhtmltopdf-buildpack](https://github.com/dscout/wkhtmltopdf-buildpack) is recommended.
+
+!!! warning
+    wkhtmltopdf-buildpack has it's binary paths slightly different than standard ubuntu packages. Make sure you set
+    the following env: `WKHTMLTOPDF_CMD=/app/bin/wkhtmltopdf` and `WKHTMLTOPDF_VERSION=0.12.4`
+
+## Gettext and heroku
+
+Django requires gettext to be installed for using the built in [i18n mechanics](https://docs.djangoproject.com/en/3.0/topics/i18n/).
+[heroku-buildpack-gettext](https://github.com/grauwoelfchen/heroku-buildpack-gettext.git)
+proved working with no troubles.
