@@ -53,6 +53,15 @@ However you would like to contribute your idea, comment, PR or anything else, pl
 - don't be a jerk 🦄
 - don't forget it is a human being at the other end 🤝
 
+## Docs contributions
+
+This docs is created with [mkdocs](https://www.mkdocs.org/) and hosted thankfully on readthedocs. It uses markdown language,
+take a brief look at the readthedocs' [getting started with mkdocs](https://docs.readthedocs.io/en/stable/intro/getting-started-with-mkdocs.html).
+Markdown is an intuitive and simple markup language, [here](https://docs.readthedocs.io/en/stable/intro/getting-started-with-mkdocs.html)
+you can find more about it.
+
+If you want to submit additional docs or spelling corrections, please submit a [pull request](#pull-requests).
+
 ## Setting up python env
 
 * Install pyenv for managing your python versions: https://github.com/pyenv/pyenv.
@@ -83,10 +92,10 @@ Linux is a recommended platform for development, on other systems use Docker to 
 ## Local development with Linux
 
 * copy dotenv template to dotenv: `cp .env_template .env`
-* Install wkhtmltopdf: https://wkhtmltopdf.org/, version 0.12.4
+* Install [wkhtmltopdf](https://wkhtmltopdf.org/), version 0.12.4
 * Install wagtail deps: https://docs.wagtail.io/en/v2.7.1/getting_started/index.html#dependencies-needed-for-installation
-* Install postgres database: https://www.postgresql.org/
-* Install redis key-value storage for caching: https://redis.io/
+* Install [postgres database](https://www.postgresql.org/)
+* Install [redis](https://redis.io/) key-value storage for caching
 
 ## Docker
 
@@ -112,3 +121,7 @@ Please read the docs for pyinvoke for the basics. Available commands can be list
 
 Consult [the official guide by wagtial](https://wagtail.io/blog/amazon-s3-for-media-files/) and docs for [collections](https://docs.wagtail.io/en/v2.8.1/editor_manual/documents_images_snippets/collections.html).
 Collections perms are not usually synced with the ACL for s3, so [wagtail-storages](https://github.com/torchbox/wagtail-storages) is keep the in sync.
+
+## Django debug toolbar
+
+See [configuration](configuration.md#debug-toolbar) how to easily enable the django debug toolbar for development.

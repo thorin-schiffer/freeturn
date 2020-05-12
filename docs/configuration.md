@@ -203,3 +203,12 @@ SCOUT_MONITOR=False
 Freeturn offers [scout apm](https://scoutapm.com/) integration, which allows you see all the performance insights.
 You can enable the integration with setting this variable to True and configure it using the environment variables
 from the [official django integration](https://scoutapm.com/blog/monitoring-a-django-app-with-scout).
+
+## Debug toolbar
+
+```python
+DEBUG_TOOLBAR=False
+```
+Enables [django debug toolbar](https://django-debug-toolbar.readthedocs.io/en/latest/). Django debug toolbar is a an
+extremely useful tool for finding the templates used, SQL queries made and much more, which you would probably need
+for development.
