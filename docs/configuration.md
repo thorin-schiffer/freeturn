@@ -121,7 +121,14 @@ In order to enable the recaptcha support, you would need the recaptcha public an
 to know where you get the keys.
 
 ## Email
-- enabling emailing
+```python
+EMAIL_URL='consolemail://'
+```
+
+Freeturn would notify about different event over the email, in order to configure it, email url must be set. Consult [django-environ](https://github.com/joke2k/django-environ)
+docs to learn how those URLs are built and also make sure you to take at least a brief look at [django email backends docs](https://docs.djangoproject.com/en/3.0/topics/email/#email-backends)
+to find out the difference.
+
 ## Google oauth2
 - enabling google account connection
 - enabling messaging
