@@ -46,6 +46,9 @@ WKHTMLTOPDF_CMD=
 # monitoring with scout apm, https://docs.scoutapm.com/#django
 SCOUT_MONITOR=
 ```
+
+### Django environ built-in env
+
 Additionally django environ offers (see [docs](https://github.com/joke2k/django-environ#supported-types))
 - `DATABASE_URL` for configuring the database, defaults to `./db.sqlite3`
 - `REDIS_URL` for configuring redis / cache urls (caches default to [locmemcache](https://docs.djangoproject.com/en/3.0/topics/cache/#local-memory-caching))
@@ -166,7 +169,22 @@ for developers and small businesses. While you don't necessary need those for th
 to find out the additional info for bugfixing. Follow the sign up wizard and you will be offered to add a project, which
 then will reveal your DSN - resource identification you'd put in the freeturn configuration.
 
+## Frontend caching
+
+```python
+CACHE_TEMPLATES=False
+```
+
+While caching is more necessary for highly loaded sites, enabling caching in the admin can significantly speed up the
+admin interface on basic computing power. Set this variable to True to enable [redis cache](#django-environ-built-in-env).
+
+```python
+WHITENOISE_STORAGE=False
+```
+
+In order to speed up the static serving, freeturn uses [django-whitenoise](http://whitenoise.evans.io/en/stable/) for
+compressing, preprocessing and minifying the static files. Set this variable to true to enable this feature.
+
 ## TBD
-- enabling frontend caching (CACHE_TEMPLATES, WHITENOISE_STORAGE)
 - enabling google analytics
 - enabling scout monitoring
