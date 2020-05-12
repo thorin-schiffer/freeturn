@@ -155,8 +155,18 @@ could use [heroku scheduler](https://devcenter.heroku.com/articles/scheduler).
     Heroku scheduler adds up to your usage metrics
 
 
-### TBD
-- enabling sentry
+## Sentry
+```python
+SENTRY_DSN=''
+```
+
+[Sentry](https://sentry.io/organizations/sergey-cheparev/issues/) is an outstanding bug monitoring tool, which allows you to see the exhaustive information about the incidents
+happening in your application. Sentry has both open source and free on premise version and cloud version, which is free
+for developers and small businesses. While you don't necessary need those for the production use, you could find it useful
+to find out the additional info for bugfixing. Follow the sign up wizard and you will be offered to add a project, which
+then will reveal your DSN - resource identification you'd put in the freeturn configuration.
+
+## TBD
 - enabling frontend caching (CACHE_TEMPLATES, WHITENOISE_STORAGE)
 - enabling google analytics
 - enabling scout monitoring
