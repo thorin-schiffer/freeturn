@@ -109,7 +109,16 @@ See [the corresponding AWS docs](https://docs.aws.amazon.com/IAM/latest/UserGuid
 how you can find out your account id and username.
 
 ## Recaptcha
-- enabling recaptcha in forms
+
+```python
+RECAPTCHA_PUBLIC_KEY=''
+RECAPTCHA_PRIVATE_KEY=''
+```
+
+Wagtail exposes the the forms to the wild internet, which means without any DoS protection. Freeturn uses [django-recaptcha2](https://github.com/kbytesys/django-recaptcha2)
+for enabling the google's recaptcha and make the submission process easy and comfortable for the visitors.
+In order to enable the recaptcha support, you would need the recaptcha public and private keys. See [the recaptcha docs](https://developers.google.com/recaptcha/intro)
+to know where you get the keys.
 
 ## Email
 - enabling emailing
