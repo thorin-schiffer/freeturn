@@ -87,16 +87,16 @@ def fill(context):
 @invoke.task
 def update(context):
     """Updates code from gitlab and reinstalls pipenv deps"""
-    context.run(f'pipenv clean')
+    context.run('pipenv clean')
     # https://github.com/pypa/pipenv/issues/3493
-    context.run(f'pipenv install --ignore-pipfile --deploy --dev')
+    context.run('pipenv install --ignore-pipfile --deploy --dev')
 
 
 @invoke.task
 def collect_static(context, local=False):
     """Django collect static"""
     print('Collecting static...')
-    context.run(f'./manage.py collectstatic --noinput -v 0')
+    context.run('./manage.py collectstatic --noinput -v 0')
 
 
 @invoke.task(help={
@@ -105,15 +105,15 @@ def collect_static(context, local=False):
 def i18n(ctx):
     """Runs django translation routines"""
     print('Collecting i18n')
-    ctx.run(f"./manage.py makemessages -i 'venv/*' -l de")
-    ctx.run(f'./manage.py compilemessages -l de')
+    ctx.run("./manage.py makemessages -i 'venv/*' -l de")
+    ctx.run('./manage.py compilemessages -l de')
 
 
 @invoke.task
 def install_hooks(context):
     """Installs pre-commit hooks"""
     print('Installing pre-commit hook')
-    context.run(f'pre-commit install')
+    context.run('pre-commit install')
 
 
 @invoke.task
