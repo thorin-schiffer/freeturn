@@ -185,6 +185,14 @@ WHITENOISE_STORAGE=False
 In order to speed up the static serving, freeturn uses [django-whitenoise](http://whitenoise.evans.io/en/stable/) for
 compressing, preprocessing and minifying the static files. Set this variable to true to enable this feature.
 
+## Google analytics
+
+```python
+GOOGLE_ANALYTICS_ID='UA-123456-7'
+```
+
+Google analytics is a monstrous analytics tool to analyze your site performance and user behavior. Consult [this docs](https://support.google.com/analytics/thread/13109681?hl=en)
+to find out where you get this tracking id.
+
 ## TBD
-- enabling google analytics
 - enabling scout monitoring
