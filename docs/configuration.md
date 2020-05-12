@@ -143,7 +143,16 @@ Consulte [the official docs](https://developers.google.com/identity/protocols/oa
     python-social-auth backend will be only used if the keys are not empty
 
 ## Setting up mail checker
-TBD
+
+Once freeturn's google email integration is configured, you'd need to set up the checker 'cron'. This utility checks if
+there are any emails in your inbox tagged `CRM`, parses their content and created the project entry for them.
+Find more info [here](crm.md#messages).
+
+The checker itself is called over the CLI invoke command `inv mail`. Put it in the crontab or if you use heroku, you
+could use [heroku scheduler](https://devcenter.heroku.com/articles/scheduler).
+
+!!! warning
+    Heroku scheduler adds up to your usage metrics
 
 
 ### TBD
