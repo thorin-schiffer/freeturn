@@ -26,7 +26,7 @@ Based on Django and Wagtail.
 
 ## Deployment
 
-Deploy directly to [heroku](deployment.md) or check out it [locally](development.md) for development and contribution
+Deploy directly to [heroku](deployment.md) or check out it [locally](contribution.md) for development and contribution
 
 
 [![eviltnan](https://circleci.com/gh/eviltnan/freeturn.svg?style=shield)](https://app.circleci.com/pipelines/github/eviltnan/freeturn)
