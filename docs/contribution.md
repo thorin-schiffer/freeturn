@@ -144,3 +144,10 @@ Collections perms are not usually synced with the ACL for s3, so [wagtail-storag
 ## Django debug toolbar
 
 See [configuration](configuration.md#debug-toolbar) how to easily enable the django debug toolbar for development.
+
+## Tests
+
+Freeturn uses pytest for testing and standard django plugins for it.
+Execute `pytest unit_tests` for unit tests,
+`pytest --driver Firefox --base-url http://localhost:8000 --capability resolution 1920x1080 acceptance_tests` for acceptance tests with selenium.
+Find more info about testing with selenium and pytest. [here](https://pytest-selenium.readthedocs.io/en/latest/user_guide.html)
