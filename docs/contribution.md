@@ -94,7 +94,7 @@ If you want to submit additional docs or spelling corrections, please submit a [
 Various features can be activated over the environment, see .env_template for annotations and options
 * Install pre-commit hooks with: `pre-commit install`. Read more about pre-commit: https://pre-commit.com/
 
-```python
+```
 Python 3.7.5 (default, Jan 30 2020, 12:57:36)
 Type 'copyright', 'credits' or 'license' for more information
 IPython 7.11.1 -- An enhanced Interactive Python. Type '?' for help.

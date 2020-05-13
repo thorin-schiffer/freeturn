@@ -91,7 +91,7 @@ for accessing the s3 storage and configuring it. Find more information on s3 in 
 
 ### S3 bucket
 ```python
-AWS_STORAGE_BUCKET_NAME=''
+AWS_STORAGE_BUCKET_NAME = ''
 ```
 
 s3 bucket is an analog of a hard drive in terms of AWS cloud storage. s3 as such mimics the popular filesystems, with
@@ -99,8 +99,8 @@ multiple differences though. Freeturn needs to know which bucket in your AWS acc
 
 ### S3 bucket policy
 ```python
-AWS_STORAGE_ACCOUNT_ID=''
-AWS_STORAGE_USER=''
+AWS_STORAGE_ACCOUNT_ID = ''
+AWS_STORAGE_USER = ''
 ```
 
 Freeturn depends on [wagtail-storages](https://github.com/torchbox/wagtail-storages) for managing the sensitive uploads
@@ -114,8 +114,8 @@ how you can find out your account id and username.
 ## Recaptcha
 
 ```python
-RECAPTCHA_PUBLIC_KEY=''
-RECAPTCHA_PRIVATE_KEY=''
+RECAPTCHA_PUBLIC_KEY = ''
+RECAPTCHA_PRIVATE_KEY = ''
 ```
 
 Wagtail exposes the the forms to the wild internet, which means without any DoS protection. Freeturn uses [django-recaptcha2](https://github.com/kbytesys/django-recaptcha2)
@@ -125,7 +125,7 @@ to know where you get the keys.
 
 ## Email
 ```python
-EMAIL_URL='consolemail://'
+EMAIL_URL = 'consolemail://'
 ```
 
 Freeturn would notify about different event over the email, in order to configure it, email url must be set. Consult [django-environ](https://github.com/joke2k/django-environ)
@@ -134,8 +134,8 @@ to find out the difference.
 
 ## Google oauth2
 ```python
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY=''
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET=''
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
 ```
 
 In order to activate the [gmail integration](crm.md#messages), freeturn uses wonderful [python-social-auth](https://python-social-auth.readthedocs.io/en/latest/)
@@ -160,7 +160,7 @@ could use [heroku scheduler](https://devcenter.heroku.com/articles/scheduler).
 
 ## Sentry
 ```python
-SENTRY_DSN=''
+SENTRY_DSN = ''
 ```
 
 [Sentry](https://sentry.io/organizations/sergey-cheparev/issues/) is an outstanding bug monitoring tool, which allows you to see the exhaustive information about the incidents
@@ -172,14 +172,14 @@ then will reveal your DSN - resource identification you'd put in the freeturn co
 ## Frontend caching
 
 ```python
-CACHE_TEMPLATES=False
+CACHE_TEMPLATES = False
 ```
 
 While caching is more necessary for highly loaded sites, enabling caching in the admin can significantly speed up the
 admin interface on basic computing power. Set this variable to True to enable [redis cache](#django-environ-built-in-env).
 
 ```python
-WHITENOISE_STORAGE=False
+WHITENOISE_STORAGE = False
 ```
 
 In order to speed up the static serving, freeturn uses [django-whitenoise](http://whitenoise.evans.io/en/stable/) for
@@ -188,7 +188,7 @@ compressing, preprocessing and minifying the static files. Set this variable to 
 ## Google analytics
 
 ```python
-GOOGLE_ANALYTICS_ID='UA-123456-7'
+GOOGLE_ANALYTICS_ID = 'UA-123456-7'
 ```
 
 Google analytics is a monstrous analytics tool to analyze your site performance and user behavior. Consult [this docs](https://support.google.com/analytics/thread/13109681?hl=en)
@@ -197,7 +197,7 @@ to find out where you get this tracking id.
 ## Scout APM
 
 ```python
-SCOUT_MONITOR=False
+SCOUT_MONITOR = False
 ```
 
 Freeturn offers [scout apm](https://scoutapm.com/) integration, which allows you see all the performance insights.
@@ -207,7 +207,7 @@ from the [official django integration](https://scoutapm.com/blog/monitoring-a-dj
 ## Debug toolbar
 
 ```python
-DEBUG_TOOLBAR=False
+DEBUG_TOOLBAR = False
 ```
 Enables [django debug toolbar](https://django-debug-toolbar.readthedocs.io/en/latest/). Django debug toolbar is a an
 extremely useful tool for finding the templates used, SQL queries made and much more, which you would probably need
