@@ -70,6 +70,8 @@ However you would like to contribute your idea, comment, PR or anything else, pl
 - don't be a jerk 🦄
 - don't forget it is a human being at the other end 🤝
 
+if in doubt consult [PyPA code of conduct](https://www.pypa.io/en/latest/code-of-conduct/) please.
+
 ## Docs contributions
 
 This docs is created with [mkdocs](https://www.mkdocs.org/) and hosted thankfully on readthedocs. It uses markdown language,
