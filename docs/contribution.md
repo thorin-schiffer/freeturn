@@ -70,6 +70,8 @@ However you would like to contribute your idea, comment, PR or anything else, pl
 - don't be a jerk 🦄
 - don't forget it is a human being at the other end 🤝
 
+if in doubt consult [PyPA code of conduct](https://www.pypa.io/en/latest/code-of-conduct/) please.
+
 ## Docs contributions
 
 This docs is created with [mkdocs](https://www.mkdocs.org/) and hosted thankfully on readthedocs. It uses markdown language,
@@ -94,7 +96,7 @@ If you want to submit additional docs or spelling corrections, please submit a [
 Various features can be activated over the environment, see .env_template for annotations and options
 * Install pre-commit hooks with: `pre-commit install`. Read more about pre-commit: https://pre-commit.com/
 
-```python
+```
 Python 3.7.5 (default, Jan 30 2020, 12:57:36)
 Type 'copyright', 'credits' or 'license' for more information
 IPython 7.11.1 -- An enhanced Interactive Python. Type '?' for help.

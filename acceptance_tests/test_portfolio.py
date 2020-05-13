@@ -62,7 +62,7 @@ def admin_login(selenium, base_url):
     selenium.find_element_by_name('username').send_keys('admin')
     selenium.find_element_by_name('password').send_keys('admin')
     selenium.find_element_by_xpath("//*[@type='submit']").submit()
-    time.sleep(1)
+    time.sleep(3)
     assert selenium.current_url == f'{base_url}/admin/'
 
 
