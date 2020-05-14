@@ -20,15 +20,23 @@ class CityAdmin(ModelAdmin):
     menu_icon = 'fa-location-arrow'
     menu_label = 'Cities'
     list_display = ('name', 'project_count')
+    add_to_settings_menu = True
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate(c=Count('projects')).order_by('-c')
+
+
+modeladmin_register(CityAdmin)
 
 
 class ChannelAdmin(ModelAdmin):
     model = Channel
     menu_icon = 'fa-arrow-circle-up'
     menu_label = 'Channels'
+    add_to_settings_menu = True
+
+
+modeladmin_register(ChannelAdmin)
 
 
 class CRMGroup(ModelAdminGroup):
@@ -36,9 +44,9 @@ class CRMGroup(ModelAdminGroup):
     menu_icon = 'fa-briefcase'
     menu_order = 200
     items = (
-        ProjectAdmin, CVAdmin, EmployeeAdmin, CompanyAdmin,
-        CityAdmin, ChannelAdmin, MessageAdmin,
-        InvoiceAdmin
+        ProjectAdmin, CVAdmin, CompanyAdmin,
+        MessageAdmin, InvoiceAdmin,
+        EmployeeAdmin,
     )
 
 
