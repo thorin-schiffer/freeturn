@@ -9,7 +9,7 @@ from django.utils import timezone
 from django_fsm import TransitionNotAllowed
 from wagtail.admin import messages
 from wagtail.admin.search import SearchArea
-from wagtail.contrib.modeladmin.helpers import AdminURLHelper, ButtonHelper
+from wagtail.contrib.modeladmin.helpers import AdminURLHelper, ButtonHelper, PermissionHelper
 from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import EditView, CreateView, InspectView
@@ -171,6 +171,14 @@ class ProjectSearchArea(SearchArea):
             order=101)
 
 
+class MessagePermissionHelper(PermissionHelper):
+    def user_can_create(self, user):
+        return False
+
+    def user_can_edit_obj(self, user, obj):
+        return False
+
+
 class MessageAdmin(ModelAdmin):
     model = ProjectMessage
     menu_icon = 'fa-envelope-open'
@@ -181,3 +189,9 @@ class MessageAdmin(ModelAdmin):
     inspect_view_enabled = True
     inspect_view_fields = ['project', 'subject', 'author', 'text']
     inspect_template_name = 'message_inspect.html'
+    permission_helper_class = MessagePermissionHelper
+    search_fields = ['subject',
+                     'author__first_name',
+                     'author__last_name',
+                     'project__name',
+                     'project__company__name']
