@@ -33,7 +33,7 @@ def test_add_required(admin_app):
 
 @pytest.mark.django_db
 def test_add(admin_app,
-             city, channel):
+             city):
     url = reverse('crm_company_modeladmin_create')
     r = admin_app.get(url)
     form = r.forms[1]
@@ -41,7 +41,6 @@ def test_add(admin_app,
     name = fake.sentence()
     form['name'] = name
     form['location'] = city.id
-    form['channel'] = channel.id
     form['url'] = fake.uri()
     form['notes'] = rich_text(fake.text())
 

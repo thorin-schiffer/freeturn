@@ -6,7 +6,6 @@ from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
 from wagtail.core import hooks
 
-from crm.models.channel import Channel
 from crm.models.city import City
 from crm.wagtail_admin.company import CompanyAdmin
 from crm.wagtail_admin.cv import CVAdmin
@@ -20,15 +19,13 @@ class CityAdmin(ModelAdmin):
     menu_icon = 'fa-location-arrow'
     menu_label = 'Cities'
     list_display = ('name', 'project_count')
+    add_to_settings_menu = True
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate(c=Count('projects')).order_by('-c')
 
 
-class ChannelAdmin(ModelAdmin):
-    model = Channel
-    menu_icon = 'fa-arrow-circle-up'
-    menu_label = 'Channels'
+modeladmin_register(CityAdmin)
 
 
 class CRMGroup(ModelAdminGroup):
@@ -36,9 +33,9 @@ class CRMGroup(ModelAdminGroup):
     menu_icon = 'fa-briefcase'
     menu_order = 200
     items = (
-        ProjectAdmin, CVAdmin, EmployeeAdmin, CompanyAdmin,
-        CityAdmin, ChannelAdmin, MessageAdmin,
-        InvoiceAdmin
+        ProjectAdmin, CVAdmin, CompanyAdmin,
+        MessageAdmin, InvoiceAdmin,
+        EmployeeAdmin,
     )
 
 

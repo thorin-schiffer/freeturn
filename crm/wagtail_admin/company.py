@@ -1,9 +1,8 @@
-from django.db.models import Count
 from instance_selector.registry import registry
 from instance_selector.selectors import ModelAdminInstanceSelector
-from wagtail.contrib.modeladmin.views import CreateView
 from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
+from wagtail.contrib.modeladmin.views import CreateView
 
 from crm.models import Company, City
 
@@ -11,7 +10,7 @@ from crm.models import Company, City
 class CreateCompanyView(CreateView):
     def get_initial(self):
         initial = super().get_initial()
-        initial['location'] = City.objects.annotate(c=Count('projects')).order_by('-c').first()
+        initial['location'] = City.most_popular()
         return initial
 
 
@@ -23,7 +22,7 @@ class CompanyAdmin(ThumbnailMixin, ModelAdmin):
     add_to_settings_menu = False  # or True to add your model to the Settings sub-menu
     exclude_from_explorer = False  # or True to exclude pages of this type from Wagtail's explorer view
     list_display = ('admin_thumb', 'name', 'location')
-    list_filter = ('location', 'channel',)
+    list_filter = ('location', )
     search_fields = ('name',)
     thumb_image_field_name = 'logo'
     thumb_default = '/static/img/default_company.png'

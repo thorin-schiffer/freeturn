@@ -1,5 +1,4 @@
 # flake8: noqa
-from crm.models.channel import *
 from crm.models.city import *
 from crm.models.company import *
 from crm.models.cv import *

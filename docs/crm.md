@@ -33,6 +33,8 @@ Adding a project is pretty straightforward:
 **Original description** would be later used for parsing the meta information about the project, technologies are fuzzy
 matched if [Technology](portfolio.md#technologies) snippet.
 
+**Project page** is a link between a project lead and a [project page](portfolio.md#project-page)/
+
 After adding a project you will be redirected to the CV generation for this project, already prefilled from your settings
 and rearranged to correspond the project description, so the most relevant projects are highlighted in the CV.
 

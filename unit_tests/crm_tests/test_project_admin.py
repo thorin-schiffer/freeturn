@@ -3,6 +3,8 @@ from datetime import datetime
 import pytest
 from django.urls import reverse
 
+from crm.factories import CityFactory, ProjectFactory
+
 
 @pytest.mark.django_db
 def test_index_action(admin_app,
@@ -69,3 +71,16 @@ def test_create_dates_prefill(admin_app,
 
     assert form['start_date'].value == '2019-02-01'
     assert form['end_date'].value == '2019-05-01'
+
+
+@pytest.mark.django_db
+def test_create_location_prefill(admin_app, city):
+    most_frequent_city = CityFactory()
+    ProjectFactory(location=most_frequent_city)
+    ProjectFactory(location=most_frequent_city)
+    assert city.project_count < most_frequent_city.project_count
+    project_create_url = reverse('crm_project_modeladmin_create')
+    r = admin_app.get(project_create_url)
+    form = r.forms[1]
+
+    assert form['location'].value == str(most_frequent_city.pk)

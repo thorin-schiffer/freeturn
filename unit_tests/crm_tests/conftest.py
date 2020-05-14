@@ -10,7 +10,6 @@ from home.factories import SiteFactory, HomePageFactory, ProjectPageFactory
 
 register(factories.CityFactory)
 register(factories.EmployeeFactory)
-register(factories.ChannelFactory)
 register(factories.CompanyFactory)
 register(factories.ProjectFactory)
 register(factories.ProjectMessageFactory)

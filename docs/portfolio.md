@@ -25,7 +25,7 @@ in your project portfolio, *to porfolio* encourages visitors to familiarize them
 1. **picture**: pick the one you think suits best.
 
 
-Besides that you can configure the color of title and don't forget about the promotion options coming with Wagtail out
+Besides that don't forget about the promotion options coming with Wagtail out
 of the box. Page title will be used by the search engines to represent your page in the search results, and you would
 probably want it to look pretty.
 
