@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Count
 
 
 class City(models.Model):
@@ -8,6 +9,10 @@ class City(models.Model):
     @property
     def project_count(self):
         return self.projects.count()
+
+    @classmethod
+    def most_popular(cls):
+        return cls.objects.annotate(c=Count('projects')).order_by('-c').first()
 
     def __str__(self):
         return self.name
