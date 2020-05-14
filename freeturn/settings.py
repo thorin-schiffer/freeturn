@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'snowpenguin.django.recaptcha2',
     'modelcluster',
     'taggit',
-    'colorful',
     'storages',
     'wagtail_storages',
     'ajax_select',

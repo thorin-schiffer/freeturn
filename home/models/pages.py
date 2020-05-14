@@ -1,7 +1,6 @@
 from datetime import timedelta
 
 from ajax_select.fields import AutoCompleteSelectMultipleWidget
-from colorful.fields import RGBColorField
 from django.db import models
 from django.db.models import Count
 from django.utils import timezone
@@ -31,8 +30,6 @@ class HomePage(Page):
     claim = models.CharField(max_length=300,
                              help_text='Claim text placed under the name',
                              default='Freelance python developer')
-    title_color = RGBColorField(default='#373a3c')
-
     picture = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
@@ -55,7 +52,6 @@ class HomePage(Page):
     linkedin_profile = models.URLField(null=True, blank=True)
 
     content_panels = Page.content_panels + [
-        FieldPanel('title_color'),
         FieldPanel('claim'),
         FieldPanel('earliest_available'),
         ImageChooserPanel('picture'),
@@ -185,10 +181,8 @@ class TechnologiesPage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    title_color = RGBColorField(default='#373a3c')
 
     content_panels = Page.content_panels + [
-        FieldPanel('title_color'),
         ImageChooserPanel('background'),
     ]
     subpage_types = []
