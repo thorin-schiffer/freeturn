@@ -14,6 +14,7 @@ from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import EditView, CreateView, InspectView
 
+from crm.models import City
 from crm.models.project import Project
 from crm.models.project_message import ProjectMessage
 
@@ -102,10 +103,10 @@ class CreateProjectView(CreateView):
 
     def get_initial(self):
         next_month_first_day = (timezone.now() + timedelta(days=30)).replace(day=1)
-
         return {
             'start_date': next_month_first_day,
-            'end_date': (next_month_first_day + timedelta(days=90)).replace(day=1)
+            'end_date': (next_month_first_day + timedelta(days=90)).replace(day=1),
+            'location': City.most_popular()
         }
 
 
