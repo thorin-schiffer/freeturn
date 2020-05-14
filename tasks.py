@@ -78,7 +78,7 @@ def fill(context):
     if not settings.DEBUG:
         print("Won't fill in non debug envs, possible data loss or corruption")
         return
-
+    migrate_db(context)
     filler.clean()
     create_admin(context)
     filler.fill()
@@ -93,10 +93,16 @@ def update(context):
 
 
 @invoke.task
-def collect_static(context, local=False):
+def collect_static(context):
     """Django collect static"""
     print('Collecting static...')
     context.run('./manage.py collectstatic --noinput -v 0')
+
+
+def migrate_db(context):
+    """Django collect static"""
+    print('Migrating db...')
+    context.run('./manage.py migrate --noinput')
 
 
 @invoke.task(help={
@@ -150,6 +156,13 @@ def unicorn(context, fill_db=False, host=None):
         context.run(f'gunicorn freeturn.wsgi --log-file - -b {host}')
     else:
         context.run('gunicorn freeturn.wsgi --log-file -')
+
+
+@invoke.task
+def heroku_release(context):
+    migrate_db(context)
+    install_s3_policy(context)
+    context.run('pip install scout-apm')
 
 
 @invoke.task(
