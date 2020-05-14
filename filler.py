@@ -12,7 +12,7 @@ from wagtail.images.models import Image
 from wagtail_factories import CollectionFactory
 
 from crm.factories import ProjectFactory, CVFactory, ProjectMessageFactory, InvoiceFactory
-from crm.models import Project, Employee, Channel
+from crm.models import Project, Employee
 from home.factories import HomePageFactory, TechnologiesPageFactory, \
     ContactPageFactory
 from home.factories import PortfolioPageFactory, ProjectPageFactory
@@ -143,7 +143,6 @@ def clean():
     Site.objects.all().delete()
     Project.objects.all().delete()
     Employee.objects.all().delete()
-    Channel.objects.all().delete()
     Collection.objects.all().delete()
 
 

@@ -22,7 +22,7 @@ class CompanyAdmin(ThumbnailMixin, ModelAdmin):
     add_to_settings_menu = False  # or True to add your model to the Settings sub-menu
     exclude_from_explorer = False  # or True to exclude pages of this type from Wagtail's explorer view
     list_display = ('admin_thumb', 'name', 'location')
-    list_filter = ('location', 'channel',)
+    list_filter = ('location', )
     search_fields = ('name',)
     thumb_image_field_name = 'logo'
     thumb_default = '/static/img/default_company.png'

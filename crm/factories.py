@@ -7,7 +7,6 @@ from django.contrib.auth import get_user_model
 from django.utils.timezone import get_current_timezone
 from social_django.models import UserSocialAuth
 
-import crm.models.channel
 import crm.models.city
 import crm.models.company
 import crm.models.cv
@@ -27,18 +26,9 @@ class CityFactory(factory.DjangoModelFactory):
         django_get_or_create = ('name',)
 
 
-class ChannelFactory(factory.DjangoModelFactory):
-    name = factory.Faker('sentence')
-    url = factory.Faker('uri')
-
-    class Meta:
-        model = crm.models.channel.Channel
-
-
 class CompanyFactory(factory.DjangoModelFactory):
     name = factory.Faker('company')
     location = factory.SubFactory(CityFactory)
-    channel = factory.SubFactory(ChannelFactory)
     url = factory.Faker('uri')
     logo = factory.SubFactory(wagtail_factories.ImageFactory)
     payment_address = factory.Faker('address')

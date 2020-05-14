@@ -15,11 +15,6 @@ class Company(TimeStampedModel):
                                  on_delete=models.CASCADE,
                                  blank=True,
                                  null=True)
-    channel = models.ForeignKey('crm.Channel',
-                                on_delete=models.SET_NULL,
-                                help_text='Lead channel this company came from',
-                                null=True,
-                                blank=True)
     url = models.URLField(blank=True,
                           null=True)
     notes = RichTextField(default='', blank=True)
@@ -45,7 +40,6 @@ class Company(TimeStampedModel):
             MultiFieldPanel(
                 [
                     ImageChooserPanel('logo'),
-                    FieldPanel('channel'),
                 ]
             )
         ], heading='details'),
