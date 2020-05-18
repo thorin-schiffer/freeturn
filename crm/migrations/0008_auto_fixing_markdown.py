@@ -4,26 +4,37 @@ from django.db import migrations
 
 
 def render_all_markdown(apps, schema_editor):
-    raise NotImplementedError
+    fields = ['notes', 'payment_address', 'experience_overview', 'education_overview', 'contact_details',
+              'languages_overview', 'rate_overview', 'working_permit', 'default_experience_overview',
+              'default_education_overview', 'default_contact_details', 'default_languages_overview',
+              'default_rate_overview',
+              'default_working_permit', 'payment_address', 'bank_account', 'contact_data', 'default_bank_account',
+              'default_contact_data', 'notes']
+
     from wagtailmarkdown.utils import render_markdown
-    from wagtailmarkdown.fields import MarkdownField
 
     for model in apps.get_models():
-        markdown_fields = [field.name for field in model._meta.fields if isinstance(field, MarkdownField)]
+        markdown_fields = [field.name for field in model._meta.fields if field.name in fields]
         if markdown_fields:
             print(f"{model.__name__}: {markdown_fields}")
+
         for instance in model.objects.all():
             for field in markdown_fields:
+                original_value = getattr(instance, field)
+                rendered_value = render_markdown(original_value)
+                print(f"{original_value} -> {rendered_value}")
                 setattr(
                     instance, field,
-                    render_markdown(getattr(instance, field))
+                    rendered_value
                 )
+                instance.save(update_fields=[field])
+
             instance.save()
 
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('crm', '0003_auto_20200504_1533'),
+        ('crm', '0007_auto_20200514_1502'),
     ]
 
     operations = [
