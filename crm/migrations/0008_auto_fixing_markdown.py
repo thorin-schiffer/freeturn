@@ -11,7 +11,10 @@ def render_all_markdown(apps, schema_editor):
               'default_working_permit', 'payment_address', 'bank_account', 'contact_data', 'default_bank_account',
               'default_contact_data', 'notes']
 
-    from wagtailmarkdown.utils import render_markdown
+    try:
+        from wagtailmarkdown.utils import render_markdown
+    except ImportError:
+        return
 
     for model in apps.get_models():
         markdown_fields = [field.name for field in model._meta.fields if field.name in fields]
