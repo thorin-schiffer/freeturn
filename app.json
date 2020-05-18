@@ -13,6 +13,14 @@
       }
     }
   ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/dscout/wkhtmltopdf-buildpack"
+    },
+    {
+      "url": "https://github.com/grauwoelfchen/heroku-buildpack-gettext.git"
+    }
+  ],
   "env": {
     "SECRET_KEY": {
       "description": "A secret key for verifying the integrity of signed cookies.",
