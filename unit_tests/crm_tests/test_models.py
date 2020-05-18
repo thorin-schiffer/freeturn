@@ -59,6 +59,7 @@ def test_parse_message(gmail_api_message):
 def test_parse_message_text(gmail_api_response_factory):
     result = parse_message(gmail_api_response_factory('gmail_api_message_text.json'))
     assert result
+    assert result['text']
 
 
 @pytest.fixture

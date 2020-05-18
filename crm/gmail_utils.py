@@ -41,7 +41,7 @@ def extract_text(email_message):
                 return extract_text(part)
     elif main_type == 'text':
         charset = email_message.get_content_charset()
-        email_message.get_payload(decode=True).decode(charset or 'utf-8', 'replace')
+        return email_message.get_payload(decode=True).decode(charset or 'utf-8', 'replace')
     else:
         logger.error(f'Unknown main mime type {main_type}')
         return ''
