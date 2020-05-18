@@ -20,6 +20,9 @@ Based on Django and Wagtail.
 
 👍 or 👎 [the issues](https://github.com/eviltnan/freeturn/issues) or even submit a [new one](https://github.com/eviltnan/freeturn/issues/new/choose). Check out our [📚 contribution docs](https://freeturn.readthedocs.io/en/latest/contribution/).
 
+[🎬 DEMO](https://freeturn-demo.herokuapp.com/)  
+[👤 DEMO ADMIN](https://freeturn-demo.herokuapp.com/admin): user: admin, password: admin
+
 ![CRM area](https://cheparev-portfolio.s3.amazonaws.com/images/Office_-_Projects_070.original.png)
 ![Front page](https://cheparev-portfolio.s3.amazonaws.com/images/Selection_069.original.png)
 
