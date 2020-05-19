@@ -16,10 +16,13 @@ if not TESTING:
 DEBUG = env.bool('DEBUG', False)
 DEBUG_TOOLBAR = env.bool('DEBUG_TOOLBAR', False)
 
+ENVIRONMENT = env.str('ENVIRONMENT', env.str('HEROKU_APP_NAME', None))
 SENTRY_DSN = env.str('SENTRY_DSN', None)
+
 if SENTRY_DSN:
     sentry_sdk.init(
         dsn=SENTRY_DSN,
+        environment=ENVIRONMENT,
         integrations=[DjangoIntegration()]
     )
 

@@ -169,6 +169,13 @@ for developers and small businesses. While you don't necessary need those for th
 to find out the additional info for bugfixing. Follow the sign up wizard and you will be offered to add a project, which
 then will reveal your DSN - resource identification you'd put in the freeturn configuration.
 
+```python
+ENVIRONMENT = ''
+```
+
+[Sentry environments](https://docs.sentry.io/enriching-error-data/environments/?platform=python) will be configured
+automatically for review apps if ENVIRONMENT is not set, using HEROKU_APP_NAME env.
+
 ## Frontend caching
 
 ```python
