@@ -25,9 +25,14 @@ If you're a Python or Django developer, [fork
 it](https://github.com/eviltnan/freeturn/) and read this contribution guide to get stuck in!
 We welcome all contributions, whether
 they solve problems which are specific to you or they address existing
-issues. If you're stuck for ideas, pick something from the [issue
-list](https://github.com/eviltnan/freeturn/issues?state=open), or [submit a question](https://portfolio.cheparev.com/freeturn/)
+issues. If you're stuck for ideas
+- pick something from the [issue
+list](https://github.com/eviltnan/freeturn/issues?state=open)
+- [join our slack workspace](https://join.slack.com/t/freeturn-project/shared_invite/zt-eg2ka5s5-TOZqkCQp19WJL2ojYcCFug)
+- [submit a question](https://portfolio.cheparev.com/freeturn/)
 if you'd like us to suggest something\!
+
+Also we have slack.
 
 For large-scale changes, we'd generally recommend breaking them down
 into smaller pull requests that achieve a single well-defined task and
