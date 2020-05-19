@@ -19,9 +19,15 @@ DEBUG_TOOLBAR = env.bool('DEBUG_TOOLBAR', False)
 ENVIRONMENT = env.str('ENVIRONMENT', env.str('HEROKU_APP_NAME', None))
 SENTRY_DSN = env.str('SENTRY_DSN', None)
 
+version_file_path = os.path.join(os.path.dirname(PROJECT_DIR), 'version.txt')
+
+with open(version_file_path, 'r') as f:
+    RELEASE = f.read().strip()
+
 if SENTRY_DSN:
     sentry_sdk.init(
         dsn=SENTRY_DSN,
+        release=RELEASE,
         environment=ENVIRONMENT,
         integrations=[DjangoIntegration()]
     )
