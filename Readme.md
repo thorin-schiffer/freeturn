@@ -24,23 +24,28 @@ Based on Django and Wagtail.
 [🎬 DEMO](https://freeturn-demo.herokuapp.com/)
 [👤 DEMO ADMIN](https://freeturn-demo.herokuapp.com/admin): user: admin, password: admin
 
-![CRM area](https://cheparev-portfolio.s3.amazonaws.com/images/Office_-_Projects_070.original.png)
+## Features
+
+### Portfolio
+
 ![Front page](https://cheparev-portfolio.s3.amazonaws.com/images/Selection_069.original.png)
-
-#### Features
-
-Portfolio:
 
 * minimalistic front page including picture and online identity
 * portfolio project pages with all necessary info
 * contact form
 
-CRM:
+### CV generation
 
-* tracking project leads and budgeting
-* clients database
+![Screenshot](docs/img/crm/cv_front_page.png)
+
 * quick per project CV generation using your project portfolio proven working against HR managers
 * Gmail integration, parsing the project description for quick project lead and CV generation
+
+### CRM
+
+![CRM area](https://cheparev-portfolio.s3.amazonaws.com/images/Office_-_Projects_070.original.png)
+* tracking project leads and budgeting
+* clients database
 * invoice generation
 
 **Full documentation**: [![Documentation Status](https://readthedocs.org/projects/freeturn/badge/?version=latest)](https://freeturn.readthedocs.io/en/latest/?badge=latest)
