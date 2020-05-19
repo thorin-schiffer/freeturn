@@ -10,6 +10,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/4aa9a9a8ce0e799208d4/maintainability)](https://codeclimate.com/github/eviltnan/freeturn/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/4aa9a9a8ce0e799208d4/test_coverage)](https://codeclimate.com/github/eviltnan/freeturn/test_coverage)
 [![Documentation Status](https://readthedocs.org/projects/freeturn/badge/?version=latest)](https://freeturn.readthedocs.io/en/latest/?badge=latest)
+[![Slack](https://img.shields.io/badge/slack-join-green.svg)](https://freeturn-project.slack.com/)
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/eviltnan/freeturn/tree/develop)
 
