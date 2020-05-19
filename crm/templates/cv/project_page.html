@@ -6,8 +6,12 @@
         <tr>
             <td valign="top">
                 <h2>Portfolio project: {{page.title}}</h2>
-                <h3 class="my-3">{{ page.start_date | date:"F Y" }}, {{ page.duration }}
-                    month{{page.duration|pluralize}}</h3>
+                {% if page.duration %}
+                    <h4 class="my-3">{{ page.start_date | date:"M Y" }}, {{ page.duration }}
+                        month{{page.duration|pluralize}}</h4>
+                {% else %}
+                    <h4 class="my-3">Since {{ page.start_date | date:"M Y" }}</h4>
+                {% endif %}
                 <h3>Summary</h3>
                 {{ page.summary }}
                 <h3>Position</h3>

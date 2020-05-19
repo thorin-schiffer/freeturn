@@ -38,8 +38,12 @@
         </div>
 
         <div class="col-md-8">
-            <h2 class="my-3">{{ page.start_date | date:"M Y" }}, {{ page.duration }}
-                month{{page.duration|pluralize}}</h2>
+            {% if page.duration %}
+                <h2 class="my-3">{{ page.start_date | date:"M Y" }}, {{ page.duration }}
+                    month{{page.duration|pluralize}}</h2>
+            {% else %}
+                <h2 class="my-3">Since {{ page.start_date | date:"M Y" }}</h2>
+            {% endif %}
             <h3><i class="fa fa-address-book"></i> Position</h3>
             <p id="position">
                 {{ page.position }}

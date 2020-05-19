@@ -15,6 +15,9 @@
   ],
   "buildpacks": [
     {
+      "url": "heroku/python"
+    },
+    {
       "url": "https://github.com/dscout/wkhtmltopdf-buildpack"
     },
     {
