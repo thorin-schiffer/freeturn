@@ -24,6 +24,8 @@ Based on Django and Wagtail.
 [🎬 DEMO](https://freeturn-demo.herokuapp.com/)
 [👤 DEMO ADMIN](https://freeturn-demo.herokuapp.com/admin): user: admin, password: admin
 
+**Warning** : demo is deployed on the heroku free instance, so it might take up to 1 minute to wake it up from slumber.
+
 ## Features
 
 ### Portfolio
