@@ -26,9 +26,12 @@
 
             {% for project in relevant_project_pages %}
             <h3><i class="fa fa-chevron-right"></i> {{project.title }}</h3>
-            <h4>
-                {{ project.start_date|date:"F Y" }} - {{ project.end_date|date:"F Y" }}
-            </h4>
+            {% if project.duration %}
+                <h4 class="my-3">{{ project.start_date | date:"M Y" }}, {{ project.duration }}
+                    month{{project.duration|pluralize}}</h4>
+            {% else %}
+                <h4 class="my-3">Since {{ project.start_date | date:"M Y" }}</h4>
+            {% endif %}
 
             <p>
                 <strong>{{project.position }}</strong>,
