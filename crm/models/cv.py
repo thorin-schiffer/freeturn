@@ -97,6 +97,7 @@ class CV(TimeStampedModel):
     ]
     panels = [
         MultiFieldPanel([
+            FieldPanel('project_listing_title'),
             AutocompletePanel('relevant_project_pages', is_single=False,
                               page_type='home.ProjectPage'),
             FieldPanel('include_portfolio'),
