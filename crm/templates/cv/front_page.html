@@ -25,7 +25,7 @@
             <h2>Recent projects</h2>
 
             {% for project in relevant_project_pages %}
-            <h3><i class="fa fa-chevron-right"></i> {{project.title }}</h3>
+            <h4><i class="fa fa-chevron-right"></i> {{project.title }}</h4>
             {% if project.duration %}
                 <h4 class="my-3">{{ project.start_date | date:"M Y" }}, {{ project.duration }}
                     month{{project.duration|pluralize}}</h4>
@@ -45,8 +45,8 @@
                 {% endif %}
                 {% endfor %}
             </p>
-            {% endfor %}
             <hr>
+            {% endfor %}
 
 
 
