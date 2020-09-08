@@ -120,7 +120,8 @@ def fill_crm_data(projects_count=10):
 
     # CV without portfolio
     without_portfolio = CVFactory(include_portfolio=False,
-                                  project=make_project(name='Project without portfolio with all projects'))
+                                  project=make_project(name='Project without portfolio with all projects'),
+                                  project_listing_title='Projects')
     without_portfolio.relevant_project_pages.set(ProjectPage.objects.all())
     without_portfolio.picture = get_random_image('People')
     without_portfolio.save()
