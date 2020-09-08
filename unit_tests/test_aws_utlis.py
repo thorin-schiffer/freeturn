@@ -31,7 +31,7 @@ def iam():
 
 @pytest.fixture(scope='session')
 def bucket(s3):
-    conn = boto3.resource('s3', region_name='eu-central-1')
+    conn = boto3.resource('s3')
     return conn.create_bucket(Bucket='bucket')
 
 
