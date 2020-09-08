@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-wagtail = "<2.9,>=2.8"
+wagtail = "<3"
 django = ">=2.2,<3.0"
 gunicorn = "*"
 django-toolbelt = "*"
@@ -41,7 +41,7 @@ asgiref = "*"
 l18n = "*"
 django-environ = "*"
 wagtail-factories = "*"
-factory-boy = "*"
+factory-boy = "<3"
 wagtail-storages = "*"
 wagtail-instance-selector = "*"
 
