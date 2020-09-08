@@ -22,37 +22,33 @@
     {% with relevant_skills=instance.relevant_skills.all %}
     <tr>
         <td valign="top" style="padding-right: 20px">
-            <h2>Recent projects</h2>
+            <h2>{{ instance.project_listing_title }}</h2>
 
             {% for project in relevant_project_pages %}
-            <h3><i class="fa fa-chevron-right"></i> {{project.title }}</h3>
-            <h4>
-                {{ project.start_date|date:"F Y" }} - {{ project.end_date|date:"F Y" }}
-            </h4>
+            <h4><i class="fa fa-chevron-right"></i> {{project.title }}</h4>
+            {% if project.duration %}
+                <h4 class="my-3">{{ project.start_date | date:"M Y" }}, {{ project.duration }}
+                    month{{project.duration|pluralize}}</h4>
+            {% else %}
+                <h4 class="my-3">Since {{ project.start_date | date:"M Y" }}</h4>
+            {% endif %}
 
             <p>
                 <strong>{{project.position }}</strong>,
                 {{project.summary | safe}}
             </p>
             <p>
-                <i class="fa fa-cog"></i>
+                {% if relevant_skills %} <i class="fa fa-cog"></i> {% endif %}
                 {% for technology in project.technologies.all %}
                 {% if technology in relevant_skills %}
                 <span class="label label-default">{{ technology }}</span>
                 {% endif %}
                 {% endfor %}
             </p>
-            {% endfor %}
             <hr>
-
-            <h2><i class="fa fa-cogs"></i> Skills</h2>
-            {% for skill in skills %}
-            {% if skill in relevant_skills %}
-            <span class="label label-default">{{ skill }}</span>
-            {% else %}
-            {{ skill }}
-            {% endif %}
             {% endfor %}
+
+
 
         </td>
         <td valign="top">
@@ -73,6 +69,14 @@
             <h3><i class="fa fa-balance-scale"></i> Working permit</h3>
             {{ instance.working_permit | richtext }}
 
+            <h3><i class="fa fa-cogs"></i> Skills</h3>
+            {% for skill in skills %}
+            {% if skill in relevant_skills %}
+            <span class="label label-default">{{ skill }}</span>
+            {% else %}
+            {{ skill }}
+            {% endif %}
+            {% endfor %}
         </td>
     </tr>
     {% endwith %}

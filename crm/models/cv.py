@@ -38,7 +38,11 @@ class CV(TimeStampedModel):
     experience_overview = RichTextField(
         help_text='Notice on your experience',
     )
-
+    project_listing_title = models.CharField(
+        max_length=200,
+        help_text="The title of your project listing, something like 'my projects' or 'recent projects'",
+        default='Recent projects'
+    )
     relevant_project_pages = models.ManyToManyField(
         'home.ProjectPage',
         help_text='Project pages to be placed on the first page, eye catcher for this project',

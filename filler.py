@@ -18,7 +18,7 @@ from home.factories import HomePageFactory, TechnologiesPageFactory, \
 from home.factories import PortfolioPageFactory, ProjectPageFactory
 from home.factories import SiteFactory
 from home.factories import TechnologyFactory, ResponsibilityFactory
-from home.models import HomePage, FormField
+from home.models import HomePage, FormField, ProjectPage
 from home.models.snippets import Technology, Responsibility
 
 
@@ -95,23 +95,37 @@ def fill_snippets(count=10):
         print(f'Adding: {ResponsibilityFactory()}')
 
 
+def make_project(**overloads):
+    project = ProjectFactory(company__logo=None, manager__picture=None, manager__company__logo=None, **overloads)
+    project.company.logo = get_random_image('Logos')
+    project.company.save()
+    project.manager.picture = get_random_image('People')
+    project.manager.save()
+    project.modified = make_aware(project.start_date) - timedelta(days=random.randint(30, 90))
+    project.save(update_modified=False)
+    print(f'Created {project}')
+    return project
+
+
 def fill_crm_data(projects_count=10):
     for i in range(projects_count):
-        project = ProjectFactory(company__logo=None, manager__picture=None, manager__company__logo=None)
-        project.company.logo = get_random_image('Logos')
-        project.company.save()
-        project.manager.picture = get_random_image('People')
-        project.manager.save()
-        project.modified = make_aware(project.start_date) - timedelta(days=random.randint(30, 90))
-        project.save(update_modified=False)
-        print(f'Created {project}')
-
+        project = make_project()
         cv = CVFactory(project=project, picture=None)
         cv.picture = get_random_image('People')
         cv.save()
-
+        cv.relevant_project_pages.set(ProjectPage.objects.order_by('?')[:3])
+        cv.relevant_skills.set(Technology.objects.order_by('?')[:3])
         ProjectMessageFactory(project=project, author=project.manager)
         InvoiceFactory(project=project, logo=project.company.logo)
+
+    # CV without portfolio
+    without_portfolio = CVFactory(include_portfolio=False,
+                                  project=make_project(name='Project without portfolio with all projects'),
+                                  project_listing_title='Projects')
+    without_portfolio.relevant_project_pages.set(ProjectPage.objects.all())
+    without_portfolio.picture = get_random_image('People')
+    without_portfolio.save()
+    without_portfolio.relevant_skills.set(Technology.objects.order_by('?')[:3])
 
 
 def fill_pictures():

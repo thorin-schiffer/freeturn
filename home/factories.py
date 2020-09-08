@@ -67,12 +67,11 @@ class TagFactory(factory.DjangoModelFactory):
 
 
 class TechnologyFactory(factory.DjangoModelFactory):
-    name = factory.Faker('word')
+    name = factory.Sequence(lambda n: f'technology_{n}')
     summary = factory.Faker('sentence')
 
     class Meta:
         model = Technology
-        django_get_or_create = ('name',)
 
 
 class TechnologiesPageFactory(wagtail_factories.PageFactory):

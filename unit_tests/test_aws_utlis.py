@@ -1,4 +1,5 @@
 import json
+import uuid
 
 import pytest
 import boto3
@@ -7,36 +8,36 @@ from moto import mock_s3, mock_sts, mock_iam
 from aws_utils import install_policy, render_policy
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def s3():
     with mock_s3():
         s3 = boto3.client('s3')
         yield s3
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def sts():
     with mock_sts():
         sts = boto3.client('sts')
         yield sts
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def iam():
     with mock_iam():
         iam = boto3.client('iam')
         yield iam
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def bucket(s3):
-    conn = boto3.resource('s3', region_name='eu-central-1')
+    conn = boto3.resource('s3')
     return conn.create_bucket(Bucket='bucket')
 
 
-@pytest.fixture
-def user(iam, faker):
-    name = faker.first_name()
+@pytest.fixture(scope='session')
+def user(iam):
+    name = str(uuid.uuid4())
     iam.create_user(UserName=name)
     return name
 
