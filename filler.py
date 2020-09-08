@@ -113,7 +113,8 @@ def fill_crm_data(projects_count=10):
         cv = CVFactory(project=project, picture=None)
         cv.picture = get_random_image('People')
         cv.save()
-
+        cv.relevant_project_pages.set(ProjectPage.objects.order_by('?')[:3])
+        cv.relevant_skills.set(Technology.objects.order_by('?')[:3])
         ProjectMessageFactory(project=project, author=project.manager)
         InvoiceFactory(project=project, logo=project.company.logo)
 
@@ -123,6 +124,7 @@ def fill_crm_data(projects_count=10):
     without_portfolio.relevant_project_pages.set(ProjectPage.objects.all())
     cv.picture = get_random_image('People')
     cv.save()
+    cv.relevant_skills.set(Technology.objects.order_by('?')[:3])
 
 
 def fill_pictures():
@@ -162,6 +164,6 @@ def fill():
     import factory.random
     factory.random.reseed_random('my_awesome_project')
     fill_pictures()
-    fill_snippets(100)
+    fill_snippets()
     fill_pages()
     fill_crm_data()
