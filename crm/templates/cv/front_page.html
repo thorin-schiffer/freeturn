@@ -38,7 +38,7 @@
                 {{project.summary | safe}}
             </p>
             <p>
-                <i class="fa fa-cog"></i>
+                {% if relevant_skills %} <i class="fa fa-cog"></i> {% endif %}
                 {% for technology in project.technologies.all %}
                 {% if technology in relevant_skills %}
                 <span class="label label-default">{{ technology }}</span>
