@@ -48,14 +48,7 @@
             {% endfor %}
             <hr>
 
-            <h2><i class="fa fa-cogs"></i> Skills</h2>
-            {% for skill in skills %}
-            {% if skill in relevant_skills %}
-            <span class="label label-default">{{ skill }}</span>
-            {% else %}
-            {{ skill }}
-            {% endif %}
-            {% endfor %}
+
 
         </td>
         <td valign="top">
@@ -76,6 +69,14 @@
             <h3><i class="fa fa-balance-scale"></i> Working permit</h3>
             {{ instance.working_permit | richtext }}
 
+            <h3><i class="fa fa-cogs"></i> Skills</h3>
+            {% for skill in skills %}
+            {% if skill in relevant_skills %}
+            <span class="label label-default">{{ skill }}</span>
+            {% else %}
+            {{ skill }}
+            {% endif %}
+            {% endfor %}
         </td>
     </tr>
     {% endwith %}
