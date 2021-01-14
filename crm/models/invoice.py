@@ -213,11 +213,17 @@ class Invoice(TimeStampedModel):
         if self.project:
             return self.project.company if self.project.company else self.project.manager.company
 
+    INVOICE_NUMBER_TRIES_COUNT = 100
+
     @staticmethod
     def get_next_invoice_number():
         this_year = timezone.now().year
         count_this_year = Invoice.objects.filter(issued_date__year=this_year).count()
-        return f'{this_year}-{count_this_year + 1:02d}'
+        for i in range(1, Invoice.INVOICE_NUMBER_TRIES_COUNT):
+            number = f'{this_year}-{count_this_year + i:02d}'
+            if not Invoice.objects.filter(invoice_number=number).exists():
+                return number
+        raise RuntimeError("Coudn't find the passing invoice number")
 
     def copy_company_params(self):
         if self.project.manager:
