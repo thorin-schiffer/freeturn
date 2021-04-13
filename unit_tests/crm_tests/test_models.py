@@ -204,7 +204,7 @@ def project_pages(project_page_factory):
 
 
 @pytest.mark.django_db
-def test_cv_set_relevant_projects(cv, project_pages, mocker):
+def test_cv_set_relevant_projects(default_locale, cv, project_pages, mocker):
     technology = Technology.objects.filter(name='xxx')
     mocker.patch('home.models.Technology.match_text',
                  side_effect=lambda *args: technology)

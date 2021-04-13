@@ -1,11 +1,11 @@
 import json
-import os
 
+import os
+import pytest
 import wagtail_factories
 from pytest_factoryboy import register
-from crm import factories
-import pytest
 
+from crm import factories
 from home.factories import SiteFactory, HomePageFactory, ProjectPageFactory
 
 register(factories.CityFactory)
@@ -27,7 +27,7 @@ register(factories.UserSocialAuthFactory)
 
 
 @pytest.fixture
-def admin_app(django_app, admin_user):
+def admin_app(default_locale, django_app, admin_user):
     django_app.set_user(admin_user)
     return django_app
 

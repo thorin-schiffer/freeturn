@@ -3,6 +3,7 @@ from wagtail.admin.edit_handlers import ObjectList
 from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import CreateView, InspectView
+from wagtail.core.models import Site
 
 from crm.models.cv import CV
 from crm.models.settings import CVGenerationSettings
@@ -21,7 +22,7 @@ class CreateCVView(CreateView):
         return edit_handler.bind_to(self.model)
 
     def get_initial(self):
-        site = self.request.site
+        site = Site.find_for_request(self.request)
         user = self.request.user
         settings = CVGenerationSettings.for_site(site)
         try:
