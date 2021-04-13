@@ -69,6 +69,7 @@ class CV(TimeStampedModel):
 
     create_panels = [
         FieldPanel('project'),
+        ImageChooserPanel('picture'),
         FieldRowPanel(
             [
                 MultiFieldPanel(
@@ -83,7 +84,6 @@ class CV(TimeStampedModel):
                 ),
                 MultiFieldPanel(
                     [
-                        ImageChooserPanel('picture'),
                         FieldPanel('contact_details'),
                         FieldPanel('languages_overview'),
                         FieldPanel('rate_overview'),
