@@ -74,4 +74,4 @@ flaky = "*"
 mkdocs = "*"
 
 [requires]
-python_version = "3.7.5"
+python_version = "3.7.10"
