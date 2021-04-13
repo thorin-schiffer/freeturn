@@ -60,7 +60,6 @@ INSTALLED_APPS = [
     'taggit',
     'storages',
     'wagtail_storages',
-    'ajax_select',
     'wkhtmltopdf',
     'analytical',
 
