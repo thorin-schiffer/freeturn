@@ -42,7 +42,7 @@ commands:
 
 defaults: &defaults
   docker:
-  - image: python:3.7.5
+  - image: python:3.9.4
   environment:
   - PIPENV_CACHE_DIR: ~/.local/pipenv-cache
   - SECRET_KEY: '1234567'

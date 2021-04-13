@@ -90,9 +90,9 @@ If you want to submit additional docs or spelling corrections, please submit a [
 
 * Install pyenv for managing your python versions: https://github.com/pyenv/pyenv.
 * Update your pyenv versions cache: `pyenv update`
-* Install python version 3.7.5 (or other you prefer or one specified in Pipfile): `pyenv install 3.7.5`
-* Verify installation with `pyenv versions`. 3.7.5 must be there.
-* Configure pyenv using 3.7.5 locally: `pyenv local 3.7.5`. Say `python -V`, it should reply `Python 3.7.5`
+* Install python version 3.9.4 (or other you prefer or one specified in Pipfile): `pyenv install 3.9.4`
+* Verify installation with `pyenv versions`. 3.9.4 must be there.
+* Configure pyenv using 3.9.4 locally: `pyenv local 3.9.4`. Say `python -V`, it should reply `Python 3.9.4`
 * Install pipenv: `pip install pipenv`
 * Initialize pipenv environment: `pipenv install --dev`. Dev install dev deps for running tests.
 * Enter virtualenv: `pipenv shell`
@@ -102,7 +102,7 @@ Various features can be activated over the environment, see .env_template for an
 * Install pre-commit hooks with: `pre-commit install`. Read more about pre-commit: https://pre-commit.com/
 
 ```
-Python 3.7.5 (default, Jan 30 2020, 12:57:36)
+Python 3.9.4 (default, Jan 30 2020, 12:57:36)
 Type 'copyright', 'credits' or 'license' for more information
 IPython 7.11.1 -- An enhanced Interactive Python. Type '?' for help.
 
