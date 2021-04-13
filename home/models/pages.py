@@ -1,6 +1,5 @@
 from datetime import timedelta
 
-from ajax_select.fields import AutoCompleteSelectMultipleWidget
 from django.db import models
 from django.db.models import Count
 from django.utils import timezone
@@ -14,6 +13,7 @@ from wagtail.documents import get_document_model_string
 from wagtail.documents.edit_handlers import DocumentChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
+from wagtailautocomplete.edit_handlers import AutocompletePanel
 
 from home.forms import RecaptchaForm
 from home.models.snippets import Technology
@@ -159,7 +159,7 @@ class ProjectPage(Page):
         FieldPanel('start_date'),
         FieldPanel('duration'),
         FieldPanel('position'),
-        FieldPanel('technologies', widget=AutoCompleteSelectMultipleWidget('technologies')),
+        AutocompletePanel('technologies', target_model=Technology),
         FieldPanel('responsibilities'),
         DocumentChooserPanel('reference_letter'),
     ]

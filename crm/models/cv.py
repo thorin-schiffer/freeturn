@@ -1,6 +1,5 @@
 import logging
 
-from ajax_select.fields import AutoCompleteSelectMultipleWidget
 from django.db import models
 from django.db.models import CASCADE
 from django.utils import timezone
@@ -103,8 +102,7 @@ class CV(TimeStampedModel):
             FieldPanel('include_portfolio'),
 
         ]),
-        FieldPanel('relevant_skills',
-                   widget=AutoCompleteSelectMultipleWidget('technologies')),
+        AutocompletePanel('relevant_skills', target_model=Technology),
     ] + create_panels
 
     @property

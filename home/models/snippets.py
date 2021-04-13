@@ -41,6 +41,11 @@ class Technology(index.Indexed, models.Model):
             name__in=[r[0] for r in results if r[1] > cutoff]
         )
 
+    autocomplete_search_field = 'name'
+
+    def autocomplete_label(self):
+        return self.name
+
     def __str__(self):
         return self.name
 
