@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 wagtail = "<3"
-django = ">=2.2,<3.0"
+django = ">3"
 gunicorn = "*"
 django-toolbelt = "*"
 whitenoise = "*"
