@@ -86,7 +86,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default='*')
