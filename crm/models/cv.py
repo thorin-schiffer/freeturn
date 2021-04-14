@@ -68,7 +68,7 @@ class CV(TimeStampedModel):
     working_permit = RichTextField()
 
     create_panels = [
-        AutocompletePanel('project'),
+        FieldPanel('project'),
         ImageChooserPanel('picture'),
         FieldRowPanel(
             [

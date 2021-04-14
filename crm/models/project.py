@@ -154,11 +154,6 @@ class Project(ProjectStateMixin, TimeStampedModel):
                 }
             )
 
-    autocomplete_search_field = 'name'
-
-    def autocomplete_label(self):
-        return self.name
-
     def save(self, *args, **kwargs):
         if not self.daily_rate and self.company:
             self.daily_rate = self.company.default_daily_rate
