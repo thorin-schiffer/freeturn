@@ -21,7 +21,7 @@
       "url": "https://github.com/hopkinschris/heroku-buildpack-apt.git"
     },
     {
-      "url": "https://github.com/dscout/wkhtmltopdf-buildpack"
+      "url": "https://github.com/notvad/wkhtmltopdf-buildpack"
     },
     {
       "url": "https://github.com/grauwoelfchen/heroku-buildpack-gettext.git"
