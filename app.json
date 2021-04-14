@@ -18,6 +18,9 @@
       "url": "heroku/python"
     },
     {
+      "url": "https://github.com/hopkinschris/heroku-buildpack-apt.git"
+    },
+    {
       "url": "https://github.com/dscout/wkhtmltopdf-buildpack"
     },
     {
