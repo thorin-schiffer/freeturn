@@ -29,7 +29,7 @@ def get_random_image(collection):
 def fill_form(home):
     contact_page = ContactPageFactory.build()
     contact_page.form_fields = [
-        FormField(label='your email', field_type='email', default_value='sergey@cheparev.com'),
+        FormField(label='your email', field_type='email', default_value='thorin@schiffer.pro'),
         FormField(label='some words about your project', field_type='multiline', required=False,
                   default_value='some words'),
         FormField(label='technologies', field_type='singleline',

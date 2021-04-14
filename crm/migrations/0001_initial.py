@@ -85,7 +85,7 @@ class Migration(migrations.Migration):
                 ('default_title', models.CharField(default='Freelance python developer', help_text='Default title to use', max_length=255)),
                 ('default_experience_overview', models.TextField(default='Python developer experience: 7 years', help_text='Notice on your experience')),
                 ('default_education_overview', models.TextField(default='Novosibirsk State Technical University', help_text='Notice on your education')),
-                ('default_contact_details', models.TextField(default='sergey@cheparev.com')),
+                ('default_contact_details', models.TextField(default='thorin@schiffer.pro')),
                 ('default_languages_overview', models.TextField(default='English: fluent')),
                 ('default_rate_overview', models.TextField(default='<<change default in settings>>')),
                 ('default_working_permit', models.TextField(default='PERMANENT RESIDENCE')),

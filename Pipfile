@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-wagtail = "<2.10"
-django = ">=2.2,<3.0"
+wagtail = "<3"
+django = ">3"
 gunicorn = "*"
 django-toolbelt = "*"
 whitenoise = "*"
@@ -26,7 +26,6 @@ social-auth-app-django = "*"
 lxml = "*"
 psycopg2-binary = "*"
 fuzzywuzzy = {extras = ["speedup"],version = "*"}
-django-ajax-selects = ">=1.7.0,<1.8.0"
 django-wkhtmltopdf = "*"
 wagtail-autocomplete = "*"
 django-redis = "*"
@@ -74,4 +73,4 @@ flaky = "*"
 mkdocs = "*"
 
 [requires]
-python_version = "3.7.5"
+python_version = "3.9.4"

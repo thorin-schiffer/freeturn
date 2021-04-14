@@ -4,6 +4,7 @@ from django.utils import translation
 from wagtail.contrib.modeladmin.helpers import ButtonHelper, AdminURLHelper
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import CreateView, InspectView, EditView
+from wagtail.core.models import Site
 
 from crm.models.invoice import Invoice, wrap_table_data
 from crm.models.settings import InvoiceGenerationSettings
@@ -12,7 +13,7 @@ from crm.utils import BasePDFView
 
 class InvoiceCreateView(CreateView):
     def get_default(self):
-        site = self.request.site
+        site = Site.find_for_request(self.request)
         settings = InvoiceGenerationSettings.for_site(site)
 
         return {

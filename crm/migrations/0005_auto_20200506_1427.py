@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='cvgenerationsettings',
             name='default_contact_details',
-            field=wagtail.core.fields.RichTextField(default='sergey@cheparev.com'),
+            field=wagtail.core.fields.RichTextField(default='thorin@schiffer.pro'),
         ),
         migrations.AlterField(
             model_name='cvgenerationsettings',

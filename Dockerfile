@@ -1,4 +1,4 @@
-FROM python:3.7.5
+FROM python:3.9.4
 ENV PYTHONUNBUFFERED 1
 EXPOSE 8000/tcp
 

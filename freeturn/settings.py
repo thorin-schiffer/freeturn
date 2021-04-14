@@ -60,7 +60,6 @@ INSTALLED_APPS = [
     'taggit',
     'storages',
     'wagtail_storages',
-    'ajax_select',
     'wkhtmltopdf',
     'analytical',
 
@@ -86,7 +85,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default='*')
@@ -262,8 +260,9 @@ if WHITENOISE_STORAGE:
 
 WKHTMLTOPDF_CMD = env.str('WKHTMLTOPDF_CMD', default='/usr/bin/wkhtmltopdf')
 WKHTMLTOPDF_CMD_OPTIONS = {
-    'quiet': True,
-    'cache-dir': '.wkhtml-cache'
+    'quiet': False,
+    'cache-dir': '.wkhtml-cache',
+    'enable-local-file-access': True
 }
 SCOUT_MONITOR = env.str('SCOUT_MONITOR', False)
 if SCOUT_MONITOR:
