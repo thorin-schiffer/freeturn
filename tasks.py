@@ -162,8 +162,6 @@ def unicorn(context, fill_db=False, host=None):
 def heroku_release(context):
     migrate_db(context)
     install_s3_policy(context)
-    if os.getenv('SCOUT_MONITOR'):
-        context.run('pip install scout-apm')
 
 
 @invoke.task(

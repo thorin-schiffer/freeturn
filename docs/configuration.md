@@ -43,8 +43,6 @@ WHITENOISE_STORAGE=
 # path to set wkhtml binary, usually /usr/bin/wkhtmltopdf, for heroku buildback /app/bin/wkhtmltopdf
 # use which wkhtmltopdf in the container to make sure it's there
 WKHTMLTOPDF_CMD=
-# monitoring with scout apm, https://docs.scoutapm.com/#django
-SCOUT_MONITOR=
 ```
 
 ### Django environ built-in env
@@ -200,16 +198,6 @@ GOOGLE_ANALYTICS_ID = 'UA-123456-7'
 
 Google analytics is a monstrous analytics tool to analyze your site performance and user behavior. Consult [this docs](https://support.google.com/analytics/thread/13109681?hl=en)
 to find out where you get this tracking id.
-
-## Scout APM
-
-```python
-SCOUT_MONITOR = False
-```
-
-Freeturn offers [scout apm](https://scoutapm.com/) integration, which allows you see all the performance insights.
-You can enable the integration with setting this variable to True and configure it using the environment variables
-from the [official django integration](https://scoutapm.com/blog/monitoring-a-django-app-with-scout).
 
 ## Debug toolbar
 
