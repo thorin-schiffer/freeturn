@@ -261,7 +261,8 @@ if WHITENOISE_STORAGE:
 WKHTMLTOPDF_CMD = env.str('WKHTMLTOPDF_CMD', default='/usr/bin/wkhtmltopdf')
 WKHTMLTOPDF_CMD_OPTIONS = {
     'quiet': False,
-    'cache-dir': '.wkhtml-cache'
+    'cache-dir': '.wkhtml-cache',
+    'enable-local-file-access': True
 }
 SCOUT_MONITOR = env.str('SCOUT_MONITOR', False)
 if SCOUT_MONITOR:
