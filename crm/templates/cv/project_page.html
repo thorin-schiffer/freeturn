@@ -1,5 +1,6 @@
 {% load wagtailimages_tags %}
 {% load wagtailcore_tags %}
+{% load static %}
 <div style="page-break-after: always;">
     <table width="100%">
         <tbody>
@@ -31,10 +32,12 @@
                 <p><a href="{{ page.project_url }}">{{ page.project_url }}</a></p>
                 {% endif %}
             </td>
-            {% if page.logo %}
             <td width="30%" align="right" valign="top" style="padding-left: 10px;">
-                {% image page.logo fill-128x128-c80 class="img-fluid"%}
-
+                {% if page.logo %}
+                    {% image page.logo fill-128x128-c80 class="img-fluid"%}
+                {% else %}
+                    <img height="128" width="128" src="{% static 'img/default_project.png' %}" class="img-fluid portfolio-logo">
+                {% endif %}
                 <h3>Technologies</h3>
                 {% for technology in page.technologies.all %}
                 {% if technology in relevant_skills %}
@@ -44,7 +47,6 @@
                 {% endif %}
                 {% endfor %}
             </td>
-            {% endif %}
         </tr>
         </tbody>
     </table>

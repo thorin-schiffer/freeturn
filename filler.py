@@ -61,6 +61,16 @@ def fill_portfolio(home, projects_count=9):
 
         print(f'Added {page}')
 
+    # issue 35
+    page = ProjectPageFactory.build(technologies=[],
+                                    title='No logo project',
+                                    description__max_nb_chars=1000,
+                                    logo=None)
+    portfolio_page.add_child(instance=page)
+    page.responsibilities.set(Responsibility.objects.order_by('?')[:3])
+    page.technologies.set(Technology.objects.order_by('?')[:3])
+    page.save()
+
 
 def fill_pages():
     backgrounds_collection = Collection.objects.get(name='Backgrounds')
@@ -120,12 +130,19 @@ def fill_crm_data(projects_count=10):
 
     # CV without portfolio
     without_portfolio = CVFactory(include_portfolio=False,
-                                  project=make_project(name='Project without portfolio with all projects'),
+                                  project=make_project(name='Project without portfolio flag with all projects'),
                                   project_listing_title='Projects')
     without_portfolio.relevant_project_pages.set(ProjectPage.objects.all())
     without_portfolio.picture = get_random_image('People')
     without_portfolio.save()
     without_portfolio.relevant_skills.set(Technology.objects.order_by('?')[:3])
+
+    # all projects with portfolio
+    all_projects = CVFactory(project=make_project(name='All projects'))
+    all_projects.relevant_project_pages.set(ProjectPage.objects.all())
+    all_projects.picture = get_random_image('People')
+    all_projects.save()
+    all_projects.relevant_skills.set(Technology.objects.order_by('?')[:3])
 
 
 def fill_pictures():
