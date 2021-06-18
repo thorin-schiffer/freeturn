@@ -120,12 +120,17 @@ def fill_crm_data(projects_count=10):
 
     # CV without portfolio
     without_portfolio = CVFactory(include_portfolio=False,
-                                  project=make_project(name='Project without portfolio with all projects'),
+                                  project=make_project(name='Project without portfolio flag with all projects'),
                                   project_listing_title='Projects')
     without_portfolio.relevant_project_pages.set(ProjectPage.objects.all())
     without_portfolio.picture = get_random_image('People')
     without_portfolio.save()
     without_portfolio.relevant_skills.set(Technology.objects.order_by('?')[:3])
+
+    without_portfolio = CVFactory(project__logo=None,
+                                  project=make_project(name='Project empty logo'))  # issue 35
+    project_page_without_portfolio = ProjectPageFactory(project=without_portfolio.project)
+    without_portfolio.relevant_project_pages.set([project_page_without_portfolio])
 
 
 def fill_pictures():
