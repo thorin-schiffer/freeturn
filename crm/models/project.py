@@ -6,15 +6,67 @@ from django.db import models
 from django.urls import reverse
 from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
+from django_fsm import FSMField, transition
 from instance_selector.edit_handlers import InstanceSelectorPanel
 from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel, FieldRowPanel, PageChooserPanel
 from wagtail.core.fields import RichTextField
 
-from crm.project_states import ProjectStateMixin
 from crm.utils import get_working_days
 
 
-class Project(ProjectStateMixin, TimeStampedModel):
+class Project(TimeStampedModel):
+    state = FSMField(default='requested', editable=False)
+    state_colors = {
+        'requested': '#71b2d4',
+        'scoped': '#43b1b0',
+        'introduced': '#71b2d4',
+        'signed': '#189370',
+        'progress': '#43b1b0',
+        'finished': '#246060',
+        'stopped': '#cd3238'
+    }
+
+    @property
+    def state_color(self):
+        return self.state_colors.get(self.state, '#000')
+
+    @transition(field=state, source='requested', target='scoped', custom={
+        'help': 'This project was scoped, on email or call',
+    })
+    def scope(self):
+        pass
+
+    @transition(field=state, source='scoped', target='introduced', custom={
+        'help': 'Introduced to the end client',
+    })
+    def introduce(self):
+        pass
+
+    @transition(field=state, source='introduced', target='signed', custom={
+        'help': 'Contract signed',
+    })
+    def sign(self):
+        pass
+
+    @transition(field=state, source='signed', target='progress', custom={
+        'help': 'Started working',
+    })
+    def start(self):
+        pass
+
+    @transition(field=state, source='progress', target='finished', custom={
+        'help': 'Finished working',
+    })
+    def finish(self):
+        pass
+
+    @transition(field=state, source='*', target='stopped', custom={
+        'help': 'Project dropped',
+        'classes': ['no'],
+    })
+    def drop(self):
+        pass
+
     name = models.CharField(max_length=120,
                             blank=True, null=True)
     company = models.ForeignKey('Company',
