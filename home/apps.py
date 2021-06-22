@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CrmConfig(AppConfig):
-    name = 'crm'
+class HomeConfig(AppConfig):
+    name = 'home'
     default_auto_field = 'django.db.models.BigAutoField'
