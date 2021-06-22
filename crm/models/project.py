@@ -14,7 +14,32 @@ from wagtail.core.fields import RichTextField
 from crm.utils import get_working_days
 
 
-class Project(TimeStampedModel):
+class ProjectDisplayMixin:
+    def get_project_page_display(self):
+        if not self.project_page:
+            return
+        url = reverse('wagtailadmin_pages:edit', args=(self.project_page.pk,))
+        return SafeText(
+            f"<a href='{url}'>{self.project_page}</a>"
+        )
+
+    def get_budget_display(self):
+        return f'{self.budget} €' if self.budget else None
+
+    def get_vat_display(self):
+        return f'{self.vat:.2f} €' if self.vat else None
+
+    def get_invoice_amount_display(self):
+        return f'{self.invoice_amount:.2f} €' if self.invoice_amount else None
+
+    def get_income_tax_display(self):
+        return f'{self.income_tax:.2f} €' if self.income_tax else None
+
+    def get_nett_income_display(self):
+        return f'{self.nett_income:.2f} €' if self.nett_income else None
+
+
+class Project(TimeStampedModel, ProjectDisplayMixin):
     state = FSMField(default='requested', editable=False)
     state_colors = {
         'requested': '#71b2d4',
@@ -131,14 +156,6 @@ class Project(TimeStampedModel):
     def get_duration_display(self):
         return f'{self.duration} months'
 
-    def get_project_page_display(self):
-        if not self.project_page:
-            return
-        url = reverse('wagtailadmin_pages:edit', args=(self.project_page.pk,))
-        return SafeText(
-            f"<a href='{url}'>{self.project_page}</a>"
-        )
-
     @property
     def budget(self):
         if not self.start_date or not self.end_date:
@@ -177,21 +194,6 @@ class Project(TimeStampedModel):
         if not self.start_date or not self.end_date:
             return
         return len(get_working_days(self.start_date, self.end_date))
-
-    def get_budget_display(self):
-        return f'{self.budget} €' if self.budget else None
-
-    def get_vat_display(self):
-        return f'{self.vat:.2f} €' if self.vat else None
-
-    def get_invoice_amount_display(self):
-        return f'{self.invoice_amount:.2f} €' if self.invoice_amount else None
-
-    def get_income_tax_display(self):
-        return f'{self.income_tax:.2f} €' if self.income_tax else None
-
-    def get_nett_income_display(self):
-        return f'{self.nett_income:.2f} €' if self.nett_income else None
 
     @property
     def logo(self):
