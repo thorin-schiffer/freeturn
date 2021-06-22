@@ -4,9 +4,33 @@ from decimal import Decimal
 import pytest
 from django.urls import reverse
 from django.utils import timezone
+from webtest import Field
 
 from crm.models.invoice import Invoice
 from crm.models.settings import InvoiceGenerationSettings
+
+positions_data = {
+    'positions-count': ['1'],
+    'positions-0-deleted': [''],
+    'positions-0-order': ['0'],
+    'positions-0-type': ['positions'], 'positions-0-id': ['da89579e-c58a-4eaa-a1f6-b6532d2ae98c'],
+    'handsontable-col-caption': [''], 'positions-0-value': [
+        '{"data":[{"article":"Python programming","amount":100,"price":15}],'
+        '"cell":[{"row":0,"col":1,"className":"htRight htNumeric"},'
+        '{"row":0,"col":2,"className":"htRight htNumeric"}],'
+        '"first_row_is_table_header":false,'
+        '"first_col_is_header":false,"table_caption":""}'
+    ]
+}
+
+
+# stream fields are now done in frontend
+# https://docs.wagtail.io/en/stable/releases/2.13.html#streamfield-performance-and-functionality-updates
+def add_position_fields(form):
+    for name, value in positions_data.items():
+        field = Field(form, tag='input', value=value, name=name, pos=20)
+        form.fields[name] = [field]
+        form.field_order.append((name, field))
 
 
 @pytest.mark.django_db
@@ -32,10 +56,8 @@ def test_create(admin_app, admin_user, default_site, image):
     assert form['issued_date'].value == str(timezone.now().date())
     assert form['delivery_date'].value == str(timezone.now().date())
     assert form['invoice_number'].value == Invoice.get_next_invoice_number()
-    # positions is a fieldset
-    positions = json.loads(form['positions-0-value'].value)['data'][0]
-    assert positions['amount']
-    assert positions['price']
+
+    add_position_fields(form)
     form.submit()
 
 
