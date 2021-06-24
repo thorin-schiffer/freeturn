@@ -67,9 +67,7 @@ class CV(TimeStampedModel):
     languages_overview = RichTextField()
     rate_overview = RichTextField(blank=True, null=True)
     working_permit = RichTextField()
-
-    create_panels = [
-        InstanceSelectorPanel('project'),
+    common_panels = [
         ImageChooserPanel('picture'),
         FieldRowPanel(
             [
@@ -95,8 +93,13 @@ class CV(TimeStampedModel):
             ]
         ),
     ]
+    create_panels = [
+        InstanceSelectorPanel('project'),
+        *common_panels
+    ]
     panels = [
         MultiFieldPanel([
+            InstanceSelectorPanel('project'),
             FieldPanel('project_listing_title'),
             AutocompletePanel('relevant_project_pages', is_single=False,
                               page_type='home.ProjectPage'),
@@ -104,7 +107,8 @@ class CV(TimeStampedModel):
 
         ]),
         AutocompletePanel('relevant_skills', target_model=Technology),
-    ] + create_panels
+        *common_panels
+    ]
 
     @property
     def logo(self):
