@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import CASCADE
 from django.utils import timezone
 from django_extensions.db.models import TimeStampedModel
+from instance_selector.edit_handlers import InstanceSelectorPanel
 from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel
 from wagtail.core.fields import RichTextField
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -66,9 +67,7 @@ class CV(TimeStampedModel):
     languages_overview = RichTextField()
     rate_overview = RichTextField(blank=True, null=True)
     working_permit = RichTextField()
-
-    create_panels = [
-        FieldPanel('project'),
+    common_panels = [
         ImageChooserPanel('picture'),
         FieldRowPanel(
             [
@@ -94,8 +93,13 @@ class CV(TimeStampedModel):
             ]
         ),
     ]
+    create_panels = [
+        InstanceSelectorPanel('project'),
+        *common_panels
+    ]
     panels = [
         MultiFieldPanel([
+            InstanceSelectorPanel('project'),
             FieldPanel('project_listing_title'),
             AutocompletePanel('relevant_project_pages', is_single=False,
                               page_type='home.ProjectPage'),
@@ -103,7 +107,8 @@ class CV(TimeStampedModel):
 
         ]),
         AutocompletePanel('relevant_skills', target_model=Technology),
-    ] + create_panels
+        *common_panels
+    ]
 
     @property
     def logo(self):
