@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import CASCADE
 from django.utils import timezone
 from django_extensions.db.models import TimeStampedModel
+from instance_selector.edit_handlers import InstanceSelectorPanel
 from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel
 from wagtail.core.fields import RichTextField
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -68,7 +69,7 @@ class CV(TimeStampedModel):
     working_permit = RichTextField()
 
     create_panels = [
-        FieldPanel('project'),
+        InstanceSelectorPanel('project'),
         ImageChooserPanel('picture'),
         FieldRowPanel(
             [

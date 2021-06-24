@@ -15,7 +15,7 @@ if not TESTING:
 
 DEBUG = env.bool('DEBUG', False)
 DEBUG_TOOLBAR = env.bool('DEBUG_TOOLBAR', False)
-
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 ENVIRONMENT = env.str('ENVIRONMENT', env.str('HEROKU_APP_NAME', None))
 SENTRY_DSN = env.str('SENTRY_DSN', None)
 
