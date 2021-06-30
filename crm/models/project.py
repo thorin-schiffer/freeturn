@@ -92,8 +92,7 @@ class Project(TimeStampedModel, ProjectDisplayMixin):
     def drop(self):
         pass
 
-    name = models.CharField(max_length=120,
-                            blank=True, null=True)
+    name = models.CharField(max_length=120)
     company = models.ForeignKey('Company',
                                 on_delete=models.SET_NULL,
                                 null=True,

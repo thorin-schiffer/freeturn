@@ -51,6 +51,7 @@ def test_create_redirect_to_cv_creation(admin_app,
     project_create_url = reverse('crm_project_modeladmin_create')
     r = admin_app.get(project_create_url)
     form = r.forms[1]
+    form['name'] = 'test name'
     form['location'] = str(city.pk)
     r = r.forms[1].submit()
     cv_create_url = reverse('crm_cv_modeladmin_create')
