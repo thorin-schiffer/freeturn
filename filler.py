@@ -164,7 +164,6 @@ def fill_pictures():
         print(f'Loaded {Image.objects.count()} images from {directory}')
 
 
-@transaction.atomic
 def clean():
     Image.objects.all().delete()
     Technology.objects.all().delete()
