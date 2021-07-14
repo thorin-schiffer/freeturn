@@ -89,7 +89,7 @@ def fill_pages():
     root.add_child(instance=home)
     default_site.root_page.delete()
     default_site.root_page = home
-    default_site.port = 8000
+    default_site.port = 80 if heroku_app_name else 8000
     default_site.save()
 
     fill_portfolio(home)
