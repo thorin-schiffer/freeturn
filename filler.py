@@ -82,12 +82,14 @@ def fill_pages():
                                  stackoverflow_profile='https://stackoverflow.com/users/1205242/eviltnan',
                                  github_profile='https://github.com/eviltnan',
                                  linkedin_profile='https://www.linkedin.com/in/sergey-cheparev/')
-    default_site = SiteFactory(is_default_site=True)
+    heroku_app_name = os.getenv('HEROKU_APP_NAME')
+    hostname = f'{heroku_app_name}.herokuapp.com' if heroku_app_name else 'localhost'
+    default_site = SiteFactory(is_default_site=True, hostname=hostname)
     root = Page.objects.get(pk=1)
     root.add_child(instance=home)
     default_site.root_page.delete()
     default_site.root_page = home
-    default_site.port = 8000
+    default_site.port = 80 if heroku_app_name else 8000
     default_site.save()
 
     fill_portfolio(home)

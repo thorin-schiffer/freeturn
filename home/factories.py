@@ -82,7 +82,7 @@ class TechnologiesPageFactory(wagtail_factories.PageFactory):
 
 
 class SiteFactory(factory.DjangoModelFactory):
-    hostname = 'testsite'
+    hostname = 'localhost'
     port = 8000
     site_name = factory.Faker('sentence')
     root_page = factory.SubFactory(wagtail_factories.PageFactory)

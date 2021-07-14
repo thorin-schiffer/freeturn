@@ -4,6 +4,7 @@
 <table {% if instance.include_portfolio %}style="page-break-after: always;" {% endif %}>
     <tbody>
     <tr>
+        {% with relevant_skills=instance.relevant_skills.all %}
         <td valign="top" style="padding-right: 20px">
             <h1> {{ instance.full_name }}</h1>
             <h2>{{ instance.title }}</h2>
@@ -14,18 +15,19 @@
 
             {{ instance.experience_overview | richtext }}
             <hr>
-        </td>
-        <td width="30%">
-            {% image instance.picture fill-200x200-c80 class="img-fluid"%}
-        </td>
-    </tr>
-    {% with relevant_skills=instance.relevant_skills.all %}
-    <tr>
-        <td valign="top" style="padding-right: 20px">
-            <h2>{{ instance.project_listing_title }}</h2>
 
+            <h2>{{ instance.project_listing_title }}</h2>
+            <br>
             {% for project in relevant_project_pages %}
-            <h4><i class="fa fa-chevron-right"></i> {{project.title }}</h4>
+
+            <h4>
+                <a href="{{ project.get_site.root_url }}{% pageurl project %}" target="_blank"
+                style="color: darkgreen">
+                    <i class="fa fa-chevron-right"></i>
+                    {{project.title }}
+                    <i class="fa fa-link"></i>
+                </a>
+            </h4>
             {% if project.duration %}
                 <h4 class="my-3">{{ project.start_date | date:"M Y" }}, {{ project.duration }}
                     month{{project.duration|pluralize}}</h4>
@@ -47,12 +49,13 @@
             </p>
             <hr>
             {% endfor %}
-
-
-
+            <h2><i class="fa fa-graduation-cap"></i> Education</h2>
+            {{ instance.education_overview | richtext }}
         </td>
-        <td valign="top">
-            {% if instance.rate_overview %}
+
+        <td width="30%" style="font-size: 4mm" valign="top">
+            {% image instance.picture fill-235x235-c80 class="img-fluid"%}
+                        {% if instance.rate_overview %}
             <h3><i class="fa fa-credit-card"></i> Pay rate</h3>
             {{ instance.rate_overview | richtext }}
             {% endif %}
@@ -70,6 +73,8 @@
             {{ instance.working_permit | richtext }}
 
             <h3><i class="fa fa-cogs"></i> Skills</h3>
+
+            <div style="font-size: 3.5mm">
             {% for skill in skills %}
             {% if skill in relevant_skills %}
             <span class="label label-default">{{ skill }}</span>
@@ -77,15 +82,9 @@
             {{ skill }}
             {% endif %}
             {% endfor %}
+            </div>
         </td>
-    </tr>
-    {% endwith %}
-
-    <tr>
-        <td>
-            <h2><i class="fa fa-graduation-cap"></i> Education</h2>
-            {{ instance.education_overview | richtext }}
-        </td>
+        {% endwith %}
     </tr>
     </tbody>
 </table>
