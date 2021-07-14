@@ -66,7 +66,7 @@ class CV(TimeStampedModel):
     contact_details = RichTextField()
     languages_overview = RichTextField()
     rate_overview = RichTextField(blank=True, null=True)
-    working_permit = RichTextField()
+    working_permit = RichTextField(blank=True, null=True)
     common_panels = [
         ImageChooserPanel('picture'),
         FieldRowPanel(

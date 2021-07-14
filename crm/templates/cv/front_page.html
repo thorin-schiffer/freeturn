@@ -55,7 +55,7 @@
 
         <td width="30%" style="font-size: 4mm" valign="top">
             {% image instance.picture fill-235x235-c80 class="img-fluid"%}
-                        {% if instance.rate_overview %}
+            {% if instance.rate_overview %}
             <h3><i class="fa fa-credit-card"></i> Pay rate</h3>
             {{ instance.rate_overview | richtext }}
             {% endif %}
@@ -69,8 +69,10 @@
             <h3><i class="fa fa-globe"></i> Languages</h3>
             {{ instance.languages_overview | richtext }}
 
+            {% if instance.working_permit %}
             <h3><i class="fa fa-balance-scale"></i> Working permit</h3>
             {{ instance.working_permit | richtext }}
+            {% endif %}
 
             <h3><i class="fa fa-cogs"></i> Skills</h3>
 
