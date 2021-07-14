@@ -44,7 +44,7 @@
             {{ instance.education_overview | richtext }}
         </td>
         {% with relevant_skills=instance.relevant_skills.all %}
-        <td width="30%" style="font-size: 4mm">
+        <td width="30%" style="font-size: 4mm" valign="top">
             {% image instance.picture fill-235x235-c80 class="img-fluid"%}
                         {% if instance.rate_overview %}
             <h3><i class="fa fa-credit-card"></i> Pay rate</h3>
