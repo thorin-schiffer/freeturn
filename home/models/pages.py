@@ -56,6 +56,7 @@ class HomePage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel('claim'),
+        FieldPanel('services'),
         FieldPanel('earliest_available'),
         ImageChooserPanel('picture'),
         ImageChooserPanel('background'),
