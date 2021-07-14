@@ -21,9 +21,11 @@
             {% for project in relevant_project_pages %}
 
             <h4>
-                <a href="{{ project.get_site.root_url }}{% pageurl project %}" target="_blank">
+                <a href="{{ project.get_site.root_url }}{% pageurl project %}" target="_blank"
+                style="color: darkgreen">
                     <i class="fa fa-chevron-right"></i>
                     {{project.title }}
+                    <i class="fa fa-link"></i>
                 </a>
             </h4>
             {% if project.duration %}
