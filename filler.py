@@ -81,7 +81,7 @@ def fill_pages():
                                  picture=Image.objects.filter(collection=people_collection).order_by('?').first(),
                                  stackoverflow_profile='https://stackoverflow.com/users/1205242/eviltnan',
                                  github_profile='https://github.com/eviltnan',
-                                 linkedin_profile='https://www.linkedin.com/in/sergey-cheparev/')
+                                 linkedin_profile='https://www.linkedin.com/in/thorin-schiffer/')
     heroku_app_name = os.getenv('HEROKU_APP_NAME')
     hostname = f'{heroku_app_name}.herokuapp.com' if heroku_app_name else 'localhost'
     default_site = SiteFactory(is_default_site=True, hostname=hostname)
