@@ -44,7 +44,7 @@
             {{ instance.education_overview | richtext }}
         </td>
         {% with relevant_skills=instance.relevant_skills.all %}
-        <td width="30%">
+        <td width="30%" style="font-size: 4mm">
             {% image instance.picture fill-235x235-c80 class="img-fluid"%}
                         {% if instance.rate_overview %}
             <h3><i class="fa fa-credit-card"></i> Pay rate</h3>
@@ -65,6 +65,7 @@
 
             <h3><i class="fa fa-cogs"></i> Skills</h3>
 
+            <div style="font-size: 3.5mm">
             {% for skill in skills %}
             {% if skill in relevant_skills %}
             <span class="label label-default">{{ skill }}</span>
@@ -72,6 +73,7 @@
             {{ skill }}
             {% endif %}
             {% endfor %}
+            </div>
         </td>
         {% endwith %}
     </tr>
