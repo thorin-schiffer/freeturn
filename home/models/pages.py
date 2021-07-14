@@ -30,6 +30,9 @@ class HomePage(Page):
     claim = models.CharField(max_length=300,
                              help_text='Claim text placed under the name',
                              default='Freelance python developer')
+    services = models.CharField(max_length=500,
+                                help_text='Services you want to highlight',
+                                default='Python, Django, Wagtail')
     picture = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
