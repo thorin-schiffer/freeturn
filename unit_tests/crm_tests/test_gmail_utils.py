@@ -1,6 +1,7 @@
 import pytest
 
 from crm import gmail_utils
+from crm.factories import UserSocialAuthFactory
 from crm.models.project_message import ProjectMessage
 from crm.utils import Credentials
 
@@ -52,3 +53,12 @@ def test_creds_refresh(gmail_service, user_social_auth, mocker):
                  side_effect=fake_refresh_token)
     creds.refresh(mocker.Mock())
     assert creds._refresh_token == 'x'
+
+
+@pytest.mark.django_db
+def test_multiple_social_auths(gmail_service):
+    # https://sentry.io/organizations/thorin-schiffer/issues/2474133927/?project=1304745&query=is%3Aunresolved
+    first_auth = UserSocialAuthFactory()
+    UserSocialAuthFactory(user=first_auth.user)
+    gmail_utils.sync()
+    assert ProjectMessage.objects.count() == 1  # because user is the same

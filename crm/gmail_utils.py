@@ -172,12 +172,13 @@ def associate(message):
 
 def sync():
     for user in get_user_model().objects.exclude(social_auth=None):
-        usa = user.social_auth.get(provider='google-oauth2')
-        creds = Credentials(usa)
-        service = discovery.build('gmail', 'v1', credentials=creds)
-        raw_messages = get_raw_messages(service)
-        parsed_messages = [
-            parse_message(raw_message) for raw_message in raw_messages
-        ]
-        for message in parsed_messages:
-            associate(message)
+        usas = user.social_auth.filter(provider='google-oauth2')
+        for usa in usas:
+            creds = Credentials(usa)
+            service = discovery.build('gmail', 'v1', credentials=creds)
+            raw_messages = get_raw_messages(service)
+            parsed_messages = [
+                parse_message(raw_message) for raw_message in raw_messages
+            ]
+            for message in parsed_messages:
+                associate(message)
