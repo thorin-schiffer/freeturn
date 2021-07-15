@@ -115,7 +115,7 @@ def ensure_manager(message):
         try:
             first_name, last_name = message['full_name'].split(' ')
         except ValueError:
-            first_name, last_name = '', message['last_name']
+            first_name, last_name = '', message.get('last_name', '')
         manager, _ = Employee.objects.get_or_create(
             email=message['from_address'],
             defaults={
@@ -154,7 +154,7 @@ def associate(message):
     """
     already_processed = ProjectMessage.objects.filter(gmail_message_id=message['gmail_message_id']).first()
     if already_processed:
-        return already_processed
+        return already_processed, False
 
     manager = ensure_manager(message)
     project = ensure_project(message, manager)
@@ -167,10 +167,11 @@ def associate(message):
         sent_at=message['sent_at'],
         gmail_message_id=message['gmail_message_id'],
         gmail_thread_id=message['gmail_thread_id']
-    )
+    ), True
 
 
 def sync():
+    messages = []
     for user in get_user_model().objects.exclude(social_auth=None):
         usas = user.social_auth.filter(provider='google-oauth2')
         for usa in usas:
@@ -180,5 +181,9 @@ def sync():
             parsed_messages = [
                 parse_message(raw_message) for raw_message in raw_messages
             ]
+
             for message in parsed_messages:
-                associate(message)
+                project_message, created = associate(message)
+                if created:
+                    messages.append(project_message)
+    return messages
