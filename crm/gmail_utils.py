@@ -171,21 +171,22 @@ def associate(message):
 
 
 def sync():
-    messages = []
+    project_messages = []
+    parsed_messages = []
     for user in get_user_model().objects.exclude(social_auth=None):
         usas = user.social_auth.filter(provider='google-oauth2')
         for usa in usas:
             creds = Credentials(usa)
             service = discovery.build('gmail', 'v1', credentials=creds)
             raw_messages = get_raw_messages(service)
-            parsed_messages = [
+            parsed_messages += [
                 parse_message(raw_message) for raw_message in raw_messages
             ]
 
-            for message in parsed_messages:
-                project_message, created = associate(message)
-                if created:
-                    messages.append(project_message)
-                    if not project_message.project.cvs.exists():
-                        project_message.project.create_cv(user)
-    return messages
+    for message in parsed_messages:
+        project_message, created = associate(message)
+        if created:
+            project_messages.append(project_message)
+            if not project_message.project.cvs.exists():
+                project_message.project.create_cv(user)
+    return project_messages
