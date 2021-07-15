@@ -91,7 +91,7 @@ def get_raw_messages(service):
             label_info['id'] for label_info in labels['labels'] if label_info['name'] == settings.MAILBOX_LABEL
         )
     except StopIteration:
-        logger.error(f"Can't find label with {settings.MAILBOX_LABEL}", code=127)
+        logger.error(f"Can't find label with {settings.MAILBOX_LABEL}")
         return []
 
     # INBOX means a message is not archived
