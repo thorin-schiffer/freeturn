@@ -12,8 +12,9 @@ from wagtail.admin.search import SearchArea
 from wagtail.contrib.modeladmin.helpers import AdminURLHelper, ButtonHelper, PermissionHelper
 from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
-from wagtail.contrib.modeladmin.views import EditView, CreateView, InspectView
+from wagtail.contrib.modeladmin.views import EditView, CreateView, InspectView, IndexView
 
+from crm.gmail_utils import sync
 from crm.models import City
 from crm.models.project import Project
 from crm.models.project_message import ProjectMessage
@@ -180,6 +181,17 @@ class MessagePermissionHelper(PermissionHelper):
         return False
 
 
+class ProjectMessageIndexView(IndexView):
+    def get_context_data(self, **kwargs):
+        created_messages = sync()
+        if created_messages:
+            messages.info(
+                self.request,
+                f'{len(created_messages)} new messages'
+            )
+        return super().get_context_data(**kwargs)
+
+
 class MessageAdmin(ModelAdmin):
     model = ProjectMessage
     menu_icon = 'fa-envelope-open'
@@ -187,6 +199,7 @@ class MessageAdmin(ModelAdmin):
     list_display = ['subject', 'author', 'project', 'created']
     list_filter = ['project', 'author']
     ordering = ['-created']
+    index_view_class = ProjectMessageIndexView
     inspect_view_enabled = True
     inspect_view_fields = ['project', 'subject', 'author', 'text']
     inspect_template_name = 'message_inspect.html'

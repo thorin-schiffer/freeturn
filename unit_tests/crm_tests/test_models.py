@@ -101,7 +101,7 @@ def parsed_message(gmail_api_message):
 
 @pytest.mark.django_db
 def test_associate_new(parsed_message):
-    message = associate(parsed_message)
+    message, _ = associate(parsed_message)
     assert message.sent_at == parsed_message['sent_at']
     assert message.subject == parsed_message['subject']
     assert message.project.name == parsed_message['subject']
@@ -120,14 +120,14 @@ def test_associate_new(parsed_message):
 def test_associate_manager_exists(employee,
                                   parsed_message):
     parsed_message['from_address'] = employee.email
-    message = associate(parsed_message)
+    message, _ = associate(parsed_message)
     assert message.author == employee
 
 
 @pytest.mark.django_db
 def test_associate_company_exists(company, parsed_message):
     parsed_message['from_address'] = f'test@{company.domain}'
-    message = associate(parsed_message)
+    message, _ = associate(parsed_message)
     assert message.project.manager.company == company
 
 
@@ -137,7 +137,7 @@ def test_associate_project_messages_exist(project, project_message_factory, pars
     parsed_message['subject'] = existing_message.subject
     parsed_message['gmail_thread_id'] = existing_message.gmail_thread_id
     parsed_message['from_email'] = f'another_manager@{existing_message.project.manager.company.domain}'
-    message = associate(parsed_message)
+    message, _ = associate(parsed_message)
     assert message.project == existing_message.project
     assert message.project.manager.company == existing_message.project.manager.company
 
@@ -145,7 +145,7 @@ def test_associate_project_messages_exist(project, project_message_factory, pars
 @pytest.mark.django_db
 def test_associate_project_exists_manager_match(project, parsed_message):
     parsed_message['from_address'] = project.manager.email
-    message = associate(parsed_message)
+    message, _ = associate(parsed_message)
     assert message.project == project
 
 
@@ -153,7 +153,7 @@ def test_associate_project_exists_manager_match(project, parsed_message):
 def test_associate_project_not_exist_manager_exists(employee, parsed_message):
     parsed_message['from_address'] = employee.email
     assert employee.projects.count() == 0
-    message = associate(parsed_message)
+    message, _ = associate(parsed_message)
     assert message.project.manager == employee
     assert message.project.name == parsed_message['subject']
     assert message.project.original_description == parsed_message['text']
@@ -164,7 +164,7 @@ def test_associate_project_not_exist_manager_exists(employee, parsed_message):
 def test_project_exists_inactive(project_factory, parsed_message):
     inactive_project = project_factory.create(state='stopped')
     parsed_message['from_address'] = inactive_project.manager.email
-    message = associate(parsed_message)
+    message, _ = associate(parsed_message)
     assert message.project != inactive_project
     assert message.project.manager == inactive_project.manager
 
@@ -173,13 +173,13 @@ def test_project_exists_inactive(project_factory, parsed_message):
 def test_message_already_processed(project_message, parsed_message):
     parsed_message['gmail_message_id'] = project_message.gmail_message_id
     parsed_message['gmail_thread_id'] = project_message.gmail_thread_id
-    message = associate(parsed_message)
-    assert message == project_message
+    message, _ = associate(parsed_message)
+    assert message, _ == project_message
 
 
 @pytest.fixture
 def raw_email():
-    message = EmailMessage()
+    message, _ = EmailMessage()
     message.set_payload('xxx')
     message['message-id'] = str(uuid.uuid4())
     return message
