@@ -101,8 +101,9 @@ class UserSocialAuthFactory(factory.DjangoModelFactory):
     extra_data = {
         'access_token': 'xyz',
         'refresh_token': 'xyz',
-        'expires_in': 100
+        'expires': 100
     }
+    uid = factory.Sequence(lambda n: f'uid_{n}')
 
     class Meta:
         model = UserSocialAuth

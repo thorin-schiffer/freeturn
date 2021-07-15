@@ -91,7 +91,7 @@ def get_raw_messages(service):
             label_info['id'] for label_info in labels['labels'] if label_info['name'] == settings.MAILBOX_LABEL
         )
     except StopIteration:
-        logger.error(f"Can't find label with {settings.MAILBOX_LABEL}", code=127)
+        logger.error(f"Can't find label with {settings.MAILBOX_LABEL}")
         return []
 
     # INBOX means a message is not archived
@@ -115,7 +115,7 @@ def ensure_manager(message):
         try:
             first_name, last_name = message['full_name'].split(' ')
         except ValueError:
-            first_name, last_name = '', message['last_name']
+            first_name, last_name = '', message.get('last_name', '')
         manager, _ = Employee.objects.get_or_create(
             email=message['from_address'],
             defaults={
@@ -154,7 +154,7 @@ def associate(message):
     """
     already_processed = ProjectMessage.objects.filter(gmail_message_id=message['gmail_message_id']).first()
     if already_processed:
-        return already_processed
+        return already_processed, False
 
     manager = ensure_manager(message)
     project = ensure_project(message, manager)
@@ -167,17 +167,26 @@ def associate(message):
         sent_at=message['sent_at'],
         gmail_message_id=message['gmail_message_id'],
         gmail_thread_id=message['gmail_thread_id']
-    )
+    ), True
 
 
 def sync():
+    project_messages = []
+    parsed_messages = []
     for user in get_user_model().objects.exclude(social_auth=None):
-        usa = user.social_auth.get(provider='google-oauth2')
-        creds = Credentials(usa)
-        service = discovery.build('gmail', 'v1', credentials=creds)
-        raw_messages = get_raw_messages(service)
-        parsed_messages = [
-            parse_message(raw_message) for raw_message in raw_messages
-        ]
-        for message in parsed_messages:
-            associate(message)
+        usas = user.social_auth.filter(provider='google-oauth2')
+        for usa in usas:
+            creds = Credentials(usa)
+            service = discovery.build('gmail', 'v1', credentials=creds)
+            raw_messages = get_raw_messages(service)
+            parsed_messages += [
+                parse_message(raw_message) for raw_message in raw_messages
+            ]
+
+    for message in parsed_messages:
+        project_message, created = associate(message)
+        if created:
+            project_messages.append(project_message)
+            if not project_message.project.cvs.exists():
+                project_message.project.create_cv(user)
+    return project_messages

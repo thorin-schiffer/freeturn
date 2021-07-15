@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from fuzzywuzzy import process
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.fields import RichTextField
@@ -31,15 +32,22 @@ class Technology(index.Indexed, models.Model):
 
     @staticmethod
     def match_text(text, limit=5, cutoff=40):
-        choices = Technology.objects.filter(match_in_cv=True).values_list(
-            'name', flat=True
-        )
-        if not choices.exists():
+        lower_text = text.lower()
+        choices = dict(Technology.objects.filter(match_in_cv=True).values_list(
+            'id', 'name'
+        ))
+        if not choices:
             return Technology.objects.none()
-        results = process.extract(text, choices, limit=limit)
-        return Technology.objects.filter(
-            name__in=[r[0] for r in results if r[1] > cutoff]
+        exact_match = Technology.objects.filter(
+            id__in=[
+                technology_id for technology_id, technology_name in choices.items() if technology_name.lower() in text
+            ]
         )
+        results = process.extract(lower_text, choices.values(), limit=limit)
+        return Technology.objects.filter(
+            Q(name__in=[r[0] for r in results if r[1] > cutoff]) |
+            Q(id__in=exact_match)
+        ).distinct()
 
     autocomplete_search_field = 'name'
 

@@ -37,7 +37,7 @@ class Credentials(GoogleCredentials):
         Returns:
              datetime: The expiration
         """
-        return datetime.now() + timedelta(seconds=data['expires_in'])
+        return datetime.now() + timedelta(seconds=data['expires'])
 
     def __init__(self, usa):
         """

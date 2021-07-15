@@ -10,7 +10,10 @@ from django_fsm import FSMField, transition
 from instance_selector.edit_handlers import InstanceSelectorPanel
 from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel, FieldRowPanel, PageChooserPanel
 from wagtail.core.fields import RichTextField
+from wagtail.core.models import Site
 
+from crm.models import CV
+from crm.models.settings import CVGenerationSettings
 from crm.utils import get_working_days
 
 
@@ -206,6 +209,23 @@ class Project(TimeStampedModel, ProjectDisplayMixin):
                     'end_date': "End date can't be earlier than start date",
                 }
             )
+
+    def create_cv(self, user):
+        site = Site.objects.get(is_default_site=True)
+        cv_settings = CVGenerationSettings.for_site(site)
+
+        return CV.objects.create(
+            title=cv_settings.default_title,
+            experience_overview=cv_settings.default_experience_overview,
+            education_overview=cv_settings.default_education_overview,
+            contact_details=cv_settings.default_contact_details,
+            languages_overview=cv_settings.default_languages_overview,
+            rate_overview=cv_settings.default_rate_overview,
+            working_permit=cv_settings.default_working_permit,
+            full_name=f'{user.first_name} {user.last_name}',
+            picture=cv_settings.default_picture,
+            project=self
+        )
 
     def save(self, *args, **kwargs):
         if not self.daily_rate and self.company:
