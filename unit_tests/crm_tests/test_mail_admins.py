@@ -15,7 +15,7 @@ def test_project_message_index(admin_app,
 
 
 @pytest.mark.django_db
-def test_project_message_index_creates_message(gmail_service, admin_app, admin_user):
+def test_project_message_index_creates_message(default_site, gmail_service, admin_app, admin_user):
     UserSocialAuthFactory(user=admin_user)
     assert ProjectMessage.objects.count() == 0
     url = reverse('crm_projectmessage_modeladmin_index')

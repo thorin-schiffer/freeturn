@@ -2,6 +2,7 @@ import pytest
 
 from crm import gmail_utils
 from crm.factories import UserSocialAuthFactory
+from crm.models import CV
 from crm.models.project_message import ProjectMessage
 from crm.utils import Credentials
 
@@ -12,7 +13,7 @@ def test_get_raw_messages(gmail_service):
 
 
 @pytest.mark.django_db
-def test_sync(gmail_service, user_social_auth):
+def test_sync(gmail_service, user_social_auth, default_site):
     gmail_utils.sync()
     message = ProjectMessage.objects.first()
     assert message.project
@@ -22,6 +23,7 @@ def test_sync(gmail_service, user_social_auth):
     assert message.text
     assert message.gmail_message_id
     assert message.gmail_thread_id
+    assert CV.objects.filter(project=message.project).exists()
 
 
 @pytest.mark.django_db
@@ -38,7 +40,7 @@ def test_creds_refresh(gmail_service, user_social_auth, mocker):
 
 
 @pytest.mark.django_db
-def test_multiple_social_auths(gmail_service):
+def test_multiple_social_auths(default_site, gmail_service):
     # https://sentry.io/organizations/thorin-schiffer/issues/2474133927/?project=1304745&query=is%3Aunresolved
     first_auth = UserSocialAuthFactory()
     UserSocialAuthFactory(user=first_auth.user)

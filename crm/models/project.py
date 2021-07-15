@@ -210,10 +210,9 @@ class Project(TimeStampedModel, ProjectDisplayMixin):
                 }
             )
 
-    def create_cv(self, request):
-        site = Site.find_for_request(request)
+    def create_cv(self, user):
+        site = Site.objects.get(is_default_site=True)
         cv_settings = CVGenerationSettings.for_site(site)
-        user = request.user
 
         return CV.objects.create(
             title=cv_settings.default_title,

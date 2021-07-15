@@ -33,7 +33,7 @@ def admin_app(default_locale, django_app, admin_user):
 
 
 @pytest.fixture
-def default_site(site_factory):
+def default_site(default_locale, site_factory):
     return site_factory.create(is_default_site=True)
 
 
