@@ -189,8 +189,6 @@ class ProjectMessageIndexView(IndexView):
                 self.request,
                 f'{len(created_messages)} new messages'
             )
-            for created_message in created_messages:
-                created_message.project.create_cv(self.request)
         return super().get_context_data(**kwargs)
 
 

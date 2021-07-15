@@ -186,4 +186,5 @@ def sync():
                 project_message, created = associate(message)
                 if created:
                     messages.append(project_message)
+                    project_message.project.create_cv(user)
     return messages
