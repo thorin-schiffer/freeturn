@@ -148,6 +148,8 @@ def fill_crm_data(projects_count=10):
 
     for transition in get_project_state_transitions():
         MessageTemplateFactory(state_transition=transition[0])
+    make_project(original_description='Das ist eine Projektbeschreibung',
+                 name='Ein deutschsprachiges Projekt')
 
 
 def fill_pictures():

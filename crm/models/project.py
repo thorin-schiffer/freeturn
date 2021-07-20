@@ -9,6 +9,7 @@ from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
 from django_fsm import FSMField, transition
 from instance_selector.edit_handlers import InstanceSelectorPanel
+from langdetect import detect
 from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel, FieldRowPanel, PageChooserPanel
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Site
@@ -122,7 +123,7 @@ class Project(TimeStampedModel, ProjectDisplayMixin):
         null=True,
         blank=True
     )
-    language = CharField(choices=settings.LANGUAGES, max_length=10, default='en')
+    language = CharField(choices=settings.LANGUAGES, max_length=10, blank=True)
 
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
@@ -155,7 +156,8 @@ class Project(TimeStampedModel, ProjectDisplayMixin):
 
     def get_message_template(self, transition_name):
         from crm.models import MessageTemplate
-        return MessageTemplate.objects.filter(state_transition=transition_name).first()
+        return MessageTemplate.objects.filter(state_transition=transition_name,
+                                              language=self.language).first()
 
     @property
     def duration(self):
@@ -241,6 +243,8 @@ class Project(TimeStampedModel, ProjectDisplayMixin):
             self.daily_rate = self.company.default_daily_rate
         if not self.name:
             self.name = str(self.company)
+        if not self.language:
+            self.language = detect(self.original_description)
         super().save(*args, **kwargs)
 
     def __str__(self):
