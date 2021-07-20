@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.conf.urls import url
 from django.contrib.admin.utils import quote
+from django.forms import CharField
 from django.shortcuts import redirect
 from django.template.defaultfilters import pluralize
 from django.urls import reverse
@@ -9,11 +10,13 @@ from django.utils import timezone
 from django_fsm import TransitionNotAllowed
 from google.auth.exceptions import GoogleAuthError
 from wagtail.admin import messages
+from wagtail.admin.forms import WagtailAdminModelForm
 from wagtail.admin.search import SearchArea
 from wagtail.contrib.modeladmin.helpers import AdminURLHelper, ButtonHelper, PermissionHelper
 from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
-from wagtail.contrib.modeladmin.views import EditView, CreateView, InspectView, IndexView
+from wagtail.contrib.modeladmin.views import CreateView, InspectView, IndexView, ModelFormView, \
+    InstanceSpecificView
 
 from crm.gmail_utils import sync
 from crm.models import City
@@ -31,13 +34,26 @@ class ProjectURLHelper(AdminURLHelper):
         return pattern
 
 
-class StateTransitionView(EditView):
+class StateTransitionForm(WagtailAdminModelForm):
+    text = CharField()
+
+    class Meta:
+        model = Project
+        fields = ['text']
+
+
+class StateTransitionView(ModelFormView, InstanceSpecificView):
     action = None
+    form_class = StateTransitionForm
+    template_name = 'state.html'
 
     def __init__(self, **kwargs):
         self.action = kwargs.pop('action')
         self.page_title = f'{self.action.capitalize()} {Project._meta.verbose_name}'
         super().__init__(**kwargs)
+
+    def get_form_class(self):
+        return StateTransitionForm
 
     def edit_url(self):
         return self.url_helper.get_action_url('state', self.pk_quoted, self.action)
