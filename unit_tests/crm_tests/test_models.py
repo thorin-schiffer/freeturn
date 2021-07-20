@@ -228,6 +228,12 @@ def test_project_logo(project):
 
 
 @pytest.mark.django_db
+def test_project_get_message_template(project, message_template):
+    template = project.get_message_template(transition_name='scope')
+    assert template == message_template
+
+
+@pytest.mark.django_db
 def test_auto_project_name(project_factory):
     project_without_company = project_factory.create(name=None)
     assert project_without_company.name == str(project_without_company.company)

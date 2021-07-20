@@ -148,6 +148,10 @@ class Project(TimeStampedModel, ProjectDisplayMixin):
         PageChooserPanel('project_page')
     ]
 
+    def get_message_template(self, transition_name):
+        from crm.models import MessageTemplate
+        return MessageTemplate.objects.filter(state_transition=transition_name).first()
+
     @property
     def duration(self):
         try:
