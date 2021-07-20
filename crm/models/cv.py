@@ -50,7 +50,7 @@ class CV(TimeStampedModel):
         blank=True
     )
     include_portfolio = models.BooleanField(
-        default=True,
+        default=False,
         help_text="Include portfolio projects' description"
     )
     relevant_skills = models.ManyToManyField(

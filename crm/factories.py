@@ -120,6 +120,7 @@ class CVFactory(factory.DjangoModelFactory):
     rate_overview = '100 schmeckles'
     working_permit = 'permanent'
     languages_overview = 'Lhammas: fluent'
+    include_portfolio = True
 
     class Meta:
         model = crm.models.cv.CV
