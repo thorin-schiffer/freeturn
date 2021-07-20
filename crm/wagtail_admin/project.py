@@ -36,12 +36,14 @@ class ProjectURLHelper(AdminURLHelper):
 
 
 class StateTransitionForm(WagtailAdminModelForm):
-    text = CharField(widget=get_rich_text_editor_widget())
+    text = CharField(widget=get_rich_text_editor_widget(),
+                     help_text="Change template text in 'Settings' > 'Reply templates'")
 
     def __init__(self, **kwargs):
         project = kwargs['instance']
         template = project.get_message_template(kwargs.pop('action'))
-        kwargs['initial']['text'] = template.text
+        if template:
+            kwargs['initial']['text'] = template.text
         super().__init__(**kwargs)
 
     class Meta:
