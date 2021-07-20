@@ -171,6 +171,8 @@ def associate(message):
 
 
 def sync():
+    if not settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY:
+        return []
     project_messages = []
     parsed_messages = []
     for user in get_user_model().objects.exclude(social_auth=None):
