@@ -11,7 +11,7 @@ INVOICE_LANGUAGE_CHOICES = (
 )
 
 
-@register_setting(icon='icon icon-fa-id-card')
+@register_setting(icon='form')
 class InvoiceGenerationSettings(BaseSetting):
     default_title = models.CharField(
         max_length=255, help_text='Default title to use',
@@ -65,7 +65,7 @@ class InvoiceGenerationSettings(BaseSetting):
     ]
 
 
-@register_setting(icon='icon icon-fa-id-card')
+@register_setting(icon='cog')
 class CVGenerationSettings(BaseSetting):
     default_title = models.CharField(
         max_length=255, help_text='Default title to use', default='Freelance python developer')
