@@ -38,6 +38,12 @@ class ProjectURLHelper(AdminURLHelper):
 class StateTransitionForm(WagtailAdminModelForm):
     text = CharField(widget=get_rich_text_editor_widget())
 
+    def __init__(self, **kwargs):
+        project = kwargs['instance']
+        template = project.get_message_template(kwargs.pop('action'))
+        kwargs['initial']['text'] = template.text
+        super().__init__(**kwargs)
+
     class Meta:
         model = Project
         fields = ['text']
@@ -52,6 +58,9 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
         self.action = kwargs.pop('action')
         self.page_title = f'{self.action.capitalize()} {Project._meta.verbose_name}'
         super().__init__(**kwargs)
+
+    def get_form_kwargs(self):
+        return {'action': self.action, **super().get_form_kwargs()}
 
     def get_form_class(self):
         return StateTransitionForm
