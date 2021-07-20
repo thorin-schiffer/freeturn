@@ -1,4 +1,6 @@
+from django.core.exceptions import ValidationError
 from django.db.models import CharField
+from django.template import Template, Context, TemplateSyntaxError
 from django_extensions.db.models import TimeStampedModel
 from wagtail.core.fields import RichTextField
 
@@ -10,8 +12,18 @@ def get_project_state_transitions():
     return [(transition.name, transition.name.capitalize()) for transition in transitions]
 
 
+def valid_django_template(value):
+    try:
+        template = Template(value)
+        template.render(Context({}))
+        return value
+    except TemplateSyntaxError as ex:
+        raise ValidationError(f'Invalid template: {ex}')
+
+
 class MessageTemplate(TimeStampedModel):
-    text = RichTextField(help_text='Text of the message')
+    text = RichTextField(help_text='Text of the message',
+                         validators=[valid_django_template])
     state_transition = CharField(max_length=50,
                                  choices=get_project_state_transitions(),
                                  help_text='Project state transition this message template '
