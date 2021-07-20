@@ -4,6 +4,7 @@ from django.conf.urls import url
 from django.contrib.admin.utils import quote
 from django.forms import CharField
 from django.shortcuts import redirect
+from django.template import Template, Context
 from django.template.defaultfilters import pluralize
 from django.urls import reverse
 from django.utils import timezone
@@ -43,8 +44,13 @@ class StateTransitionForm(WagtailAdminModelForm):
         project = kwargs['instance']
         template = project.get_message_template(kwargs.pop('action'))
         if template:
-            kwargs['initial']['text'] = template.text
+            kwargs['initial']['text'] = Template(template.text).render(Context({'project': project}))
+
         super().__init__(**kwargs)
+
+        if template:
+            self.fields['text'].help_text = f'Using template {template}. ' \
+                                            f"Edit template in 'Settings' > 'Reply templates'"
 
     class Meta:
         model = Project
