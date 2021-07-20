@@ -56,7 +56,7 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
 
     def __init__(self, **kwargs):
         self.action = kwargs.pop('action')
-        self.page_title = f'{self.action.capitalize()} {Project._meta.verbose_name}'
+        self.page_title = f'{self.action.capitalize()} {Project._meta.verbose_name}: write your message'
         super().__init__(**kwargs)
 
     def get_form_kwargs(self):
