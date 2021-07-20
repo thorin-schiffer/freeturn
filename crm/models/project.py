@@ -3,6 +3,7 @@ import math
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import CharField
 from django.urls import reverse
 from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
@@ -121,6 +122,7 @@ class Project(TimeStampedModel, ProjectDisplayMixin):
         null=True,
         blank=True
     )
+    language = CharField(choices=settings.LANGUAGES, max_length=10, default='en')
 
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
@@ -137,7 +139,10 @@ class Project(TimeStampedModel, ProjectDisplayMixin):
             FieldPanel('original_description'),
             InstanceSelectorPanel('company'),
             InstanceSelectorPanel('manager'),
-            InstanceSelectorPanel('location')
+            FieldRowPanel([
+                InstanceSelectorPanel('location'),
+                FieldPanel('language'),
+            ])
         ]),
         FieldRowPanel([
             FieldPanel('daily_rate'),

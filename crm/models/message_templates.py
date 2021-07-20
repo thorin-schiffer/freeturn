@@ -3,7 +3,7 @@ from django.db.models import CharField
 from django.template import Template, Context, TemplateSyntaxError
 from django_extensions.db.models import TimeStampedModel
 from wagtail.core.fields import RichTextField
-
+from django.conf import settings
 from crm.models import Project
 
 
@@ -30,6 +30,7 @@ class MessageTemplate(TimeStampedModel):
                                            'will be associated with, if any',
                                  null=True, blank=True, default=None)
     name = CharField(max_length=100)
+    language = CharField(choices=settings.LANGUAGES, max_length=10, default='en')
 
     def __str__(self):
         return self.name
