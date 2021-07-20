@@ -14,6 +14,7 @@ import crm.models.employee
 import crm.models.invoice
 import crm.models.project
 import crm.models.project_message
+from crm.models import MessageTemplate
 from crm.models.invoice import wrap_table_data
 from home.factories import ProjectPageFactory, TechnologyFactory
 
@@ -157,3 +158,12 @@ class InvoiceFactory(factory.DjangoModelFactory):
     @factory.post_generation
     def generate_positions(self, *args, **kwargs):
         self.positions = wrap_table_data(crm.models.invoice.Invoice.get_initial_positions())
+
+
+class MessageTemplateFactory(factory.DjangoModelFactory):
+    text = factory.Faker('text')
+    state_transition = 'scope'
+    name = factory.Sequence(lambda n: f'Template {n}')
+
+    class Meta:
+        model = MessageTemplate
