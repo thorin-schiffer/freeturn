@@ -7,6 +7,7 @@ from django.template.defaultfilters import pluralize
 from django.urls import reverse
 from django.utils import timezone
 from django_fsm import TransitionNotAllowed
+from google.auth.exceptions import GoogleAuthError
 from wagtail.admin import messages
 from wagtail.admin.search import SearchArea
 from wagtail.contrib.modeladmin.helpers import AdminURLHelper, ButtonHelper, PermissionHelper
@@ -183,7 +184,11 @@ class MessagePermissionHelper(PermissionHelper):
 
 class ProjectMessageIndexView(IndexView):
     def get_context_data(self, **kwargs):
-        created_messages = sync()
+        try:
+            created_messages = sync()
+        except GoogleAuthError as ex:
+            messages.error(self.request, f"Can't update messages: {ex}")
+            created_messages = []
         if created_messages:
             messages.info(
                 self.request,

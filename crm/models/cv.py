@@ -41,7 +41,7 @@ class CV(TimeStampedModel):
     project_listing_title = models.CharField(
         max_length=200,
         help_text="The title of your project listing, something like 'my projects' or 'recent projects'",
-        default='Recent projects'
+        default='Relevant projects'
     )
     relevant_project_pages = models.ManyToManyField(
         'home.ProjectPage',
@@ -50,7 +50,7 @@ class CV(TimeStampedModel):
         blank=True
     )
     include_portfolio = models.BooleanField(
-        default=True,
+        default=False,
         help_text="Include portfolio projects' description"
     )
     relevant_skills = models.ManyToManyField(
@@ -114,14 +114,14 @@ class CV(TimeStampedModel):
     def logo(self):
         return self.project.logo if self.project else None
 
-    def set_relevant_skills_and_projects(self, limit=5):
+    def set_relevant_skills_and_projects(self):
         technologies = Technology.match_text(self.project.original_description)
         if self.relevant_project_pages.count():
             logger.error(f"Won't set relevant project pages for {self}, it's not empty")
             return
         self.relevant_project_pages.set(ProjectPage.objects.live().filter(
             technologies__in=technologies
-        ).order_by('-start_date')[:limit])
+        ).order_by('-start_date'))
         self.relevant_skills.set(technologies)
 
     def save(self, **kwargs):
