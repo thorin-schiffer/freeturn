@@ -11,6 +11,7 @@ from django_fsm import TransitionNotAllowed
 from google.auth.exceptions import GoogleAuthError
 from wagtail.admin import messages
 from wagtail.admin.forms import WagtailAdminModelForm
+from wagtail.admin.rich_text import get_rich_text_editor_widget
 from wagtail.admin.search import SearchArea
 from wagtail.contrib.modeladmin.helpers import AdminURLHelper, ButtonHelper, PermissionHelper
 from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
@@ -35,7 +36,7 @@ class ProjectURLHelper(AdminURLHelper):
 
 
 class StateTransitionForm(WagtailAdminModelForm):
-    text = CharField()
+    text = CharField(widget=get_rich_text_editor_widget())
 
     class Meta:
         model = Project
