@@ -41,7 +41,7 @@ class CV(TimeStampedModel):
     project_listing_title = models.CharField(
         max_length=200,
         help_text="The title of your project listing, something like 'my projects' or 'recent projects'",
-        default='Recent projects'
+        default='Relevant projects'
     )
     relevant_project_pages = models.ManyToManyField(
         'home.ProjectPage',
