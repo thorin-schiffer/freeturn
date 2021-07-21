@@ -8,8 +8,10 @@ from django.template import Template, Context
 from django.template.defaultfilters import pluralize
 from django.urls import reverse
 from django.utils import timezone
+from django_filters.fields import ModelChoiceField
 from django_fsm import TransitionNotAllowed
 from google.auth.exceptions import GoogleAuthError
+from instance_selector.widgets import InstanceSelectorWidget
 from wagtail.admin import messages
 from wagtail.admin.forms import WagtailAdminModelForm
 from wagtail.admin.rich_text import get_rich_text_editor_widget
@@ -21,7 +23,7 @@ from wagtail.contrib.modeladmin.views import CreateView, InspectView, IndexView,
     InstanceSpecificView
 
 from crm.gmail_utils import sync
-from crm.models import City
+from crm.models import City, CV
 from crm.models.project import Project
 from crm.models.project_message import ProjectMessage
 
@@ -39,13 +41,19 @@ class ProjectURLHelper(AdminURLHelper):
 class StateTransitionForm(WagtailAdminModelForm):
     text = CharField(widget=get_rich_text_editor_widget(),
                      help_text="Change template text in 'Settings' > 'Reply templates'")
+    cv = ModelChoiceField(queryset=CV.objects.all(),
+                          label='CV',
+                          widget=InstanceSelectorWidget(model=CV),
+                          required=False)
 
     def __init__(self, **kwargs):
+        # start here
+        # add cv attachment checkbox
         project = kwargs['instance']
         template = project.get_message_template(kwargs.pop('action'))
         if template:
             kwargs['initial']['text'] = Template(template.text).render(Context({'project': project}))
-
+            kwargs['initial']['cv'] = project.cvs.first()
         super().__init__(**kwargs)
 
         if template:
