@@ -51,7 +51,7 @@ class CVInspectView(BasePDFView,
         }
 
     def get_filename(self):
-        return f'{self.instance.full_name} CV for {self.instance.project}.pdf'
+        return self.instance.get_filename()
 
 
 class CVAdmin(ThumbnailMixin, ModelAdmin):

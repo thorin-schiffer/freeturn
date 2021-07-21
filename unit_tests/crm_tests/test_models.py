@@ -1,12 +1,14 @@
 import uuid
 from datetime import date
 from datetime import timedelta
+from decimal import Decimal as D
 from email.message import Message as EmailMessage
+
 import pytest
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from decimal import Decimal as D
-from django.conf import settings
+
 from crm.gmail_utils import parse_message, associate, remove_quotation
 from crm.models.invoice import Invoice, InvoicePosition, invoice_raw_options, dictify_position_row
 from home.models.snippets import Technology
@@ -286,3 +288,9 @@ def test_dictify_position():
     position = ('x',) * len(invoice_raw_options['columns'])
     dictified_position = dictify_position_row(position)
     assert isinstance(dictified_position, dict)
+
+
+@pytest.mark.django_db
+def test_cv_get_file(cv, admin_app):
+    file = cv.get_file()
+    assert b'PDF' in file.read()
