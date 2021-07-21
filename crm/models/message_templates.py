@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.db.models import CharField
+from django.db.models import CharField, BooleanField
 from django.template import Template, Context, TemplateSyntaxError
 from django_extensions.db.models import TimeStampedModel
 from wagtail.core.fields import RichTextField
@@ -31,6 +31,8 @@ class MessageTemplate(TimeStampedModel):
                                  null=True, blank=True, default=None)
     name = CharField(max_length=100)
     language = CharField(choices=settings.LANGUAGES, max_length=10, default='en')
+    attach_cv = BooleanField(default=True,
+                             help_text='Attach CV by default for this template')
 
     def __str__(self):
         return self.name
