@@ -6,7 +6,6 @@ from email.mime.application import MIMEApplication
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from io import StringIO
 
 import pytz
 from django.conf import settings
@@ -216,9 +215,8 @@ def create_message_with_attachment(sender, to, message_text_html,
     main_type, sub_type = content_type.split('/', 1)
 
     if main_type == 'application' and sub_type == 'pdf':
-        temp = open(file, 'rb')
-        msg = MIMEApplication(temp.read(), _subtype=sub_type)
-        temp.close()
+        msg = MIMEApplication(file.read(), _subtype=sub_type)
+        file.close()
     else:
         msg = MIMEBase(main_type, sub_type)
         msg.set_payload(file.read())
@@ -240,16 +238,16 @@ def send_email(from_user, to_email, rich_text, cv, reply_to=None):
     usa = from_user.social_auth.filter(provider='google-oauth2').first()
     creds = Credentials(usa)
     service = discovery.build('gmail', 'v1', credentials=creds)
-    file = StringIO('1234566')
+    file = cv.get_file()
 
     message = create_message_with_attachment(
-        sender=from_user.email,
+        sender=f"<{from_user.first_name + ' ' + from_user.last_name}> {from_user.email} ",
         to=to_email,
         reply_to=reply_to,
         message_text_html=rich_text,
         file=file,
-        subject='test',
-        filename='test.txt',
-        content_type='text/plain'
+        subject=cv.project.name,
+        filename=cv.get_filename(),
+        content_type='application/pdf'
     )
     send_raw(service=service, user_id='thorin@schiffer.pro', message=message)
