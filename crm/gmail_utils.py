@@ -2,6 +2,11 @@ import base64
 import email
 import logging
 from datetime import datetime
+from email.mime.application import MIMEApplication
+from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from io import StringIO
 
 import pytz
 from django.conf import settings
@@ -192,3 +197,59 @@ def sync():
             if not project_message.project.cvs.exists():
                 project_message.project.create_cv(user)
     return project_messages
+
+
+def create_message_with_attachment(sender, to, message_text_html,
+                                   file,
+                                   content_type, filename,
+                                   encoding=None, reply_to=None, subject=None):
+    message = MIMEMultipart()
+    message['to'] = to
+    message['from'] = sender
+    message['subject'] = subject
+    message['in-reply-to'] = reply_to
+
+    message.attach(MIMEText(message_text_html, 'html'))
+
+    if content_type is None or encoding is not None:
+        content_type = 'application/octet-stream'
+    main_type, sub_type = content_type.split('/', 1)
+
+    if main_type == 'application' and sub_type == 'pdf':
+        temp = open(file, 'rb')
+        msg = MIMEApplication(temp.read(), _subtype=sub_type)
+        temp.close()
+    else:
+        msg = MIMEBase(main_type, sub_type)
+        msg.set_payload(file.read())
+        file.close()
+    msg.add_header('Content-Disposition', 'attachment', filename=filename)
+    message.attach(msg)
+
+    return {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()}
+
+
+def send_raw(service, user_id, message):
+    message = service.users().messages().send(userId=user_id, body=message).execute()
+    return message
+
+
+def send_email(from_user, to_email, rich_text, cv, reply_to=None):
+    if reply_to:
+        raise NotImplementedError
+    usa = from_user.social_auth.filter(provider='google-oauth2').first()
+    creds = Credentials(usa)
+    service = discovery.build('gmail', 'v1', credentials=creds)
+    file = StringIO('1234566')
+
+    message = create_message_with_attachment(
+        sender=from_user.email,
+        to=to_email,
+        reply_to=reply_to,
+        message_text_html=rich_text,
+        file=file,
+        subject='test',
+        filename='test.txt',
+        content_type='text/plain'
+    )
+    send_raw(service=service, user_id='thorin@schiffer.pro', message=message)
