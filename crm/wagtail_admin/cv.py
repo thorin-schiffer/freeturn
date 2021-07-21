@@ -1,4 +1,3 @@
-from django.db.models import Count
 from wagtail.admin.edit_handlers import ObjectList
 from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
@@ -6,11 +5,9 @@ from wagtail.contrib.modeladmin.views import CreateView, InspectView
 from wagtail.core.models import Site
 
 from crm.models.cv import CV
-from crm.models.settings import CVGenerationSettings
 from crm.models.project import Project
+from crm.models.settings import CVGenerationSettings
 from crm.utils import BasePDFView
-from home.models import ProjectPage
-from home.models.snippets import Technology
 
 
 class CreateCVView(CreateView):
@@ -48,17 +45,13 @@ class CVInspectView(BasePDFView,
     template_name = 'cv/body.html'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        context['skills'] = Technology.objects.annotate(
-            projects_count=Count('projects')
-        ).filter(projects_count__gt=0).order_by('-projects_count')
-        context['project_pages'] = ProjectPage.objects.live().order_by('-start_date')
-        context['relevant_project_pages'] = self.instance.relevant_project_pages.order_by('-start_date')
-        return context
+        return {
+            **super().get_context_data(**kwargs),
+            **self.instance.get_default_file_render_context()
+        }
 
     def get_filename(self):
-        return f'{self.instance.full_name} CV and project portfolio for {self.instance.project}.pdf'
+        return f'{self.instance.full_name} CV for {self.instance.project}.pdf'
 
 
 class CVAdmin(ThumbnailMixin, ModelAdmin):

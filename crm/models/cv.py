@@ -1,7 +1,7 @@
 import logging
 
 from django.db import models
-from django.db.models import CASCADE
+from django.db.models import CASCADE, Count
 from django.utils import timezone
 from django_extensions.db.models import TimeStampedModel
 from instance_selector.edit_handlers import InstanceSelectorPanel
@@ -123,6 +123,15 @@ class CV(TimeStampedModel):
             technologies__in=technologies
         ).order_by('-start_date'))
         self.relevant_skills.set(technologies)
+
+    def get_default_file_render_context(self):
+        return {
+            'skills': Technology.objects.annotate(
+                projects_count=Count('projects')
+            ).filter(projects_count__gt=0).order_by('-projects_count'),
+            'project_pages': ProjectPage.objects.live().order_by('-start_date'),
+            'relevant_project_pages': self.relevant_project_pages.order_by('-start_date')
+        }
 
     def save(self, **kwargs):
         creating = self.pk is None
