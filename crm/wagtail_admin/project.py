@@ -45,7 +45,7 @@ class ProjectURLHelper(AdminURLHelper):
 
 class StateTransitionForm(WagtailAdminModelForm):
     text = CharField(widget=get_rich_text_editor_widget(),
-                     help_text="Change template text in 'Settings' > 'Reply templates'")
+                     help_text="Change template text in 'Settings' > 'Message templates'")
     cv = ModelChoiceField(queryset=CV.objects.all(),
                           label='CV',
                           widget=InstanceSelectorWidget(model=CV),
@@ -64,7 +64,7 @@ class StateTransitionForm(WagtailAdminModelForm):
 
         if template:
             self.fields['text'].help_text = f'Using template {template}. ' \
-                                            f"Edit template in 'Settings' > 'Reply templates'"
+                                            f"Edit template in 'Settings' > 'Message templates'"
 
     class Meta:
         model = Project
