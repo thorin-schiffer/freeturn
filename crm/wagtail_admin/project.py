@@ -1,7 +1,9 @@
+import logging
 from datetime import timedelta
 
 from django.conf.urls import url
 from django.contrib.admin.utils import quote
+from django.db import transaction
 from django.forms import CharField
 from django.shortcuts import redirect
 from django.template import Template, Context
@@ -10,6 +12,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django_filters.fields import ModelChoiceField
 from django_fsm import TransitionNotAllowed
+from google.api_core.exceptions import GoogleAPIError
 from google.auth.exceptions import GoogleAuthError
 from instance_selector.widgets import InstanceSelectorWidget
 from wagtail.admin import messages
@@ -22,10 +25,13 @@ from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import CreateView, InspectView, IndexView, ModelFormView, \
     InstanceSpecificView
 
+from crm.gmail_utils import send_email
 from crm.gmail_utils import sync
 from crm.models import City, CV
 from crm.models.project import Project
 from crm.models.project_message import ProjectMessage
+
+logger = logging.getLogger(__file__)
 
 
 class ProjectURLHelper(AdminURLHelper):
@@ -90,10 +96,34 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
             model_name=self.verbose_name.capitalize(), instance=instance
         )
 
+    def send_mail(self, data):
+        from_user = self.request.user
+        to_email = self.instance.manager.email
+        rich_text = data['text']
+        cv = data['cv']
+        project_message = self.instance.messages.first()
+
+        try:
+            send_email(
+                from_user=from_user,
+                to_email=to_email,
+                rich_text=rich_text,
+                cv=cv,
+                project_message=project_message
+            )
+        except GoogleAPIError as ex:
+            logger.error(self.request, f"Can't send messages: {ex}")
+            messages.error(self.request, f"Can't send messages: {ex}")
+            return
+        messages.success(self.request,
+                         f'Message sent to {to_email}')
+
+    @transaction.atomic
     def form_valid(self, form):
         method = getattr(form.instance, self.action)
         try:
             method()
+            self.send_mail(data=form.cleaned_data)
         except TransitionNotAllowed:
             return self.form_invalid(form)
         return super().form_valid(form)
@@ -230,6 +260,7 @@ class ProjectMessageIndexView(IndexView):
         try:
             created_messages = sync()
         except GoogleAuthError as ex:
+            logger.error(f"Can't update messages: {ex}")
             messages.error(self.request, f"Can't update messages: {ex}")
             created_messages = []
         if created_messages:
