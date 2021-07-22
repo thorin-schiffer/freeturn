@@ -86,6 +86,8 @@ class ProjectMessageFactory(factory.DjangoModelFactory):
 
 class UserFactory(factory.DjangoModelFactory):
     username = factory.Sequence(lambda n: f'user{n}')
+    first_name = factory.Faker('first_name')
+    last_name = factory.Faker('last_name')
 
     class Meta:
         model = get_user_model()
