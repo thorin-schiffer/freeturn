@@ -76,5 +76,42 @@ def test_create_message_with_pdf_attachment(faker):
 
 
 @pytest.mark.django_db
-def test_send_email(gmail_service, cv):
-    send_email(gmail_service)
+def test_send_email(gmail_service, cv, user_social_auth, faker,
+                    project_message, mocker):
+    user = user_social_auth.user
+    mocker.patch.object(cv, 'get_file', return_value=BytesIO(b'test'))
+    to_email = faker.email()
+    text = '<p>test <b>test</b></p>'
+
+    _, message = send_email(
+        from_user=user,
+        to_email=to_email,
+        rich_text=text,
+        cv=cv,
+        reply_to=project_message,
+    )
+    assert message['threadId'] == project_message.gmail_thread_id
+    payload = base64.urlsafe_b64decode(message['raw'].encode())
+    message = email.message_from_bytes(payload)
+    assert message['to'] == to_email
+    assert message['from'] == f"{user.first_name + ' ' + user.last_name} <{user.email}>"
+    assert message['subject'] == project_message.subject
+    assert message['in-reply-to'] == message['references'] == project_message.gmail_message_id
+
+    attachment = message.get_payload()[1]
+    assert attachment['content-type'] == 'application/pdf'
+
+
+@pytest.mark.django_db
+def test_send_email_without_message(gmail_service, cv, admin_user, faker, project_message):
+    raise NotImplementedError
+    to_email = faker.email()
+    text = '<p>test <b>test</b></p>'
+
+    send_email(
+        from_user=admin_user,
+        to_email=to_email,
+        rich_text=text,
+        cv=cv,
+        reply_to=project_message,
+    )
