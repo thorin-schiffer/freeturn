@@ -201,12 +201,14 @@ def sync():
 def create_message_with_attachment(sender, to, message_text_html,
                                    file,
                                    content_type, filename,
-                                   encoding=None, reply_to=None, subject=None):
+                                   encoding=None, message_id=None, thread_id=None,
+                                   subject=None):
     message = MIMEMultipart()
     message['to'] = to
     message['from'] = sender
     message['subject'] = subject
-    message['in-reply-to'] = reply_to
+    message['in-reply-to'] = message_id
+    message['references'] = message_id
 
     message.attach(MIMEText(message_text_html, 'html'))
 
@@ -223,8 +225,8 @@ def create_message_with_attachment(sender, to, message_text_html,
         file.close()
     msg.add_header('Content-Disposition', 'attachment', filename=filename)
     message.attach(msg)
-
-    return {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()}
+    return {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode(),
+            'threadId': thread_id}
 
 
 def send_raw(service, user_id, message):
@@ -232,21 +234,28 @@ def send_raw(service, user_id, message):
     return message
 
 
-def send_email(from_user, to_email, rich_text, cv, reply_to=None):
+def send_email(from_user, to_email, rich_text: str, cv, reply_to: ProjectMessage):
     if reply_to:
-        raise NotImplementedError
+        subject = reply_to.subject
+        message_id = reply_to.gmail_message_id
+        thread_id = reply_to.gmail_thread_id
+    else:
+        subject = cv.project.name
+        message_id = None
+        thread_id = None
     usa = from_user.social_auth.filter(provider='google-oauth2').first()
     creds = Credentials(usa)
     service = discovery.build('gmail', 'v1', credentials=creds)
     file = cv.get_file()
 
     message = create_message_with_attachment(
-        sender=f"<{from_user.first_name + ' ' + from_user.last_name}> {from_user.email} ",
+        sender=f"{from_user.first_name + ' ' + from_user.last_name} <{from_user.email}>",
         to=to_email,
-        reply_to=reply_to,
+        message_id=message_id,
+        thread_id=thread_id,
         message_text_html=rich_text,
         file=file,
-        subject=cv.project.name,
+        subject=subject,
         filename=cv.get_filename(),
         content_type='application/pdf'
     )
