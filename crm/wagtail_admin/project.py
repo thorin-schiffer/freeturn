@@ -3,7 +3,6 @@ from datetime import timedelta
 
 from django.conf.urls import url
 from django.contrib.admin.utils import quote
-from django.db import transaction
 from django.forms import CharField
 from django.shortcuts import redirect
 from django.template import Template, Context
@@ -118,7 +117,6 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
         messages.success(self.request,
                          f'Message sent to {to_email}')
 
-    @transaction.atomic
     def form_valid(self, form):
         method = getattr(form.instance, self.action)
         try:
