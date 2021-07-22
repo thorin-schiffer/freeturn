@@ -3,23 +3,41 @@ from datetime import datetime
 import pytest
 from django.urls import reverse
 
-from crm.factories import CityFactory, ProjectFactory
+from crm.factories import CityFactory, ProjectFactory, MessageTemplateFactory, CVFactory, UserSocialAuthFactory
 
 
 @pytest.mark.django_db
-def test_index_action(admin_app,
-                      project):
+def test_state_transition_action(gmail_service,
+                                 admin_app,
+                                 admin_user,
+                                 project):
+    UserSocialAuthFactory(user=admin_user)
+    MessageTemplateFactory(state_transition='drop')
+    CVFactory(project=project)
     assert project.state == 'requested'
     url = reverse('crm_project_modeladmin_index')
     r = admin_app.get(url)
     r = r.click('Drop')
-    inputs = r.lxml.xpath(".//*[@id='id_notes']")
-    assert len(inputs) == 1
 
     r = r.forms[1].submit().follow()
 
     project.refresh_from_db()
     assert project.state == 'stopped'
+    assert len(r.context['messages']) == 2
+
+
+@pytest.mark.django_db
+def test_state_transition_no_social_auth(gmail_service,
+                                         admin_app,
+                                         project):
+    MessageTemplateFactory(state_transition='drop')
+    CVFactory(project=project)
+    assert project.state == 'requested'
+    url = reverse('crm_project_modeladmin_index')
+    r = admin_app.get(url)
+    r = r.click('Drop')
+    assert len(r.context['messages']) == 1
+    r = r.forms[1].submit().follow()
     assert len(r.context['messages']) == 1
 
 

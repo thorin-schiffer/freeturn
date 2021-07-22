@@ -24,7 +24,7 @@ from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import CreateView, InspectView, IndexView, ModelFormView, \
     InstanceSpecificView
 
-from crm.gmail_utils import send_email
+from crm.gmail_utils import send_email, NoSocialAuth
 from crm.gmail_utils import sync
 from crm.models import City, CV
 from crm.models.project import Project
@@ -81,6 +81,14 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
         self.page_title = f'{self.action.capitalize()} {Project._meta.verbose_name}: write your message'
         super().__init__(**kwargs)
 
+    def get_context_data(self, form=None, **kwargs):
+        context = super().get_context_data(form, **kwargs)
+        if not self.request.user.social_auth.filter(provider='google-oauth2').exists():
+            messages.error(self.request,
+                           "Message won't be sent, because no google social auth connection is configured. "
+                           "Go to 'AccountSetting'->'More actions' -> 'Google Login'.")
+        return context
+
     def get_form_kwargs(self):
         return {'action': self.action, **super().get_form_kwargs()}
 
@@ -111,8 +119,10 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
                 project_message=project_message
             )
         except GoogleAPIError as ex:
-            logger.error(self.request, f"Can't send messages: {ex}")
+            logger.error(f"Can't send messages: {ex}")
             messages.error(self.request, f"Can't send messages: {ex}")
+            return
+        except NoSocialAuth:
             return
         messages.success(self.request,
                          f'Message sent to {to_email}')

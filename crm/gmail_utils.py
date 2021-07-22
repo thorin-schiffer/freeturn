@@ -228,6 +228,10 @@ def create_message_with_attachment(sender, to, message_text_html,
             'threadId': thread_id}
 
 
+class NoSocialAuth(Exception):
+    pass
+
+
 def send_email(from_user, to_email, rich_text: str, cv=None, project_message: ProjectMessage = None):
     if project_message:
         subject = project_message.subject
@@ -241,6 +245,8 @@ def send_email(from_user, to_email, rich_text: str, cv=None, project_message: Pr
         message_id = None
         thread_id = None
     usa = from_user.social_auth.filter(provider='google-oauth2').first()
+    if not usa:
+        raise NoSocialAuth('Google auth not configured')
     creds = Credentials(usa)
     service = discovery.build('gmail', 'v1', credentials=creds)
 
