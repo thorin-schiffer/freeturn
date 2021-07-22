@@ -227,7 +227,7 @@ def create_message_with_attachment(sender, to, message_text_html,
             'threadId': thread_id}
 
 
-def send_email(from_user, to_email, rich_text: str, cv, reply_to: ProjectMessage):
+def send_email(from_user, to_email, rich_text: str, cv, reply_to: ProjectMessage = None):
     if reply_to:
         subject = reply_to.subject
         message_id = reply_to.gmail_message_id

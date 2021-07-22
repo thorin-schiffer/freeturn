@@ -103,15 +103,24 @@ def test_send_email(gmail_service, cv, user_social_auth, faker,
 
 
 @pytest.mark.django_db
-def test_send_email_without_message(gmail_service, cv, admin_user, faker, project_message):
-    raise NotImplementedError
+def test_send_email_without_message(gmail_service, cv, user_social_auth, faker,
+                                    mocker):
+    user = user_social_auth.user
+    mocker.patch.object(cv, 'get_file', return_value=BytesIO(b'test'))
     to_email = faker.email()
     text = '<p>test <b>test</b></p>'
 
-    send_email(
-        from_user=admin_user,
+    _, message = send_email(
+        from_user=user,
         to_email=to_email,
         rich_text=text,
         cv=cv,
-        reply_to=project_message,
     )
+    assert message['threadId'] is None
+    payload = base64.urlsafe_b64decode(message['raw'].encode())
+    message = email.message_from_bytes(payload)
+    assert message['to'] == to_email
+    assert message['from'] == f"{user.first_name + ' ' + user.last_name} <{user.email}>"
+    assert message['subject'] == cv.project.name
+    assert not message['in-reply-to']
+    assert not message['references']
