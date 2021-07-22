@@ -88,7 +88,7 @@ def test_send_email(gmail_service, cv, user_social_auth, faker,
         to_email=to_email,
         rich_text=text,
         cv=cv,
-        reply_to=project_message,
+        project_message=project_message,
     )
     assert message['threadId'] == project_message.gmail_thread_id
     payload = base64.urlsafe_b64decode(message['raw'].encode())
@@ -124,3 +124,20 @@ def test_send_email_without_message(gmail_service, cv, user_social_auth, faker,
     assert message['subject'] == cv.project.name
     assert not message['in-reply-to']
     assert not message['references']
+
+
+@pytest.mark.django_db
+def test_send_email_without_cv(gmail_service, user_social_auth, faker, project_message):
+    user = user_social_auth.user
+    to_email = faker.email()
+    text = '<p>test <b>test</b></p>'
+
+    _, message = send_email(
+        from_user=user,
+        to_email=to_email,
+        rich_text=text,
+        project_message=project_message
+    )
+    payload = base64.urlsafe_b64decode(message['raw'].encode())
+    message = email.message_from_bytes(payload)
+    assert len(message.get_payload()) == 1

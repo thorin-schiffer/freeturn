@@ -214,32 +214,35 @@ def create_message_with_attachment(sender, to, message_text_html,
 
     main_type, sub_type = content_type.split('/', 1)
 
-    if main_type == 'application' and sub_type == 'pdf':
-        msg = MIMEApplication(file.read(), _subtype=sub_type)
-        file.close()
-    else:
-        msg = MIMEBase(main_type, sub_type)
-        msg.set_payload(file.read())
-        file.close()
-    msg.add_header('Content-Disposition', 'attachment', filename=filename)
-    message.attach(msg)
+    if file:
+        if main_type == 'application' and sub_type == 'pdf':
+            msg = MIMEApplication(file.read(), _subtype=sub_type)
+            file.close()
+        else:
+            msg = MIMEBase(main_type, sub_type)
+            msg.set_payload(file.read())
+            file.close()
+        msg.add_header('Content-Disposition', 'attachment', filename=filename)
+        message.attach(msg)
     return {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode(),
             'threadId': thread_id}
 
 
-def send_email(from_user, to_email, rich_text: str, cv, reply_to: ProjectMessage = None):
-    if reply_to:
-        subject = reply_to.subject
-        message_id = reply_to.gmail_message_id
-        thread_id = reply_to.gmail_thread_id
+def send_email(from_user, to_email, rich_text: str, cv=None, project_message: ProjectMessage = None):
+    if project_message:
+        subject = project_message.subject
+        message_id = project_message.gmail_message_id
+        thread_id = project_message.gmail_thread_id
     else:
+        if not cv:
+            raise RuntimeError('Either CV or project_message has to be set')
+
         subject = cv.project.name
         message_id = None
         thread_id = None
     usa = from_user.social_auth.filter(provider='google-oauth2').first()
     creds = Credentials(usa)
     service = discovery.build('gmail', 'v1', credentials=creds)
-    file = cv.get_file()
 
     message = create_message_with_attachment(
         sender=f"{from_user.first_name + ' ' + from_user.last_name} <{from_user.email}>",
@@ -247,9 +250,9 @@ def send_email(from_user, to_email, rich_text: str, cv, reply_to: ProjectMessage
         message_id=message_id,
         thread_id=thread_id,
         message_text_html=rich_text,
-        file=file,
+        file=cv.get_file() if cv else None,
         subject=subject,
-        filename=cv.get_filename(),
+        filename=cv.get_filename() if cv else None,
         content_type='application/pdf'
     )
     return service.users().messages().send(userId=from_user.email, body=message).execute(), message
