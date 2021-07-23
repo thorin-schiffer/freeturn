@@ -24,10 +24,11 @@
                 {% endblock %}
 
                 <li>
-                    <button type="submit" class="button right" value="Submit"><i class="icon icon-fa-send"></i> {% trans 'Send message' %}</button>
-                    {% if can_delete %}
-                        <a href="{{ view.get_delete_url }}" class="button button-secondary no">{{ view.delete_item_label }}</a>
-                    {% endif %}
+                    <div class="button-group right">
+                        <button name='change_state' type="submit" class="button" value="Send"><i class="icon icon-fa-send"></i> {% trans 'Send message' %}</button>
+                        <button id='change_state_button' name='change_state' type="submit" class="button button-secondary"
+                                value="change_state">{% trans 'Just change state' %}</button>
+                    </div>
                 </li>
             </ul>
         </form>

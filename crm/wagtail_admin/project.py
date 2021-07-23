@@ -129,9 +129,11 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
 
     def form_valid(self, form):
         method = getattr(form.instance, self.action)
+
         try:
             method()
-            self.send_mail(data=form.cleaned_data)
+            if self.request.POST.get('change_state') != 'change_state':
+                self.send_mail(data=form.cleaned_data)
         except TransitionNotAllowed:
             return self.form_invalid(form)
         return super().form_valid(form)

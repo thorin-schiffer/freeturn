@@ -47,6 +47,22 @@ def test_state_transition_no_social_auth(gmail_service,
 
 
 @pytest.mark.django_db
+def test_state_transition_just_change_state_button(gmail_service,
+                                                   admin_app,
+                                                   project):
+    MessageTemplateFactory(state_transition='drop')
+    CVFactory(project=project)
+    assert project.state == 'requested'
+    url = reverse('crm_project_modeladmin_index')
+    r = admin_app.get(url)
+    r = r.click('Drop')
+    r = r.forms[1].submit(name='change_state', value='Just change state').follow()
+    project.refresh_from_db()
+    assert project.state == 'stopped'
+    assert len(r.context['messages']) == 1
+
+
+@pytest.mark.django_db
 def test_inspect(admin_app,
                  project_factory,
                  project_page):
