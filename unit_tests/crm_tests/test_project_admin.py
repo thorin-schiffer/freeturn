@@ -18,7 +18,12 @@ def test_state_transition_action(gmail_service,
     url = reverse('crm_project_modeladmin_index')
     r = admin_app.get(url)
     r = r.click('Drop')
-
+    drop_state_url = reverse('crm_project_modeladmin_state',
+                             kwargs={
+                                 'instance_pk': project.pk,
+                                 'action': 'drop'
+                             })
+    assert r.request.path == drop_state_url
     r = r.forms[1].submit().follow()
 
     project.refresh_from_db()
