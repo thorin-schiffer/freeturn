@@ -1,5 +1,6 @@
 import pytest
 from django.urls import reverse
+from google.auth.exceptions import GoogleAuthError
 
 from crm.factories import UserSocialAuthFactory
 from crm.models import ProjectMessage
@@ -12,6 +13,16 @@ def test_project_message_index(admin_app,
     project_message_factory.create()
     url = reverse('crm_projectmessage_modeladmin_index')
     admin_app.get(url)
+
+
+@pytest.mark.django_db
+def test_project_message_index_google_auth_error(admin_app,
+                                                 mocker):
+    mocker.patch('crm.gmail_utils.sync', side_effect=GoogleAuthError)
+    url = reverse('crm_projectmessage_modeladmin_index')
+    r = admin_app.get(url)
+    assert len(r.context['messages']) == 1
+    assert 'Can&#x27;t update messages' in r.text
 
 
 @pytest.mark.django_db
