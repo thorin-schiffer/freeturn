@@ -24,8 +24,7 @@ from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import CreateView, InspectView, IndexView, ModelFormView, \
     InstanceSpecificView
 
-from crm.gmail_utils import send_email, NoSocialAuth
-from crm.gmail_utils import sync
+from crm import gmail_utils
 from crm.models import City, CV
 from crm.models.project import Project
 from crm.models.project_message import ProjectMessage
@@ -108,7 +107,7 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
         project_message = self.instance.messages.first()
 
         try:
-            send_email(
+            gmail_utils.send_email(
                 from_user=from_user,
                 to_email=to_email,
                 rich_text=rich_text,
@@ -119,7 +118,7 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
             logger.error(f"Can't send messages: {ex}")
             messages.error(self.request, f"Can't send messages: {ex}")
             return
-        except NoSocialAuth:
+        except gmail_utils.NoSocialAuth:
             return
         messages.success(self.request,
                          f'Message sent to {to_email}')
@@ -265,7 +264,7 @@ class MessagePermissionHelper(PermissionHelper):
 class ProjectMessageIndexView(IndexView):
     def get_context_data(self, **kwargs):
         try:
-            created_messages = sync()
+            created_messages = gmail_utils.sync()
         except GoogleAuthError as ex:
             logger.error(f"Can't update messages: {ex}")
             messages.error(self.request, f"Can't update messages: {ex}")

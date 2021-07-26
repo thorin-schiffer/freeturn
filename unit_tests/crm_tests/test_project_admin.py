@@ -1,7 +1,9 @@
 from datetime import datetime
 
 import pytest
+from django.contrib.messages import ERROR
 from django.urls import reverse
+from google.api_core.exceptions import GoogleAPIError
 
 from crm.factories import CityFactory, ProjectFactory, MessageTemplateFactory, CVFactory, UserSocialAuthFactory
 
@@ -60,6 +62,24 @@ def test_state_transition_just_change_state_button(gmail_service,
     project.refresh_from_db()
     assert project.state == 'stopped'
     assert len(r.context['messages']) == 1
+
+
+@pytest.mark.django_db
+def test_state_transition_google_api_error(gmail_service,
+                                           admin_app,
+                                           project,
+                                           mocker):
+    mocker.patch('crm.gmail_utils.send_email', side_effect=GoogleAPIError)
+    MessageTemplateFactory(state_transition='drop')
+    CVFactory(project=project)
+    assert project.state == 'requested'
+    url = reverse('crm_project_modeladmin_index')
+    r = admin_app.get(url)
+    r = r.click('Drop')
+    r = r.forms[1].submit(name='change_state', value='Just change state').follow()
+    project.refresh_from_db()
+    assert project.state == 'stopped'
+    assert r.context['messages']._get()[0][0].level == ERROR
 
 
 @pytest.mark.django_db
