@@ -95,9 +95,6 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
     def get_form_class(self):
         return StateTransitionForm
 
-    def edit_url(self):
-        return self.url_helper.get_action_url('state', self.pk_quoted, self.action)
-
     def get_success_message(self, instance):
         return "{model_name} '{instance}' now in state {instance.state}".format(
             model_name=self.verbose_name.capitalize(), instance=instance
