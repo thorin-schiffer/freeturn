@@ -33,10 +33,23 @@ Adding a project is pretty straightforward:
 **Original description** would be later used for parsing the meta information about the project, technologies are fuzzy
 matched if [Technology](portfolio.md#technologies) snippet.
 
-**Project page** is a link between a project lead and a [project page](portfolio.md#project-page)/
+**Project page** is a link between a project lead and a [project page](portfolio.md#project-page).
 
 After adding a project you will be redirected to the CV generation for this project, already prefilled from your settings
 and rearranged to correspond the project description, so the most relevant projects are highlighted in the CV.
+
+### Project states and sending emails
+
+Project leads go through the different states, representing the stages of the project acquisition.
+Here are the possible project lead states and transitions:
+
+![Screenshot](img/crm/project_state_graph.png)
+
+Click the transition buttons from the list or inspect view of the project lead:
+
+![Screenshot](img/crm/project_state_buttons.png)
+![Screenshot](img/crm/project_state_buttons_inspect.png)
+
 
 ## CVs
 
