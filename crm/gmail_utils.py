@@ -229,7 +229,9 @@ class NoSocialAuth(Exception):
     pass
 
 
-def send_email(from_user, to_email, rich_text: str, cv=None, project_message: ProjectMessage = None):
+def send_email(from_user, to_email, rich_text: str, **kwargs):
+    project_message = kwargs.get('project_message')
+    cv = kwargs.get('cv')
     if project_message:
         subject = project_message.subject
         message_id = project_message.gmail_message_id
