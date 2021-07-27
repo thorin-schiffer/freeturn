@@ -199,20 +199,17 @@ def sync():
 
 
 def create_message_with_attachment(sender, to, message_text_html,
-                                   file,
-                                   content_type, filename,
-                                   message_id=None, thread_id=None,
-                                   subject=None):
+                                   file, **kwargs):
     message = MIMEMultipart()
     message['to'] = to
     message['from'] = sender
-    message['subject'] = subject
-    message['in-reply-to'] = message_id
-    message['references'] = message_id
+    message['subject'] = kwargs.get('subject')
+    message['in-reply-to'] = kwargs.get('message_id')
+    message['references'] = kwargs.get('message_id')
 
     message.attach(MIMEText(message_text_html, 'html'))
 
-    main_type, sub_type = content_type.split('/', 1)
+    main_type, sub_type = kwargs.get('content_type').split('/', 1)
 
     if file:
         if main_type == 'application' and sub_type == 'pdf':
@@ -222,10 +219,10 @@ def create_message_with_attachment(sender, to, message_text_html,
             msg = MIMEBase(main_type, sub_type)
             msg.set_payload(file.read())
             file.close()
-        msg.add_header('Content-Disposition', 'attachment', filename=filename)
+        msg.add_header('Content-Disposition', 'attachment', filename=kwargs.get('filename'))
         message.attach(msg)
     return {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode(),
-            'threadId': thread_id}
+            'threadId': kwargs.get('thread_id')}
 
 
 class NoSocialAuth(Exception):
