@@ -50,6 +50,25 @@ Click the transition buttons from the list or inspect view of the project lead:
 ![Screenshot](img/crm/project_state_buttons.png)
 ![Screenshot](img/crm/project_state_buttons_inspect.png)
 
+Use the intermediate state transition view to notify the project manager about the state change.
+
+![Screenshot](img/crm/project_state_transition_view.png)
+
+The text input field is prefilled with the template text associated with the state change. Those
+templates can be configured in in Settings -> Message Templates.
+![Screenshot](img/crm/message_template_edit_view.png)
+
+Text field supports formatting, which then will be used in the emails you send to the manager of the project.
+Every template will be associated with the project state transition and language the project description is in.
+If no association is possible, the text field of the transition view will remain empty.
+
+Choose the CV you would like to send to the manager along with your message.
+The project's CV will be attached automatically if 'Attach CV' flag was set on the message template.
+
+![Screenshot](img/crm/project_state_transition_buttons.png)
+
+Click 'Send message' to send message and change the project's state or 'Just change state' to just change the state and
+not send the message.
 
 ## CVs
 
