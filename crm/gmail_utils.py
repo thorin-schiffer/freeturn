@@ -199,7 +199,7 @@ def sync():
 
 
 def create_message_with_attachment(sender, to, message_text_html,
-                                   file, **kwargs):
+                                   **kwargs):
     message = MIMEMultipart()
     message['to'] = to
     message['from'] = sender
@@ -210,7 +210,7 @@ def create_message_with_attachment(sender, to, message_text_html,
     message.attach(MIMEText(message_text_html, 'html'))
 
     main_type, sub_type = kwargs.get('content_type').split('/', 1)
-
+    file = kwargs.get('file')
     if file:
         if main_type == 'application' and sub_type == 'pdf':
             msg = MIMEApplication(file.read(), _subtype=sub_type)
