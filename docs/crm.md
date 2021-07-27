@@ -70,6 +70,10 @@ The project's CV will be attached automatically if 'Attach CV' flag was set on t
 Click 'Send message' to send message and change the project's state or 'Just change state' to just change the state and
 not send the message.
 
+!!! warning
+    Make sure your [google oauth2 integration](configuration.md#google-oauth2) is activated, otherwise no messages
+    will be sent
+
 ## CVs
 
 CV and project portfolio docs are your main tool to convince the client of yourself. Freeturn is built to make every
