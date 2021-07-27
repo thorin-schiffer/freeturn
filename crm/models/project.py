@@ -43,6 +43,9 @@ class ProjectDisplayMixin:
     def get_nett_income_display(self):
         return f'{self.nett_income:.2f} €' if self.nett_income else None
 
+    def get_duration_display(self):
+        return f'{self.duration} months'
+
 
 class Project(TimeStampedModel, ProjectDisplayMixin):
     state = FSMField(default='requested', editable=False)
@@ -165,9 +168,6 @@ class Project(TimeStampedModel, ProjectDisplayMixin):
             return math.ceil((self.end_date - self.start_date).days / 30)
         except TypeError:
             pass
-
-    def get_duration_display(self):
-        return f'{self.duration} months'
 
     @property
     def budget(self):
