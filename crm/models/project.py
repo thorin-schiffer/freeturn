@@ -3,11 +3,13 @@ import math
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import CharField
 from django.urls import reverse
 from django.utils.safestring import SafeText
 from django_extensions.db.models import TimeStampedModel
 from django_fsm import FSMField, transition
 from instance_selector.edit_handlers import InstanceSelectorPanel
+from langdetect import detect
 from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel, FieldRowPanel, PageChooserPanel
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Site
@@ -40,6 +42,9 @@ class ProjectDisplayMixin:
 
     def get_nett_income_display(self):
         return f'{self.nett_income:.2f} €' if self.nett_income else None
+
+    def get_duration_display(self):
+        return f'{self.duration} months'
 
 
 class Project(TimeStampedModel, ProjectDisplayMixin):
@@ -121,6 +126,7 @@ class Project(TimeStampedModel, ProjectDisplayMixin):
         null=True,
         blank=True
     )
+    language = CharField(choices=settings.LANGUAGES, max_length=10, blank=True)
 
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
@@ -137,7 +143,10 @@ class Project(TimeStampedModel, ProjectDisplayMixin):
             FieldPanel('original_description'),
             InstanceSelectorPanel('company'),
             InstanceSelectorPanel('manager'),
-            InstanceSelectorPanel('location')
+            FieldRowPanel([
+                InstanceSelectorPanel('location'),
+                FieldPanel('language'),
+            ])
         ]),
         FieldRowPanel([
             FieldPanel('daily_rate'),
@@ -148,15 +157,17 @@ class Project(TimeStampedModel, ProjectDisplayMixin):
         PageChooserPanel('project_page')
     ]
 
+    def get_message_template(self, transition_name):
+        from crm.models import MessageTemplate
+        return MessageTemplate.objects.filter(state_transition=transition_name,
+                                              language=self.language).first()
+
     @property
     def duration(self):
         try:
             return math.ceil((self.end_date - self.start_date).days / 30)
         except TypeError:
             pass
-
-    def get_duration_display(self):
-        return f'{self.duration} months'
 
     @property
     def budget(self):
@@ -232,6 +243,8 @@ class Project(TimeStampedModel, ProjectDisplayMixin):
             self.daily_rate = self.company.default_daily_rate
         if not self.name:
             self.name = str(self.company)
+        if not self.language:
+            self.language = detect(self.original_description)
         super().save(*args, **kwargs)
 
     def __str__(self):

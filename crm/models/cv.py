@@ -1,7 +1,8 @@
 import logging
+from io import BytesIO
 
 from django.db import models
-from django.db.models import CASCADE
+from django.db.models import CASCADE, Count
 from django.utils import timezone
 from django_extensions.db.models import TimeStampedModel
 from instance_selector.edit_handlers import InstanceSelectorPanel
@@ -9,6 +10,7 @@ from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPan
 from wagtail.core.fields import RichTextField
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtailautocomplete.edit_handlers import AutocompletePanel
+from wkhtmltopdf.views import PDFTemplateResponse
 
 from home.models import ProjectPage
 from home.models.snippets import Technology
@@ -123,6 +125,30 @@ class CV(TimeStampedModel):
             technologies__in=technologies
         ).order_by('-start_date'))
         self.relevant_skills.set(technologies)
+
+    def get_default_file_render_context(self):
+        return {
+            'skills': Technology.objects.annotate(
+                projects_count=Count('projects')
+            ).filter(projects_count__gt=0).order_by('-projects_count'),
+            'project_pages': ProjectPage.objects.live().order_by('-start_date'),
+            'relevant_project_pages': self.relevant_project_pages.order_by('-start_date'),
+            'instance': self
+        }
+
+    def get_filename(self):
+        return f'{self.full_name} CV for {self.project}.pdf'
+
+    def get_file(self):
+        pdf_response = PDFTemplateResponse(
+            request=None,
+            context=self.get_default_file_render_context(),
+            current_app='crm',
+            filename=self.get_filename(),
+            template='cv/body.html'
+        )
+        file = BytesIO(pdf_response.rendered_content)
+        return file
 
     def save(self, **kwargs):
         creating = self.pk is None

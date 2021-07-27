@@ -39,4 +39,4 @@ def test_create_empty_project(admin_app, admin_user, default_site):
     url = f"{reverse('crm_cv_modeladmin_create')}"
     r = admin_app.get(url)
     form = r.forms[1]
-    assert form.submit().status_code == 200
+    assert form.submit().maybe_follow().status_code == 200

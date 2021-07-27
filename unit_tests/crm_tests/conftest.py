@@ -15,7 +15,8 @@ register(factories.ProjectFactory)
 register(factories.ProjectMessageFactory)
 register(factories.UserFactory)
 register(factories.AdminFactory, 'admin_user')
-register(factories.CVFactory)
+register(factories.CVFactory, include_portfolio=False)
+register(factories.MessageTemplateFactory)
 register(factories.CVWithRelevantFactory, 'cv_with_relevant')
 register(factories.InvoiceFactory)
 register(SiteFactory)
@@ -58,6 +59,7 @@ def gmail_service(mocker, gmail_api_response_factory, monkeypatch, settings):
         'social_core.backends.google.GoogleOAuth2',
         'django.contrib.auth.backends.ModelBackend',
     )
+    settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '111'
     service = mocker.Mock()
     mocker.patch('googleapiclient.discovery.build', return_value=service)
     mocker.patch('crm.gmail_utils.get_labels', lambda s: gmail_api_response_factory('gmapi_labels_response.json'))

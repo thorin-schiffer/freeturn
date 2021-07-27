@@ -42,6 +42,8 @@ wagtail-factories = "*"
 factory-boy = "<3"
 wagtail-storages = "*"
 wagtail-instance-selector = "*"
+langdetect = "*"
+graphviz = "*"
 
 [dev-packages]
 django-debug-toolbar = "*"

@@ -2,6 +2,10 @@ import base64
 import email
 import logging
 from datetime import datetime
+from email.mime.application import MIMEApplication
+from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 import pytz
 from django.conf import settings
@@ -171,6 +175,8 @@ def associate(message):
 
 
 def sync():
+    if not settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY:
+        return []
     project_messages = []
     parsed_messages = []
     for user in get_user_model().objects.exclude(social_auth=None):
@@ -190,3 +196,68 @@ def sync():
             if not project_message.project.cvs.exists():
                 project_message.project.create_cv(user)
     return project_messages
+
+
+def create_message_with_attachment(sender, to, message_text_html,
+                                   **kwargs):
+    message = MIMEMultipart()
+    message['to'] = to
+    message['from'] = sender
+    message['subject'] = kwargs.get('subject')
+    message['in-reply-to'] = kwargs.get('message_id')
+    message['references'] = kwargs.get('message_id')
+
+    message.attach(MIMEText(message_text_html, 'html'))
+
+    main_type, sub_type = kwargs.get('content_type').split('/', 1)
+    file = kwargs.get('file')
+    if file:
+        if main_type == 'application' and sub_type == 'pdf':
+            msg = MIMEApplication(file.read(), _subtype=sub_type)
+            file.close()
+        else:
+            msg = MIMEBase(main_type, sub_type)
+            msg.set_payload(file.read())
+            file.close()
+        msg.add_header('Content-Disposition', 'attachment', filename=kwargs.get('filename'))
+        message.attach(msg)
+    return {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode(),
+            'threadId': kwargs.get('thread_id')}
+
+
+class NoSocialAuth(Exception):
+    pass
+
+
+def send_email(from_user, to_email, rich_text: str, **kwargs):
+    project_message = kwargs.get('project_message')
+    cv = kwargs.get('cv')
+    if project_message:
+        subject = project_message.subject
+        message_id = project_message.gmail_message_id
+        thread_id = project_message.gmail_thread_id
+    else:
+        if not cv:
+            raise RuntimeError('Either CV or project_message has to be set')
+
+        subject = cv.project.name
+        message_id = None
+        thread_id = None
+    usa = from_user.social_auth.filter(provider='google-oauth2').first()
+    if not usa:
+        raise NoSocialAuth('Google auth not configured')
+    creds = Credentials(usa)
+    service = discovery.build('gmail', 'v1', credentials=creds)
+
+    message = create_message_with_attachment(
+        sender=f"{from_user.first_name + ' ' + from_user.last_name} <{from_user.email}>",
+        to=to_email,
+        message_id=message_id,
+        thread_id=thread_id,
+        message_text_html=rich_text,
+        file=cv.get_file() if cv else None,
+        subject=subject,
+        filename=cv.get_filename() if cv else None,
+        content_type='application/pdf'
+    )
+    return service.users().messages().send(userId=from_user.email, body=message).execute(), message

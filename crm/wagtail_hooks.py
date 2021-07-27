@@ -6,6 +6,7 @@ from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register, ModelAdminGroup)
 from wagtail.core import hooks
 
+from crm.models import MessageTemplate
 from crm.models.city import City
 from crm.wagtail_admin.company import CompanyAdmin
 from crm.wagtail_admin.cv import CVAdmin
@@ -40,6 +41,17 @@ class CRMGroup(ModelAdminGroup):
 
 
 modeladmin_register(CRMGroup)
+
+
+class MessageTemplateAdmin(ModelAdmin):
+    model = MessageTemplate
+    menu_icon = 'fa-envelope-square'
+    menu_label = 'Message templates'
+    list_display = ['name', 'state_transition', 'text']
+    add_to_settings_menu = True
+
+
+modeladmin_register(MessageTemplateAdmin)
 
 
 class PeopleSearchArea(SearchArea):

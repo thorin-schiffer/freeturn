@@ -11,8 +11,8 @@ from wagtail.core.models import Site
 from wagtail.images.models import Image
 from wagtail_factories import CollectionFactory
 
-from crm.factories import ProjectFactory, CVFactory, ProjectMessageFactory, InvoiceFactory
-from crm.models import Project, Employee
+from crm.factories import ProjectFactory, CVFactory, ProjectMessageFactory, InvoiceFactory, MessageTemplateFactory
+from crm.models import Project, Employee, get_project_state_transitions, MessageTemplate
 from home.factories import HomePageFactory, TechnologiesPageFactory, \
     ContactPageFactory
 from home.factories import PortfolioPageFactory, ProjectPageFactory
@@ -146,6 +146,11 @@ def fill_crm_data(projects_count=10):
     all_projects.save()
     all_projects.relevant_skills.set(Technology.objects.order_by('?')[:3])
 
+    for transition in get_project_state_transitions():
+        MessageTemplateFactory(state_transition=transition[0])
+    make_project(original_description='Das ist eine Projektbeschreibung',
+                 name='Ein deutschsprachiges Projekt')
+
 
 def fill_pictures():
     images_path = 'fill_media'
@@ -176,6 +181,7 @@ def clean():
     Project.objects.all().delete()
     Employee.objects.all().delete()
     Collection.objects.all().delete()
+    MessageTemplate.objects.all().delete()
 
 
 @transaction.atomic

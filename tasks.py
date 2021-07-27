@@ -207,3 +207,9 @@ def install_s3_policy(context):
               'set bucket, user and account in env, see .env_template for info')
         return
     print(response)
+
+
+@invoke.task
+def update_project_state_graph(context):
+    context.run('./manage.py graph_transitions -o docs/img/crm/project_state_graph.png crm.Project;'
+                'rm docs/img/crm/project_state_graph')
