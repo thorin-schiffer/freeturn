@@ -9,7 +9,8 @@
     <div class="nice-padding">
         <h3>{{transition.source.upper }} <i class="icon icon-fa-arrow-right"></i>️ {{transition.target.upper }}</h3>
         {% if form.instance.manager %}
-        <h2>Message for <a href="{% url 'crm_employee_modeladmin_edit' instance_pk=form.instance.manager.pk %}">{{form.instance.manager.full_name}}</a></h2>
+        <h2>Message for <a href="{% url 'crm_employee_modeladmin_edit' instance_pk=form.instance.manager.pk %}">{{form.instance.manager.full_name}}</a> {{form.instance.manager.email}}</h2>
+
         {% endif %}
 
         {% block before_form %}{% endblock %}
