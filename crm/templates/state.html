@@ -7,7 +7,10 @@
 
     {% include "wagtailadmin/shared/header.html" with title=view.page_title subtitle=view.get_page_subtitle icon=view.header_icon %}
     <div class="nice-padding">
+        {% if form.instance.manager %}
         <h2>Message for <a href="{% url 'crm_employee_modeladmin_edit' instance_pk=form.instance.manager.pk %}">{{form.instance.manager.full_name}}</a></h2>
+        {% endif %}
+
         {% block before_form %}{% endblock %}
         <form action="{{ view.get_edit_url }}" method="POST" novalidate{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>
             {% csrf_token %}
@@ -25,7 +28,9 @@
 
                 <li>
                     <div class="button-group right">
+                        {% if form.instance.manager %}
                         <button name='change_state' type="submit" class="button" value="Send"><i class="icon icon-fa-send"></i> {% trans 'Send message' %}</button>
+                        {% endif %}
                         <button id='change_state_button' name='change_state' type="submit" class="button button-secondary"
                                 value="change_state">{% trans 'Just change state' %}</button>
                     </div>

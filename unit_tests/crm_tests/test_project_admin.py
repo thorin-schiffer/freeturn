@@ -6,6 +6,7 @@ from django.urls import reverse
 from google.api_core.exceptions import GoogleAPIError
 
 from crm.factories import CityFactory, ProjectFactory, MessageTemplateFactory, CVFactory, UserSocialAuthFactory
+from utils import get_messages
 
 
 @pytest.mark.django_db
@@ -46,6 +47,27 @@ def test_state_transition_no_social_auth(gmail_service,
     assert len(r.context['messages']) == 1
     r = r.forms[1].submit().follow()
     assert len(r.context['messages']) == 1
+
+
+@pytest.mark.django_db
+def test_state_transition_no_manager_associated(gmail_service,
+                                                admin_user,
+                                                admin_app):
+    # https://sentry.io/share/issue/2f073f4072824a82bade78c6472e1faf/
+    project = ProjectFactory(manager=None)
+    UserSocialAuthFactory(user=admin_user)
+
+    MessageTemplateFactory(state_transition='drop')
+    CVFactory(project=project)
+    url = reverse('crm_project_modeladmin_index')
+    r = admin_app.get(url)
+    r = r.click('Drop')
+    messages = get_messages(r)
+    assert len(messages) == 1
+    assert messages[0][0] == 'error'
+    assert messages[0][1] == "Project doesn't have a manager, messages can't be sent"
+    assert r.lxml.xpath(".//button[@value='change_state']")
+    assert not r.lxml.xpath(".//button[@value='Send']")
 
 
 @pytest.mark.django_db

@@ -87,6 +87,13 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
             messages.error(self.request,
                            "Message won't be sent, because no google social auth connection is configured. "
                            "Go to 'AccountSetting'->'More actions' -> 'Google Login'.")
+        if self.instance.manager is None:
+            messages.error(self.request,
+                           "Project doesn't have a manager, messages can't be sent",
+                           buttons=[
+                               messages.button(text='EDIT', url=reverse('crm_project_modeladmin_edit',
+                                                                        kwargs={'instance_pk': self.instance.pk}))
+                           ])
         return context
 
     def get_form_kwargs(self):
