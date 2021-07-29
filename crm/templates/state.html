@@ -4,9 +4,10 @@
 {% block titletag %}{{ view.page_title }} {{ view.get_page_subtitle }}{% endblock %}
 
 {% block content %}
-
     {% include "wagtailadmin/shared/header.html" with title=view.page_title subtitle=view.get_page_subtitle icon=view.header_icon %}
+
     <div class="nice-padding">
+        <h3>{{transition.source.upper }} <i class="icon icon-fa-arrow-right"></i>️ {{transition.target.upper }}</h3>
         {% if form.instance.manager %}
         <h2>Message for <a href="{% url 'crm_employee_modeladmin_edit' instance_pk=form.instance.manager.pk %}">{{form.instance.manager.full_name}}</a></h2>
         {% endif %}

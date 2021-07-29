@@ -94,6 +94,8 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
                                messages.button(text='EDIT', url=reverse('crm_project_modeladmin_edit',
                                                                         kwargs={'instance_pk': self.instance.pk}))
                            ])
+        transitions = list(Project._meta.get_field('state').get_all_transitions(Project))
+        context['transition'] = next(transition for transition in transitions if transition.name == self.action)
         return context
 
     def get_form_kwargs(self):
