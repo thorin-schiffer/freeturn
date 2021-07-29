@@ -47,7 +47,7 @@ class MessageTemplateAdmin(ModelAdmin):
     model = MessageTemplate
     menu_icon = 'fa-envelope-square'
     menu_label = 'Message templates'
-    list_display = ['name', 'state_transition', 'text']
+    list_display = ['name', 'state_transition', 'language']
     add_to_settings_menu = True
 
 
