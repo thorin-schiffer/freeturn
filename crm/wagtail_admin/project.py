@@ -44,7 +44,8 @@ class ProjectURLHelper(AdminURLHelper):
 
 class StateTransitionForm(WagtailAdminModelForm):
     text = CharField(widget=get_rich_text_editor_widget(),
-                     help_text="Change template text in 'Settings' > 'Message templates'")
+                     help_text="Change template text in 'Settings' > 'Message templates'",
+                     initial='Write your message here...')
     cv = ModelChoiceField(queryset=CV.objects.all(),
                           label='CV',
                           widget=InstanceSelectorWidget(model=CV),
