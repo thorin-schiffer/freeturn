@@ -4,7 +4,7 @@ from datetime import timedelta
 from django.conf.urls import url
 from django.contrib.admin.utils import quote
 from django.forms import CharField
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.template import Template, Context
 from django.template.defaultfilters import pluralize
 from django.urls import reverse
@@ -23,9 +23,10 @@ from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.views import CreateView, InspectView, IndexView, ModelFormView, \
     InstanceSpecificView
+from wagtail.tests.utils.form_data import rich_text
 
 from crm import gmail_utils
-from crm.models import City, CV
+from crm.models import City, CV, MessageTemplate
 from crm.models.project import Project
 from crm.models.project_message import ProjectMessage
 
@@ -43,6 +44,9 @@ class ProjectURLHelper(AdminURLHelper):
 
 
 class StateTransitionForm(WagtailAdminModelForm):
+    template = ModelChoiceField(queryset=MessageTemplate.objects.all(),
+                                widget=InstanceSelectorWidget(model=MessageTemplate))
+
     text = CharField(widget=get_rich_text_editor_widget(),
                      help_text="Change template text in 'Settings' > 'Message templates'",
                      initial='Write your message here...')
@@ -55,20 +59,31 @@ class StateTransitionForm(WagtailAdminModelForm):
         # start here
         # add cv attachment checkbox
         project = kwargs['instance']
-        template = project.get_message_template(kwargs.pop('action'))
-        if template:
-            kwargs['initial']['text'] = Template(template.text).render(Context({'project': project}))
-            if template.attach_cv:
-                kwargs['initial']['cv'] = project.cvs.first()
+        data = kwargs.get('data', {})
+        action = kwargs.pop('action')
+        kwargs['initial']['template'] = project.get_message_template(action)
+        template_pk = data.get('template')
+        if template_pk:
+            self.template = get_object_or_404(MessageTemplate, pk=data.get('template'))
+
+            kwargs['data'] = data.copy()
+            kwargs['data']['text'] = rich_text(Template(self.template.text).render(Context({'project': project})))
+            if self.template.attach_cv:
+                kwargs['data']['cv'] = project.cvs.first()
+        else:
+            self.template = None
         super().__init__(**kwargs)
 
-        if template:
-            self.fields['text'].help_text = f'Using template {template}. ' \
-                                            f"Edit template in 'Settings' > 'Message templates'"
+        if template_pk:
+            self.fields.pop('template')
+        else:
+            self.fields.pop('text')
+            self.fields.pop('cv')
+            self.next = True
 
     class Meta:
         model = Project
-        fields = ['text']
+        fields = ['template', 'text', 'cv']
 
 
 class StateTransitionView(ModelFormView, InstanceSpecificView):
@@ -132,6 +147,15 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
             return
         messages.success(self.request,
                          f'Message sent to {to_email}')
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if self.request.POST.get('next'):
+            return self.render_to_response(self.get_context_data(form=form))
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
     def form_valid(self, form):
         method = getattr(form.instance, self.action)

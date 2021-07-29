@@ -7,10 +7,12 @@
     {% include "wagtailadmin/shared/header.html" with title=view.page_title subtitle=view.get_page_subtitle icon=view.header_icon %}
 
     <div class="nice-padding">
-        <h3>{{transition.source.upper }} <i class="icon icon-fa-arrow-right"></i>️ {{transition.target.upper }}</h3>
+        <h3 class="right">{{transition.source.upper }} <i class="icon icon-fa-arrow-right"></i>️ {{transition.target.upper }}</h3>
         {% if form.instance.manager %}
         <h2>Message for <a href="{% url 'crm_employee_modeladmin_edit' instance_pk=form.instance.manager.pk %}">{{form.instance.manager.full_name}}</a> {{form.instance.manager.email}}</h2>
-
+        {% endif %}
+        {% if form.template.pk %}
+            <h3>Using template <a href="{% url 'crm_messagetemplate_modeladmin_edit' instance_pk=form.template.pk %}">{{form.template}}</a></h3>
         {% endif %}
 
         {% block before_form %}{% endblock %}
@@ -30,11 +32,17 @@
 
                 <li>
                     <div class="button-group right">
-                        {% if form.instance.manager %}
-                        <button name='change_state' type="submit" class="button" value="Send"><i class="icon icon-fa-send"></i> {% trans 'Send message' %}</button>
+                        {% if form.next %}
+                            <button id='next' name='next' type="submit" class="button button-secondary"
+                                        value="next">{% trans 'Next' %}</button>
+                        {% else %}
+                            {% if form.instance.manager %}
+                            <button name='change_state' type="submit" class="button" value="Send"><i class="icon icon-fa-send"></i> {% trans 'Send message' %}</button>
+                            {% endif %}
+                            <button id='change_state_button' name='change_state' type="submit" class="button button-secondary"
+                                    value="change_state">{% trans 'Just change state' %}</button>
                         {% endif %}
-                        <button id='change_state_button' name='change_state' type="submit" class="button button-secondary"
-                                value="change_state">{% trans 'Just change state' %}</button>
+
                     </div>
                 </li>
             </ul>
