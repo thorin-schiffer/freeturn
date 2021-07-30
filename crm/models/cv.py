@@ -92,7 +92,7 @@ class CV(TimeStampedModel):
                     ]
                 )
 
-            ]
+            ], heading='Personal data'
         ),
     ]
     create_panels = [
