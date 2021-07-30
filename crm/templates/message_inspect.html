@@ -17,9 +17,12 @@
     </h1>
 
     <h3>
+        {% if instance.project %}
         <a href="{% url 'crm_project_modeladmin_inspect' instance_pk=instance.project.pk %}">
             <i class="icon icon-fa-product-hunt"></i> {{ instance.project }}
         </a>
+        {% endif %}
+
         {% if instance.author.company.pk %}
         <a href="{% url 'crm_company_modeladmin_edit' instance_pk=instance.author.company.pk %}">
             <span class="right"><i class="icon icon-fa-building"></i> {{instance.author.company}}</span>
