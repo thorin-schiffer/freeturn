@@ -11,8 +11,8 @@
         {% if form.instance.manager %}
         <h2>Message for <a href="{% url 'crm_employee_modeladmin_edit' instance_pk=form.instance.manager.pk %}">{{form.instance.manager.full_name}}</a> {{form.instance.manager.email}}</h2>
         {% endif %}
-        {% if form.template.pk %}
-            <h3>Using template <a href="{% url 'crm_messagetemplate_modeladmin_edit' instance_pk=form.template.pk %}">{{form.template}}</a></h3>
+        {% if form.message_template.pk %}
+            <h3>Using template <a href="{% url 'crm_messagetemplate_modeladmin_edit' instance_pk=form.message_template.pk %}">{{form.message_template}}</a></h3>
         {% endif %}
 
         {% block before_form %}{% endblock %}
@@ -36,8 +36,9 @@
                             <button id='next' name='next' type="submit" class="button button-secondary"
                                         value="next">{% trans 'Next' %}</button>
                         {% else %}
+
                             {% if form.instance.manager %}
-                            <button name='change_state' type="submit" class="button" value="Send"><i class="icon icon-fa-send"></i> {% trans 'Send message' %}</button>
+                            <button name='send' type="submit" class="button" value="send"><i class="icon icon-fa-send"></i> {% trans 'Send message' %}</button>
                             {% endif %}
                             <button id='change_state_button' name='change_state' type="submit" class="button button-secondary"
                                     value="change_state">{% trans 'Just change state' %}</button>

@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from django.conf.urls import url
 from django.contrib.admin.utils import quote
-from django.forms import CharField
+from django.forms import CharField, HiddenInput
 from django.shortcuts import redirect, get_object_or_404
 from django.template import Template, Context
 from django.template.defaultfilters import pluralize
@@ -64,18 +64,18 @@ class StateTransitionForm(WagtailAdminModelForm):
         kwargs['initial']['template'] = project.get_message_template(action)
         template_pk = data.get('template')
         if template_pk:
-            self.template = get_object_or_404(MessageTemplate, pk=data.get('template'))
-
+            self.message_template = get_object_or_404(MessageTemplate, pk=data.get('template'))
             kwargs['data'] = data.copy()
-            kwargs['data']['text'] = rich_text(Template(self.template.text).render(Context({'project': project})))
-            if self.template.attach_cv:
+            kwargs['data']['text'] = rich_text(
+                Template(self.message_template.text).render(Context({'project': project})))
+            if self.message_template.attach_cv:
                 kwargs['data']['cv'] = project.cvs.first()
         else:
-            self.template = None
+            self.message_template = None
         super().__init__(**kwargs)
 
         if template_pk:
-            self.fields.pop('template')
+            self.fields['template'].widget = HiddenInput()
         else:
             self.fields.pop('text')
             self.fields.pop('cv')

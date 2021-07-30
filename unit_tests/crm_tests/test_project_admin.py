@@ -27,8 +27,16 @@ def test_state_transition_action(gmail_service,
                                  'action': 'drop'
                              })
     assert r.request.path == drop_state_url
-    r = r.forms[1].submit().follow()
+    form = r.forms[1]
+    assert 'template' in form.fields
+    assert 'text' not in form.fields
+    assert 'cv' not in form.fields
+    r = form.submit(name='next')
 
+    form = r.forms[1]
+    assert 'text' in form.fields
+    assert 'cv' in form.fields
+    r = form.submit(name='send').follow()
     project.refresh_from_db()
     assert project.state == 'stopped'
     assert len(r.context['messages']) == 2
