@@ -55,7 +55,10 @@ Use the intermediate state transition view to notify the project manager about t
 ![Screenshot](img/crm/project_state_transition_view.png)
 
 The text input field is prefilled with the template text associated with the state change. Those
-templates can be configured in in Settings -> Message Templates.
+templates can be configured in in Settings -> Message Templates. The template are django templates, `{{project}}` is
+passed as context, meaning you can use `{{project.manager}}`, `{{project.company}}` and similar to insert the data into
+the template.
+
 ![Screenshot](img/crm/message_template_edit_view.png)
 
 Text field supports formatting, which then will be used in the emails you send to the manager of the project.

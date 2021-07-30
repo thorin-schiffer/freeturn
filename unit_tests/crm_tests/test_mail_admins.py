@@ -2,7 +2,7 @@ import pytest
 from django.urls import reverse
 from google.auth.exceptions import GoogleAuthError
 
-from crm.factories import UserSocialAuthFactory
+from crm.factories import UserSocialAuthFactory, ProjectMessageFactory
 from crm.models import ProjectMessage
 
 
@@ -37,5 +37,13 @@ def test_project_message_index_creates_message(default_site, gmail_service, admi
 @pytest.mark.django_db
 def test_project_message_inspect(admin_app,
                                  project_message):
+    url = reverse('crm_projectmessage_modeladmin_inspect', kwargs={'instance_pk': project_message.pk})
+    admin_app.get(url)
+
+
+@pytest.mark.django_db
+def test_project_message_inspect_no_project(admin_app):
+    # https://sentry.io/share/issue/5ca8418a573d4ab59df0e1e5c34a1953/
+    project_message = ProjectMessageFactory(project=None)
     url = reverse('crm_projectmessage_modeladmin_inspect', kwargs={'instance_pk': project_message.pk})
     admin_app.get(url)

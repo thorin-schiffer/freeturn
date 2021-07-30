@@ -34,9 +34,15 @@ def disabled_in_admin(func):
     """
 
     def _inner(request):
-
         if request.path.startswith('/admin/'):
             return {}
         return func(request)
 
     return _inner
+
+
+def get_messages(r):
+    messages = [
+        (m.get('class'), m.xpath('./text()')[1].strip()) for m in r.lxml.xpath(".//div[@class='messages']//li")
+    ]
+    return messages

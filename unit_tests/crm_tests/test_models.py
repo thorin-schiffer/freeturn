@@ -122,8 +122,20 @@ def test_associate_new(parsed_message):
 def test_associate_manager_exists(employee,
                                   parsed_message):
     parsed_message['from_address'] = employee.email
+    parsed_message['full_name'] = employee.full_name
+
     message, _ = associate(parsed_message)
     assert message.author == employee
+
+
+@pytest.mark.django_db
+def test_associate_manager_same_email_different_name(employee,
+                                                     parsed_message):
+    # case with linkedin emails coming from all the same address inmail-hit-reply@linkedin.com
+    parsed_message['from_address'] = employee.email
+    parsed_message['full_name'] = 'John Dow'
+    message, _ = associate(parsed_message)
+    assert message.author != employee
 
 
 @pytest.mark.django_db
@@ -147,6 +159,8 @@ def test_associate_project_messages_exist(project, project_message_factory, pars
 @pytest.mark.django_db
 def test_associate_project_exists_manager_match(project, parsed_message):
     parsed_message['from_address'] = project.manager.email
+    parsed_message['full_name'] = project.manager.full_name
+
     message, _ = associate(parsed_message)
     assert message.project == project
 
@@ -154,6 +168,8 @@ def test_associate_project_exists_manager_match(project, parsed_message):
 @pytest.mark.django_db
 def test_associate_project_not_exist_manager_exists(employee, parsed_message):
     parsed_message['from_address'] = employee.email
+    parsed_message['full_name'] = employee.full_name
+
     assert employee.projects.count() == 0
     message, _ = associate(parsed_message)
     assert message.project.manager == employee
@@ -166,6 +182,8 @@ def test_associate_project_not_exist_manager_exists(employee, parsed_message):
 def test_project_exists_inactive(project_factory, parsed_message):
     inactive_project = project_factory.create(state='stopped')
     parsed_message['from_address'] = inactive_project.manager.email
+    parsed_message['full_name'] = inactive_project.manager.full_name
+
     message, _ = associate(parsed_message)
     assert message.project != inactive_project
     assert message.project.manager == inactive_project.manager

@@ -3,8 +3,8 @@ from datetime import timedelta
 
 from django.conf.urls import url
 from django.contrib.admin.utils import quote
-from django.forms import CharField
-from django.shortcuts import redirect
+from django.forms import CharField, HiddenInput
+from django.shortcuts import redirect, get_object_or_404
 from django.template import Template, Context
 from django.template.defaultfilters import pluralize
 from django.urls import reverse
@@ -12,22 +12,21 @@ from django.utils import timezone
 from django_filters.fields import ModelChoiceField
 from django_fsm import TransitionNotAllowed
 from google.api_core.exceptions import GoogleAPIError
-from google.auth.exceptions import GoogleAuthError
 from instance_selector.widgets import InstanceSelectorWidget
 from wagtail.admin import messages
 from wagtail.admin.forms import WagtailAdminModelForm
 from wagtail.admin.rich_text import get_rich_text_editor_widget
 from wagtail.admin.search import SearchArea
-from wagtail.contrib.modeladmin.helpers import AdminURLHelper, ButtonHelper, PermissionHelper
+from wagtail.contrib.modeladmin.helpers import AdminURLHelper, ButtonHelper
 from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
-from wagtail.contrib.modeladmin.views import CreateView, InspectView, IndexView, ModelFormView, \
+from wagtail.contrib.modeladmin.views import CreateView, InspectView, ModelFormView, \
     InstanceSpecificView
+from wagtail.tests.utils.form_data import rich_text
 
 from crm import gmail_utils
-from crm.models import City, CV
+from crm.models import City, CV, MessageTemplate
 from crm.models.project import Project
-from crm.models.project_message import ProjectMessage
 
 logger = logging.getLogger(__file__)
 
@@ -43,8 +42,12 @@ class ProjectURLHelper(AdminURLHelper):
 
 
 class StateTransitionForm(WagtailAdminModelForm):
+    template = ModelChoiceField(queryset=MessageTemplate.objects.all(),
+                                widget=InstanceSelectorWidget(model=MessageTemplate))
+
     text = CharField(widget=get_rich_text_editor_widget(),
-                     help_text="Change template text in 'Settings' > 'Message templates'")
+                     help_text="Change template text in 'Settings' > 'Message templates'",
+                     initial='Write your message here...')
     cv = ModelChoiceField(queryset=CV.objects.all(),
                           label='CV',
                           widget=InstanceSelectorWidget(model=CV),
@@ -54,20 +57,31 @@ class StateTransitionForm(WagtailAdminModelForm):
         # start here
         # add cv attachment checkbox
         project = kwargs['instance']
-        template = project.get_message_template(kwargs.pop('action'))
-        if template:
-            kwargs['initial']['text'] = Template(template.text).render(Context({'project': project}))
-            if template.attach_cv:
-                kwargs['initial']['cv'] = project.cvs.first()
+        data = kwargs.get('data', {})
+        action = kwargs.pop('action')
+        kwargs['initial']['template'] = project.get_message_template(action)
+        template_pk = data.get('template')
+        if template_pk:
+            self.message_template = get_object_or_404(MessageTemplate, pk=data.get('template'))
+            kwargs['data'] = data.copy()
+            kwargs['data']['text'] = rich_text(
+                Template(self.message_template.text).render(Context({'project': project})))
+            if self.message_template.attach_cv:
+                kwargs['data']['cv'] = project.cvs.first()
+        else:
+            self.message_template = None
         super().__init__(**kwargs)
 
-        if template:
-            self.fields['text'].help_text = f'Using template {template}. ' \
-                                            f"Edit template in 'Settings' > 'Message templates'"
+        if template_pk:
+            self.fields['template'].widget = HiddenInput()
+        else:
+            self.fields.pop('text')
+            self.fields.pop('cv')
+            self.next = True
 
     class Meta:
         model = Project
-        fields = ['text']
+        fields = ['template', 'text', 'cv']
 
 
 class StateTransitionView(ModelFormView, InstanceSpecificView):
@@ -86,6 +100,15 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
             messages.error(self.request,
                            "Message won't be sent, because no google social auth connection is configured. "
                            "Go to 'AccountSetting'->'More actions' -> 'Google Login'.")
+        if self.instance.manager is None:
+            messages.error(self.request,
+                           "Project doesn't have a manager, messages can't be sent",
+                           buttons=[
+                               messages.button(text='EDIT', url=reverse('crm_project_modeladmin_edit',
+                                                                        kwargs={'instance_pk': self.instance.pk}))
+                           ])
+        transitions = list(Project._meta.get_field('state').get_all_transitions(Project))
+        context['transition'] = next(transition for transition in transitions if transition.name == self.action)
         return context
 
     def get_form_kwargs(self):
@@ -122,6 +145,15 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
             return
         messages.success(self.request,
                          f'Message sent to {to_email}')
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if self.request.POST.get('next'):
+            return self.render_to_response(self.get_context_data(form=form))
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
     def form_valid(self, form):
         method = getattr(form.instance, self.action)
@@ -251,46 +283,3 @@ class ProjectSearchArea(SearchArea):
             name='projects',
             classnames='icon icon-fa-product-hunt',
             order=101)
-
-
-class MessagePermissionHelper(PermissionHelper):
-    def user_can_create(self, user):
-        return False
-
-    def user_can_edit_obj(self, user, obj):
-        return False
-
-
-class ProjectMessageIndexView(IndexView):
-    def get_context_data(self, **kwargs):
-        try:
-            created_messages = gmail_utils.sync()
-        except GoogleAuthError as ex:
-            logger.error(f"Can't update messages: {ex}")
-            messages.error(self.request, f"Can't update messages: {ex}")
-            created_messages = []
-        if created_messages:
-            messages.info(
-                self.request,
-                f'{len(created_messages)} new messages'
-            )
-        return super().get_context_data(**kwargs)
-
-
-class MessageAdmin(ModelAdmin):
-    model = ProjectMessage
-    menu_icon = 'fa-envelope-open'
-    menu_label = 'Messages'
-    list_display = ['subject', 'author', 'project', 'created']
-    list_filter = ['project', 'author']
-    ordering = ['-created']
-    index_view_class = ProjectMessageIndexView
-    inspect_view_enabled = True
-    inspect_view_fields = ['project', 'subject', 'author', 'text']
-    inspect_template_name = 'message_inspect.html'
-    permission_helper_class = MessagePermissionHelper
-    search_fields = ['subject',
-                     'author__first_name',
-                     'author__last_name',
-                     'project__name',
-                     'project__company__name']

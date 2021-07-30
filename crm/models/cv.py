@@ -92,7 +92,7 @@ class CV(TimeStampedModel):
                     ]
                 )
 
-            ]
+            ], heading='Personal data'
         ),
     ]
     create_panels = [
@@ -137,7 +137,7 @@ class CV(TimeStampedModel):
         }
 
     def get_filename(self):
-        return f'{self.full_name} CV for {self.project}.pdf'
+        return f'{self.full_name} CV for {self.project} at {self.project.company}.pdf'
 
     def get_file(self):
         pdf_response = PDFTemplateResponse(
