@@ -22,6 +22,7 @@ class Employee(TimeStampedModel):
 
     picture = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL,
                                 null=True, blank=True)
+    linkedin = models.URLField(null=True, blank=True)
 
     panels = [
         FieldRowPanel(
@@ -31,11 +32,12 @@ class Employee(TimeStampedModel):
                     FieldPanel('last_name'),
                     FieldPanel('telephone'),
                     FieldPanel('mobile'),
-                    FieldPanel('email'),
                 ]),
                 MultiFieldPanel([
                     InstanceSelectorPanel('company'),
                     ImageChooserPanel('picture'),
+                    FieldPanel('linkedin'),
+                    FieldPanel('email'),
                 ]),
             ]
         ),
