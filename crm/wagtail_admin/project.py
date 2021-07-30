@@ -291,9 +291,6 @@ class MessagePermissionHelper(PermissionHelper):
     def user_can_create(self, user):
         return False
 
-    def user_can_edit_obj(self, user, obj):
-        return False
-
 
 class ProjectMessageIndexView(IndexView):
     def get_context_data(self, **kwargs):
