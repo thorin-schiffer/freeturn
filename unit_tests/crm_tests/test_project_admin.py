@@ -70,6 +70,7 @@ def test_state_transition_no_manager_associated(gmail_service,
     url = reverse('crm_project_modeladmin_index')
     r = admin_app.get(url)
     r = r.click('Drop')
+    r = r.forms[1].submit(name='next')
     messages = get_messages(r)
     assert len(messages) == 1
     assert messages[0][0] == 'error'
