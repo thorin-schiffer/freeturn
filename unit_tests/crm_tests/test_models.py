@@ -122,8 +122,20 @@ def test_associate_new(parsed_message):
 def test_associate_manager_exists(employee,
                                   parsed_message):
     parsed_message['from_address'] = employee.email
+    parsed_message['full_name'] = employee.full_name
+
     message, _ = associate(parsed_message)
     assert message.author == employee
+
+
+@pytest.mark.django_db
+def test_associate_manager_same_email_different_name(employee,
+                                                     parsed_message):
+    # case with linkedin emails coming from all the same address inmail-hit-reply@linkedin.com
+    parsed_message['from_address'] = employee.email
+    parsed_message['full_name'] = 'John Dow'
+    message, _ = associate(parsed_message)
+    assert message.author != employee
 
 
 @pytest.mark.django_db

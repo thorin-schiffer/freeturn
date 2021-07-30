@@ -108,7 +108,13 @@ def get_raw_messages(service):
 
 
 def ensure_manager(message):
-    manager = Employee.objects.filter(email__iexact=message['from_address']).first()
+    try:
+        first_name, last_name = message['full_name'].split(' ')
+    except ValueError:
+        first_name, last_name = '', message.get('last_name', '')
+    manager = Employee.objects.filter(email__iexact=message['from_address'],
+                                      first_name__iexact=first_name,
+                                      last_name__iexact=last_name).first()
     if not manager:
         domain = message['from_address'].split('@')[-1]
         company = Company.objects.filter(url__icontains=domain).first()
@@ -116,16 +122,13 @@ def ensure_manager(message):
             name=domain.split('.')[0].capitalize(),
             url=f'http://{domain}'
         )
-        try:
-            first_name, last_name = message['full_name'].split(' ')
-        except ValueError:
-            first_name, last_name = '', message.get('last_name', '')
+
         manager, _ = Employee.objects.get_or_create(
             email=message['from_address'],
+            first_name=first_name,
+            last_name=last_name,
             defaults={
                 'company': company,
-                'first_name': first_name,
-                'last_name': last_name,
             }
         )
     return manager
