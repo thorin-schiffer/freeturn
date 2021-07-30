@@ -12,7 +12,8 @@ from crm.wagtail_admin.company import CompanyAdmin
 from crm.wagtail_admin.cv import CVAdmin
 from crm.wagtail_admin.employee import EmployeeAdmin
 from crm.wagtail_admin.invoice import InvoiceAdmin
-from crm.wagtail_admin.project import ProjectAdmin, ProjectSearchArea, MessageAdmin
+from crm.wagtail_admin.project import ProjectAdmin, ProjectSearchArea
+from crm.wagtail_admin.project_message import MessageAdmin
 
 
 class CityAdmin(ModelAdmin):
