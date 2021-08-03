@@ -230,7 +230,7 @@ class ProjectAdmin(ThumbnailMixin, ModelAdmin):
     menu_label = 'Projects'
 
     list_display = ('admin_thumb', 'name', 'manager', 'location', 'state', 'last_activity')
-    list_per_page = 10
+    list_per_page = 5
     list_select_related = ['manager', 'location']
 
     search_fields = ('project_page__title', 'manager__company__name', 'name', 'company__name',
