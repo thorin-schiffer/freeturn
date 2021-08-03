@@ -102,12 +102,13 @@ Click inspect button to see and download the CV you've just created in PDF forma
 ![Screenshot](img/crm/cv_front_page.png)
 
 1. name
-1. title
-1. recent projects - is the list of your projects, which match the project technologies parsed from the project
+2. title
+3. recent projects - is the list of your projects, which match the project technologies parsed from the project
 description. Can be edited.
-1. skills list, skills relevant for this project are highlighted.
-1. education
-1. side panel including your pay rate, next available date (calculated automatically upon creation), contact data,
+4. highlighted projects - project to be visually marked on the front page your CV
+5. skills list, skills relevant for this project are highlighted.
+6. education
+7. side panel including your pay rate, next available date (calculated automatically upon creation), contact data,
 languages and working permit.
 
 After the front page, which is your brief CV, follow the pages of your project portfolio.

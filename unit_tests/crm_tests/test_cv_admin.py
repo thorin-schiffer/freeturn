@@ -2,6 +2,7 @@ import pytest
 from django.urls import reverse
 
 from crm.models.settings import CVGenerationSettings
+from home.factories import ProjectPageFactory
 
 
 @pytest.mark.django_db
@@ -30,8 +31,11 @@ def test_create(admin_app, admin_user, default_site, project, image):
 
 @pytest.mark.django_db
 def test_inspect(admin_app, cv_with_relevant):
+    cv_with_relevant.relevant_project_pages.add(ProjectPageFactory())
     url = reverse('crm_cv_modeladmin_inspect', kwargs={'instance_pk': cv_with_relevant.pk})
-    admin_app.get(url)
+    r = admin_app.get(url)
+    relevant_pages = r.context['relevant_project_pages']
+    assert relevant_pages[0] == cv_with_relevant.highlighted_project_pages.first()
 
 
 @pytest.mark.django_db

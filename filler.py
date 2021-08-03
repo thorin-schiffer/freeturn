@@ -119,7 +119,7 @@ def make_project(**overloads):
     return project
 
 
-def fill_crm_data(projects_count=10):
+def fill_crm_data(projects_count=5):
     for i in range(projects_count):
         project = make_project()
         cv = CVFactory(project=project, picture=None)

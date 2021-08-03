@@ -48,7 +48,13 @@ class CV(TimeStampedModel):
     relevant_project_pages = models.ManyToManyField(
         'home.ProjectPage',
         help_text='Project pages to be placed on the first page, eye catcher for this project',
-        related_name='applications_highlighted',
+        related_name='applications_relevant_pages',
+        blank=True
+    )
+    highlighted_project_pages = models.ManyToManyField(
+        'home.ProjectPage',
+        help_text='Project pages placed first and visually highlighted for this CV and project lead',
+        related_name='applications_highlighted_pages',
         blank=True
     )
     include_portfolio = models.BooleanField(
@@ -105,6 +111,8 @@ class CV(TimeStampedModel):
             FieldPanel('project_listing_title'),
             AutocompletePanel('relevant_project_pages', is_single=False,
                               page_type='home.ProjectPage'),
+            AutocompletePanel('highlighted_project_pages', is_single=False,
+                              page_type='home.ProjectPage'),
             FieldPanel('include_portfolio'),
 
         ]),
@@ -127,17 +135,23 @@ class CV(TimeStampedModel):
         self.relevant_skills.set(technologies)
 
     def get_default_file_render_context(self):
+        highlighted_projects = self.highlighted_project_pages.all()
+        relevant_projects = []
+        for project in self.relevant_project_pages.order_by('-start_date'):
+            project.highlighted = int(project in highlighted_projects)
+            relevant_projects.append(project)
+        relevant_projects = sorted(relevant_projects, key=lambda x: -x.highlighted)
         return {
             'skills': Technology.objects.annotate(
                 projects_count=Count('projects')
             ).filter(projects_count__gt=0).order_by('-projects_count'),
             'project_pages': ProjectPage.objects.live().order_by('-start_date'),
-            'relevant_project_pages': self.relevant_project_pages.order_by('-start_date'),
+            'relevant_project_pages': relevant_projects,
             'instance': self
         }
 
     def get_filename(self):
-        return f'{self.full_name} CV for {self.project} at {self.project.company}.pdf'
+        return f'{self.full_name} CV for {self.project}.pdf' if self.project else f'{self.full_name} CV'
 
     def get_file(self):
         pdf_response = PDFTemplateResponse(
