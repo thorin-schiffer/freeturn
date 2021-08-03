@@ -137,7 +137,7 @@ class CV(TimeStampedModel):
         }
 
     def get_filename(self):
-        return f'{self.full_name} CV for {self.project} at {self.project.company}.pdf'
+        return f'{self.full_name} CV for {self.project}.pdf' if self.project else f'{self.full_name} CV'
 
     def get_file(self):
         pdf_response = PDFTemplateResponse(
