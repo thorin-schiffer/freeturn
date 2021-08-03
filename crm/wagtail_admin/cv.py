@@ -60,7 +60,8 @@ class CVAdmin(ThumbnailMixin, ModelAdmin):
     menu_label = 'CVs'
     create_view_class = CreateCVView
     list_display = ['admin_thumb', 'project', 'created']
-    list_filter = ['project__manager']
+    search_fields = ['project__manager__first_name', 'project__manager__last_name',
+                     'project__name', 'project__company__name']
     list_per_page = 10
     list_select_related = ['project']
     ordering = ['-created']
