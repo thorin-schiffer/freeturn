@@ -64,8 +64,9 @@ class StateTransitionForm(WagtailAdminModelForm):
         if template_pk:
             self.message_template = get_object_or_404(MessageTemplate, pk=data.get('template'))
             kwargs['data'] = data.copy()
-            kwargs['data']['text'] = rich_text(
-                Template(self.message_template.text).render(Context({'project': project})))
+            kwargs['data']['text'] = kwargs['data'].get('text') or rich_text(
+                Template(self.message_template.text).render(Context({'project': project}))
+            )
             if self.message_template.attach_cv:
                 kwargs['data']['cv'] = project.cvs.first()
         else:
@@ -125,7 +126,7 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
     def send_mail(self, data):
         from_user = self.request.user
         to_email = self.instance.manager.email
-        rich_text = data['text']
+        text = data['text']
         cv = data['cv']
         project_message = self.instance.messages.first()
 
@@ -133,7 +134,7 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
             gmail_utils.send_email(
                 from_user=from_user,
                 to_email=to_email,
-                rich_text=rich_text,
+                rich_text=text,
                 cv=cv,
                 project_message=project_message
             )

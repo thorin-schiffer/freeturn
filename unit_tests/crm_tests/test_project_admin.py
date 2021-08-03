@@ -1,4 +1,8 @@
+import base64
+import email
+import json
 from datetime import datetime
+from wagtail.tests.utils.form_data import rich_text
 
 import pytest
 from django.contrib.messages import ERROR
@@ -9,23 +13,32 @@ from crm.factories import CityFactory, ProjectFactory, MessageTemplateFactory, C
 from utils import get_messages
 
 
-@pytest.mark.django_db
-def test_state_transition_action(gmail_service,
-                                 admin_app,
-                                 admin_user,
-                                 project):
+def get_text_from_richtext(richtext):
+    return json.loads(richtext)['blocks'][0]['text']
+
+
+def get_html_from_email(raw):
+    payload = base64.urlsafe_b64decode(raw.encode())
+    message = email.message_from_bytes(payload)
+    return message.get_payload()[0].get_payload()
+
+
+@pytest.fixture
+def full_template_data(admin_user, project):
     UserSocialAuthFactory(user=admin_user)
     MessageTemplateFactory(state_transition='drop')
     CVFactory(project=project)
     assert project.state == 'requested'
+
+
+@pytest.mark.django_db
+def test_state_transition_action(gmail_service,
+                                 admin_app,
+                                 project, full_template_data):
     url = reverse('crm_project_modeladmin_index')
     r = admin_app.get(url)
     r = r.click('Drop')
-    drop_state_url = reverse('crm_project_modeladmin_state',
-                             kwargs={
-                                 'instance_pk': project.pk,
-                                 'action': 'drop'
-                             })
+    drop_state_url = reverse('crm_project_modeladmin_state', kwargs={'instance_pk': project.pk, 'action': 'drop'})
     assert r.request.path == drop_state_url
     form = r.forms[1]
     assert 'template' in form.fields
@@ -34,12 +47,17 @@ def test_state_transition_action(gmail_service,
     r = form.submit(name='next')
 
     form = r.forms[1]
-    assert 'text' in form.fields
+    form['text'] = rich_text('test test')
     assert 'cv' in form.fields
+
     r = form.submit(name='send').follow()
     project.refresh_from_db()
     assert project.state == 'stopped'
     assert len(r.context['messages']) == 2
+
+    raw = gmail_service.users.mock_calls[2][2]['body']['raw']
+    html = get_html_from_email(raw)
+    assert 'test test' in html
 
 
 @pytest.mark.django_db
