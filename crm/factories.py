@@ -143,6 +143,12 @@ class CVWithRelevantFactory(CVFactory):
             raise NotImplementedError()
         self.relevant_project_pages.set([ProjectPageFactory()])
 
+    @factory.post_generation
+    def highlighted_projects(self, created, extracted, **kwargs):
+        if extracted:
+            raise NotImplementedError()
+        self.highlighted_project_pages.set(self.relevant_project_pages.order_by('?'))
+
 
 class InvoiceFactory(factory.DjangoModelFactory):
     project = factory.SubFactory(ProjectFactory)
