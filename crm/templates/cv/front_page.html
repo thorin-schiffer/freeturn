@@ -16,10 +16,10 @@
             {{ instance.experience_overview | richtext }}
             <hr>
 
-            <h2>{{ instance.project_listing_title }}</h2>
-            <br>
-            {% for project in relevant_project_pages %}
+            <h1>{{ instance.project_listing_title }}</h1>
 
+            {% for project in relevant_project_pages %}
+            {% if forloop.first and not project.highlighted  %} <br> {% endif %}
             {% if project.highlighted  %} <h3> {% else %} <h4> {% endif %}
                 <a href="{{ project.get_site.root_url }}{% pageurl project %}" target="_blank"
                 style="color: darkgreen">
