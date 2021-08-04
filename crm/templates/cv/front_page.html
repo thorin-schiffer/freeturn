@@ -78,12 +78,14 @@
 
             <div style="font-size: 3.5mm">
             {% for skill in skills %}
-            {% if skill in relevant_skills %}
-            <span class="label label-default">{{ skill }}</span>
-            {% else %}
-            {{ skill }}
-            {% endif %}
-            {% endfor %}
+            <a href="{{root_url}}{% pageurl portfolio %}?technology={{skill}}" style="color: darkgreen">
+                {% if skill in relevant_skills %}
+                <span class="label label-default">{{ skill }}</span>
+                {% else %}
+                {{ skill }}
+                {% endif %}
+                {% endfor %}
+            </a>
             </div>
         </td>
         {% endwith %}

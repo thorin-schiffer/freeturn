@@ -12,7 +12,7 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 from wkhtmltopdf.views import PDFTemplateResponse
 
-from home.models import ProjectPage
+from home.models import ProjectPage, PortfolioPage
 from home.models.snippets import Technology
 
 logger = logging.getLogger(__file__)
@@ -141,13 +141,17 @@ class CV(TimeStampedModel):
             project.highlighted = int(project in highlighted_projects)
             relevant_projects.append(project)
         relevant_projects = sorted(relevant_projects, key=lambda x: -x.highlighted)
+        project_pages = ProjectPage.objects.live().order_by('-start_date')
+        portfolio = PortfolioPage.objects.last()
         return {
             'skills': Technology.objects.annotate(
                 projects_count=Count('projects')
             ).filter(projects_count__gt=0).order_by('-projects_count'),
-            'project_pages': ProjectPage.objects.live().order_by('-start_date'),
+            'project_pages': project_pages,
             'relevant_project_pages': relevant_projects,
-            'instance': self
+            'instance': self,
+            'root_url': project_pages[0].get_site().root_url,
+            'portfolio': portfolio
         }
 
     def get_filename(self):
