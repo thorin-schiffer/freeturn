@@ -71,10 +71,12 @@ def test_edit(admin_app, cv_with_relevant):
     form['languages_overview'] = rich_text('test')
     form['rate_overview'] = rich_text('test')
     form['working_permit'] = rich_text('test')
-
-    add_field_for_autocomplete(form, [{'pk': ProjectPageFactory().pk}], 'relevant_project_pages')
-    add_field_for_autocomplete(form, [{'pk': ProjectPageFactory().pk}], 'highlighted_project_pages')
-    add_field_for_autocomplete(form, [{'pk': TechnologyFactory().pk}], 'relevant_skills')
+    rp_page = ProjectPageFactory()
+    hp_page = ProjectPageFactory()
+    technology = TechnologyFactory()
+    add_field_for_autocomplete(form, [{'pk': rp_page.pk}], 'relevant_project_pages')
+    add_field_for_autocomplete(form, [{'pk': hp_page.pk}], 'highlighted_project_pages')
+    add_field_for_autocomplete(form, [{'pk': technology.pk}], 'relevant_skills')
 
     assert form.submit().maybe_follow().status_code == 200
 
@@ -86,3 +88,7 @@ def test_edit(admin_app, cv_with_relevant):
     assert 'test' in cv_with_relevant.languages_overview
     assert 'test' in cv_with_relevant.rate_overview
     assert 'test' in cv_with_relevant.working_permit
+
+    assert list(cv_with_relevant.relevant_project_pages.all()) == [rp_page]
+    assert list(cv_with_relevant.highlighted_project_pages.all()) == [hp_page]
+    assert list(cv_with_relevant.relevant_skills.all()) == [technology]
