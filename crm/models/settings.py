@@ -71,16 +71,16 @@ class CVGenerationSettings(BaseSetting):
         max_length=255, help_text='Default title to use', default='Freelance python developer')
     default_experience_overview = RichTextField(
         help_text='Notice on your experience',
-        default='Python developer experience: 7 years'
+        default='Python developer experience: 7 years', blank=True, null=True
     )
 
     default_education_overview = RichTextField(
         help_text='Notice on your education',
-        default='Novosibirsk State Technical University'
+        default='Novosibirsk State Technical University', blank=True, null=True
     )
-    default_contact_details = RichTextField(default='thorin@schiffer.pro')
-    default_languages_overview = RichTextField(default='English: fluent')
-    default_rate_overview = RichTextField(default='100 schmeckles')
+    default_contact_details = RichTextField(default='thorin@schiffer.pro', blank=True, null=True)
+    default_languages_overview = RichTextField(default='English: fluent', blank=True, null=True)
+    default_rate_overview = RichTextField(default='100 schmeckles', blank=True, null=True)
     default_working_permit = RichTextField(default='PERMANENT RESIDENCE', blank=True, null=True)
     default_picture = models.ForeignKey(
         'wagtailimages.Image',
