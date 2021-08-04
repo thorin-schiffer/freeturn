@@ -77,3 +77,12 @@ def test_edit(admin_app, cv_with_relevant):
     add_field_for_autocomplete(form, [{'pk': TechnologyFactory().pk}], 'relevant_skills')
 
     assert form.submit().maybe_follow().status_code == 200
+
+    cv_with_relevant.refresh_from_db()
+
+    assert 'test' in cv_with_relevant.experience_overview
+    assert 'test' in cv_with_relevant.education_overview
+    assert 'test' in cv_with_relevant.contact_details
+    assert 'test' in cv_with_relevant.languages_overview
+    assert 'test' in cv_with_relevant.rate_overview
+    assert 'test' in cv_with_relevant.working_permit
