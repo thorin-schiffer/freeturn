@@ -68,7 +68,7 @@ class StateTransitionForm(WagtailAdminModelForm):
                 Template(self.message_template.text).render(Context({'project': project}))
             )
             if self.message_template.attach_cv:
-                kwargs['data']['cv'] = project.cvs.first()
+                kwargs['data']['cv'] = kwargs['data'].get('cv') or project.cvs.first()
         else:
             self.message_template = None
         super().__init__(**kwargs)
