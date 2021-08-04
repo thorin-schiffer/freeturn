@@ -1,4 +1,7 @@
+from django.utils.safestring import mark_safe
 from social_core.exceptions import AuthForbidden
+from django.utils.html import format_html
+from wagtail.admin.edit_handlers import EditHandler
 
 
 def social_for_authed_only(backend, *args, **kwargs):
@@ -46,3 +49,33 @@ def get_messages(r):
         (m.get('class'), m.xpath('./text()')[1].strip()) for m in r.lxml.xpath(".//div[@class='messages']//li")
     ]
     return messages
+
+
+class ReadOnlyPanel(EditHandler):
+    def __init__(self, attr, *args, **kwargs):
+        self.attr = attr
+        super().__init__(*args, **kwargs)
+
+    def clone(self):
+        return self.__class__(
+            attr=self.attr,
+            heading=self.heading,
+            classname=self.classname,
+            help_text=self.help_text,
+        )
+
+    def render(self):
+        value = getattr(self.instance, self.attr)
+        if callable(value):
+            value = value()
+        return format_html('<div>{}</div>', mark_safe(value))
+
+    def render_as_object(self):
+        return format_html(
+            '<fieldset><legend>{}</legend>'
+            '<ul class="fields"><li><div class="field">{}</div></li></ul>'
+            '</fieldset>',
+            self.heading, self.render())
+
+    def render_as_field(self):
+        return format_html(f'<label>{self.heading}:</label> <div class="field_content">{self.render()}</div>')

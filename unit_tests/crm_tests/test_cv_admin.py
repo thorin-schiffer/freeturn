@@ -2,7 +2,7 @@ import pytest
 from django.urls import reverse
 
 from crm.models.settings import CVGenerationSettings
-from home.factories import ProjectPageFactory
+from home.factories import ProjectPageFactory, PortfolioPageFactory
 
 
 @pytest.mark.django_db
@@ -31,6 +31,7 @@ def test_create(admin_app, admin_user, default_site, project, image):
 
 @pytest.mark.django_db
 def test_inspect(admin_app, cv_with_relevant):
+    PortfolioPageFactory()
     cv_with_relevant.relevant_project_pages.add(ProjectPageFactory())
     url = reverse('crm_cv_modeladmin_inspect', kwargs={'instance_pk': cv_with_relevant.pk})
     r = admin_app.get(url)

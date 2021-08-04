@@ -3,6 +3,7 @@ from io import BytesIO
 
 from django.db import models
 from django.db.models import CASCADE, Count
+from django.urls import reverse
 from django.utils import timezone
 from django_extensions.db.models import TimeStampedModel
 from instance_selector.edit_handlers import InstanceSelectorPanel
@@ -14,6 +15,7 @@ from wkhtmltopdf.views import PDFTemplateResponse
 
 from home.models import ProjectPage, PortfolioPage
 from home.models.snippets import Technology
+from utils import ReadOnlyPanel
 
 logger = logging.getLogger(__file__)
 
@@ -108,7 +110,10 @@ class CV(TimeStampedModel):
     panels = [
         MultiFieldPanel([
             InstanceSelectorPanel('project'),
-            FieldPanel('project_listing_title'),
+            FieldRowPanel([
+                FieldPanel('project_listing_title'),
+                ReadOnlyPanel('download_link', heading='Preview'),
+            ]),
             AutocompletePanel('relevant_project_pages', is_single=False,
                               page_type='home.ProjectPage'),
             AutocompletePanel('highlighted_project_pages', is_single=False,
@@ -119,6 +124,13 @@ class CV(TimeStampedModel):
         AutocompletePanel('relevant_skills', target_model=Technology),
         *common_panels
     ]
+
+    @property
+    def download_link(self):
+        return f"<a target='_blank'" \
+               f"href='{reverse('crm_cv_modeladmin_inspect', kwargs={'instance_pk': self.pk})}'" \
+               f"class='button'" \
+               f'>INSPECT</a>'
 
     @property
     def logo(self):
@@ -143,6 +155,7 @@ class CV(TimeStampedModel):
         relevant_projects = sorted(relevant_projects, key=lambda x: -x.highlighted)
         project_pages = ProjectPage.objects.live().order_by('-start_date')
         portfolio = PortfolioPage.objects.last()
+        site = project_pages[0].get_site() if project_pages else None
         return {
             'skills': Technology.objects.annotate(
                 projects_count=Count('projects')
@@ -150,7 +163,7 @@ class CV(TimeStampedModel):
             'project_pages': project_pages,
             'relevant_project_pages': relevant_projects,
             'instance': self,
-            'root_url': project_pages[0].get_site().root_url,
+            'root_url': site.root_url if site else None,
             'portfolio': portfolio
         }
 
