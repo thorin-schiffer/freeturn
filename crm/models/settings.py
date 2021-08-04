@@ -1,5 +1,5 @@
 from django.db import models
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail.core.fields import RichTextField
@@ -91,12 +91,19 @@ class CVGenerationSettings(BaseSetting):
     )
 
     panels = [
-        FieldPanel('default_title'),
-        FieldPanel('default_experience_overview'),
-        FieldPanel('default_education_overview'),
-        FieldPanel('default_contact_details'),
-        FieldPanel('default_languages_overview'),
-        FieldPanel('default_rate_overview'),
-        FieldPanel('default_working_permit'),
-        ImageChooserPanel('default_picture')
+        FieldRowPanel([
+            MultiFieldPanel([
+                FieldPanel('default_title'),
+                FieldPanel('default_experience_overview'),
+                FieldPanel('default_education_overview'),
+                FieldPanel('default_working_permit'),
+            ]),
+            MultiFieldPanel([
+                ImageChooserPanel('default_picture'),
+                FieldPanel('default_contact_details'),
+                FieldPanel('default_languages_overview'),
+                FieldPanel('default_rate_overview'),
+
+            ])
+        ], heading='CV generation settings')
     ]
