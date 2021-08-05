@@ -32,7 +32,7 @@ class Technology(index.Indexed, models.Model):
 
     @classmethod
     def autocomplete_create(kls: type, value: str):
-        return kls.objects.create(name=value)
+        return kls.objects.get_or_create(name=value)
 
     @staticmethod
     def match_text(text, cutoff=40):
