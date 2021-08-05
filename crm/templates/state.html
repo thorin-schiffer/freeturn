@@ -31,20 +31,18 @@
                 {% endblock %}
 
                 <li>
-                    <div class="button-group right">
-                        {% if form.next %}
-                            <button id='next' name='next' type="submit" class="button button-secondary"
-                                        value="next">{% trans 'Next' %}</button>
-                        {% else %}
-
-                            {% if form.instance.manager %}
-                            <button name='send' type="submit" class="button" value="send"><i class="icon icon-fa-send"></i> {% trans 'Send message' %}</button>
-                            {% endif %}
-                            <button id='change_state_button' name='change_state' type="submit" class="button button-secondary"
-                                    value="change_state">{% trans 'Just change state' %}</button>
+                    {% if form.next %}
+                        <button id='next' name='next' type="submit" class="button button-secondary right"
+                                    value="next">{% trans 'Next' %}</button>
+                    {% else %}
+                        <div class="button-group right">
+                        {% if form.instance.manager %}
+                        <button name='send' type="submit" class="button" value="send"><i class="icon icon-fa-send"></i> {% trans 'Send message' %}</button>
                         {% endif %}
-
-                    </div>
+                        <button id='change_state_button' name='change_state' type="submit" class="button button-secondary"
+                                value="change_state">{% trans 'Just change state' %}</button>
+                        </div>
+                    {% endif %}
                 </li>
             </ul>
         </form>
