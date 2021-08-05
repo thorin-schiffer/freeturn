@@ -44,6 +44,19 @@ def test_inspect(admin_app, cv_with_relevant):
 
 
 @pytest.mark.django_db
+def test_inspect_name_contains_newlines(admin_app, cv_with_relevant):
+    # https://sentry.io/share/issue/86a6982a7f0849c58ac08e626e6c459f/
+    PortfolioPageFactory()
+    cv_with_relevant.project.name = 'test \r\n test'
+    cv_with_relevant.project.save()
+    cv_with_relevant.relevant_project_pages.add(ProjectPageFactory())
+    url = reverse('crm_cv_modeladmin_inspect', kwargs={'instance_pk': cv_with_relevant.pk})
+    r = admin_app.get(url)
+    relevant_pages = r.context['relevant_project_pages']
+    assert relevant_pages[0] == cv_with_relevant.highlighted_project_pages.first()
+
+
+@pytest.mark.django_db
 def test_create_empty_project(admin_app, admin_user, default_site):
     url = f"{reverse('crm_cv_modeladmin_create')}"
     r = admin_app.get(url)
