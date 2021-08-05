@@ -23,6 +23,7 @@ class ProjectMessage(TimeStampedModel):
 
     gmail_message_id = models.CharField(max_length=50)
     gmail_thread_id = models.CharField(max_length=50)
+    message_id = models.CharField(max_length=300, help_text='Message-id header of the original message')
 
     panels = [
         FieldRowPanel([
