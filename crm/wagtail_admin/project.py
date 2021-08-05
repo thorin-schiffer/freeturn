@@ -127,7 +127,7 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
     def send_mail(self, data):
         from_user = self.request.user
         project_message = self.instance.messages.first()
-        to_email = project_message.reply_to or self.instance.manager.email
+        to_email = (project_message.reply_to if project_message else None) or self.instance.manager.email
         text = data['text']
         cv = data['cv']
 
