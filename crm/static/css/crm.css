@@ -22,3 +22,6 @@ h2 {
     vertical-align:middle;
     border-radius: 100px;
 }
+.project-description {
+    max-width: 1000px;
+}
