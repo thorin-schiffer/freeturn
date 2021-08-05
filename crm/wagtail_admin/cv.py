@@ -1,7 +1,10 @@
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+from django.utils.decorators import method_decorator
 from wagtail.admin.edit_handlers import ObjectList
 from wagtail.contrib.modeladmin.mixins import ThumbnailMixin
 from wagtail.contrib.modeladmin.options import ModelAdmin
-from wagtail.contrib.modeladmin.views import CreateView, InspectView
+from wagtail.contrib.modeladmin.views import CreateView, InspectView, EditView
 from wagtail.core.models import Site
 
 from crm.models.cv import CV
@@ -54,6 +57,18 @@ class CVInspectView(BasePDFView,
         return self.instance.get_filename()
 
 
+class CVEditView(EditView):
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        if request.method == 'POST':
+            return redirect(
+                self.url_helper.get_action_url('edit', self.pk_quoted)
+            )
+        else:
+            return response
+
+
 class CVAdmin(ThumbnailMixin, ModelAdmin):
     model = CV
     menu_icon = 'fa-id-card'
@@ -71,3 +86,4 @@ class CVAdmin(ThumbnailMixin, ModelAdmin):
     thumb_image_field_name = 'logo'
     thumb_default = '/static/img/default_project.png'
     list_display_add_buttons = 'project'
+    edit_view_class = CVEditView
