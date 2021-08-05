@@ -28,15 +28,20 @@ class ProjectMessage(TimeStampedModel):
     panels = [
         FieldRowPanel([
             MultiFieldPanel([
+                InstanceSelectorPanel('project'),
                 FieldPanel('subject'),
                 FieldPanel('text'),
-                InstanceSelectorPanel('project'),
             ]),
+        ]),
+        FieldRowPanel([
             MultiFieldPanel([
                 InstanceSelectorPanel('author'),
                 FieldPanel('sent_at'),
+            ]),
+            MultiFieldPanel([
                 FieldPanel('gmail_message_id'),
                 FieldPanel('gmail_thread_id'),
+                FieldPanel('message_id'),
             ])
         ])
     ]
