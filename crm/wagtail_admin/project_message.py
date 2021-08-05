@@ -1,3 +1,4 @@
+from django.urls import reverse
 from google.auth.exceptions import GoogleAuthError
 from wagtail.admin import messages
 from wagtail.contrib.modeladmin.helpers import PermissionHelper
@@ -24,10 +25,21 @@ class ProjectMessageIndexView(IndexView):
             logger.error(f"Can't update messages: {ex}")
             messages.error(self.request, f"Can't update messages: {ex}")
             created_messages = []
+
         if created_messages:
             messages.info(
                 self.request,
-                f'{len(created_messages)} new messages'
+                buttons=[
+                    messages.button(
+                        text=str(message.project),
+                        url=reverse(
+                            'crm_project_modeladmin_edit',
+                            kwargs={'instance_pk': message.project.pk}
+                        )
+                    )
+                    for message in created_messages
+                ],
+                message=f'{len(created_messages)} new projects'
             )
         return super().get_context_data(**kwargs)
 
