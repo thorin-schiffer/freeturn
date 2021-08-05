@@ -28,6 +28,7 @@ def test_sync(gmail_service, user_social_auth, default_site):
     assert message.text
     assert message.gmail_message_id
     assert message.gmail_thread_id
+    assert message.message_id
     assert CV.objects.filter(project=message.project).exists()
 
 
@@ -93,10 +94,11 @@ def test_send_email(gmail_service, cv, user_social_auth, faker,
     assert message['threadId'] == project_message.gmail_thread_id
     payload = base64.urlsafe_b64decode(message['raw'].encode())
     message = email.message_from_bytes(payload)
+    assert message['message-id'] == project_message.message_id
     assert message['to'] == to_email
     assert message['from'] == f"{user.first_name + ' ' + user.last_name} <{user.email}>"
     assert message['subject'] == project_message.subject
-    assert message['in-reply-to'] == message['references'] == project_message.gmail_message_id
+    assert message['in-reply-to'] == message['references'] == project_message.message_id
 
     attachment = message.get_payload()[1]
     assert attachment['content-type'] == 'application/pdf'
