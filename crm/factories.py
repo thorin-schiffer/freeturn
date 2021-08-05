@@ -80,6 +80,7 @@ class ProjectMessageFactory(factory.DjangoModelFactory):
     gmail_message_id = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
     gmail_thread_id = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
     message_id = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
+    reply_to = factory.Faker('email')
 
     class Meta:
         model = crm.models.project_message.ProjectMessage
