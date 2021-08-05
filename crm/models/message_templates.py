@@ -36,7 +36,7 @@ class MessageTemplate(TimeStampedModel):
                                            'will be associated with, if any',
                                  null=True, blank=True, default=None)
     name = CharField(max_length=100)
-    language = CharField(choices=settings.LANGUAGES, max_length=10, default='en')
+    language = CharField(choices=settings.TEMPLATE_LANGUAGES, max_length=10, default='en')
     attach_cv = BooleanField(default=True,
                              help_text='Attach CV by default for this template',
                              verbose_name='Attach CV')

@@ -50,6 +50,7 @@ class MessageTemplateAdmin(ModelAdmin):
     menu_label = 'Message templates'
     list_display = ['name', 'state_transition', 'language']
     add_to_settings_menu = True
+    list_filter = ['language']
 
 
 modeladmin_register(MessageTemplateAdmin)

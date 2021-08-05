@@ -68,7 +68,8 @@ class StateTransitionForm(WagtailAdminModelForm):
                 Template(self.message_template.text).render(Context({'project': project}))
             )
             if self.message_template.attach_cv:
-                kwargs['data']['cv'] = project.cvs.first()
+                if 'cv' not in kwargs['data']:
+                    kwargs['data']['cv'] = project.cvs.first()
         else:
             self.message_template = None
         super().__init__(**kwargs)
@@ -125,10 +126,10 @@ class StateTransitionView(ModelFormView, InstanceSpecificView):
 
     def send_mail(self, data):
         from_user = self.request.user
-        to_email = self.instance.manager.email
+        project_message = self.instance.messages.first()
+        to_email = (project_message.reply_to if project_message else None) or self.instance.manager.email
         text = data['text']
         cv = data['cv']
-        project_message = self.instance.messages.first()
 
         try:
             gmail_utils.send_email(

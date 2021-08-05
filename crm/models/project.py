@@ -140,7 +140,7 @@ class Project(TimeStampedModel, ProjectDisplayMixin):
         MultiFieldPanel([
             FieldPanel('name'),
             FieldPanel('original_url'),
-            FieldPanel('original_description'),
+            FieldPanel('original_description', classname='project-description'),
             InstanceSelectorPanel('company'),
             InstanceSelectorPanel('manager'),
             FieldRowPanel([

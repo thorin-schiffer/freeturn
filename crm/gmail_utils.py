@@ -60,7 +60,6 @@ def parse_message(message):
     else:
         from_address = 'unknown'
         full_name = 'unknown'
-
     result = {
         'sent_at': datetime.utcfromtimestamp(int(message['internalDate']) / 1000).replace(tzinfo=pytz.utc),
         'subject': email_message['subject'],
@@ -68,6 +67,8 @@ def parse_message(message):
         'full_name': full_name,
         'gmail_thread_id': message['threadId'],
         'gmail_message_id': message['id'],
+        'message_id': email_message['message-id'],
+        'reply-to': email_message['reply-to']
     }
     text = extract_text(email_message)
     if text:
@@ -173,7 +174,9 @@ def associate(message):
         subject=message['subject'],
         sent_at=message['sent_at'],
         gmail_message_id=message['gmail_message_id'],
-        gmail_thread_id=message['gmail_thread_id']
+        gmail_thread_id=message['gmail_thread_id'],
+        message_id=message['message_id'],
+        reply_to=message['reply-to']
     ), True
 
 
@@ -207,6 +210,7 @@ def create_message_with_attachment(sender, to, message_text_html,
     message['to'] = to
     message['from'] = sender
     message['subject'] = kwargs.get('subject')
+    message['message-id'] = kwargs.get('message_id')
     message['in-reply-to'] = kwargs.get('message_id')
     message['references'] = kwargs.get('message_id')
 
@@ -237,7 +241,7 @@ def send_email(from_user, to_email, rich_text: str, **kwargs):
     cv = kwargs.get('cv')
     if project_message:
         subject = project_message.subject
-        message_id = project_message.gmail_message_id
+        message_id = project_message.message_id
         thread_id = project_message.gmail_thread_id
     else:
         if not cv:

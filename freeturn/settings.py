@@ -148,7 +148,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = 'en-us'
-
+TEMPLATE_LANGUAGES = (
+    ('en', 'English'),
+    ('de', 'German')
+)
 TIME_ZONE = 'UTC'
 
 USE_I18N = True

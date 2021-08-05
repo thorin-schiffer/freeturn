@@ -23,19 +23,27 @@ class ProjectMessage(TimeStampedModel):
 
     gmail_message_id = models.CharField(max_length=50)
     gmail_thread_id = models.CharField(max_length=50)
+    message_id = models.CharField(max_length=300, help_text='Message-id header of the original message')
+    reply_to = models.EmailField(help_text='Reply-to header of the original message', null=True, blank=True)
 
     panels = [
         FieldRowPanel([
             MultiFieldPanel([
+                InstanceSelectorPanel('project'),
                 FieldPanel('subject'),
                 FieldPanel('text'),
-                InstanceSelectorPanel('project'),
             ]),
+        ]),
+        FieldRowPanel([
             MultiFieldPanel([
                 InstanceSelectorPanel('author'),
                 FieldPanel('sent_at'),
+            ]),
+            MultiFieldPanel([
                 FieldPanel('gmail_message_id'),
                 FieldPanel('gmail_thread_id'),
+                FieldPanel('message_id'),
+                FieldPanel('reply_to'),
             ])
         ])
     ]
