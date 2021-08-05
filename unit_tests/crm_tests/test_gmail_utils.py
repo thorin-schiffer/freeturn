@@ -29,6 +29,7 @@ def test_sync(gmail_service, user_social_auth, default_site):
     assert message.gmail_message_id
     assert message.gmail_thread_id
     assert message.message_id
+    assert message.reply_to
     assert CV.objects.filter(project=message.project).exists()
 
 

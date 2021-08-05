@@ -67,7 +67,8 @@ def parse_message(message):
         'full_name': full_name,
         'gmail_thread_id': message['threadId'],
         'gmail_message_id': message['id'],
-        'message_id': email_message['message-id']
+        'message_id': email_message['message-id'],
+        'reply-to': email_message['reply-to']
     }
     text = extract_text(email_message)
     if text:
@@ -174,7 +175,8 @@ def associate(message):
         sent_at=message['sent_at'],
         gmail_message_id=message['gmail_message_id'],
         gmail_thread_id=message['gmail_thread_id'],
-        message_id=message['message_id']
+        message_id=message['message_id'],
+        reply_to=message['reply-to']
     ), True
 
 
