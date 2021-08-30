@@ -116,7 +116,7 @@ Linux is a recommended platform for development, on other systems use Docker to 
 ## Local development with Linux
 
 * copy dotenv template to dotenv: `cp .env_template .env`
-* Install [wkhtmltopdf](https://wkhtmltopdf.org/), version 0.12.4
+* Install [wkhtmltopdf](https://wkhtmltopdf.org/), version 0.12.5
 * Install wagtail deps: https://docs.wagtail.io/en/v2.7.1/getting_started/index.html#dependencies-needed-for-installation
 * Install [postgres database](https://www.postgresql.org/)
 * Install [redis](https://redis.io/) key-value storage for caching
