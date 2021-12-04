@@ -10,6 +10,7 @@ from email.mime.text import MIMEText
 import pytz
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from googleapiclient import discovery
 
 from crm.models.company import Company
@@ -118,9 +119,10 @@ def ensure_manager(message):
                                       last_name__iexact=last_name).first()
     if not manager:
         domain = message['from_address'].split('@')[-1]
-        company = Company.objects.filter(url__icontains=domain).first()
+        name = domain.split('.')[0].capitalize()
+        company = Company.objects.filter(Q(url__icontains=domain) or Q(name__icontains=name)).first()
         company = company or Company.objects.create(
-            name=domain.split('.')[0].capitalize(),
+            name=name,
             url=f'http://{domain}'
         )
 
